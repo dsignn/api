@@ -1,0 +1,67 @@
+<?php
+declare(strict_types=1);
+
+namespace App\Storage\Adapter\Mongo\ResultSet;
+
+use App\Storage\ObjectPrototypeInterface;
+use App\Storage\ObjectPrototypeTrait;
+use App\Storage\ResultSet\ResultSetInterface;
+use Zend\Hydrator\HydratorAwareInterface;
+use Zend\Hydrator\HydratorAwareTrait;
+
+/**
+ * Class MongoHydrateResultSet
+ * @package App\Storage\Mongo
+ */
+class MongoHydrateResultSet extends MongoResultSet implements ResultSetInterface, HydratorAwareInterface, ObjectPrototypeInterface {
+
+   use HydratorAwareTrait, ObjectPrototypeTrait;
+
+    /**
+     * @inheritDoc
+     */
+    public function current()
+    {
+        $current = parent::current();
+        if ($this->getHydrator()) {
+            $prototype = clone $this->getObjectPrototype();
+            $this->getHydrator()->hydrate($current, $prototype);
+            $current = $prototype;
+        }
+        return $current;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function next()
+    {
+        $next = parent::next();
+        if ($this->getHydrator()) {
+            $prototype = clone $this->getObjectPrototype();
+            $this->getHydrator()->hydrate($next, $prototype);
+            $next = $prototype;
+        }
+        return $next;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function toArray(): array {
+        // TODO Better solution
+        $data = parent::toArray();
+        if ($this->getHydrator()) {
+            $hydrateArray = [];
+            foreach ($data as $item) {
+                $prototype = clone $this->getObjectPrototype();
+                $this->getHydrator()->hydrate($item, $prototype);
+                array_push($hydrateArray,  $prototype);
+            }
+
+            $data = $hydrateArray;
+        }
+
+        return $data;
+    }
+}
