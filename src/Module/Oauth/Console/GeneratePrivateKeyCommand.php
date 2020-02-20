@@ -45,6 +45,7 @@ class GeneratePrivateKeyCommand extends SymfonyCommand
         }
 
         shell_exec('openssl genrsa ' . $passphraseString . '-out key/' . GeneratePrivateKeyCommand::$NAME_FILE . ' 2048');
+        chmod(  'key/' . GeneratePrivateKeyCommand::$NAME_FILE, 0600 );
         // TODO catch error
         return 0;
     }

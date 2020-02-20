@@ -4,6 +4,7 @@
 /logs/*
 !/logs/README.md
 /key
+composer.lock
 
 
 # Mac

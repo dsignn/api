@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Module\Monitor\Controller;
 
-use App\Controller\RestAbstractController;
+use App\Controller\RestController;
 use App\Module\Monitor\Storage\MonitorStorageInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -13,7 +13,7 @@ use Slim\Psr7\Factory\StreamFactory;
  * Class MonitorController
  * @package App\Module\Monitor\Controller
  */
-class MonitorController extends RestAbstractController
+class MonitorController extends RestController
 {
     /**
      * @var MonitorStorageInterface
@@ -52,7 +52,7 @@ class MonitorController extends RestAbstractController
      * @param Request $request
      * @param Response $response
      * @return Response|void
-     */
+
     public function post(Request $request, Response $response) {
         // TODO attach to content negotiation middleware
         $body = json_decode($request->getBody()->getContents(), true);
@@ -60,5 +60,5 @@ class MonitorController extends RestAbstractController
         $streamFactory = new StreamFactory();
         return $response->withStatus(201)->withBody($streamFactory->createStream(json_encode($data)));
     }
-
+     */
 }

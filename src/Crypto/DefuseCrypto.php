@@ -17,7 +17,7 @@ class DefuseCrypto implements CryptoInterface {
      */
     protected $key;
 
-    public function __construct(Key $key) {
+    public function __construct(Key $key = null) {
         $this->key = $key;
     }
 

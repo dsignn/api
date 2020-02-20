@@ -35,21 +35,15 @@ class CreateClientCommand extends SymfonyCommand {
     protected $crypto;
 
     /**
-     * @var HydratorInterface
-     */
-    protected $hydrator;
-
-    /**
      * CreateClientCommand constructor.
      * @param StorageInterface $storage
      * @param CryptoInterface $crypto
      * @param HydratorInterface|null $hydrator
      */
-    public function __construct(StorageInterface $storage, CryptoInterface $crypto, HydratorInterface $hydrator = null) {
+    public function __construct(StorageInterface $storage, CryptoInterface $crypto) {
 
         $this->storage = $storage;
         $this->crypto = $crypto;
-        $this->hydrator = $hydrator ? $hydrator : new ClassMethodsHydrator();
 
         parent::__construct();
     }
@@ -79,7 +73,7 @@ class CreateClientCommand extends SymfonyCommand {
         $client->setPassword($this->crypto->crypto($password));
 
         try {
-            $this->storage->save($this->hydrator->extract($client));
+            $this->storage->save($client);
             $output->writeln('Client ' . $name . ' saved');
             return 0;
         } catch (\Exception $e) {

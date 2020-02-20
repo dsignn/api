@@ -55,7 +55,7 @@ class RestController
      */
     public function post(Request $request, Response $response) {
 
-        var_dump($request->getBody()->__toString());
+        var_dump($request->getBody()->getContents());
         die();
         return $response->withStatus(405);
     }

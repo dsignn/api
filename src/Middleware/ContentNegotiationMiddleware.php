@@ -42,9 +42,6 @@ class ContentNegotiationMiddleware implements Middleware
      */
     public function process(Request $request, RequestHandler $handler): Response
     {
-        var_dump($request->getAttribute('route')->getPattern());
-        var_dump($request->getMethod());
-        die();
         if(!$this->checkAcceptHeader($request)) {
 
             $response = new ResponseSlim();

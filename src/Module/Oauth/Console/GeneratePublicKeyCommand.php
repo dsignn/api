@@ -44,6 +44,7 @@ class GeneratePublicKeyCommand extends SymfonyCommand
             $passphraseString = ' -passin pass:' . $passphrase  ;
         }
         shell_exec('openssl rsa -in key/' . GeneratePrivateKeyCommand::$NAME_FILE  . $passphraseString . '-pubout -out key/' . GeneratePublicKeyCommand::$NAME_FILE);
+        chmod(  'key/' . GeneratePublicKeyCommand::$NAME_FILE, 0600 );
         // TODO catch error
         return 0;
     }

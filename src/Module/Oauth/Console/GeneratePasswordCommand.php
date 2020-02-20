@@ -27,6 +27,7 @@ class GeneratePasswordCommand extends SymfonyCommand
         $fp = fopen('key/dsign-oauth-password.txt', 'wr');
         fwrite($fp, $password);
         fclose($fp);
+        chmod( 'key/dsign-oauth-password.txt' , 0600 );
         return 0;
     }
 }

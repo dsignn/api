@@ -36,7 +36,10 @@ return function (ContainerBuilder $containerBuilder) {
 
         'OAuthCrypto' => function(ContainerInterface $c) {
 
-            $key = Key::loadFromAsciiSafeString(file_get_contents(__DIR__ . '/../../../key/dsign-oauth-password.txt'));
+            $key = null;
+            if (file_exists(__DIR__ . '/../../../key/dsign-oauth-password.txt')) {
+                $key = Key::loadFromAsciiSafeString(file_get_contents(__DIR__ . '/../../../key/dsign-oauth-password.txt'));
+            }
             return new DefuseCrypto($key);
         },
 

@@ -19,4 +19,5 @@ return function (App $app) {
 function createContentNegotiation() {
 
     var_dump('test');
+    die();
 }

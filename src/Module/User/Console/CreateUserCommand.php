@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Module\User\Console;
 
 use App\Crypto\CryptoInterface;
+use App\Module\User\Entity\UserEntity;
 use App\Storage\StorageInterface;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -37,7 +38,7 @@ class CreateUserCommand extends SymfonyCommand {
      */
     protected static $defaultName = 'user-repo:create';
 
-    public function __construct(StorageInterface $storage, CryptoInterface $crypto, HydratorInterface $hydrator = null)
+    public function __construct(StorageInterface $storage, CryptoInterface $crypto)
     {
         $this->storage = $storage;
         $this->crypto = $crypto;
@@ -60,13 +61,12 @@ class CreateUserCommand extends SymfonyCommand {
         $email = $input->getArgument('email');
         $password = $input->getArgument('password');
 
-        $data = [
-            'email' => $email,
-            'password' => $this->crypto->crypto($password)
-        ];
+        $user = new UserEntity();
+        $user->setEmail($email);
+        $user->setPassword($this->crypto->crypto($password));
 
         try {
-            $this->storage->save($data);
+            $this->storage->save($user);
             $output->writeln('User ' . $email . ' saved');
             return 0;
         } catch (\Exception $e) {
