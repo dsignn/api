@@ -11,25 +11,26 @@ use Iterator;
  * @package App\Storage\ResultSet
  */
 interface ResultSetPaginateInterface extends ResultSetInterface {
+
     /**
-     * @return mixed
+     * @return int
      */
     public function getPage();
 
     /**
      * @param $page
-     * @return ResultSetPaginateInterface
+     * @return self
      */
-    public function setPage($page): self;
+    public function setPage(int $page): self;
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getItemPerPage();
 
     /**
      * @param $itemPerPage
-     * @return ResultSetPaginateInterface
+     * @return self
      */
-    public function setItemPerPage($itemPerPage): self;
+    public function setItemPerPage(int $itemPerPage): self;
 }

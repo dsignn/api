@@ -9,6 +9,7 @@ use App\Module\User\Entity\UserEntity;
 use App\Module\User\Storage\UserStorage;
 use App\Module\User\Storage\UserStorageInterface;
 use App\Storage\Adapter\Mongo\MongoAdapter;
+use App\Storage\Adapter\Mongo\ResultSet\MongoHydratePaginateResultSet;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
 use App\Storage\Storage;
 use DI\ContainerBuilder;
@@ -32,8 +33,13 @@ return function (ContainerBuilder $containerBuilder) {
             $resultSet->setHydrator($hydrator);
             $resultSet->setObjectPrototype(new UserEntity());
 
+            $resultSetPaginator = new MongoHydratePaginateResultSet();
+            $resultSetPaginator->setHydrator($hydrator);
+            $resultSetPaginator->setObjectPrototype(new UserEntity());
+
             $mongoAdapter = new MongoAdapter($c->get(MongoClient::class), $settings['storage']['name'], $serviceSetting['collection']);
             $mongoAdapter->setResultSet($resultSet);
+            $mongoAdapter->setResultSetPaginate($resultSetPaginator);
 
             $storage = new UserStorage($mongoAdapter);
             $storage->setHydrator($hydrator);

@@ -95,7 +95,15 @@ class RestController
     public function paginate(Request $request, Response $response) {
       //  $result = $this->storage->gelAll([]);
       //  $result->next();
-        var_dump('suca');
+
+        $query = $request->getQueryParams();
+        $page = isset($query['page']) ? intval($query['page']) ? intval($query['page']) : 1 : 1;
+        $itemPerPage = isset($query['item-per-page']) ? intval($query['item-per-page']) ? intval($query['item-per-page']) : 10 : 10;
+
+
+        $list = $this->storage->getPage($page, $itemPerPage);
+       // var_dump($list->count());
+        var_dump($list);
         die();
         $response->getBody()->write(json_encode(["get" => "paginate"]));
         return $response;

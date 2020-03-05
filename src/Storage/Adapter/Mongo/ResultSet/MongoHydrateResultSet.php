@@ -6,6 +6,7 @@ namespace App\Storage\Adapter\Mongo\ResultSet;
 use App\Storage\ObjectPrototypeInterface;
 use App\Storage\ObjectPrototypeTrait;
 use App\Storage\ResultSet\ResultSetInterface;
+use App\Storage\ResultSet\ResultSetPaginateInterface;
 use Zend\Hydrator\HydratorAwareInterface;
 use Zend\Hydrator\HydratorAwareTrait;
 
@@ -13,7 +14,7 @@ use Zend\Hydrator\HydratorAwareTrait;
  * Class MongoHydrateResultSet
  * @package App\Storage\Mongo
  */
-class MongoHydrateResultSet extends MongoResultSet implements ResultSetInterface, HydratorAwareInterface, ObjectPrototypeInterface {
+class MongoHydrateResultSet extends MongoResultSet implements HydratorAwareInterface, ObjectPrototypeInterface {
 
    use HydratorAwareTrait, ObjectPrototypeTrait;
 
@@ -23,7 +24,7 @@ class MongoHydrateResultSet extends MongoResultSet implements ResultSetInterface
     public function current()
     {
         $current = parent::current();
-        if ($this->getHydrator()) {
+        if ($this->getHydrator() && $current) {
             $prototype = clone $this->getObjectPrototype();
             $this->getHydrator()->hydrate($current, $prototype);
             $current = $prototype;
@@ -37,7 +38,7 @@ class MongoHydrateResultSet extends MongoResultSet implements ResultSetInterface
     public function next()
     {
         $next = parent::next();
-        if ($this->getHydrator()) {
+        if ($this->getHydrator() && $next) {
             $prototype = clone $this->getObjectPrototype();
             $this->getHydrator()->hydrate($next, $prototype);
             $next = $prototype;
@@ -51,12 +52,12 @@ class MongoHydrateResultSet extends MongoResultSet implements ResultSetInterface
     public function toArray(): array {
         // TODO Better solution
         $data = parent::toArray();
-        if ($this->getHydrator()) {
+        if ($this->getHydrator() && count($data) > 0) {
             $hydrateArray = [];
             foreach ($data as $item) {
                 $prototype = clone $this->getObjectPrototype();
                 $this->getHydrator()->hydrate($item, $prototype);
-                array_push($hydrateArray,  $prototype);
+                array_push($hydrateArray,  $this->getHydrator()->extract($prototype));
             }
 
             $data = $hydrateArray;

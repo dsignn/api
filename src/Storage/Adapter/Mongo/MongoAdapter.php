@@ -6,6 +6,8 @@ namespace App\Storage\Adapter\Mongo;
 use App\Storage\Adapter\Mongo\ResultSet\MongoResultSet;
 use App\Storage\Adapter\Mongo\ResultSet\MongoResultSetAwareInterface;
 use App\Storage\Adapter\Mongo\ResultSet\MongoResultSetAwareTrait;
+use App\Storage\Adapter\Mongo\ResultSet\MongoResultSetPaginateAwareInterface;
+use App\Storage\Adapter\Mongo\ResultSet\MongoResultSetPaginateAwareTrait;
 use App\Storage\Entity\EntityInterface;
 use App\Storage\StorageInterface;
 use MongoClient;
@@ -14,9 +16,9 @@ use MongoId;
 /**
  * Class MongoAdapter
  */
-class MongoAdapter implements StorageInterface, MongoResultSetAwareInterface  {
+class MongoAdapter implements StorageInterface, MongoResultSetAwareInterface, MongoResultSetPaginateAwareInterface  {
 
-    use MongoResultSetAwareTrait;
+    use MongoResultSetAwareTrait, MongoResultSetPaginateAwareTrait;
 
     /**
      * @var string
@@ -98,16 +100,26 @@ class MongoAdapter implements StorageInterface, MongoResultSetAwareInterface  {
      */
     public function gelAll(array $search = null) {
         $resultSet = clone $this->getResultSet();
-        return $resultSet->setDataSource($this->getCollection()->find($this->search($search ?  $search : [])));
+        return $resultSet->setDataSource(
+            $this->getCollection()->find($this->search($search ?  $search : []))
+        );
     }
 
     /**
-     * @param $page
-     * @param $itemPerPage
-     * @param $search
+     * @param int $page
+     * @param int $itemPerPage
+     * @param null $search
+     * @return \MongoCursor
+     * @throws \MongoCursorException
      */
-    public function paginate($page, $itemPerPage, $search) {
+    public function getPage($page = 1, $itemPerPage = 10, $search = null) {
 
+        $resultSet = clone $this->getResultSetPaginate();
+        return $resultSet->setDataSource(
+            $this->getCollection()->find($this->search($search ?  $search : []))
+                ->limit($itemPerPage)
+                ->skip(($page-1)*$itemPerPage)
+        );
     }
 
     /**

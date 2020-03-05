@@ -26,10 +26,13 @@ class MongoResultSet implements MongoResultSetInterface {
 
     /**
      * @param MongoCursor $dataSource
-     * @return MongoResultSet
+     * @return MongoResultSetInterface
+     * @throws \MongoConnectionException
+     * @throws \MongoCursorTimeoutException
      */
     public function setDataSource(MongoCursor $dataSource): MongoResultSetInterface {
         $this->dataSource = $dataSource;
+        $this->dataSource->next();
         return $this;
     }
 
@@ -58,7 +61,8 @@ class MongoResultSet implements MongoResultSetInterface {
      * @inheritDoc
      */
     public function rewind() {
-        return $this->dataSource->reset();
+        $this->dataSource->reset();
+        $this->dataSource->next();
     }
 
     /**

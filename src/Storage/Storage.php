@@ -73,4 +73,13 @@ class Storage implements StorageInterface, ObjectPrototypeInterface, HydratorAwa
     public function gelAll(array $search = null) {
         return $this->storage->gelAll($search);
     }
+
+    /**
+     * @param int $page
+     * @param int $itemPerPage
+     * @param null $search
+     */
+    public function getPage($page = 1, $itemPerPage = 10, $search = null) {
+        return $this->storage->getPage($page, $itemPerPage, $search);
+    }
 }
