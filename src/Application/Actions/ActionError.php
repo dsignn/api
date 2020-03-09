@@ -28,6 +28,11 @@ class ActionError implements JsonSerializable
     private $description;
 
     /**
+     * @var array
+     */
+    private $trace;
+
+    /**
      * @param string        $type
      * @param string|null   $description
      */
@@ -74,6 +79,13 @@ class ActionError implements JsonSerializable
     }
 
     /**
+     * @param array $trace
+     */
+    public function setTrace(array $trace) {
+        $this->trace = $trace;
+    }
+
+    /**
      * @return array
      */
     public function jsonSerialize()
@@ -81,6 +93,7 @@ class ActionError implements JsonSerializable
         $payload = [
             'type' => $this->type,
             'description' => $this->description,
+            'trace' => $this->trace,
         ];
 
         return $payload;

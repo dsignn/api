@@ -9,7 +9,7 @@ return function (App $app) {
 
     $app->group('/monitor', function (Group $group) {
 
-        $group->get('', [MonitorController::class, 'getAll']);
+        $group->get('', [MonitorController::class, 'paginate']);
 
         $group->get('/{id:[0-9a-fA-F]{24}}',  [MonitorController::class, 'get']);
 

@@ -11,6 +11,9 @@ use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
 use DI\ContainerBuilder;
 use Psr\Container\ContainerInterface;
 use Zend\Hydrator\ClassMethodsHydrator;
+use Zend\Hydrator\Filter\FilterComposite;
+use Zend\Hydrator\Filter\MethodMatchFilter;
+use Zend\Hydrator\Strategy\ClosureStrategy;
 
 return function (ContainerBuilder $containerBuilder) {
 
@@ -36,6 +39,20 @@ return function (ContainerBuilder $containerBuilder) {
             $storage->setObjectPrototype(new MonitorEntity());
 
             return $storage;
+        }
+    ])->addDefinitions([
+        'RestMonitorEntityHydrator' => function(ContainerInterface $c) {
+
+            $hydrator = new ClassMethodsHydrator();
+            $hydrator->addStrategy('id', new ClosureStrategy(function ($data) {
+
+                if ($data instanceof MongoId) {
+                    $data = $data->__toString();
+                }
+                return $data;
+            }));
+
+            return $hydrator;
         }
     ]);
 };

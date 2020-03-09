@@ -22,7 +22,7 @@ class UserController extends RestController {
     /**
      * @inheritDoc
      */
-    public function __construct(UserStorageInterface $storage,  ContainerInterface $container) {
+    public function __construct(UserStorageInterface $storage, ContainerInterface $container) {
         parent::__construct($storage, $container);
     }
 }

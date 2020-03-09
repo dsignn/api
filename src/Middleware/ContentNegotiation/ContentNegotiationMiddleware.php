@@ -61,7 +61,7 @@ class ContentNegotiationMiddleware implements Middleware
     /**
      * @var array
      */
-    protected $contentTypeFilter = ['/.*\/.*|)/'];
+    protected $contentTypeFilter = ["/.*\/.*/"];
 
     /**
      * @var bool
