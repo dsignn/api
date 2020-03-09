@@ -4,8 +4,6 @@ declare(strict_types=1);
 use App\Module\User\Controller\UserController;
 use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
-use Slim\Psr7\Request;
-use Slim\Psr7\Response;
 
 return function (App $app) {
 

@@ -6,8 +6,7 @@ namespace App\Module\User\Controller;
 
 use App\Controller\RestController;
 use App\Module\User\Storage\UserStorageInterface;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Container\ContainerInterface;
 
 /**
  * Class UserController
@@ -16,9 +15,14 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 class UserController extends RestController {
 
     /**
+     * @var string
+     */
+    protected $entityNameClass = 'UserEntity';
+
+    /**
      * @inheritDoc
      */
-    public function __construct(UserStorageInterface $storage) {
-        parent::__construct($storage);
+    public function __construct(UserStorageInterface $storage,  ContainerInterface $container) {
+        parent::__construct($storage, $container);
     }
 }

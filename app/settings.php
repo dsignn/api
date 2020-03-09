@@ -8,6 +8,8 @@ return function (ContainerBuilder $containerBuilder) {
     // Global Settings Object
     $containerBuilder->addDefinitions([
         'settings' => [
+            'determineRouteBeforeAppMiddleware' => true,
+            'debug' => true,
             'displayErrorDetails' => true, // Should be set to false in production
             'logger' => [
                 'name' => 'slim-app',
@@ -64,6 +66,14 @@ return function (ContainerBuilder $containerBuilder) {
                         'collection' => 'refresh-token'
                     ]
                 ],
+            ],
+            'contentNegotiation' => [
+                '/user' => [
+                    'default' => [
+                        'acceptFilter' => ['/application\/json/'],
+                        'contentTypeFilter' => ['/application\/json/']
+                    ]
+                ]
             ]
         ],
     ]);

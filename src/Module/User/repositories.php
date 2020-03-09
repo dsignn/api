@@ -3,19 +3,20 @@ declare(strict_types=1);
 
 use App\Crypto\CryptoOpenSsl;
 use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
-use App\Hydrator\Strategy\Mongo\NamingStrategy\UnderscoreNamingStrategy;
-use App\Module\Oauth\Entity\ClientEntity;
 use App\Module\User\Entity\UserEntity;
 use App\Module\User\Storage\UserStorage;
 use App\Module\User\Storage\UserStorageInterface;
 use App\Storage\Adapter\Mongo\MongoAdapter;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydratePaginateResultSet;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
-use App\Storage\Storage;
 use DI\ContainerBuilder;
-use MongoDB\Client;
 use Psr\Container\ContainerInterface;
 use Zend\Hydrator\ClassMethodsHydrator;
+use Zend\Hydrator\Filter\FilterComposite;
+use Zend\Hydrator\Filter\GetFilter;
+use Zend\Hydrator\Filter\MethodMatchFilter;
+use Zend\Hydrator\NamingStrategy\MapNamingStrategy;
+use Zend\Hydrator\Strategy\ClosureStrategy;
 
 return function (ContainerBuilder $containerBuilder) {
 
@@ -26,7 +27,9 @@ return function (ContainerBuilder $containerBuilder) {
             $serviceSetting = $settings['storage']['user'];
 
             $hydrator = new ClassMethodsHydrator();
-            $hydrator->setNamingStrategy(new UnderscoreNamingStrategy());
+            $hydrator->setNamingStrategy(MapNamingStrategy::createFromAsymmetricMap(
+                ['id' => '_id'],  ['_id' => 'id']
+            ));
             $hydrator->addStrategy('id', new MongoIdStrategy());
 
             $resultSet = new MongoHydrateResultSet();
@@ -46,6 +49,22 @@ return function (ContainerBuilder $containerBuilder) {
             $storage->setObjectPrototype(new UserEntity());
 
             return $storage;
+        }
+    ])->addDefinitions([
+        'RestUserEntityHydrator' => function(ContainerInterface $c) {
+
+            $hydrator = new ClassMethodsHydrator();
+            $hydrator->addFilter('password', new MethodMatchFilter('getPassword'),  FilterComposite::CONDITION_AND);
+            $hydrator->addFilter('identifier', new MethodMatchFilter('getIdentifier'),  FilterComposite::CONDITION_AND);
+            $hydrator->addStrategy('id', new ClosureStrategy(function ($data) {
+
+                if ($data instanceof MongoId) {
+                    $data = $data->__toString();
+                }
+                return $data;
+            }));
+
+            return $hydrator;
         }
     ]);
 };

@@ -1,8 +1,11 @@
 <?php
 declare(strict_types=1);
 
+use App\Middleware\ContentNegotiation\Accept\AcceptContainer;
+use App\Middleware\ContentNegotiation\Accept\JsonAccept;
+use App\Middleware\ContentNegotiation\ContentType\ContentTypeContainer;
+use App\Middleware\ContentNegotiation\ContentType\JsonContentType;
 use DI\ContainerBuilder;
-use MongoDB\Client;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
@@ -32,6 +35,28 @@ return function (ContainerBuilder $containerBuilder) {
             $mongoSettings = $settings['mongodb'];
 
             return new MongoClient('mongodb://' . $mongoSettings["host"] . '/');
+        }
+    ])->addDefinitions([
+        ContentTypeContainer::class => function(ContainerInterface $c) {
+            $container = new ContentTypeContainer();
+
+            $container->set(
+                JsonContentType::class,
+                new JsonContentType()
+            );
+
+            return $container;
+        }
+    ])->addDefinitions([
+        AcceptContainer::class => function(ContainerInterface $c) {
+            $container = new AcceptContainer();
+
+            $container->set(
+                JsonAccept::class,
+                new JsonAccept()
+            );
+
+            return $container;
         }
     ]);
 };

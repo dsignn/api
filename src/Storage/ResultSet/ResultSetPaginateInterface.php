@@ -3,9 +3,6 @@ declare(strict_types=1);
 
 namespace App\Storage\ResultSet;
 
-use Countable;
-use Iterator;
-
 /**
  * Interface ResultSetPaginateInterface
  * @package App\Storage\ResultSet

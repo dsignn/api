@@ -5,8 +5,6 @@ namespace App\Storage\Adapter\Mongo\ResultSet;
 
 use App\Storage\ObjectPrototypeInterface;
 use App\Storage\ObjectPrototypeTrait;
-use App\Storage\ResultSet\ResultSetInterface;
-use App\Storage\ResultSet\ResultSetPaginateInterface;
 use Zend\Hydrator\HydratorAwareInterface;
 use Zend\Hydrator\HydratorAwareTrait;
 
@@ -52,6 +50,7 @@ class MongoHydrateResultSet extends MongoResultSet implements HydratorAwareInter
     public function toArray(): array {
         // TODO Better solution
         $data = parent::toArray();
+
         if ($this->getHydrator() && count($data) > 0) {
             $hydrateArray = [];
             foreach ($data as $item) {
@@ -59,10 +58,8 @@ class MongoHydrateResultSet extends MongoResultSet implements HydratorAwareInter
                 $this->getHydrator()->hydrate($item, $prototype);
                 array_push($hydrateArray,  $this->getHydrator()->extract($prototype));
             }
-
             $data = $hydrateArray;
         }
-
         return $data;
     }
 }

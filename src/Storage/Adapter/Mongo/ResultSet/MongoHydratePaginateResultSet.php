@@ -4,10 +4,8 @@ declare(strict_types=1);
 namespace App\Storage\Adapter\Mongo\ResultSet;
 
 use App\Storage\ObjectPrototypeInterface;
-use App\Storage\ObjectPrototypeTrait;
 use App\Storage\ResultSet\ResultSetPaginateInterface;
 use Zend\Hydrator\HydratorAwareInterface;
-use Zend\Hydrator\HydratorAwareTrait;
 
 /**
  * Class MongoHydrateResultSet

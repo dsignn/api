@@ -4,10 +4,6 @@ declare(strict_types=1);
 use App\Application\Handlers\HttpErrorHandler;
 use App\Application\Handlers\ShutdownHandler;
 use App\Application\ResponseEmitter\ResponseEmitter;
-use App\Module\Oauth\Repository\AccessTokenRepository;
-use App\Module\Oauth\Repository\AuthCodeRepository;
-use App\Module\Oauth\Repository\RefreshTokenRepository;
-use App\Module\Oauth\Repository\UserRepository;
 use DI\ContainerBuilder;
 use Slim\Factory\ServerRequestCreatorFactory;
 

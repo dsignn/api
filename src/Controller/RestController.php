@@ -3,7 +3,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Middleware\ContentNegotiation\ContentType\ContentTypeTransformInterface;
+use App\Middleware\ContentNegotiation\Exception\ServiceNotFound;
 use App\Storage\StorageInterface;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Zend\Hydrator\HydratorAwareInterface;
@@ -15,16 +18,25 @@ use Zend\Hydrator\HydratorAwareInterface;
 class RestController
 {
     /**
+     * @var string
+     */
+    protected $entityNameClass = '';
+
+    /**
      * @var StorageInterface
      */
     protected $storage;
 
+    protected $container;
+
     /**
-     * RestAbstractController constructor.
+     * RestController constructor.
      * @param StorageInterface $storage
+     * @param ContainerInterface $container
      */
-    public function __construct(StorageInterface $storage) {
+    public function __construct(StorageInterface $storage, ContainerInterface $container) {
         $this->storage = $storage;
+        $this->container = $container;
     }
 
     /**
@@ -34,15 +46,13 @@ class RestController
      */
     public function get(Request $request, Response $response) {
 
-        $id = $request->getAttribute('route')->getArgument('id');
-
+        $id = $request->getAttribute('__route__')->getArgument('id');
 
         $entity = $this->storage->get($id);
+
         if ($this->storage instanceof HydratorAwareInterface) {
             $entity = $entity  ? $this->storage->getHydrator()->extract($entity) : null;
         }
-
-        
 
         $response->getBody()->write(json_encode($entity));
         return $response->withStatus(200);
@@ -54,9 +64,6 @@ class RestController
      * @return Response
      */
     public function post(Request $request, Response $response) {
-
-        var_dump($request->getBody()->getContents());
-        die();
         return $response->withStatus(405);
     }
 
@@ -91,24 +98,26 @@ class RestController
      * @param Request $request
      * @param Response $response
      * @return Response
+     * @throws ServiceNotFound
      */
     public function paginate(Request $request, Response $response) {
-      //  $result = $this->storage->gelAll([]);
-      //  $result->next();
 
         $query = $request->getQueryParams();
         $page = isset($query['page']) ? intval($query['page']) ? intval($query['page']) : 1 : 1;
         $itemPerPage = isset($query['item-per-page']) ? intval($query['item-per-page']) ? intval($query['item-per-page']) : 10 : 10;
+        $pagination = $this->storage->getPage($page, $itemPerPage);
 
+        /** @var ContentTypeTransformInterface $contentTypeService */
+        $contentTypeService = $request->getAttribute('ContentTypeService');
 
-        $list = $this->storage->getPage($page, $itemPerPage);
-       // var_dump($list->count());
-        var_dump($list);
-        die();
-        $response->getBody()->write(json_encode(["get" => "paginate"]));
-        return $response;
-        return $response->withStatus(405);
+        if (!$contentTypeService) {
+            throw new ServiceNotFound('ContentTypeService not found in request attribute');
+        }
+
+        if ($this->container->has('Rest' . $this->entityNameClass . 'Hydrator')) {
+            $contentTypeService->setHydrator($this->container->get('Rest' . $this->entityNameClass . 'Hydrator'));
+        }
+
+        return $contentTypeService->transformContentType($response, $pagination);
     }
-
-
 }

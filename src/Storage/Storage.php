@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Storage;
 
 use App\Storage\Entity\EntityInterface;
+use App\Storage\ResultSet\ResultSetPaginateInterface;
 use Zend\Hydrator\HydratorAwareInterface;
 use Zend\Hydrator\HydratorAwareTrait;
 use Zend\Hydrator\HydratorInterface;
@@ -36,7 +37,7 @@ class Storage implements StorageInterface, ObjectPrototypeInterface, HydratorAwa
      */
     public function get($id) {
         $entity = $this->storage->get($id);
-        return $this->hydrator ? $this->hydrator->hydrate($entity, clone $this->objectPrototype) : $entity;
+        return $this->hydrator && $entity ? $this->hydrator->hydrate($entity, clone $this->objectPrototype) : $entity;
     }
 
     /**
@@ -78,6 +79,7 @@ class Storage implements StorageInterface, ObjectPrototypeInterface, HydratorAwa
      * @param int $page
      * @param int $itemPerPage
      * @param null $search
+     * @return ResultSetPaginateInterface
      */
     public function getPage($page = 1, $itemPerPage = 10, $search = null) {
         return $this->storage->getPage($page, $itemPerPage, $search);
