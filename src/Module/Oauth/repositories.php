@@ -27,6 +27,7 @@ use League\OAuth2\Server\Grant\ClientCredentialsGrant;
 use League\OAuth2\Server\Grant\ImplicitGrant;
 use League\OAuth2\Server\Grant\PasswordGrant;
 use League\OAuth2\Server\Grant\RefreshTokenGrant;
+use League\OAuth2\Server\ResourceServer;
 use Psr\Container\ContainerInterface;
 use Zend\Hydrator\ClassMethodsHydrator;
 
@@ -131,7 +132,11 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new UnderscoreNamingStrategy());
             $hydrator->addStrategy('id', new MongoIdStrategy());
-            $hydrator->addStrategy('accessToken', new HydratorStrategy(  new ClassMethodsHydrator(), new AccessTokenEntity()));
+
+            $accessTokenHydrator = new ClassMethodsHydrator();
+            $accessTokenHydrator->addStrategy('client', new HydratorStrategy(new ClassMethodsHydrator(), new ClientEntity()));
+
+            $hydrator->addStrategy('accessToken', new HydratorStrategy($accessTokenHydrator, new AccessTokenEntity()));
 
             $storage = new Storage($mongoAdapter);
             $storage->setHydrator($hydrator);
@@ -231,6 +236,17 @@ return function (ContainerBuilder $containerBuilder) {
             );
 
             return $server;
+        },
+
+        ResourceServer::class => function(ContainerInterface $c) {
+
+            $settings = $c->get('settings');
+            $oauthSettings =  $settings['oauth'];
+
+            return new ResourceServer(
+                $c->get(AccessTokenRepository::class),
+                $oauthSettings['path-public-key']
+            );
         }
     ]);
 };

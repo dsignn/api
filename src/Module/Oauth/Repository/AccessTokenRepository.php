@@ -53,11 +53,9 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface {
      * {@inheritdoc}
      */
     public function revokeAccessToken($tokenId) {
-
         $resultSet = $this->storage->gelAll(['identifier' => $tokenId]);
 
         if ($resultSet->count() === 1) {
-            $resultSet->next();
             $this->storage->delete($resultSet->current());
         }
     }

@@ -59,14 +59,12 @@ class ClientRepository implements ClientRepositoryInterface
 
         $isValid = false;
         if ($resultSet->count() === 1) {
-            $resultSet->next();
             if ($this->crypto->deCrypto($resultSet->current()->getPassword()) === $clientSecret) {
                 $isValid = true;
                 $this->client->setName($resultSet->current()->getName());
                 $this->client->setIdentifier($resultSet->current()->getPassword());
             }
         }
-
         return $isValid;
     }
 

@@ -45,15 +45,11 @@ class UserRepository implements UserRepositoryInterface {
 
         if ($resultSet->count() === 1) {
 
-            $resultSet->next();
             $userEntity = $resultSet->current();
-
             if ($this->crypto->deCrypto($userEntity->getPassword()) === $password) {
-
                 $user = $userEntity;
             }
         }
-
         return $user;
     }
 }

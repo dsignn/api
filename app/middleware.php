@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use App\Middleware\AuthMiddleware;
 use App\Middleware\ContentNegotiation\Accept\AcceptContainer;
 use App\Middleware\ContentNegotiation\Accept\JsonAccept;
 use App\Middleware\ContentNegotiation\ContentNegotiationMiddleware;
@@ -8,6 +9,8 @@ use App\Middleware\ContentNegotiation\ContentType\ContentTypeContainer;
 use App\Middleware\ContentNegotiation\ContentType\JsonContentType;
 use App\Middleware\CorsMiddleware;
 use App\Middleware\SessionMiddleware;
+use League\OAuth2\Server\Middleware\ResourceServerMiddleware;
+use League\OAuth2\Server\ResourceServer;
 use Slim\App;
 
 return function (App $app) {
@@ -25,5 +28,6 @@ return function (App $app) {
 
     $app->add($contentNegotiationMiddleware);
 
+    //$app->add(new AuthMiddleware($app->getContainer()->get(ResourceServer::class)));
     $app->add(new CorsMiddleware());
 };
