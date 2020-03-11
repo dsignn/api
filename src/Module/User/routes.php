@@ -17,6 +17,8 @@ return function (App $app) {
         $group->post('',  [UserController::class, 'post']);
 
         $group->put('/{id:[0-9a-fA-F]{24}}',  [UserController::class, 'put']);
+
+        $group->delete('/{id:[0-9a-fA-F]{24}}',  [UserController::class, 'delete']);
     });
 
 };

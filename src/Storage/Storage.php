@@ -82,8 +82,8 @@ class Storage implements StorageHydrateInterface {
     /**
      * @inheritDoc
      */
-    public function delete($data) {
-        return $this->storage->delete($obj);
+    public function delete($id) {
+        return $this->storage->delete($id);
     }
 
     /**

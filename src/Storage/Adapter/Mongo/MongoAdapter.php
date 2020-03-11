@@ -96,12 +96,12 @@ class MongoAdapter implements StorageInterface, MongoResultSetAwareInterface, Mo
     /**
      * @inheritDoc
      */
-    public function delete($data) {
-        $dbInfo = $this->getCollection()->remove(['_id' => new \MongoId($data->getId())]);
+    public function delete($id) {
+        $dbInfo = $this->getCollection()->remove(['_id' => new \MongoId($id)]);
         if ($dbInfo['errmsg'] !== null) {
             throw new \MongoException($dbInfo['errmsg']);
         }
-        return true;
+        return !!$dbInfo['ok'];
     }
 
     /**

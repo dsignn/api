@@ -20,9 +20,15 @@ class MonitorEntity implements EntityInterface {
     protected $name;
 
     /**
+     * @var
+     */
+    protected $description;
+
+
+    /**
      * @return mixed
      */
-    public function getName(): string {
+    public function getName() {
         return $this->name;
     }
 
@@ -34,4 +40,21 @@ class MonitorEntity implements EntityInterface {
         $this->name = $name;
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getDescription() {
+        return $this->description;
+    }
+
+    /**
+     * @param mixed $description
+     * @return MonitorEntity
+     */
+    public function setDescription($description): MonitorEntity {
+        $this->description = $description;
+        return $this;
+    }
 }
+

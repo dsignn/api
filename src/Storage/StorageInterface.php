@@ -31,10 +31,10 @@ interface StorageInterface {
     public function update($data);
 
     /**
-     * @param $data
+     * @param $id
      * @return boolean
      */
-    public function delete($data);
+    public function delete($id);
 
     /**
      * @param array $search

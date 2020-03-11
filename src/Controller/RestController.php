@@ -81,6 +81,7 @@ class RestController
      * @param Request $request
      * @param Response $response
      * @return Response
+     * @throws ServiceNotFound
      */
     public function put(Request $request, Response $response) {
 
@@ -110,7 +111,22 @@ class RestController
      * @return Response
      */
     public function patch(Request $request, Response $response) {
-        return $response->withStatus(405);
+
+        $id = $request->getAttribute('__route__')->getArgument('id');
+        $entity = $this->storage->get($id);
+
+        if (!$entity) {
+            return $response->withStatus(404);
+        }
+
+        /**
+         * TODO override total entity?? REST complient
+         */
+        $this->storage->getHydrator()->hydrate($request->getParsedBody(), $entity);
+        $this->storage->update($entity);
+
+        $contentTypeService = $this->getContentTypeService($request);
+        return $contentTypeService->transformContentType($response, $entity);
     }
 
     /**
@@ -119,7 +135,16 @@ class RestController
      * @return Response
      */
     public function delete(Request $request, Response $response) {
-        return $response->withStatus(405);
+
+        $id = $request->getAttribute('__route__')->getArgument('id');
+        $entity = $this->storage->get($id);
+
+        if (!$entity) {
+            return $response->withStatus(404);
+        }
+
+        $this->storage->delete($id);
+        return $response->withStatus(200);
     }
 
     /**
