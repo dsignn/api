@@ -16,6 +16,6 @@ class JsonAccept implements AcceptTransformInterface {
      * @inheritDoc
      */
     public function transformAccept(Request $request): Request {
-        return $request->withParsedBody(json_decode($request->getBody()->getContents()));
+        return $request->withParsedBody(json_decode($request->getBody()->getContents(), true));
     }
 }

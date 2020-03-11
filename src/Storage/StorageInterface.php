@@ -5,13 +5,13 @@ namespace App\Storage;
 
 use App\Storage\Entity\EntityInterface;
 use App\Storage\ResultSet\ResultSetInterface;
+use App\Storage\ResultSet\ResultSetPaginateInterface;
 
 /**
  * Interface StorageInterface
  * @package App\Storage
  */
-interface StorageInterface
-{
+interface StorageInterface {
     /**
      * @param $id
      * @return mixed
@@ -20,25 +20,33 @@ interface StorageInterface
 
     /**
      * @param $data
-     * @return $data
+     * @return mixed($data|EntityInterface)
      */
-    public function save(&$data);
+    public function save($data);
 
     /**
      * @param $data
-     * @return $data
+     * @return  mixed($data|EntityInterface)
      */
-    public function update(&$data);
+    public function update($data);
 
     /**
-     * @param EntityInterface $obj
-     * @return $data
+     * @param $data
+     * @return boolean
      */
-    public function delete(EntityInterface $obj);
+    public function delete($data);
 
     /**
      * @param array $search
      * @return ResultSetInterface
      */
     public function gelAll(array $search = null);
+
+    /**
+     * @param int $page
+     * @param int $itemPerPage
+     * @param null $search
+     * @return ResultSetPaginateInterface
+     */
+    public function getPage($page = 1, $itemPerPage = 10, $search = null);
 }

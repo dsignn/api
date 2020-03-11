@@ -73,7 +73,19 @@ return function (ContainerBuilder $containerBuilder) {
                         'acceptFilter' => ['/application\/json/'],
                         'contentTypeFilter' => ['/application\/json/']
                     ]
-                ]
+                ],
+                '/monitor' => [
+                    'default' => [
+                        'acceptFilter' => ['/application\/json/'],
+                        'contentTypeFilter' => ['/application\/json/']
+                    ]
+                ],
+                '/monitor/{id:[0-9a-fA-F]{24}}' => [
+                    'default' => [
+                        'acceptFilter' => ['/application\/json/'],
+                        'contentTypeFilter' => ['/application\/json/']
+                    ]
+                ],
             ]
         ],
     ]);

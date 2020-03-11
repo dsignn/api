@@ -62,8 +62,7 @@ class MongoAdapter implements StorageInterface, MongoResultSetAwareInterface, Mo
     /**
      * @inheritDoc
      */
-    public function get($id)
-    {
+    public function get($id) {
         return $this->getCollection()->findOne(
             ['_id' => new MongoId($id)]
         );
@@ -72,23 +71,33 @@ class MongoAdapter implements StorageInterface, MongoResultSetAwareInterface, Mo
     /**
      * @inheritDoc
      */
-    public function save(&$data) {
+    public function save($data) {
         $dbInfo = $this->getCollection()->insert($data);
+        if ($dbInfo['errmsg'] !== null) {
+            throw new \MongoException($dbInfo['errmsg']);
+        }
         return $data;
     }
 
     /**
      * @inheritDoc
      */
-    public function update(&$data) {
-        throw new \Exception('Implements');
+    public function update($data) {
+        $dbInfo = $this->getCollection()->update(
+            ["_id" => $data["_id"] ? $data['_id'] :  ''],
+            $data
+        );
+        if ($dbInfo['errmsg'] !== null) {
+            throw new \MongoException($dbInfo['errmsg']);
+        }
+        return $data;
     }
 
     /**
      * @inheritDoc
      */
-    public function delete(EntityInterface $obj) {
-        $dbInfo = $this->getCollection()->remove(['_id' => new \MongoId($obj->getId())]);
+    public function delete($data) {
+        $dbInfo = $this->getCollection()->remove(['_id' => new \MongoId($data->getId())]);
         if ($dbInfo['errmsg'] !== null) {
             throw new \MongoException($dbInfo['errmsg']);
         }
@@ -106,11 +115,7 @@ class MongoAdapter implements StorageInterface, MongoResultSetAwareInterface, Mo
     }
 
     /**
-     * @param int $page
-     * @param int $itemPerPage
-     * @param null $search
-     * @return \MongoCursor
-     * @throws \MongoCursorException
+     * @inheritDoc
      */
     public function getPage($page = 1, $itemPerPage = 10, $search = null) {
 

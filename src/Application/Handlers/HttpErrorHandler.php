@@ -60,6 +60,7 @@ class HttpErrorHandler extends SlimErrorHandler
         }
 
         $error->setTrace($exception->getTrace());
+
         $payload = new ActionPayload($statusCode, null, $error);
         $encodedPayload = json_encode($payload, JSON_PRETTY_PRINT);
 

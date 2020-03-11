@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Middleware\ContentNegotiation\ContentType;
 
+use App\Storage\Entity\EntityInterface;
 use App\Storage\ResultSet\ResultSetPaginateInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Psr7\Stream;
@@ -23,7 +24,7 @@ class JsonContentType implements ContentTypeTransformInterface {
         $computeData = [];
 
         switch (true) {
-            case $data instanceof ResultSetPaginateInterface === true;
+            case $data instanceof ResultSetPaginateInterface === true:
                 /** @var ResultSetPaginateInterface $data */
 
                 if ($data instanceof HydratorAwareInterface && $this->getHydrator()) {
@@ -38,6 +39,9 @@ class JsonContentType implements ContentTypeTransformInterface {
 
                 $computeData['data'] = $data->toArray();
                 break;
+            case $data instanceof EntityInterface === true:
+                $computeData = $this->getHydrator()->extract($data);
+                true;
         }
 
         $body = new Stream(fopen('php://temp', 'r+'));

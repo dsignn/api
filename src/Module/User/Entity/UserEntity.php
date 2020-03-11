@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Module\User\Entity;
 
+use App\Storage\Entity\EntityInterface;
 use App\Storage\Entity\EntityTrait as StorageEntityTrait;
 use League\OAuth2\Server\Entities\UserEntityInterface;
 
@@ -10,25 +11,24 @@ use League\OAuth2\Server\Entities\UserEntityInterface;
  * Class UserEntity
  * @package App\Module\User\Entity
  */
-class UserEntity implements UserEntityInterface {
+class UserEntity implements EntityInterface, UserEntityInterface {
 
     use StorageEntityTrait;
 
     /**
      * @var string
      */
-    protected $email;
+    protected $email = '';
 
     /**
      * @var string
      */
-    protected $password;
+    protected $password = '';
 
     /**
      * @return string
      */
-    public function getEmail(): string
-    {
+    public function getEmail(): string {
         return $this->email;
     }
 
@@ -36,8 +36,7 @@ class UserEntity implements UserEntityInterface {
      * @param string $email
      * @return UserEntity
      */
-    public function setEmail(string $email): UserEntity
-    {
+    public function setEmail(string $email): UserEntity {
         $this->email = $email;
         return $this;
     }
@@ -45,8 +44,7 @@ class UserEntity implements UserEntityInterface {
     /**
      * @return string
      */
-    public function getPassword(): string
-    {
+    public function getPassword(): string {
         return $this->password;
     }
 
@@ -54,8 +52,7 @@ class UserEntity implements UserEntityInterface {
      * @param string $password
      * @return UserEntity
      */
-    public function setPassword(string $password): UserEntity
-    {
+    public function setPassword(string $password): UserEntity {
         $this->password = $password;
         return $this;
     }
@@ -63,8 +60,7 @@ class UserEntity implements UserEntityInterface {
     /**
      * @return mixed
      */
-    public function getIdentifier()
-    {
+    public function getIdentifier() {
         return $this->email;
     }
 
@@ -72,8 +68,7 @@ class UserEntity implements UserEntityInterface {
      * @param $identifier
      * @return UserEntity
      */
-    public function setIdentifier($identifier): UserEntity
-    {
+    public function setIdentifier($identifier): UserEntity {
         $this->email = $identifier;
         return $this;
     }

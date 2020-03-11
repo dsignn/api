@@ -14,5 +14,7 @@ return function (App $app) {
         $group->get('/{id:[0-9a-fA-F]{24}}',  [MonitorController::class, 'get']);
 
         $group->post('',  [MonitorController::class, 'post']);
+
+        $group->put('/{id:[0-9a-fA-F]{24}}',  [MonitorController::class, 'put']);
     });
 };

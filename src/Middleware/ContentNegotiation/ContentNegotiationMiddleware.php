@@ -92,14 +92,13 @@ class ContentNegotiationMiddleware implements Middleware
 
         $this->loadSettings($path, $method);
 
-        if(!$this->checkAcceptHeader($request)) {
+        if(!$this->isValidAcceptHeader($request)) {
             return (new ResponseSlim())->withStatus(406);
         };
 
-        if(!$this->checkContentTypeHeader($request)) {
+        if(!$this->isValidContentTypeHeader($request)) {
             return (new ResponseSlim())->withStatus(415);
         };
-
 
         $acceptService = $this->getAcceptService($path, $method, $request->getHeaderLine(self::$ACCEPT));
         $contentTypeService = $this->getContentTypeService($path, $method, $request->getHeaderLine(self::$CONTENT_TYPE));
@@ -127,12 +126,12 @@ class ContentNegotiationMiddleware implements Middleware
      * @param Response $response
      * @return boolean
      */
-    protected function checkAcceptHeader(Request $request) {
+    protected function isValidAcceptHeader(Request $request) {
 
         $header = $request->getHeaderLine(ContentNegotiationMiddleware::$ACCEPT);
 
-        if (!$header && !$this->isCustomAccept) {
-            return true;
+        if (!$header) {
+            return false;
         }
 
         $check = true;
@@ -142,33 +141,29 @@ class ContentNegotiationMiddleware implements Middleware
                 break;
             }
         }
-
         return $check;
     }
 
 
     /**
      * @param Request $request
-     * @param Response $response
-     * @return boolean
+     * @return bool
      */
-    protected function checkContentTypeHeader(Request $request) {
+    protected function isValidContentTypeHeader(Request $request) {
 
         $header = $request->getHeaderLine(ContentNegotiationMiddleware::$CONTENT_TYPE);
 
-        if (!$header && !$this->isCustomContentType) {
-            return true;
+        if (!$header) {
+            return false;
         }
 
-        $check = false;
+        $check = true;
         for ($cont = 0; $cont < count($this->contentTypeFilter); $cont++) {
-            $check = preg_match($this->contentTypeFilter[$cont], $header);
-
+            $check = !!preg_match($this->contentTypeFilter[$cont], $header);
             if (!$check) {
                 break;
             }
         }
-
         return $check;
     }
 
@@ -253,6 +248,7 @@ class ContentNegotiationMiddleware implements Middleware
         $custom = isset($settings['contentTypeService']) ? $settings['contentTypeService'] : '';
 
         $serviceName = $custom ? $custom : $default;
+
         if ($this->contentTypeContainer->has($serviceName)) {
             $service = $this->contentTypeContainer->get($serviceName);
         }

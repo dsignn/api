@@ -6,7 +6,9 @@ use App\Hydrator\Strategy\Mongo\NamingStrategy\UnderscoreNamingStrategy;
 use App\Module\Monitor\Entity\MonitorEntity;
 use App\Module\Monitor\Storage\MonitorStorage;
 use App\Module\Monitor\Storage\MonitorStorageInterface;
+use App\Module\User\Entity\UserEntity;
 use App\Storage\Adapter\Mongo\MongoAdapter;
+use App\Storage\Adapter\Mongo\ResultSet\MongoHydratePaginateResultSet;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
 use DI\ContainerBuilder;
 use Psr\Container\ContainerInterface;
@@ -31,8 +33,13 @@ return function (ContainerBuilder $containerBuilder) {
             $resultSet->setHydrator($hydrator);
             $resultSet->setObjectPrototype(new MonitorEntity());
 
+            $resultSetPaginator = new MongoHydratePaginateResultSet();
+            $resultSetPaginator->setHydrator($hydrator);
+            $resultSetPaginator->setObjectPrototype(new MonitorEntity());
+
             $mongoAdapter = new MongoAdapter($c->get(MongoClient::class), $settings['storage']['name'], $serviceSetting['collection']);
             $mongoAdapter->setResultSet($resultSet);
+            $mongoAdapter->setResultSetPaginate($resultSetPaginator);
 
             $storage = new MonitorStorage($mongoAdapter);
             $storage->setHydrator($hydrator);

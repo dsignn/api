@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Middleware\ContentNegotiation\ContentType\ContentTypeTransformInterface;
 use App\Middleware\ContentNegotiation\Exception\ServiceNotFound;
+use App\Storage\StorageHydrateInterface;
 use App\Storage\StorageInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -23,18 +24,21 @@ class RestController
     protected $entityNameClass = '';
 
     /**
-     * @var StorageInterface
+     * @var StorageHydrateInterface
      */
     protected $storage;
 
+    /**
+     * @var ContainerInterface
+     */
     protected $container;
 
     /**
      * RestController constructor.
-     * @param StorageInterface $storage
+     * @param StorageHydrateInterface $storage
      * @param ContainerInterface $container
      */
-    public function __construct(StorageInterface $storage, ContainerInterface $container) {
+    public function __construct(StorageHydrateInterface $storage, ContainerInterface $container) {
         $this->storage = $storage;
         $this->container = $container;
     }
@@ -43,28 +47,34 @@ class RestController
      * @param Request $request
      * @param Response $response
      * @return Response
+     * @throws ServiceNotFound
      */
     public function get(Request $request, Response $response) {
 
         $id = $request->getAttribute('__route__')->getArgument('id');
-
         $entity = $this->storage->get($id);
 
-        if ($this->storage instanceof HydratorAwareInterface) {
-            $entity = $entity  ? $this->storage->getHydrator()->extract($entity) : null;
+        if (!$entity) {
+            return $response->withStatus(404);
         }
 
-        $response->getBody()->write(json_encode($entity));
-        return $response->withStatus(200);
+        $contentTypeService = $this->getContentTypeService($request);
+        return $contentTypeService->transformContentType($response, $entity);
     }
 
     /**
      * @param Request $request
      * @param Response $response
      * @return Response
+     * @throws ServiceNotFound
      */
     public function post(Request $request, Response $response) {
-        return $response->withStatus(405);
+
+        $data = $request->getParsedBody();
+        $entity = $this->storage->save($data);
+
+        $contentTypeService = $this->getContentTypeService($request);
+        return $contentTypeService->transformContentType($response, $entity);
     }
 
     /**
@@ -73,7 +83,25 @@ class RestController
      * @return Response
      */
     public function put(Request $request, Response $response) {
-        return $response->withStatus(405);
+
+        $id = $request->getAttribute('__route__')->getArgument('id');
+        $entity = $this->storage->get($id);
+
+        if (!$entity) {
+            return $response->withStatus(404);
+        }
+
+        /**
+         * TODO override total entity?? REST complient
+         */
+        $putEntity = clone $this->storage->getObjectPrototype();
+        $this->storage->getHydrator()->hydrate($request->getParsedBody(), $putEntity);
+        $putEntity->setId($id);
+
+        $this->storage->update($putEntity);
+
+        $contentTypeService = $this->getContentTypeService($request);
+        return $contentTypeService->transformContentType($response, $putEntity);
     }
 
     /**
@@ -107,6 +135,17 @@ class RestController
         $itemPerPage = isset($query['item-per-page']) ? intval($query['item-per-page']) ? intval($query['item-per-page']) : 10 : 10;
         $pagination = $this->storage->getPage($page, $itemPerPage);
 
+        $contentTypeService = $this->getContentTypeService($request);
+        return $contentTypeService->transformContentType($response, $pagination);
+    }
+
+    /**
+     * @param Request $request
+     * @return ContentTypeTransformInterface
+     * @throws ServiceNotFound
+     */
+    protected function getContentTypeService(Request $request) {
+
         /** @var ContentTypeTransformInterface $contentTypeService */
         $contentTypeService = $request->getAttribute('ContentTypeService');
 
@@ -118,6 +157,6 @@ class RestController
             $contentTypeService->setHydrator($this->container->get('Rest' . $this->entityNameClass . 'Hydrator'));
         }
 
-        return $contentTypeService->transformContentType($response, $pagination);
+        return $contentTypeService;
     }
 }

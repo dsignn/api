@@ -13,7 +13,7 @@ use Zend\Hydrator\HydratorInterface;
  * Class Storage
  * @package App\Storage
  */
-class Storage implements StorageInterface, ObjectPrototypeInterface, HydratorAwareInterface {
+class Storage implements StorageHydrateInterface {
 
     use ObjectPrototypeTrait;
     use HydratorAwareTrait;
@@ -26,7 +26,6 @@ class Storage implements StorageInterface, ObjectPrototypeInterface, HydratorAwa
     /**
      * Storage constructor.
      * @param StorageInterface $storage
-     * @param HydratorInterface|null $hydrator
      */
     public function __construct(StorageInterface $storage) {
         $this->storage = $storage;
@@ -36,35 +35,54 @@ class Storage implements StorageInterface, ObjectPrototypeInterface, HydratorAwa
      * @inheritDoc
      */
     public function get($id) {
-        $entity = $this->storage->get($id);
-        return $this->hydrator && $entity ? $this->hydrator->hydrate($entity, clone $this->objectPrototype) : $entity;
+        $data = $this->storage->get($id);
+        return $this->hydrator && $data ? $this->hydrator->hydrate($data, clone $this->objectPrototype) : $data;
     }
 
     /**
      * @inheritDoc
      */
-    public function save(&$data) {
+    public function save($data) {
 
-        $dataToSave = $this->hydrator ? $this->hydrator->extract($data) : $data;
-        $this->storage->save($dataToSave);
-        if ($this->hydrator) {
-            $this->hydrator->hydrate($dataToSave, $data);
+        if ($this->hydrator && $data instanceof EntityInterface === true) {
+            $dataSave = $this->hydrator->extract($data);
+        } else {
+            $dataSave = $data;
         }
+
+        $dataSave = $this->storage->save($dataSave);
+
+        if ($this->hydrator && $data instanceof EntityInterface !== true) {
+            $dataSave = $this->hydrator->hydrate($dataSave, clone $this->objectPrototype);
+        }
+
+        return $dataSave;
     }
 
     /**
      * @inheritDoc
      */
-    public function update(&$data) {
-        $dataToUpdate = $this->hydrator ? $this->hydrator->extract($data) : $data;
-        $this->storage->update($dataToUpdate);
-        return $data;
+    public function update($data) {
+
+        if ($this->hydrator && $data instanceof EntityInterface === true) {
+            $dataToUpdate = $this->hydrator->extract($data);
+        } else {
+            $dataToUpdate = $data;
+        }
+
+        $dataToUpdate = $this->storage->update($dataToUpdate);
+
+        if ($this->hydrator && $data instanceof EntityInterface !== true) {
+            $dataToUpdate = $this->hydrator->hydrate($dataToUpdate, clone $this->objectPrototype);
+        }
+
+        return $dataToUpdate;
     }
 
     /**
      * @inheritDoc
      */
-    public function delete(EntityInterface $obj) {
+    public function delete($data) {
         return $this->storage->delete($obj);
     }
 
@@ -76,10 +94,7 @@ class Storage implements StorageInterface, ObjectPrototypeInterface, HydratorAwa
     }
 
     /**
-     * @param int $page
-     * @param int $itemPerPage
-     * @param null $search
-     * @return ResultSetPaginateInterface
+     * @inheritDoc
      */
     public function getPage($page = 1, $itemPerPage = 10, $search = null) {
         return $this->storage->getPage($page, $itemPerPage, $search);
