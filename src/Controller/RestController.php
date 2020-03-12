@@ -6,11 +6,9 @@ namespace App\Controller;
 use App\Middleware\ContentNegotiation\ContentType\ContentTypeTransformInterface;
 use App\Middleware\ContentNegotiation\Exception\ServiceNotFound;
 use App\Storage\StorageHydrateInterface;
-use App\Storage\StorageInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Zend\Hydrator\HydratorAwareInterface;
 
 /**
  * Class RestController
@@ -109,6 +107,7 @@ class RestController
      * @param Request $request
      * @param Response $response
      * @return Response
+     * @throws ServiceNotFound
      */
     public function patch(Request $request, Response $response) {
 

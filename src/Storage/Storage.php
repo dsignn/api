@@ -3,12 +3,8 @@ declare(strict_types=1);
 
 namespace App\Storage;
 
-use App\Module\Oauth\Entity\RefreshTokenEntity;
 use App\Storage\Entity\EntityInterface;
-use App\Storage\ResultSet\ResultSetPaginateInterface;
-use Zend\Hydrator\HydratorAwareInterface;
 use Zend\Hydrator\HydratorAwareTrait;
-use Zend\Hydrator\HydratorInterface;
 
 /**
  * Class Storage

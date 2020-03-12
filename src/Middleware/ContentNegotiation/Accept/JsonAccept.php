@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Middleware\ContentNegotiation\Accept;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
-use function DI\value;
 
 /**
  * Class JsonAccept

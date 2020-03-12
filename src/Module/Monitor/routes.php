@@ -2,7 +2,6 @@
 declare(strict_types=1);
 
 use App\Module\Monitor\Controller\MonitorController;
-use App\Module\User\Controller\UserController;
 use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 

@@ -14,9 +14,7 @@ use DI\ContainerBuilder;
 use Psr\Container\ContainerInterface;
 use Zend\Hydrator\ClassMethodsHydrator;
 use Zend\Hydrator\Filter\FilterComposite;
-use Zend\Hydrator\Filter\GetFilter;
 use Zend\Hydrator\Filter\MethodMatchFilter;
-use Zend\Hydrator\NamingStrategy\MapNamingStrategy;
 use Zend\Hydrator\Strategy\ClosureStrategy;
 
 return function (ContainerBuilder $containerBuilder) {

@@ -5,7 +5,6 @@ namespace App\Module\Oauth\Repository;
 
 use App\Module\Oauth\Entity\AuthCodeEntity;
 use App\Storage\StorageHydrateInterface;
-use App\Storage\StorageInterface;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
 

@@ -31,7 +31,6 @@ use League\OAuth2\Server\Grant\RefreshTokenGrant;
 use League\OAuth2\Server\ResourceServer;
 use Psr\Container\ContainerInterface;
 use Zend\Hydrator\ClassMethodsHydrator;
-use Zend\Hydrator\NamingStrategy\MapNamingStrategy;
 
 return function (ContainerBuilder $containerBuilder) {
 

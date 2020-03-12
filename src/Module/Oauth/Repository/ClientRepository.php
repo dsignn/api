@@ -73,6 +73,7 @@ class ClientRepository implements ClientRepositoryInterface
                 $this->client->setIdentifier($resultSet->current()->getPassword());
             }
         }
+
         return $isValid;
     }
 

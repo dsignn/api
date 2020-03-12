@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Storage;
 
-use App\Storage\Entity\EntityInterface;
 use App\Storage\ResultSet\ResultSetInterface;
 use App\Storage\ResultSet\ResultSetPaginateInterface;
 

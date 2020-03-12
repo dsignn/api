@@ -8,7 +8,6 @@ use App\Storage\Adapter\Mongo\ResultSet\MongoResultSetAwareInterface;
 use App\Storage\Adapter\Mongo\ResultSet\MongoResultSetAwareTrait;
 use App\Storage\Adapter\Mongo\ResultSet\MongoResultSetPaginateAwareInterface;
 use App\Storage\Adapter\Mongo\ResultSet\MongoResultSetPaginateAwareTrait;
-use App\Storage\Entity\EntityInterface;
 use App\Storage\StorageInterface;
 use MongoClient;
 use MongoId;
