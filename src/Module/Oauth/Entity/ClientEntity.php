@@ -31,11 +31,13 @@ class ClientEntity implements ClientEntityInterface, EntityInterface
     }
 
     /**
-     * @param string $password
+     * @param $password
+     * @return ClientEntity
      */
-    public function setPassword($password): void
+    public function setPassword($password): ClientEntity
     {
         $this->password = $password;
+        return $this;
     }
 
     /**
@@ -44,4 +46,24 @@ class ClientEntity implements ClientEntityInterface, EntityInterface
     public function setName($name) {
         $this->name = $name;
     }
+
+    /**
+     * @param $redirectUri
+     * @return ClientEntity
+     */
+    public function setRedirectUri($redirectUri): ClientEntity {
+        $this->redirectUri = $redirectUri;
+        return $this;
+    }
+
+    /**
+     * @param bool $isConfidential
+     * @return ClientEntity
+     */
+    public function setIsConfidential(bool $isConfidential): ClientEntity {
+        $this->isConfidential = $isConfidential;
+        return $this;
+    }
+
+
 }

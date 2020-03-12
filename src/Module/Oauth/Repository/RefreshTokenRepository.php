@@ -54,7 +54,7 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface {
      */
     public function isRefreshTokenRevoked($tokenId) {
 
-        $resultSet = $this->storage->gelAll(['identifier' => $tokenId]);
+        $resultSet = $this->storage->getAll(['identifier' => $tokenId]);
 
         $isValid = true;
         if ($resultSet->count() === 1) {

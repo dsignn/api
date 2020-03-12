@@ -107,7 +107,7 @@ class MongoAdapter implements StorageInterface, MongoResultSetAwareInterface, Mo
     /**
      * @inheritDoc
      */
-    public function gelAll(array $search = null) {
+    public function getAll(array $search = null) {
         $resultSet = clone $this->getResultSet();
         return $resultSet->setDataSource(
             $this->getCollection()->find($this->search($search ?  $search : []))

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use App\Module\User\Console\CreateUserCommand;
 use App\Module\User\Storage\UserStorageInterface;

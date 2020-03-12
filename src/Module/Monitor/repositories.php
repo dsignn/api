@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
+use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\UnderscoreNamingStrategy;
 use App\Module\Monitor\Entity\MonitorEntity;
 use App\Module\Monitor\Storage\MonitorStorage;
@@ -26,7 +27,7 @@ return function (ContainerBuilder $containerBuilder) {
             $serviceSetting = $settings['storage']['monitor'];
 
             $hydrator = new ClassMethodsHydrator();
-            $hydrator->setNamingStrategy(new UnderscoreNamingStrategy());
+            $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
             $hydrator->addStrategy('id', new MongoIdStrategy());
 
             $resultSet = new MongoHydrateResultSet();

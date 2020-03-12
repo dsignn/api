@@ -40,7 +40,7 @@ class UserRepository implements UserRepositoryInterface {
      */
     public function getUserEntityByUserCredentials($username, $password, $grantType, ClientEntityInterface $clientEntity) {
 
-        $resultSet = $this->storage->gelAll(['email' => $username]);
+        $resultSet = $this->storage->getAll(['email' => $username]);
         $user = null;
 
         if ($resultSet->count() === 1) {

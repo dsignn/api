@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace App\Module\Oauth\Controller;
 
 use App\Module\User\Entity\UserEntity;
@@ -60,7 +62,6 @@ class OauthController {
     public function authorize(Request $request, Response $response) {
 
         try {
-
             // Validate the HTTP request and return an AuthorizationRequest object.
             $authRequest = $this->oauthServer->validateAuthorizationRequest($request);
 

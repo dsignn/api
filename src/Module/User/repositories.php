@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 use App\Crypto\CryptoOpenSsl;
 use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
+use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
 use App\Module\User\Entity\UserEntity;
 use App\Module\User\Storage\UserStorage;
 use App\Module\User\Storage\UserStorageInterface;
@@ -27,9 +28,7 @@ return function (ContainerBuilder $containerBuilder) {
             $serviceSetting = $settings['storage']['user'];
 
             $hydrator = new ClassMethodsHydrator();
-            $hydrator->setNamingStrategy(MapNamingStrategy::createFromAsymmetricMap(
-                ['id' => '_id'],  ['_id' => 'id']
-            ));
+            $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
             $hydrator->addStrategy('id', new MongoIdStrategy());
 
             $resultSet = new MongoHydrateResultSet();

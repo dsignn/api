@@ -40,7 +40,7 @@ interface StorageInterface {
      * @param array $search
      * @return ResultSetInterface
      */
-    public function gelAll(array $search = null);
+    public function getAll(array $search = null);
 
     /**
      * @param int $page

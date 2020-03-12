@@ -7,10 +7,10 @@ use Zend\Hydrator\NamingStrategy\NamingStrategyInterface;
 use Zend\Hydrator\NamingStrategy\UnderscoreNamingStrategy as ZendUnderscoreNamingStrategy;
 
 /**
- * Class UnderscoreNamingStrategy
+ * Class MongoUnderscoreNamingStrategy
  * @package App\Hydrator\Strategy\Mongo\NamingStrategy
  */
-class UnderscoreNamingStrategy implements NamingStrategyInterface {
+class MongoUnderscoreNamingStrategy implements NamingStrategyInterface {
 
     /**
      * @var ZendUnderscoreNamingStrategy

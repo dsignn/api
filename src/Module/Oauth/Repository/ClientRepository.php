@@ -43,17 +43,25 @@ class ClientRepository implements ClientRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function getClientEntity($clientIdentifier)
-    {
+    public function getClientEntity($clientIdentifier) {
+
+        if (!$this->client->getIdentifier()) {
+
+            $resultSet = $this->storage->getAll(['identifier' => $clientIdentifier]);
+            if ($resultSet->count() === 1) {
+                $this->client = $resultSet->current();
+            }
+        }
+
         return $this->client;
     }
 
     /**
      * @inheritDoc
      */
-    public function validateClient($clientIdentifier, $clientSecret, $grantType)
-    {
-        $resultSet = $this->storage->gelAll(
+    public function validateClient($clientIdentifier, $clientSecret, $grantType) {
+
+        $resultSet = $this->storage->getAll(
             ['identifier' => $clientIdentifier]
         );
 

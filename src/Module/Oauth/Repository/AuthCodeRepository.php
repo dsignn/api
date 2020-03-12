@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Module\Oauth\Repository;
 
 use App\Module\Oauth\Entity\AuthCodeEntity;
+use App\Storage\StorageHydrateInterface;
 use App\Storage\StorageInterface;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
@@ -15,10 +16,10 @@ use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
 class AuthCodeRepository implements AuthCodeRepositoryInterface {
 
     /**
-     * AccessTokenRepository constructor.
-     * @param StorageInterface $storage
+     * AuthCodeRepository constructor.
+     * @param StorageHydrateInterface $storage
      */
-    public function __construct(StorageInterface $storage) {
+    public function __construct(StorageHydrateInterface $storage) {
 
         $this->storage = $storage;
     }
@@ -31,26 +32,21 @@ class AuthCodeRepository implements AuthCodeRepositoryInterface {
         return new AuthCodeEntity();
     }
 
-    public function persistNewAuthCode(AuthCodeEntityInterface $authCodeEntity)
-    {
-        // TODO: Implement persistNewAuthCode() method.
-        var_dump('persistNewAuthCode');
-        var_dump($authCodeEntity);
-        die();
+    /**
+     * @inheritDoc
+     */
+    public function persistNewAuthCode(AuthCodeEntityInterface $authCodeEntity) {
+        $this->storage->save($authCodeEntity);
     }
 
-    public function revokeAuthCode($codeId)
-    {
+    public function revokeAuthCode($codeId) {
         // TODO: Implement revokeAuthCode() method.
         var_dump('revokeAuthCode');
         var_dump($codeId);
         die();
     }
 
-    public function isAuthCodeRevoked($codeId)
-    {
+    public function isAuthCodeRevoked($codeId) {
         return false; // The auth code has not been revoked
     }
-
-
 }

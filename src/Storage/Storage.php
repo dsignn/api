@@ -90,8 +90,8 @@ class Storage implements StorageHydrateInterface {
     /**
      * @inheritDoc
      */
-    public function gelAll(array $search = null) {
-        return $this->storage->gelAll($search);
+    public function getAll(array $search = null) {
+        return $this->storage->getAll($search);
     }
 
     /**
