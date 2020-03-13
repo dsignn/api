@@ -6,7 +6,7 @@ namespace App\Hydrator\Strategy\Mongo;
 use DateTimeImmutable;
 use DateTimeInterface;
 use MongoDate;
-use Zend\Hydrator\Strategy\StrategyInterface;
+use Laminas\Hydrator\Strategy\StrategyInterface;
 
 /**
  * Class MongoDateStrategy

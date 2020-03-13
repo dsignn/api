@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Middleware\ContentNegotiation\ContentType;
 
 use Psr\Http\Message\ResponseInterface as Response;
-use Zend\Hydrator\HydratorAwareInterface;
+use Laminas\Hydrator\HydratorAwareInterface;
 
 /**
  * Interface ContentTypeTransformInterface

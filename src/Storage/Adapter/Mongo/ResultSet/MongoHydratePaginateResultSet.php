@@ -5,7 +5,7 @@ namespace App\Storage\Adapter\Mongo\ResultSet;
 
 use App\Storage\ObjectPrototypeInterface;
 use App\Storage\ResultSet\ResultSetPaginateInterface;
-use Zend\Hydrator\HydratorAwareInterface;
+use Laminas\Hydrator\HydratorAwareInterface;
 
 /**
  * Class MongoHydrateResultSet

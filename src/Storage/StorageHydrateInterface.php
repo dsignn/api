@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Storage;
 
-use Zend\Hydrator\HydratorAwareInterface;
+use Laminas\Hydrator\HydratorAwareInterface;
 
 /**
  * Interface StorageInterface

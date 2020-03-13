@@ -30,7 +30,7 @@ use League\OAuth2\Server\Grant\PasswordGrant;
 use League\OAuth2\Server\Grant\RefreshTokenGrant;
 use League\OAuth2\Server\ResourceServer;
 use Psr\Container\ContainerInterface;
-use Zend\Hydrator\ClassMethodsHydrator;
+use Laminas\Hydrator\ClassMethodsHydrator;
 
 return function (ContainerBuilder $containerBuilder) {
 

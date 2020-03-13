@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace App\Middleware\ContentNegotiation;
 
 use App\Middleware\ContentNegotiation\Accept\AcceptContainer;
@@ -85,8 +87,7 @@ class ContentNegotiationMiddleware implements Middleware
     /**
      * @inheritDoc
      */
-    public function process(Request $request, RequestHandler $handler): Response
-    {
+    public function process(Request $request, RequestHandler $handler): Response {
         $path = $request->getAttribute('__route__')->getPattern();
         $method = $request->getMethod();
 

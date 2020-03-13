@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Hydrator\Strategy\Mongo;
 
 use MongoId;
-use Zend\Hydrator\Strategy\StrategyInterface;
+use Laminas\Hydrator\Strategy\StrategyInterface;
 
 /**
  * Class MongoIdStrategy

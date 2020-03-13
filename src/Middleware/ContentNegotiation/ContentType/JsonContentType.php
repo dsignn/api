@@ -7,8 +7,8 @@ use App\Storage\Entity\EntityInterface;
 use App\Storage\ResultSet\ResultSetPaginateInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Psr7\Stream;
-use Zend\Hydrator\HydratorAwareInterface;
-use Zend\Hydrator\HydratorAwareTrait;
+use Laminas\Hydrator\HydratorAwareInterface;
+use Laminas\Hydrator\HydratorAwareTrait;
 
 
 /**

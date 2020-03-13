@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Storage;
 
 use App\Storage\Entity\EntityInterface;
-use Zend\Hydrator\HydratorAwareTrait;
+use Laminas\Hydrator\HydratorAwareTrait;
 
 /**
  * Class Storage

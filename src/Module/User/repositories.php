@@ -12,10 +12,10 @@ use App\Storage\Adapter\Mongo\ResultSet\MongoHydratePaginateResultSet;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
 use DI\ContainerBuilder;
 use Psr\Container\ContainerInterface;
-use Zend\Hydrator\ClassMethodsHydrator;
-use Zend\Hydrator\Filter\FilterComposite;
-use Zend\Hydrator\Filter\MethodMatchFilter;
-use Zend\Hydrator\Strategy\ClosureStrategy;
+use Laminas\Hydrator\ClassMethodsHydrator;
+use Laminas\Hydrator\Filter\FilterComposite;
+use Laminas\Hydrator\Filter\MethodMatchFilter;
+use Laminas\Hydrator\Strategy\ClosureStrategy;
 
 return function (ContainerBuilder $containerBuilder) {
 

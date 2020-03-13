@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\Hydrator\Strategy\Mongo\NamingStrategy;
 
-use Zend\Hydrator\NamingStrategy\NamingStrategyInterface;
-use Zend\Hydrator\NamingStrategy\UnderscoreNamingStrategy as ZendUnderscoreNamingStrategy;
+use Laminas\Hydrator\NamingStrategy\NamingStrategyInterface;
+use Laminas\Hydrator\NamingStrategy\UnderscoreNamingStrategy as ZendUnderscoreNamingStrategy;
 
 /**
  * Class MongoUnderscoreNamingStrategy

@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\Hydrator\Strategy;
 
-use Zend\Hydrator\HydratorInterface;
-use Zend\Hydrator\Strategy\StrategyInterface;
+use Laminas\Hydrator\HydratorInterface;
+use Laminas\Hydrator\Strategy\StrategyInterface;
 
 /**
  * Class HydratorStrategy
