@@ -25,8 +25,10 @@ return function (App $app) {
 
         $group->delete('/{id:[0-9a-fA-F]{24}}',  [MonitorController::class, 'delete']);
     })->add(
-        new ValidationMiddleware()
-    )->add(new OAuthMiddleware(
+        new ValidationMiddleware(
+            $app->getContainer()->get('settings')['validation'],
+            $app->getContainer()
+    ))->add(new OAuthMiddleware(
         $app->getContainer()->get(ResourceServer::class),
         $app->getContainer()->get(UserStorageInterface::class),
         $app->getContainer()->get('AccessTokenStorage')

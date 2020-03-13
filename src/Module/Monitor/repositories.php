@@ -11,8 +11,11 @@ use App\Storage\Adapter\Mongo\MongoAdapter;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydratePaginateResultSet;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
 use DI\ContainerBuilder;
+use Laminas\InputFilter\Input;
+use Laminas\Validator\EmailAddress;
 use Psr\Container\ContainerInterface;
 use Laminas\Hydrator\ClassMethodsHydrator;
+use Laminas\InputFilter\InputFilter;
 use Laminas\Hydrator\Strategy\ClosureStrategy;
 
 return function (ContainerBuilder $containerBuilder) {
@@ -58,6 +61,28 @@ return function (ContainerBuilder $containerBuilder) {
             }));
 
             return $hydrator;
+        }
+    ])->addDefinitions([
+        'UserPostValidation' => function(ContainerInterface $container) {
+
+            $inputFilter = new InputFilter();
+
+            // Name field
+            $name = new Input('name');
+            // Last name field
+            $lastName = new Input('lastName');
+            // Email field
+            $email= new Input('email');
+            $email->getValidatorChain()->attach(new EmailAddress());
+            // Role field
+            $role = new Input('role');
+
+            $inputFilter->add($email)
+                ->add($name)
+                ->add($lastName)
+                ->add($role);
+
+            return $inputFilter;
         }
     ]);
 };

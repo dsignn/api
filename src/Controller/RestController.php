@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Middleware\ContentNegotiation\ContentType\ContentTypeTransformInterface;
 use App\Middleware\ContentNegotiation\Exception\ServiceNotFound;
 use App\Storage\StorageHydrateInterface;
+use Laminas\InputFilter\InputFilterInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -69,6 +70,21 @@ class RestController
     public function post(Request $request, Response $response) {
 
         $data = $request->getParsedBody();
+
+        if ($request->getAttribute('app-validation')) {
+            /** @var InputFilterInterface $validator */
+            $validator = $request->getAttribute('app-validation');
+            $validator->setData($data);
+            if (!$validator->isValid()) {
+                $contentTypeService = $this->getContentTypeService($request);
+                $response = $contentTypeService->transformContentType($response, $validator->getMessages());
+                return $response->withStatus(422);
+            }
+
+            var_dump($validator->getValues());
+            die();
+        }
+
         $entity = $this->storage->save($data);
 
         $contentTypeService = $this->getContentTypeService($request);

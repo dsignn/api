@@ -41,7 +41,10 @@ class JsonContentType implements ContentTypeTransformInterface {
                 break;
             case $data instanceof EntityInterface === true:
                 $computeData = $this->getHydrator()->extract($data);
-                true;
+                break;
+            case is_array($data) === true:
+                $computeData = $data;
+                break;
         }
 
         $body = new Stream(fopen('php://temp', 'r+'));

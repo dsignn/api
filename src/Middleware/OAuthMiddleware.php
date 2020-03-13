@@ -65,8 +65,8 @@ class OAuthMiddleware implements Middleware {
         }
 
         return $handler->handle(
-            $request->withAttribute('oauth_user_obj', $this->getUser($request->getAttribute('oauth_user_id')))
-                ->withAttribute('oauth_client_obj', $this->getClient($request->getAttribute('oauth_access_token_id')))
+            $request->withAttribute('app-user', $this->getUser($request->getAttribute('oauth_user_id')))
+                ->withAttribute('app-client', $this->getClient($request->getAttribute('oauth_access_token_id')))
         );
     }
 

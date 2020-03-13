@@ -80,7 +80,6 @@ class ContentNegotiationMiddleware implements Middleware
      * @param $setting
      */
     public function __construct($setting) {
-
         $this->settings = $setting;
     }
 

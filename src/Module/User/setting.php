@@ -29,7 +29,7 @@ return function (&$setting) {
                     ],
                 ],
                 'validation' => [
-                    '/monitor' => [
+                    '/user' => [
                         'POST' => 'UserPostValidation'
                     ]
                 ]
