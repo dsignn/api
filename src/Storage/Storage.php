@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Storage;
 
+use App\Storage\Adapter\StorageAdapterInterface;
 use App\Storage\Entity\EntityInterface;
 use Laminas\Hydrator\HydratorAwareTrait;
 
@@ -10,13 +11,13 @@ use Laminas\Hydrator\HydratorAwareTrait;
  * Class Storage
  * @package App\Storage
  */
-class Storage implements StorageHydrateInterface {
+class Storage implements StorageInterface {
 
     use ObjectPrototypeTrait;
     use HydratorAwareTrait;
 
     /**
-     * @var StorageInterface
+     * @var StorageAdapterInterface
      */
     protected $storage;
 
@@ -24,7 +25,7 @@ class Storage implements StorageHydrateInterface {
      * Storage constructor.
      * @param StorageInterface $storage
      */
-    public function __construct(StorageInterface $storage) {
+    public function __construct(StorageAdapterInterface $storage) {
         $this->storage = $storage;
     }
 
@@ -49,10 +50,9 @@ class Storage implements StorageHydrateInterface {
 
         $dataSave = $this->storage->save($dataSave);
 
-        if ($this->hydrator && $data instanceof EntityInterface !== true) {
+        if ($this->hydrator) {
             $dataSave = $this->hydrator->hydrate($dataSave, clone $this->objectPrototype);
         }
-
         return $dataSave;
     }
 
@@ -95,5 +95,14 @@ class Storage implements StorageHydrateInterface {
      */
     public function getPage($page = 1, $itemPerPage = 10, $search = null) {
         return $this->storage->getPage($page, $itemPerPage, $search);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function generateEntity(array $data): EntityInterface {
+        $entity = clone $this->getObjectPrototype();
+        $this->getHydrator()->hydrate($data, $entity);
+        return $entity;
     }
 }

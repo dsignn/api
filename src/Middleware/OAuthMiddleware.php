@@ -6,7 +6,7 @@ namespace App\Middleware;
 use App\Module\Oauth\Entity\AccessTokenEntity;
 use App\Module\Oauth\Entity\ClientEntity;
 use App\Module\User\Entity\UserEntity;
-use App\Storage\StorageHydrateInterface;
+use App\Storage\StorageInterface;
 use Exception;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\ResourceServer;
@@ -28,22 +28,22 @@ class OAuthMiddleware implements Middleware {
     protected $server;
 
     /**
-     * @var StorageHydrateInterface
+     * @var StorageInterface
      */
     protected $userStorage;
 
     /**
-     * @var StorageHydrateInterface
+     * @var StorageInterface
      */
     protected $tokenStorage;
 
     /**
      * AuthMiddleware constructor.
      * @param ResourceServer $server
-     * @param StorageHydrateInterface $userStorage
-     * @param StorageHydrateInterface $tokenStorage
+     * @param StorageInterface $userStorage
+     * @param StorageInterface $tokenStorage
      */
-    public function __construct(ResourceServer $server, StorageHydrateInterface $userStorage, StorageHydrateInterface $tokenStorage) {
+    public function __construct(ResourceServer $server, StorageInterface $userStorage, StorageInterface $tokenStorage) {
         $this->server = $server;
         $this->userStorage = $userStorage;
         $this->tokenStorage = $tokenStorage;

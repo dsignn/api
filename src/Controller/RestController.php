@@ -5,7 +5,7 @@ namespace App\Controller;
 
 use App\Middleware\ContentNegotiation\ContentType\ContentTypeTransformInterface;
 use App\Middleware\ContentNegotiation\Exception\ServiceNotFound;
-use App\Storage\StorageHydrateInterface;
+use App\Storage\StorageInterface;
 use Laminas\InputFilter\InputFilterInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -23,7 +23,7 @@ class RestController
     protected $entityNameClass = '';
 
     /**
-     * @var StorageHydrateInterface
+     * @var StorageInterface
      */
     protected $storage;
 
@@ -34,10 +34,10 @@ class RestController
 
     /**
      * RestController constructor.
-     * @param StorageHydrateInterface $storage
+     * @param StorageInterface $storage
      * @param ContainerInterface $container
      */
-    public function __construct(StorageHydrateInterface $storage, ContainerInterface $container) {
+    public function __construct(StorageInterface $storage, ContainerInterface $container) {
         $this->storage = $storage;
         $this->container = $container;
     }
@@ -77,12 +77,14 @@ class RestController
             $validator->setData($data);
             if (!$validator->isValid()) {
                 $contentTypeService = $this->getContentTypeService($request);
-                $response = $contentTypeService->transformContentType($response, $validator->getMessages());
+                $response = $contentTypeService->transformContentType(
+                    $response,
+                    ['errors' => $validator->getMessages()]
+                );
                 return $response->withStatus(422);
             }
 
-            var_dump($validator->getValues());
-            die();
+            $data = $validator->getValues();
         }
 
         $entity = $this->storage->save($data);

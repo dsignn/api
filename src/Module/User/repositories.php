@@ -4,6 +4,7 @@ declare(strict_types=1);
 use App\Crypto\CryptoOpenSsl;
 use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
+use App\Module\Oauth\Filter\PasswordFilter;
 use App\Module\User\Entity\UserEntity;
 use App\Module\User\Storage\UserStorage;
 use App\Module\User\Storage\UserStorageInterface;
@@ -11,6 +12,13 @@ use App\Storage\Adapter\Mongo\MongoAdapter;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydratePaginateResultSet;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
 use DI\ContainerBuilder;
+use Laminas\InputFilter\Input;
+use Laminas\InputFilter\InputFilter;
+use Laminas\Validator\EmailAddress;
+use Laminas\Validator\GreaterThan;
+use Laminas\Validator\InArray;
+use Laminas\Validator\LessThan;
+use Laminas\Validator\StringLength;
 use Psr\Container\ContainerInterface;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Hydrator\Filter\FilterComposite;
@@ -62,6 +70,42 @@ return function (ContainerBuilder $containerBuilder) {
             }));
 
             return $hydrator;
+        }
+    ])->addDefinitions([
+        'UserPostValidation' => function(ContainerInterface $container) {
+
+            $inputFilter = new InputFilter();
+
+            // Name field
+            $name = new Input('name');
+            // Last name field
+            $lastName = new Input('lastName');
+            // Email field
+            $email= new Input('email');
+            $email->getValidatorChain()->attach(new EmailAddress());
+            // Role field
+            $role = new Input('role');
+            $role->getValidatorChain()->attach(new InArray([
+                'haystack' => ['guest', 'companyOwner', 'admin']
+            ]));
+            // Password field
+            $password = $password = new Input('password');
+            $password->getValidatorChain()->attach(new StringLength([
+                'min' => 8,
+                'max' => 12
+            ]));
+
+            $inputFilter->add($email)
+                ->add($name)
+                ->add($lastName)
+                ->add($role)
+                ->add($password);
+
+            return $inputFilter;
+        }
+    ])->addDefinitions([
+        'PasswordFilter' => function(ContainerInterface $container) {
+            return new PasswordFilter($container->get('OAuthCrypto'));
         }
     ]);
 };

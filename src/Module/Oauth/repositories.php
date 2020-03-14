@@ -9,7 +9,9 @@ use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\UnderscoreNamingStrategy;
 use App\Module\Oauth\Entity\AccessTokenEntity;
+use App\Module\Oauth\Entity\AuthCodeEntity;
 use App\Module\Oauth\Entity\ClientEntity;
+use App\Module\Oauth\Entity\RefreshTokenEntity;
 use App\Module\Oauth\Repository\AccessTokenRepository;
 use App\Module\Oauth\Repository\AuthCodeRepository;
 use App\Module\Oauth\Repository\ClientRepository;
@@ -63,6 +65,7 @@ return function (ContainerBuilder $containerBuilder) {
 
             $storage = new Storage($mongoAdapter);
             $storage->setHydrator($hydrator);
+            $storage->setObjectPrototype(new ClientEntity());
 
             return $storage;
         },
@@ -92,6 +95,8 @@ return function (ContainerBuilder $containerBuilder) {
 
             $storage = new Storage($mongoAdapter);
             $storage->setHydrator($hydrator);
+            $storage->setObjectPrototype(new AccessTokenEntity());
+
             return $storage;
         },
 
@@ -118,6 +123,8 @@ return function (ContainerBuilder $containerBuilder) {
 
             $storage = new Storage($mongoAdapter);
             $storage->setHydrator($hydrator);
+            $storage->setObjectPrototype(new UserEntity());
+
             return $storage;
         },
 
@@ -130,8 +137,6 @@ return function (ContainerBuilder $containerBuilder) {
             $settings = $c->get('settings');
             $serviceSetting = $settings['oauth']['refresh-token']['storage'];
 
-            $mongoAdapter = new MongoAdapter($c->get(MongoClient::class), $serviceSetting['name'], $serviceSetting['collection']);
-
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
             $hydrator->addStrategy('id', new MongoIdStrategy());
@@ -141,8 +146,17 @@ return function (ContainerBuilder $containerBuilder) {
 
             $hydrator->addStrategy('accessToken', new HydratorStrategy($accessTokenHydrator, new AccessTokenEntity()));
 
+            $resultSet = new MongoHydrateResultSet();
+            $resultSet->setHydrator($hydrator);
+            $resultSet->setObjectPrototype(new RefreshTokenEntity());
+
+            $mongoAdapter = new MongoAdapter($c->get(MongoClient::class), $serviceSetting['name'], $serviceSetting['collection']);
+            $mongoAdapter->setResultSet($resultSet);
+
             $storage = new Storage($mongoAdapter);
             $storage->setHydrator($hydrator);
+            $storage->setObjectPrototype(new RefreshTokenEntity());
+
             return $storage;
         },
 
@@ -155,11 +169,17 @@ return function (ContainerBuilder $containerBuilder) {
             $settings = $c->get('settings');
             $serviceSetting = $settings['oauth']['auth-code']['storage'];
 
-            $mongoAdapter = new MongoAdapter($c->get(MongoClient::class), $serviceSetting['name'], $serviceSetting['collection']);
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
             $hydrator->addStrategy('id', new MongoIdStrategy());
             $hydrator->addStrategy('client', new HydratorStrategy(new ClassMethodsHydrator(), new ClientEntity()));
+
+            $resultSet = new MongoHydrateResultSet();
+            $resultSet->setHydrator($hydrator);
+            $resultSet->setObjectPrototype(new AuthCodeEntity());
+
+            $mongoAdapter = new MongoAdapter($c->get(MongoClient::class), $serviceSetting['name'], $serviceSetting['collection']);
+            $mongoAdapter->setResultSet($resultSet);
 
             $storage = new Storage($mongoAdapter);
             $storage->setHydrator($hydrator);

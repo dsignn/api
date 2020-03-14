@@ -8,6 +8,7 @@ use App\Storage\Adapter\Mongo\ResultSet\MongoResultSetAwareInterface;
 use App\Storage\Adapter\Mongo\ResultSet\MongoResultSetAwareTrait;
 use App\Storage\Adapter\Mongo\ResultSet\MongoResultSetPaginateAwareInterface;
 use App\Storage\Adapter\Mongo\ResultSet\MongoResultSetPaginateAwareTrait;
+use App\Storage\Adapter\StorageAdapterInterface;
 use App\Storage\StorageInterface;
 use MongoClient;
 use MongoId;
@@ -15,7 +16,7 @@ use MongoId;
 /**
  * Class MongoAdapter
  */
-class MongoAdapter implements StorageInterface, MongoResultSetAwareInterface, MongoResultSetPaginateAwareInterface  {
+class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterface, MongoResultSetPaginateAwareInterface  {
 
     use MongoResultSetAwareTrait, MongoResultSetPaginateAwareTrait;
 
@@ -70,7 +71,7 @@ class MongoAdapter implements StorageInterface, MongoResultSetAwareInterface, Mo
     /**
      * @inheritDoc
      */
-    public function save($data) {
+    public function save(array $data) {
         $dbInfo = $this->getCollection()->insert($data);
         if ($dbInfo['errmsg'] !== null) {
             throw new \MongoException($dbInfo['errmsg']);
@@ -81,7 +82,7 @@ class MongoAdapter implements StorageInterface, MongoResultSetAwareInterface, Mo
     /**
      * @inheritDoc
      */
-    public function update($data) {
+    public function update(array $data) {
         $dbInfo = $this->getCollection()->update(
             ["_id" => $data["_id"] ? $data['_id'] :  ''],
             $data

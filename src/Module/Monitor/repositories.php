@@ -62,27 +62,5 @@ return function (ContainerBuilder $containerBuilder) {
 
             return $hydrator;
         }
-    ])->addDefinitions([
-        'UserPostValidation' => function(ContainerInterface $container) {
-
-            $inputFilter = new InputFilter();
-
-            // Name field
-            $name = new Input('name');
-            // Last name field
-            $lastName = new Input('lastName');
-            // Email field
-            $email= new Input('email');
-            $email->getValidatorChain()->attach(new EmailAddress());
-            // Role field
-            $role = new Input('role');
-
-            $inputFilter->add($email)
-                ->add($name)
-                ->add($lastName)
-                ->add($role);
-
-            return $inputFilter;
-        }
     ]);
 };

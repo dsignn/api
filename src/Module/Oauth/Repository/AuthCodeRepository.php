@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Module\Oauth\Repository;
 
 use App\Module\Oauth\Entity\AuthCodeEntity;
-use App\Storage\StorageHydrateInterface;
+use App\Storage\StorageInterface;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
 
@@ -16,9 +16,9 @@ class AuthCodeRepository implements AuthCodeRepositoryInterface {
 
     /**
      * AuthCodeRepository constructor.
-     * @param StorageHydrateInterface $storage
+     * @param StorageInterface $storage
      */
-    public function __construct(StorageHydrateInterface $storage) {
+    public function __construct(StorageInterface $storage) {
 
         $this->storage = $storage;
     }
