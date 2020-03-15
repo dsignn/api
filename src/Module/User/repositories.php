@@ -36,6 +36,7 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
             $hydrator->addStrategy('id', new MongoIdStrategy());
+            $hydrator->addFilter('identifier', new MethodMatchFilter('getIdentifier'),  FilterComposite::CONDITION_AND);
 
             $resultSet = new MongoHydrateResultSet();
             $resultSet->setHydrator($hydrator);

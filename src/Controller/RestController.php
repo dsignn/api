@@ -87,7 +87,8 @@ class RestController
             $data = $validator->getValues();
         }
 
-        $entity = $this->storage->save($data);
+        $entity = $this->storage->generateEntity($data);
+        $this->storage->save($entity);
 
         $contentTypeService = $this->getContentTypeService($request);
         return $contentTypeService->transformContentType($response, $entity);
@@ -108,13 +109,26 @@ class RestController
             return $response->withStatus(404);
         }
 
-        /**
-         * TODO override total entity?? REST complient
-         */
-        $putEntity = clone $this->storage->getObjectPrototype();
-        $this->storage->getHydrator()->hydrate($request->getParsedBody(), $putEntity);
-        $putEntity->setId($id);
+        $data = $request->getParsedBody();
 
+        if ($request->getAttribute('app-validation')) {
+            /** @var InputFilterInterface $validator */
+            $validator = $request->getAttribute('app-validation');
+            $validator->setData($data);
+            if (!$validator->isValid()) {
+                $contentTypeService = $this->getContentTypeService($request);
+                $response = $contentTypeService->transformContentType(
+                    $response,
+                    ['errors' => $validator->getMessages()]
+                );
+                return $response->withStatus(422);
+            }
+
+            $data = $validator->getValues();
+        }
+
+        $putEntity = clone $this->storage->generateEntity($request->getParsedBody());
+        $putEntity->setId($id);
         $this->storage->update($putEntity);
 
         $contentTypeService = $this->getContentTypeService($request);

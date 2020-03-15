@@ -9,6 +9,8 @@ use App\Storage\Adapter\Mongo\ResultSet\MongoResultSetAwareTrait;
 use App\Storage\Adapter\Mongo\ResultSet\MongoResultSetPaginateAwareInterface;
 use App\Storage\Adapter\Mongo\ResultSet\MongoResultSetPaginateAwareTrait;
 use App\Storage\Adapter\StorageAdapterInterface;
+use App\Storage\ResultSet\ResultSetInterface;
+use App\Storage\ResultSet\ResultSetPaginateInterface;
 use App\Storage\StorageInterface;
 use MongoClient;
 use MongoId;
@@ -71,7 +73,7 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
     /**
      * @inheritDoc
      */
-    public function save(array $data) {
+    public function save(array $data): array {
         $dbInfo = $this->getCollection()->insert($data);
         if ($dbInfo['errmsg'] !== null) {
             throw new \MongoException($dbInfo['errmsg']);
@@ -82,7 +84,7 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
     /**
      * @inheritDoc
      */
-    public function update(array $data) {
+    public function update(array $data): array {
         $dbInfo = $this->getCollection()->update(
             ["_id" => $data["_id"] ? $data['_id'] :  ''],
             $data
@@ -96,7 +98,7 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
     /**
      * @inheritDoc
      */
-    public function delete($id) {
+    public function delete($id): bool {
         $dbInfo = $this->getCollection()->remove(['_id' => new \MongoId($id)]);
         if ($dbInfo['errmsg'] !== null) {
             throw new \MongoException($dbInfo['errmsg']);
@@ -107,7 +109,7 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
     /**
      * @inheritDoc
      */
-    public function getAll(array $search = null) {
+    public function getAll(array $search = null): ResultSetInterface {
         $resultSet = clone $this->getResultSet();
         return $resultSet->setDataSource(
             $this->getCollection()->find($this->search($search ?  $search : []))
@@ -117,7 +119,7 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
     /**
      * @inheritDoc
      */
-    public function getPage($page = 1, $itemPerPage = 10, $search = null) {
+    public function getPage($page = 1, $itemPerPage = 10, $search = null): ResultSetPaginateInterface {
 
         $resultSet = clone $this->getResultSetPaginate();
         return $resultSet->setPage($page)

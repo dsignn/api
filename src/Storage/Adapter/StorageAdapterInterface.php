@@ -21,25 +21,25 @@ interface StorageAdapterInterface {
      * @param array $data
      * @return array
      */
-    public function save(array $data);
+    public function save(array $data): array ;
 
     /**
      * @param array $data
      * @return  array
      */
-    public function update(array $data);
+    public function update(array $data): array ;
 
     /**
      * @param $id
      * @return boolean
      */
-    public function delete($id);
+    public function delete($id): bool;
 
     /**
      * @param array $search
-     * @return ResultSetInterface
+     * @return
      */
-    public function getAll(array $search = null);
+    public function getAll(array $search = null): ResultSetInterface;
 
     /**
      * @param int $page
@@ -47,5 +47,5 @@ interface StorageAdapterInterface {
      * @param null $search
      * @return ResultSetPaginateInterface
      */
-    public function getPage($page = 1, $itemPerPage = 10, $search = null);
+    public function getPage($page = 1, $itemPerPage = 10, $search = null): ResultSetPaginateInterface;
 }

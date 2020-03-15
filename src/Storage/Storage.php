@@ -5,6 +5,8 @@ namespace App\Storage;
 
 use App\Storage\Adapter\StorageAdapterInterface;
 use App\Storage\Entity\EntityInterface;
+use App\Storage\ResultSet\ResultSetInterface;
+use App\Storage\ResultSet\ResultSetPaginateInterface;
 use Laminas\Hydrator\HydratorAwareTrait;
 
 /**
@@ -32,7 +34,7 @@ class Storage implements StorageInterface {
     /**
      * @inheritDoc
      */
-    public function get($id) {
+    public function get(string $id) {
         $data = $this->storage->get($id);
         return $this->hydrator && $data ? $this->hydrator->hydrate($data, clone $this->objectPrototype) : $data;
     }
@@ -40,60 +42,44 @@ class Storage implements StorageInterface {
     /**
      * @inheritDoc
      */
-    public function save($data) {
+    public function save(EntityInterface &$entity): EntityInterface {
+        $this->hydrator->hydrate(
+            $this->storage->save($this->hydrator->extract($entity)),
+            $entity
+        );
 
-        if ($this->hydrator && $data instanceof EntityInterface === true) {
-            $dataSave = $this->hydrator->extract($data);
-        } else {
-            $dataSave = $data;
-        }
-
-        $dataSave = $this->storage->save($dataSave);
-
-        if ($this->hydrator) {
-            $dataSave = $this->hydrator->hydrate($dataSave, clone $this->objectPrototype);
-        }
-        return $dataSave;
+        return $entity;
     }
 
     /**
      * @inheritDoc
      */
-    public function update($data) {
+    public function update(EntityInterface $entity): EntityInterface {
 
-        if ($this->hydrator && $data instanceof EntityInterface === true) {
-            $dataToUpdate = $this->hydrator->extract($data);
-        } else {
-            $dataToUpdate = $data;
-        }
-
-        $dataToUpdate = $this->storage->update($dataToUpdate);
-
-        if ($this->hydrator && $data instanceof EntityInterface !== true) {
-            $dataToUpdate = $this->hydrator->hydrate($dataToUpdate, clone $this->objectPrototype);
-        }
-
-        return $dataToUpdate;
+        // TODO evt
+        $dataToUpdate = $this->storage->update($this->hydrator->extract($entity));
+        // TODO evt
+        return $entity;
     }
 
     /**
      * @inheritDoc
      */
-    public function delete($id) {
+    public function delete(string $id): bool {
         return $this->storage->delete($id);
     }
 
     /**
      * @inheritDoc
      */
-    public function getAll(array $search = null) {
+    public function getAll(array $search = null): ResultSetInterface {
         return $this->storage->getAll($search);
     }
 
     /**
      * @inheritDoc
      */
-    public function getPage($page = 1, $itemPerPage = 10, $search = null) {
+    public function getPage($page = 1, $itemPerPage = 10, $search = null): ResultSetPaginateInterface {
         return $this->storage->getPage($page, $itemPerPage, $search);
     }
 
