@@ -5,8 +5,8 @@ namespace App\Hydrator\Strategy\Mongo;
 
 use DateTimeImmutable;
 use DateTimeInterface;
-use MongoDate;
 use Laminas\Hydrator\Strategy\StrategyInterface;
+use MongoDate;
 
 /**
  * Class MongoDateStrategy

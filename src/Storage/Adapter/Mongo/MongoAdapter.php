@@ -11,7 +11,6 @@ use App\Storage\Adapter\Mongo\ResultSet\MongoResultSetPaginateAwareTrait;
 use App\Storage\Adapter\StorageAdapterInterface;
 use App\Storage\ResultSet\ResultSetInterface;
 use App\Storage\ResultSet\ResultSetPaginateInterface;
-use App\Storage\StorageInterface;
 use MongoClient;
 use MongoId;
 

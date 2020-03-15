@@ -7,8 +7,9 @@ use App\Storage\Adapter\StorageAdapterInterface;
 use App\Storage\Entity\EntityInterface;
 use App\Storage\ResultSet\ResultSetInterface;
 use App\Storage\ResultSet\ResultSetPaginateInterface;
+use Laminas\EventManager\EventManager;
+use Laminas\EventManager\EventManagerInterface;
 use Laminas\Hydrator\HydratorAwareTrait;
-use function DI\value;
 
 /**
  * Class Storage
@@ -16,8 +17,7 @@ use function DI\value;
  */
 class Storage implements StorageInterface {
 
-    use ObjectPrototypeTrait;
-    use HydratorAwareTrait;
+    use ObjectPrototypeTrait, HydratorAwareTrait;
 
     /**
      * @var StorageAdapterInterface
@@ -25,11 +25,17 @@ class Storage implements StorageInterface {
     protected $storage;
 
     /**
+     * @var EventManager
+     */
+    protected $events;
+
+    /**
      * Storage constructor.
-     * @param StorageInterface $storage
+     * @param StorageAdapterInterface $storage
      */
     public function __construct(StorageAdapterInterface $storage) {
         $this->storage = $storage;
+        $this->events = new EventManager();
     }
 
     /**
@@ -43,32 +49,21 @@ class Storage implements StorageInterface {
     /**
      * @inheritDoc
      */
-    public function save($data) {
+    public function save(EntityInterface &$entity): EntityInterface {
 
-
-        if ($this->hydrator && $data instanceof EntityInterface === true) {
-            $dataSave = $this->hydrator->extract($data);
-        } else {
-            $dataSave = $data;
-        }
-
-        $dataSave = $this->storage->save($dataSave);
-
-        if ($this->hydrator && $data instanceof EntityInterface !== true) {
-            $dataSave = $this->hydrator->hydrate($dataSave, clone $this->objectPrototype);
-        }
-
-        return $dataSave;
+        //$this->events->trigger()
+        $dataSave = $this->storage->save($this->hydrator->extract($entity));
+        // TODO event post save
+        return $entity;
     }
 
     /**
      * @inheritDoc
      */
     public function update(EntityInterface $entity): EntityInterface {
-
-        // TODO evt
+        // TODO event pre update
         $dataToUpdate = $this->storage->update($this->hydrator->extract($entity));
-        // TODO evt
+        // TODO event post update
         return $entity;
     }
 
@@ -76,21 +71,27 @@ class Storage implements StorageInterface {
      * @inheritDoc
      */
     public function delete(string $id): bool {
+        // TODO event pre delete
         return $this->storage->delete($id);
+        // TODO event post delete
     }
 
     /**
      * @inheritDoc
      */
     public function getAll(array $search = null): ResultSetInterface {
+        // TODO event pre getAll
         return $this->storage->getAll($search);
+        // TODO event post getAll
     }
 
     /**
      * @inheritDoc
      */
     public function getPage($page = 1, $itemPerPage = 10, $search = null): ResultSetPaginateInterface {
+        // TODO event pre getPage
         return $this->storage->getPage($page, $itemPerPage, $search);
+        // TODO event post getPage
     }
 
     /**
@@ -100,5 +101,12 @@ class Storage implements StorageInterface {
         $entity = clone $this->getObjectPrototype();
         $this->getHydrator()->hydrate($data, $entity);
         return $entity;
+    }
+
+    /**
+     * @return EventManagerInterface
+     */
+    public function getEventManager() {
+        return $this->events;
     }
 }

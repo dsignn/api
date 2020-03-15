@@ -1,8 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use DI\ContainerBuilder;
-
 return function (&$setting) {
 
     $setting = array_merge_recursive(

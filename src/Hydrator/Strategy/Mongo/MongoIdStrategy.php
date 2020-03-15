@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\Hydrator\Strategy\Mongo;
 
-use MongoId;
 use Laminas\Hydrator\Strategy\StrategyInterface;
+use MongoId;
 
 /**
  * Class MongoIdStrategy

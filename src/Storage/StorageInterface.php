@@ -6,13 +6,17 @@ namespace App\Storage;
 use App\Storage\Entity\EntityInterface;
 use App\Storage\ResultSet\ResultSetInterface;
 use App\Storage\ResultSet\ResultSetPaginateInterface;
+use Laminas\EventManager\EventsCapableInterface;
 use Laminas\Hydrator\HydratorAwareInterface;
 
 /**
  * Interface StorageInterface
  * @package App\Storage
  */
-interface StorageInterface extends HydratorAwareInterface, ObjectPrototypeInterface {
+interface StorageInterface extends HydratorAwareInterface, ObjectPrototypeInterface, EventsCapableInterface {
+
+
+
     /**
      * @param $id
      * @return null|EntityInterface
@@ -20,10 +24,10 @@ interface StorageInterface extends HydratorAwareInterface, ObjectPrototypeInterf
     public function get(string $id);
 
     /**
-     * @param EntityInterface $entity
-     * @return EntityInterface
+     * @param $data
+     * @return mixed($data|EntityInterface)
      */
-    public function save($data);
+    public function save(EntityInterface &$entity): EntityInterface;
 
     /**
      * @param EntityInterface $entity

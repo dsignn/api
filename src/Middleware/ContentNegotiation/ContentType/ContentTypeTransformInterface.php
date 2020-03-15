@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\Middleware\ContentNegotiation\ContentType;
 
-use Psr\Http\Message\ResponseInterface as Response;
 use Laminas\Hydrator\HydratorAwareInterface;
+use Psr\Http\Message\ResponseInterface as Response;
 
 /**
  * Interface ContentTypeTransformInterface

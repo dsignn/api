@@ -26,6 +26,7 @@ use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
 use App\Storage\Storage;
 use Defuse\Crypto\Key;
 use DI\ContainerBuilder;
+use Laminas\Hydrator\ClassMethodsHydrator;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Grant\AuthCodeGrant;
 use League\OAuth2\Server\Grant\ClientCredentialsGrant;
@@ -34,7 +35,6 @@ use League\OAuth2\Server\Grant\PasswordGrant;
 use League\OAuth2\Server\Grant\RefreshTokenGrant;
 use League\OAuth2\Server\ResourceServer;
 use Psr\Container\ContainerInterface;
-use Laminas\Hydrator\ClassMethodsHydrator;
 
 return function (ContainerBuilder $containerBuilder) {
 

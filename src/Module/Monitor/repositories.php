@@ -11,12 +11,9 @@ use App\Storage\Adapter\Mongo\MongoAdapter;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydratePaginateResultSet;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
 use DI\ContainerBuilder;
-use Laminas\InputFilter\Input;
-use Laminas\Validator\EmailAddress;
-use Psr\Container\ContainerInterface;
 use Laminas\Hydrator\ClassMethodsHydrator;
-use Laminas\InputFilter\InputFilter;
 use Laminas\Hydrator\Strategy\ClosureStrategy;
+use Psr\Container\ContainerInterface;
 
 return function (ContainerBuilder $containerBuilder) {
 

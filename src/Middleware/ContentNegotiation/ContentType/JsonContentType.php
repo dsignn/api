@@ -5,10 +5,10 @@ namespace App\Middleware\ContentNegotiation\ContentType;
 
 use App\Storage\Entity\EntityInterface;
 use App\Storage\ResultSet\ResultSetPaginateInterface;
-use Psr\Http\Message\ResponseInterface as Response;
-use Slim\Psr7\Stream;
 use Laminas\Hydrator\HydratorAwareInterface;
 use Laminas\Hydrator\HydratorAwareTrait;
+use Psr\Http\Message\ResponseInterface as Response;
+use Slim\Psr7\Stream;
 
 
 /**

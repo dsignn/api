@@ -12,18 +12,16 @@ use App\Storage\Adapter\Mongo\MongoAdapter;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydratePaginateResultSet;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
 use DI\ContainerBuilder;
-use Laminas\InputFilter\Input;
-use Laminas\InputFilter\InputFilter;
-use Laminas\Validator\EmailAddress;
-use Laminas\Validator\GreaterThan;
-use Laminas\Validator\InArray;
-use Laminas\Validator\LessThan;
-use Laminas\Validator\StringLength;
-use Psr\Container\ContainerInterface;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Hydrator\Filter\FilterComposite;
 use Laminas\Hydrator\Filter\MethodMatchFilter;
 use Laminas\Hydrator\Strategy\ClosureStrategy;
+use Laminas\InputFilter\Input;
+use Laminas\InputFilter\InputFilter;
+use Laminas\Validator\EmailAddress;
+use Laminas\Validator\InArray;
+use Laminas\Validator\StringLength;
+use Psr\Container\ContainerInterface;
 
 return function (ContainerBuilder $containerBuilder) {
 
