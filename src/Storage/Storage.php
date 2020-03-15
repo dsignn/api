@@ -8,6 +8,7 @@ use App\Storage\Entity\EntityInterface;
 use App\Storage\ResultSet\ResultSetInterface;
 use App\Storage\ResultSet\ResultSetPaginateInterface;
 use Laminas\Hydrator\HydratorAwareTrait;
+use function DI\value;
 
 /**
  * Class Storage
@@ -42,13 +43,22 @@ class Storage implements StorageInterface {
     /**
      * @inheritDoc
      */
-    public function save(EntityInterface &$entity): EntityInterface {
-        $this->hydrator->hydrate(
-            $this->storage->save($this->hydrator->extract($entity)),
-            $entity
-        );
+    public function save($data) {
 
-        return $entity;
+
+        if ($this->hydrator && $data instanceof EntityInterface === true) {
+            $dataSave = $this->hydrator->extract($data);
+        } else {
+            $dataSave = $data;
+        }
+
+        $dataSave = $this->storage->save($dataSave);
+
+        if ($this->hydrator && $data instanceof EntityInterface !== true) {
+            $dataSave = $this->hydrator->hydrate($dataSave, clone $this->objectPrototype);
+        }
+
+        return $dataSave;
     }
 
     /**

@@ -23,7 +23,7 @@ interface StorageInterface extends HydratorAwareInterface, ObjectPrototypeInterf
      * @param EntityInterface $entity
      * @return EntityInterface
      */
-    public function save(EntityInterface &$entity): EntityInterface;
+    public function save($data);
 
     /**
      * @param EntityInterface $entity

@@ -46,6 +46,7 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface {
      * {@inheritdoc}
      */
     public function persistNewAccessToken(AccessTokenEntityInterface $accessTokenEntity) {
+
         $this->storage->save($accessTokenEntity);
     }
 

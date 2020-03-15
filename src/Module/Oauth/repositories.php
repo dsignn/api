@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 use App\Crypto\CryptoOpenSsl;
 use App\Crypto\DefuseCrypto;
+use App\Hydrator\Strategy\HydratorArrayStrategy;
 use App\Hydrator\Strategy\HydratorStrategy;
 use App\Hydrator\Strategy\Mongo\MongoDateStrategy;
 use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
@@ -12,6 +13,7 @@ use App\Module\Oauth\Entity\AccessTokenEntity;
 use App\Module\Oauth\Entity\AuthCodeEntity;
 use App\Module\Oauth\Entity\ClientEntity;
 use App\Module\Oauth\Entity\RefreshTokenEntity;
+use App\Module\Oauth\Entity\ScopeEntity;
 use App\Module\Oauth\Repository\AccessTokenRepository;
 use App\Module\Oauth\Repository\AuthCodeRepository;
 use App\Module\Oauth\Repository\ClientRepository;
@@ -85,6 +87,7 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addStrategy('id', new MongoIdStrategy());
             $hydrator->addStrategy('client', new HydratorStrategy(  new ClassMethodsHydrator(), new ClientEntity()));
             $hydrator->addStrategy('expiry_date_time', new MongoDateStrategy());
+            $hydrator->addStrategy('scopes', new HydratorArrayStrategy(  new ClassMethodsHydrator(), new ScopeEntity()));
 
             $resultSet = new MongoHydrateResultSet();
             $resultSet->setHydrator($hydrator);
@@ -137,13 +140,16 @@ return function (ContainerBuilder $containerBuilder) {
             $settings = $c->get('settings');
             $serviceSetting = $settings['oauth']['refresh-token']['storage'];
 
+            $accessTokenHydrator = new ClassMethodsHydrator();
+            $accessTokenHydrator->addStrategy('client', new HydratorStrategy(new ClassMethodsHydrator(), new ClientEntity()));
+            $accessTokenHydrator->addStrategy('scopes', new HydratorArrayStrategy(  new ClassMethodsHydrator(), new ScopeEntity()));
+            $accessTokenHydrator->addStrategy('expiry_date_time', new MongoDateStrategy());
+
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
             $hydrator->addStrategy('id', new MongoIdStrategy());
-
-            $accessTokenHydrator = new ClassMethodsHydrator();
-            $accessTokenHydrator->addStrategy('client', new HydratorStrategy(new ClassMethodsHydrator(), new ClientEntity()));
-
+            $hydrator->addStrategy('expiry_date_time', new MongoDateStrategy());
+            $hydrator->addStrategy('expiry_date_time', new MongoDateStrategy());
             $hydrator->addStrategy('accessToken', new HydratorStrategy($accessTokenHydrator, new AccessTokenEntity()));
 
             $resultSet = new MongoHydrateResultSet();
