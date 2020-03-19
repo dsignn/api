@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Hydrator\Strategy\Mongo;
 
-use DateTimeImmutable;
 use DateTimeInterface;
 use Laminas\Hydrator\Strategy\StrategyInterface;
 use MongoDate;
@@ -23,7 +22,7 @@ class MongoDateStrategy implements StrategyInterface {
      */
     public function __construct($datePrototype = null) {
 
-        $datePrototype = $datePrototype ? $datePrototype : new DateTimeImmutable();
+        $datePrototype = $datePrototype ? $datePrototype : new \DateTime();
         $this->setDatePrototype($datePrototype);
     }
 
@@ -43,7 +42,6 @@ class MongoDateStrategy implements StrategyInterface {
      * @inheritDoc
      */
     public function hydrate($value, ?array $data) {
-
         if ($value instanceof MongoDate) {
             $dateTime = clone $this->getDatePrototype();
             $dateTime->setTimestamp($value->sec);

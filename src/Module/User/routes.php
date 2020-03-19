@@ -4,6 +4,7 @@ declare(strict_types=1);
 use App\Middleware\AuthMiddleware;
 use App\Middleware\OAuthMiddleware;
 use App\Middleware\Validation\ValidationMiddleware;
+use App\Module\User\Controller\PasswordToken;
 use App\Module\User\Controller\UserController;
 use App\Module\User\Storage\UserStorageInterface;
 use League\OAuth2\Server\ResourceServer;
@@ -33,4 +34,5 @@ return function (App $app) {
         $app->getContainer()->get('AccessTokenStorage')
     ));
 
+    $app->post('/recover-password', [PasswordToken::class, 'rpc']);
 };

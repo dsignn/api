@@ -1,17 +1,29 @@
 <?php
 declare(strict_types=1);
 
+use App\Crypto\CryptoInterface;
 use App\Crypto\CryptoOpenSsl;
+use App\Hydrator\Strategy\HydratorArrayStrategy;
+use App\Hydrator\Strategy\HydratorStrategy;
+use App\Hydrator\Strategy\Mongo\MongoDateStrategy;
 use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
+use App\Mail\adapter\GoogleMailer;
+use App\Module\Oauth\Entity\ScopeEntity;
 use App\Module\Oauth\Filter\PasswordFilter;
+use App\Module\User\Entity\Embedded\RecoverPassword;
 use App\Module\User\Entity\UserEntity;
+use App\Module\User\Event\UserPasswordEvent;
+use App\Module\User\Mail\adapter\UserGoogleMailer;
+use App\Module\User\Mail\RecoverPasswordMailerInterface;
 use App\Module\User\Storage\UserStorage;
 use App\Module\User\Storage\UserStorageInterface;
 use App\Storage\Adapter\Mongo\MongoAdapter;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydratePaginateResultSet;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
+use App\Storage\Storage;
 use DI\ContainerBuilder;
+use Laminas\EventManager\Event;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Hydrator\Filter\FilterComposite;
 use Laminas\Hydrator\Filter\MethodMatchFilter;
@@ -35,6 +47,9 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
             $hydrator->addStrategy('id', new MongoIdStrategy());
             $hydrator->addFilter('identifier', new MethodMatchFilter('getIdentifier'),  FilterComposite::CONDITION_AND);
+            $recoverPasswordHydrator = new ClassMethodsHydrator();
+            $recoverPasswordHydrator->addStrategy('date', new MongoDateStrategy());
+            $hydrator->addStrategy('recoverPassword', new HydratorStrategy($recoverPasswordHydrator, new RecoverPassword()));
 
             $resultSet = new MongoHydrateResultSet();
             $resultSet->setHydrator($hydrator);
@@ -52,6 +67,8 @@ return function (ContainerBuilder $containerBuilder) {
             $storage->setHydrator($hydrator);
             $storage->setObjectPrototype(new UserEntity());
 
+            $storage->getEventManager()->attach(Storage::$BEFORE_SAVE, new UserPasswordEvent($c->get('OAuthCrypto')));
+
             return $storage;
         }
     ])->addDefinitions([
@@ -60,6 +77,7 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator = new ClassMethodsHydrator();
             $hydrator->addFilter('password', new MethodMatchFilter('getPassword'),  FilterComposite::CONDITION_AND);
             $hydrator->addFilter('identifier', new MethodMatchFilter('getIdentifier'),  FilterComposite::CONDITION_AND);
+            $hydrator->addFilter('recoverPassword', new MethodMatchFilter('getRecoverPassword'),  FilterComposite::CONDITION_AND);
             $hydrator->addStrategy('id', new ClosureStrategy(function ($data) {
 
                 if ($data instanceof MongoId) {
@@ -105,6 +123,14 @@ return function (ContainerBuilder $containerBuilder) {
     ])->addDefinitions([
         'PasswordFilter' => function(ContainerInterface $container) {
             return new PasswordFilter($container->get('OAuthCrypto'));
+        }
+    ])->addDefinitions([
+        CryptoInterface::class => function(ContainerInterface $container) {
+            return $container->get('OAuthCrypto');
+        }
+    ])->addDefinitions([
+        RecoverPasswordMailerInterface::class => function(ContainerInterface $container) {
+            return new UserGoogleMailer();
         }
     ]);
 };

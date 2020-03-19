@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Module\User\Entity;
 
 use App\Auth\RoleInterface;
+use App\Module\User\Entity\Embedded\RecoverPassword;
 use App\Storage\Entity\EntityInterface;
 use App\Storage\Entity\EntityTrait as StorageEntityTrait;
 use League\OAuth2\Server\Entities\UserEntityInterface;
@@ -19,17 +20,17 @@ class UserEntity implements EntityInterface, UserEntityInterface, RoleInterface 
     /**
      * @var string
      */
+    static public $STATUS_NOT_VERIFY = 'not-verify';
+
+    /**
+     * @var string
+     */
+    static public $STATUS_ENABLE = 'enable';
+
+    /**
+     * @var string
+     */
     protected $email = '';
-
-    /**
-     * @var string
-     */
-    protected $password = '';
-
-    /**
-     * @var string
-     */
-    protected $name = '';
 
     /**
      * @var string
@@ -39,7 +40,35 @@ class UserEntity implements EntityInterface, UserEntityInterface, RoleInterface 
     /**
      * @var string
      */
+    protected $name = '';
+
+    /**
+     * @var string
+     */
+    protected $password = '';
+
+    /**
+     * @var string
+     */
     protected $role = '';
+
+    /**
+     * @var string
+     */
+    protected $status = '';
+
+    /**
+     * @var RecoverPassword
+     */
+    protected $recoverPassword;
+
+    /**
+     * UserEntity constructor.
+     */
+    public function __construct() {
+        $this->status = UserEntity::$STATUS_NOT_VERIFY;
+        $this->recoverPassword = new RecoverPassword();
+    }
 
     /**
      * @return string
@@ -130,8 +159,44 @@ class UserEntity implements EntityInterface, UserEntityInterface, RoleInterface 
 
     /**
      * @param string $role
+     * @return UserEntity
      */
-    public function setRole(string $role): void {
+    public function setRole(string $role): UserEntity {
         $this->role = $role;
+        return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getStatus(): string {
+        return $this->status;
+    }
+
+    /**
+     * @param string $status
+     * @return UserEntity
+     */
+    public function setStatus(string $status): UserEntity {
+        $this->status = $status;
+        return $this;
+    }
+
+    /**
+     * @return RecoverPassword
+     */
+    public function getRecoverPassword(): RecoverPassword {
+        return $this->recoverPassword;
+    }
+
+    /**
+     * @param RecoverPassword $recoverPassword
+     * @return UserEntity
+     */
+    public function setRecoverPassword(RecoverPassword $recoverPassword): UserEntity {
+        $this->recoverPassword = $recoverPassword;
+        return $this;
+    }
+
+
 }

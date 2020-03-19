@@ -55,6 +55,9 @@ class OAuthMiddleware implements Middleware {
      * @return ResponseInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
+
+        return $handler->handle($request);
+
         try {
             $request = $this->server->validateAuthenticatedRequest($request);
         } catch (OAuthServerException $exception) {

@@ -21,6 +21,12 @@ return function (ContainerBuilder $containerBuilder) {
             ],
             'storage' => [
                 'name' => 'dsign'
+            ],
+            'mail' => [
+                "port" => 587,
+                "host" => 'smtp.gmail.com',
+                "username" => 'antonino.visalli@gmail.comt',
+                "password" => '1984_visa'
             ]
         ],
     ];
