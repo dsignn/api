@@ -23,10 +23,11 @@ return function (ContainerBuilder $containerBuilder) {
                 'name' => 'dsign'
             ],
             'mail' => [
+                "url" => "http://127.0.0.150/reset-password",
                 "port" => 587,
                 "host" => 'smtp.gmail.com',
-                "username" => 'antonino.visalli@gmail.comt',
-                "password" => '1984_visa'
+                "username" => 'antonino.visalli@gmail.com',
+                "password" => 'xhveatyfvxscmrco'
             ]
         ],
     ];

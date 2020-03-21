@@ -42,7 +42,6 @@ class UserRepository implements UserRepositoryInterface {
 
         $resultSet = $this->storage->getAll(['email' => $username]);
         $user = null;
-
         if ($resultSet->count() === 1) {
 
             $userEntity = $resultSet->current();

@@ -6,6 +6,7 @@ namespace App\Module\User\Controller;
 use App\Controller\RpcControllerInterface;
 use App\Crypto\CryptoInterface;
 use App\Mail\MailerInterface;
+use App\Middleware\ContentNegotiation\ContentTypeAwareTrait;
 use App\Module\User\Entity\UserEntity;
 use App\Module\User\Mail\RecoverPasswordMailerInterface;
 use App\Module\User\Storage\UserStorageInterface;
@@ -19,6 +20,13 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  * @package App\Module\User\Controller
  */
 class PasswordToken implements RpcControllerInterface {
+
+    use ContentTypeAwareTrait;
+
+    /**
+     * @var string
+     */
+    protected $hydratorService = 'RestUserEntityHydrator';
 
     /**
      * @var StorageInterface
@@ -36,13 +44,29 @@ class PasswordToken implements RpcControllerInterface {
     protected $mailer;
 
     /**
+     * @var MailerInterface
+     */
+    protected $container;
+
+    /**
+     * @var
+     */
+    protected $url;
+
+    /**
      * @inheritDoc
      */
-    public function __construct(UserStorageInterface $storage, CryptoInterface $crypto, RecoverPasswordMailerInterface $mailer) {
+    public function __construct(UserStorageInterface $storage, CryptoInterface $crypto, RecoverPasswordMailerInterface $mailer, ContainerInterface $container) {
 
         $this->storage = $storage;
         $this->crypto = $crypto;
         $this->mailer = $mailer;
+        $this->container = $container;
+
+        if ($container->has('settings')) {
+            $mailSetting = $container->get('settings')['mail'];
+            $this->url = $mailSetting['url'];
+        }
     }
 
     /**
@@ -66,8 +90,25 @@ class PasswordToken implements RpcControllerInterface {
 
         $this->storage->update($user);
 
-        // TODO send mail
-        $this->mailer->send(['test'], 'test');
-        die();
+        $url = $this->url . '?token=' . $user->getRecoverPassword()->getToken();
+        $this->mailer->send([$user->getEmail()], $this->getBodyMessage($user, $url));
+
+        $contentTypeService = $this->getContentTypeService($request);
+        return $contentTypeService->transformContentType($response, $user);
+    }
+
+    /**
+     * @param UserEntity $user
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
+    protected function getBodyMessage(UserEntity $user, $url) {
+
+        $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../Mail/Template/');
+        $twig = new \Twig\Environment($loader, []);
+
+        return $twig->render('reset-password.html', ['user' => $user, 'url' => $url]);
     }
 }

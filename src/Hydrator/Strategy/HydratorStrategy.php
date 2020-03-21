@@ -47,6 +47,7 @@ class HydratorStrategy implements StrategyInterface {
      */
     public function hydrate($value, ?array $data) {
         if ($value) {
+
             $hydrateValue = clone $this->objectPrototype;
             $this->hydrator->hydrate($value, $hydrateValue);
             $value = $hydrateValue;

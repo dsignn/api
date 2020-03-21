@@ -130,7 +130,10 @@ return function (ContainerBuilder $containerBuilder) {
         }
     ])->addDefinitions([
         RecoverPasswordMailerInterface::class => function(ContainerInterface $container) {
-            return new UserGoogleMailer();
+            $settings = $container->get('settings');
+            $serviceSetting = $settings['mail'];
+
+            return new UserGoogleMailer($serviceSetting);
         }
     ]);
 };
