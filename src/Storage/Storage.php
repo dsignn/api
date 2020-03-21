@@ -118,9 +118,11 @@ class Storage implements StorageInterface {
     /**
      * @inheritDoc
      */
-    public function generateEntity(array $data): EntityInterface {
-        $entity = clone $this->getObjectPrototype();
-        $this->getHydrator()->hydrate($data, $entity);
+    public function generateEntity(array $data = null): EntityInterface {
+        $entity = $this->getObjectPrototype() ? clone $this->getObjectPrototype() : new \stdClass();
+        if ($data) {
+            $this->getHydrator()->hydrate($data, $entity);
+        }
         return $entity;
     }
 

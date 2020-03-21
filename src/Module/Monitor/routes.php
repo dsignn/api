@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use App\Middleware\OAuthMiddleware;
+use App\Middleware\AuthenticationMiddleware;
 use App\Middleware\Validation\ValidationMiddleware;
 use App\Module\Monitor\Controller\MonitorController;
 use App\Module\User\Storage\UserStorageInterface;
@@ -28,7 +28,7 @@ return function (App $app) {
         new ValidationMiddleware(
             $app->getContainer()->get('settings')['validation'],
             $app->getContainer()
-    ))->add(new OAuthMiddleware(
+    ))->add(new AuthenticationMiddleware(
         $app->getContainer()->get(ResourceServer::class),
         $app->getContainer()->get(UserStorageInterface::class),
         $app->getContainer()->get('AccessTokenStorage')

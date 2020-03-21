@@ -3,17 +3,18 @@ declare(strict_types=1);
 
 namespace App\Middleware\ContentNegotiation\Accept;
 
-use Psr\Http\Message\ServerRequestInterface as Request;
-
+use Laminas\Hydrator\HydratorAwareInterface;
+use Psr\Http\Message\ResponseInterface as Response;
 /**
  * Interface AcceptTransformInterface
  * @package App\Middleware\ContentNegotiation\Accept
  */
-interface AcceptTransformInterface {
+interface AcceptTransformInterface extends HydratorAwareInterface {
 
     /**
-     * @param Request $request
-     * @return Request
+     * @param Response $response
+     * @param $data
+     * @return Response
      */
-    public function transformAccept(Request $request): Request;
+    public function transformAccept(Response $response, $data): Response;
 }

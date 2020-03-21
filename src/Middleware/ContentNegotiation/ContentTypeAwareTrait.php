@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Middleware\ContentNegotiation;
 
+use App\Middleware\ContentNegotiation\Accept\AcceptTransformInterface;
 use App\Middleware\ContentNegotiation\ContentType\ContentTypeTransformInterface;
 use App\Middleware\ContentNegotiation\Exception\ServiceNotFound;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -19,25 +20,24 @@ trait ContentTypeAwareTrait {
      * protected $hydratorService;
      */
 
-
     /**
      * @param Request $request
-     * @return ContentTypeTransformInterface
+     * @return AcceptTransformInterface
      * @throws ServiceNotFound
      */
     protected function getContentTypeService(Request $request) {
 
-        /** @var ContentTypeTransformInterface $contentTypeService */
-        $contentTypeService = $request->getAttribute('ContentTypeService');
+        /** @var AcceptTransformInterface $acceptService */
+        $acceptService = $request->getAttribute('AcceptService');
 
-        if (!$contentTypeService) {
+        if (!$acceptService) {
             throw new ServiceNotFound('ContentTypeService not found in request attribute');
         }
 
         if ($this->container->has($this->hydratorService)) {
-            $contentTypeService->setHydrator($this->container->get($this->hydratorService));
+            $acceptService->setHydrator($this->container->get($this->hydratorService));
         }
 
-        return $contentTypeService;
+        return $acceptService;
     }
 }

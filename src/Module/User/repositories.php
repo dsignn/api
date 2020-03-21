@@ -85,6 +85,9 @@ return function (ContainerBuilder $containerBuilder) {
                 }
                 return $data;
             }));
+            $recoverPasswordHydrator = new ClassMethodsHydrator();
+            $recoverPasswordHydrator->addStrategy('date', new MongoDateStrategy());
+            $hydrator->addStrategy('recoverPassword', new HydratorStrategy($recoverPasswordHydrator, new RecoverPassword()));
 
             return $hydrator;
         }

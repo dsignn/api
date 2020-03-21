@@ -15,4 +15,7 @@ return function (ContainerBuilder $containerBuilder) {
 
     $monitorRepositories = include_once __DIR__ . "/../src/Module/Monitor/repositories.php";
     $monitorRepositories($containerBuilder);
+
+    $resourceRepositories = include_once __DIR__ . "/../src/Module/Resource/repositories.php";
+    $resourceRepositories($containerBuilder);
 };

@@ -4,18 +4,17 @@ declare(strict_types=1);
 namespace App\Middleware\ContentNegotiation\ContentType;
 
 use Laminas\Hydrator\HydratorAwareInterface;
-use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 /**
  * Interface ContentTypeTransformInterface
  * @package App\Middleware\ContentNegotiation\ContentType
  */
-interface ContentTypeTransformInterface extends HydratorAwareInterface {
+interface ContentTypeTransformInterface {
 
     /**
-     * @param Response $response
-     * @param $data
-     * @return Response
+     * @param Request $request
+     * @return Request
      */
-    public function transformContentType(Response $response, $data): Response;
+    public function transformContentType(Request $request): Request;
 }

@@ -17,10 +17,10 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Slim\Psr7\Response;
 
 /**
- * Class OAuthMiddleware
+ * Class AuthenticationMiddleware
  * @package App\Middleware
  */
-class OAuthMiddleware implements Middleware {
+class AuthenticationMiddleware implements Middleware {
 
     /**
      * @var ResourceServer

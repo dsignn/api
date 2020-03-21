@@ -5,6 +5,7 @@ use App\Middleware\ContentNegotiation\Accept\AcceptContainer;
 use App\Middleware\ContentNegotiation\Accept\JsonAccept;
 use App\Middleware\ContentNegotiation\ContentType\ContentTypeContainer;
 use App\Middleware\ContentNegotiation\ContentType\JsonContentType;
+use App\Middleware\ContentNegotiation\ContentType\MultipartFormDataContentType;
 use DI\ContainerBuilder;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -43,6 +44,11 @@ return function (ContainerBuilder $containerBuilder) {
             $container->set(
                 JsonContentType::class,
                 new JsonContentType()
+            );
+
+            $container->set(
+                MultipartFormDataContentType::class,
+                new MultipartFormDataContentType()
             );
 
             return $container;

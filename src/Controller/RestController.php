@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Middleware\ContentNegotiation\Accept\AcceptTransformInterface;
 use App\Middleware\ContentNegotiation\ContentType\ContentTypeTransformInterface;
 use App\Middleware\ContentNegotiation\Exception\ServiceNotFound;
 use App\Storage\StorageInterface;
@@ -57,8 +58,8 @@ class RestController
             return $response->withStatus(404);
         }
 
-        $contentTypeService = $this->getContentTypeService($request);
-        return $contentTypeService->transformContentType($response, $entity);
+        $acceptService = $this->getAcceptService($request);
+        return $acceptService->transformAccept($response, $entity);
     }
 
     /**
@@ -76,8 +77,8 @@ class RestController
             $validator = $request->getAttribute('app-validation');
             $validator->setData($data);
             if (!$validator->isValid()) {
-                $contentTypeService = $this->getContentTypeService($request);
-                $response = $contentTypeService->transformContentType(
+                $acceptService = $this->getAcceptService($request);
+                $response = $acceptService->transformAccept(
                     $response,
                     ['errors' => $validator->getMessages()]
                 );
@@ -90,8 +91,8 @@ class RestController
         $entity = $this->storage->generateEntity($data);
         $this->storage->save($entity);
 
-        $contentTypeService = $this->getContentTypeService($request);
-        return $contentTypeService->transformContentType($response, $entity);
+        $acceptService = $this->getAcceptService($request);
+        return $acceptService->transformAccept($response, $entity);
     }
 
     /**
@@ -116,8 +117,8 @@ class RestController
             $validator = $request->getAttribute('app-validation');
             $validator->setData($data);
             if (!$validator->isValid()) {
-                $contentTypeService = $this->getContentTypeService($request);
-                $response = $contentTypeService->transformContentType(
+                $acceptService = $this->getAcceptService($request);
+                $response = $acceptService->transformAccept(
                     $response,
                     ['errors' => $validator->getMessages()]
                 );
@@ -131,8 +132,8 @@ class RestController
         $putEntity->setId($id);
         $this->storage->update($putEntity);
 
-        $contentTypeService = $this->getContentTypeService($request);
-        return $contentTypeService->transformContentType($response, $putEntity);
+        $acceptService = $this->getAcceptService($request);
+        return $acceptService->transformAccept($response, $putEntity);
     }
 
     /**
@@ -156,8 +157,8 @@ class RestController
         $this->storage->getHydrator()->hydrate($request->getParsedBody(), $entity);
         $this->storage->update($entity);
 
-        $contentTypeService = $this->getContentTypeService($request);
-        return $contentTypeService->transformContentType($response, $entity);
+        $acceptService = $this->getAcceptService($request);
+        return $acceptService->transformAccept($response, $entity);
     }
 
     /**
@@ -191,8 +192,8 @@ class RestController
         $itemPerPage = isset($query['item-per-page']) ? intval($query['item-per-page']) ? intval($query['item-per-page']) : 10 : 10;
         $pagination = $this->storage->getPage($page, $itemPerPage);
 
-        $contentTypeService = $this->getContentTypeService($request);
-        return $contentTypeService->transformContentType($response, $pagination);
+        $acceptService = $this->getAcceptService($request);
+        return $acceptService->transformAccept($response, $pagination);
     }
 
     /**
@@ -200,19 +201,19 @@ class RestController
      * @return ContentTypeTransformInterface
      * @throws ServiceNotFound
      */
-    protected function getContentTypeService(Request $request) {
+    protected function getAcceptService(Request $request) {
 
-        /** @var ContentTypeTransformInterface $contentTypeService */
-        $contentTypeService = $request->getAttribute('ContentTypeService');
+        /** @var AcceptTransformInterface $acceptService */
+        $acceptService = $request->getAttribute('AcceptService');
 
-        if (!$contentTypeService) {
+        if (!$acceptService) {
             throw new ServiceNotFound('ContentTypeService not found in request attribute');
         }
 
         if ($this->container->has('Rest' . $this->entityNameClass . 'Hydrator')) {
-            $contentTypeService->setHydrator($this->container->get('Rest' . $this->entityNameClass . 'Hydrator'));
+            $acceptService->setHydrator($this->container->get('Rest' . $this->entityNameClass . 'Hydrator'));
         }
 
-        return $contentTypeService;
+        return $acceptService;
     }
 }

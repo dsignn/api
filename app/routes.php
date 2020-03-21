@@ -21,4 +21,6 @@ return function (App $app) {
     $oauthRoute = include_once __DIR__ . "/../src/Module/Oauth/routes.php";
     $oauthRoute($app);
 
+    $resourceRoute = include_once __DIR__ . "/../src/Module/Resource/routes.php";
+    $resourceRoute($app);
 };

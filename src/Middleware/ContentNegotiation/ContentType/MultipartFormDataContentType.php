@@ -12,15 +12,15 @@ use Slim\Psr7\Stream;
 
 
 /**
- * Class JsonContentType
+ * Class MultipartFormDataContentType
  * @package App\Middleware\ContentNegotiation\ContentType
  */
-class JsonContentType implements ContentTypeTransformInterface {
+class MultipartFormDataContentType implements ContentTypeTransformInterface {
 
     /**
      * @inheritDoc
      */
     public function transformContentType(Request $request): Request {
-        return $request->withParsedBody(json_decode($request->getBody()->getContents(), true));
+        return $request->withParsedBody($_POST);
     }
 }

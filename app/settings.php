@@ -41,6 +41,9 @@ return function (ContainerBuilder $containerBuilder) {
     $monitorSetting = include_once __DIR__ . "/../src/Module/Monitor/setting.php";
     $monitorSetting($setting);
 
+    $resourceSetting = include_once __DIR__ . "/../src/Module/Resource/setting.php";
+    $resourceSetting($setting);
+
 
     // Global Settings Object
     $containerBuilder->addDefinitions($setting);

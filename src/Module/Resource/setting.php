@@ -1,53 +1,36 @@
 <?php
 declare(strict_types=1);
 
+use App\Middleware\ContentNegotiation\ContentType\MultipartFormDataContentType;
+
 return function (&$setting) {
 
     $setting = array_merge_recursive(
         $setting,
         [
             "settings" => [
-                'oauth' => [
-                    'encryption-key' => 'h1Z6HajxU9ObuJKotafqqxriGuuuRhqSd1VZK7wAnXU=',
-                    'path-private-key' => __DIR__ . '/../../../key/dsign-oauth-private.key',
-                    'path-public-key' => __DIR__ . '/../../../key/dsign-oauth-public.key',
-                    'client' => [
-                        'storage' => [
-                            'type' => 'mongo',
-                            'name' => 'dsign-oauth',
-                            'collection' => 'client'
+                'storage' => [
+                    'resource' => [
+                        'collection' => 'monitor'
+                    ],
+                ],
+                'contentNegotiation' => [
+                    '/resource' => [
+                        'default' => [
+                            'acceptFilter' => ['/application\/json/'],
+                            'contentTypeFilter' => ['/multipart\/form-data/'],
+                            'contentTypeService' => MultipartFormDataContentType::class
                         ]
                     ],
-                    'access-token' => [
-                        'storage' => [
-                            'type' => 'mongo',
-                            'name' => 'dsign-oauth',
-                            'collection' => 'access-token'
+                    '/resource/{id:[0-9a-fA-F]{24}}' => [
+                        'default' => [
+                            'acceptFilter' => ['/multipart\/form-data/'],
+                            'contentTypeFilter' => ['/application\/json/'],
+                            'contentTypeService' => MultipartFormDataContentType::class
                         ]
                     ],
-                    'user' => [
-                        'storage' => [
-                            'type' => 'mongo',
-                            'name' => 'dsign',
-                            'collection' => 'user'
-                        ]
-                    ],
-                    'auth-code' => [
-                        'storage' => [
-                            'type' => 'mongo',
-                            'name' => 'dsign-oauth',
-                            'collection' => 'auth-code'
-                        ]
-                    ],
-                    'refresh-token' => [
-                        'storage' => [
-                            'type' => 'mongo',
-                            'name' => 'dsign-oauth',
-                            'collection' => 'refresh-token'
-                        ]
-                    ],
-                ]
-            ],
+                ],
+            ]
         ]
     );
 };

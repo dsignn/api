@@ -100,12 +100,14 @@ class ContentNegotiationMiddleware implements Middleware
             return (new ResponseSlim())->withStatus(415);
         };
 
+        /** @var AcceptTransformInterface $acceptService */
         $acceptService = $this->getAcceptService($path, $method, $request->getHeaderLine(self::$ACCEPT));
+        /** @var ContentTypeTransformInterface $contentTypeService */
         $contentTypeService = $this->getContentTypeService($path, $method, $request->getHeaderLine(self::$CONTENT_TYPE));
 
         if ($acceptService) {
             try {
-                $request = $acceptService->transformAccept($request);
+                $request = $contentTypeService->transformContentType($request);
             } catch (\Exception $e) {
                 return (new ResponseSlim())->withStatus(406);
             }
@@ -113,8 +115,8 @@ class ContentNegotiationMiddleware implements Middleware
 
         if ($contentTypeService) {
             $request = $request->withAttribute(
-                'ContentTypeService',
-                $contentTypeService
+                'AcceptService',
+                $acceptService
             );
         }
 
@@ -246,7 +248,6 @@ class ContentNegotiationMiddleware implements Middleware
         $service = null;
         $default = isset($this->defaultContentTypeServices[$header]) ? $this->defaultContentTypeServices[$header] : '';
         $custom = isset($settings['contentTypeService']) ? $settings['contentTypeService'] : '';
-
         $serviceName = $custom ? $custom : $default;
 
         if ($this->contentTypeContainer->has($serviceName)) {
