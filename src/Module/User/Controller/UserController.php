@@ -17,7 +17,7 @@ class UserController extends RestController {
     /**
      * @var string
      */
-    protected $entityNameClass = 'UserEntity';
+    protected $hydratorService = 'RestUserEntityHydrator';
 
     /**
      * @inheritDoc

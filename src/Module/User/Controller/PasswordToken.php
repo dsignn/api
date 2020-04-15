@@ -26,7 +26,7 @@ class PasswordToken implements RpcControllerInterface {
     /**
      * @var string
      */
-    protected $hydratorService = 'RestUserEntityHydrator';
+    protected $hydratorService = 'RpcPasswordUserEntityHydrator';
 
     /**
      * @var StorageInterface
@@ -87,6 +87,7 @@ class PasswordToken implements RpcControllerInterface {
 
         $user->getRecoverPassword()->setDate(new \DateTime())
             ->setToken($this->crypto->crypto($user->getRecoverPassword()->getDate()->format('Y-m-d H:i:s')));
+
 
         $this->storage->update($user);
 

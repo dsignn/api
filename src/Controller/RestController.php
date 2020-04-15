@@ -84,6 +84,7 @@ class RestController implements RestControllerInterface
         }
 
         $entity = $this->storage->getEntityPrototype()->getPrototype($data);
+        $this->storage->getHydrator()->hydrate($data, $entity);
         $this->storage->save($entity);
 
         $acceptService = $this->getAcceptService($request);
@@ -121,6 +122,7 @@ class RestController implements RestControllerInterface
         }
 
         $putEntity = clone $this->storage->getEntityPrototype()->getPrototype($request->getParsedBody());
+        $this->storage->getHydrator()->hydrate($data, $putEntity);
         $putEntity->setId($id);
         $this->storage->update($putEntity);
 

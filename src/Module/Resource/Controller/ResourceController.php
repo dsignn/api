@@ -51,9 +51,7 @@ class ResourceController implements RestControllerInterface {
     public function post(Request $request, Response $response) {
 
         $data = array_merge($request->getParsedBody(), $request->getUploadedFiles());
-        var_dump($_FILES);
-        var_dump($_POST);
-        die();
+
         if ($request->getAttribute('app-validation')) {
             /** @var InputFilterInterface $validator */
             $validator = $request->getAttribute('app-validation');

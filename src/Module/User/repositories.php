@@ -8,6 +8,8 @@ use App\Hydrator\Strategy\Mongo\MongoDateStrategy;
 use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
 use App\Module\Oauth\Filter\PasswordFilter;
+use App\Module\Resource\Entity\ImageResourceEntity;
+use App\Module\Resource\Entity\VideoResourceEntity;
 use App\Module\User\Entity\Embedded\RecoverPassword;
 use App\Module\User\Entity\UserEntity;
 use App\Module\User\Event\UserPasswordEvent;
@@ -18,6 +20,8 @@ use App\Module\User\Storage\UserStorageInterface;
 use App\Storage\Adapter\Mongo\MongoAdapter;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydratePaginateResultSet;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
+use App\Storage\Entity\MultiEntityPrototype;
+use App\Storage\Entity\SingleEntityPrototype;
 use App\Storage\Storage;
 use DI\ContainerBuilder;
 use Laminas\Hydrator\ClassMethodsHydrator;
@@ -49,11 +53,11 @@ return function (ContainerBuilder $containerBuilder) {
 
             $resultSet = new MongoHydrateResultSet();
             $resultSet->setHydrator($hydrator);
-            $resultSet->setObjectPrototype(new UserEntity());
+            $resultSet->setEntityPrototype($c->get('UserEntityPrototype'));
 
             $resultSetPaginator = new MongoHydratePaginateResultSet();
             $resultSetPaginator->setHydrator($hydrator);
-            $resultSetPaginator->setObjectPrototype(new UserEntity());
+            $resultSetPaginator->setEntityPrototype($c->get('UserEntityPrototype'));
 
             $mongoAdapter = new MongoAdapter($c->get(MongoClient::class), $settings['storage']['name'], $serviceSetting['collection']);
             $mongoAdapter->setResultSet($resultSet);
@@ -61,7 +65,7 @@ return function (ContainerBuilder $containerBuilder) {
 
             $storage = new UserStorage($mongoAdapter);
             $storage->setHydrator($hydrator);
-            $storage->setObjectPrototype(new UserEntity());
+            $storage->setEntityPrototype($c->get('UserEntityPrototype'));
 
             $storage->getEventManager()->attach(Storage::$BEFORE_SAVE, new UserPasswordEvent($c->get('OAuthCrypto')));
 
@@ -86,6 +90,29 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addStrategy('recoverPassword', new HydratorStrategy($recoverPasswordHydrator, new RecoverPassword()));
 
             return $hydrator;
+        }
+    ])->addDefinitions([
+        'RpcPasswordUserEntityHydrator' => function(ContainerInterface $c) {
+
+            $hydrator = new ClassMethodsHydrator();
+            $hydrator->addFilter('password', new MethodMatchFilter('getPassword'),  FilterComposite::CONDITION_AND);
+            $hydrator->addFilter('identifier', new MethodMatchFilter('getIdentifier'),  FilterComposite::CONDITION_AND);
+            $hydrator->addStrategy('id', new ClosureStrategy(function ($data) {
+
+                if ($data instanceof MongoId) {
+                    $data = $data->__toString();
+                }
+                return $data;
+            }));
+            $recoverPasswordHydrator = new ClassMethodsHydrator();
+            $recoverPasswordHydrator->addStrategy('date', new MongoDateStrategy());
+            $hydrator->addStrategy('recoverPassword', new HydratorStrategy($recoverPasswordHydrator, new RecoverPassword()));
+
+            return $hydrator;
+        }
+    ])->addDefinitions([
+        'UserEntityPrototype' => function(ContainerInterface $c) {
+            return new SingleEntityPrototype(new UserEntity());
         }
     ])->addDefinitions([
         'UserPostValidation' => function(ContainerInterface $container) {
