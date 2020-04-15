@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Middleware\ContentNegotiation;
 
 use App\Middleware\ContentNegotiation\Accept\AcceptTransformInterface;
-use App\Middleware\ContentNegotiation\ContentType\ContentTypeTransformInterface;
 use App\Middleware\ContentNegotiation\Exception\ServiceNotFound;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
