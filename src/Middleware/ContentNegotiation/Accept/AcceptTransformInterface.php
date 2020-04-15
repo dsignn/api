@@ -5,6 +5,7 @@ namespace App\Middleware\ContentNegotiation\Accept;
 
 use Laminas\Hydrator\HydratorAwareInterface;
 use Psr\Http\Message\ResponseInterface as Response;
+
 /**
  * Interface AcceptTransformInterface
  * @package App\Middleware\ContentNegotiation\Accept

@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Storage\Adapter\Mongo\ResultSet;
 
+use App\Storage\Entity\EntityPrototypeAwareInterface;
+use App\Storage\Entity\EntityPrototypeAwareTrait;
 use App\Storage\ObjectPrototypeInterface;
 use App\Storage\ObjectPrototypeTrait;
 use Laminas\Hydrator\HydratorAwareInterface;
@@ -12,9 +14,9 @@ use Laminas\Hydrator\HydratorAwareTrait;
  * Class MongoHydrateResultSet
  * @package App\Storage\Mongo
  */
-class MongoHydrateResultSet extends MongoResultSet implements HydratorAwareInterface, ObjectPrototypeInterface {
+class MongoHydrateResultSet extends MongoResultSet implements HydratorAwareInterface, EntityPrototypeAwareInterface, ObjectPrototypeInterface {
 
-   use HydratorAwareTrait, ObjectPrototypeTrait;
+   use HydratorAwareTrait, EntityPrototypeAwareTrait, ObjectPrototypeTrait;
 
     /**
      * @inheritDoc
@@ -23,7 +25,7 @@ class MongoHydrateResultSet extends MongoResultSet implements HydratorAwareInter
     {
         $current = parent::current();
         if ($this->getHydrator() && $current) {
-            $prototype = clone $this->getObjectPrototype();
+            $prototype = clone $this->getEntityPrototype()->getPrototype($current);
             $this->getHydrator()->hydrate($current, $prototype);
             $current = $prototype;
         }
@@ -37,7 +39,7 @@ class MongoHydrateResultSet extends MongoResultSet implements HydratorAwareInter
     {
         $next = parent::next();
         if ($this->getHydrator() && $next) {
-            $prototype = clone $this->getObjectPrototype();
+            $prototype = clone $this->getEntityPrototype()->getPrototype($next);
             $this->getHydrator()->hydrate($next, $prototype);
             $next = $prototype;
         }
@@ -54,7 +56,7 @@ class MongoHydrateResultSet extends MongoResultSet implements HydratorAwareInter
         if ($this->getHydrator() && count($data) > 0) {
             $hydrateArray = [];
             foreach ($data as $item) {
-                $prototype = clone $this->getObjectPrototype();
+                $prototype = clone $this->getEntityPrototype()->getPrototype($item);
                 $this->getHydrator()->hydrate($item, $prototype);
                 array_push($hydrateArray,  $this->getHydrator()->extract($prototype));
             }

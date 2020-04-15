@@ -3,11 +3,16 @@ declare(strict_types=1);
 
 namespace App\Module\Resource\Entity;
 
+use App\Storage\Entity\EntityInterface;
+use App\Storage\Entity\EntityTrait;
+
 /**
  * Class AbstractResourceEntity
  * @package App\Module\Resource\Entity
  */
-abstract class AbstractResourceEntity {
+abstract class AbstractResourceEntity implements EntityInterface {
+
+    use EntityTrait;
 
     /**
      * @var string
@@ -96,6 +101,4 @@ abstract class AbstractResourceEntity {
         $this->src = $src;
         return $this;
     }
-
-
 }

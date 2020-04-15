@@ -7,17 +7,28 @@ namespace App\Storage\Entity;
  * Interface EntityPrototypeAwareInterface
  * @package App\Storage\Entity
  */
-interface EntityPrototypeAwareInterface {
+trait EntityPrototypeAwareTrait {
 
     /**
-     * @param $data
-     * @return mixed
+     * @var
      */
-    public function getEntityPrototype();
+    protected $entityPrototype;
+
+    /**
+     * @return EntityPrototypeInterface|null
+     */
+    public function getEntityPrototype() {
+
+        return $this->entityPrototype;
+    }
 
     /**
      * @param EntityPrototypeInterface $entityPrototype
-     * @return EntityPrototypeAwareInterface
+     * @return EntityPrototypeAwareTrait
      */
-    public function setEntityPrototype(EntityPrototypeInterface $entityPrototype);
+    public function setEntityPrototype(EntityPrototypeInterface $entityPrototype) {
+
+        $this->entityPrototype = $entityPrototype;
+        return $this;
+    }
 }

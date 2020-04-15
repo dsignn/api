@@ -4,14 +4,20 @@ declare(strict_types=1);
 namespace App\Storage\Entity;
 
 /**
- * Interface EntityInterface
+ * Interface EntityPrototypeAwareInterface
  * @package App\Storage\Entity
  */
-interface EntityPrototypeInterface {
+interface EntityPrototypeAwareInterface {
 
     /**
      * @param $data
-     * @return mixed
+     * @return EntityPrototypeInterface
      */
-    public function getEntityPrototype($data = null);
+    public function getEntityPrototype();
+
+    /**
+     * @param EntityPrototypeInterface $entityPrototype
+     * @return EntityPrototypeAwareInterface
+     */
+    public function setEntityPrototype(EntityPrototypeInterface $entityPrototype);
 }

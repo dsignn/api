@@ -8,10 +8,10 @@ use App\Middleware\ContentNegotiation\Exception\ServiceNotFound;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 /**
- * Trait ContentTypeAwareTrait
+ * Trait AcceptServiceAwareTrait
  * @package App\Middleware\ContentNegotiation
  */
-trait ContentTypeAwareTrait {
+trait AcceptServiceAwareTrait {
 
     /**
      * Add in the class where extends
@@ -24,7 +24,7 @@ trait ContentTypeAwareTrait {
      * @return AcceptTransformInterface
      * @throws ServiceNotFound
      */
-    protected function getContentTypeService(Request $request) {
+    protected function getAcceptService(Request $request) {
 
         /** @var AcceptTransformInterface $acceptService */
         $acceptService = $request->getAttribute('AcceptService');

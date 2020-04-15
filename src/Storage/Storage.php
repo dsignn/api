@@ -5,6 +5,7 @@ namespace App\Storage;
 
 use App\Storage\Adapter\StorageAdapterInterface;
 use App\Storage\Entity\EntityInterface;
+use App\Storage\Entity\EntityPrototypeAwareTrait;
 use App\Storage\ResultSet\ResultSetInterface;
 use App\Storage\ResultSet\ResultSetPaginateInterface;
 use Laminas\EventManager\EventManager;
@@ -27,7 +28,7 @@ class Storage implements StorageInterface {
      */
     static public $AFTER_SAVE = 'after_save';
 
-    use ObjectPrototypeTrait, HydratorAwareTrait;
+    use ObjectPrototypeTrait, EntityPrototypeAwareTrait, HydratorAwareTrait;
 
     /**
      * @var StorageAdapterInterface
@@ -53,7 +54,9 @@ class Storage implements StorageInterface {
      */
     public function get(string $id) {
         $data = $this->storage->get($id);
-        return $this->hydrator && $data ? $this->hydrator->hydrate($data, clone $this->objectPrototype) : $data;
+        return $this->hydrator && $data ?
+            $this->hydrator->hydrate($data, clone $this->getEntityPrototype()->getPrototype($data)) :
+            $data;
     }
 
     /**
@@ -67,7 +70,6 @@ class Storage implements StorageInterface {
         );
 
         $dataSave = $this->storage->save($this->hydrator->extract($entity));
-
         $this->hydrator->hydrate($dataSave, $entity);
 
         $this->events->trigger(
@@ -113,17 +115,6 @@ class Storage implements StorageInterface {
         // TODO event pre getPage
         return $this->storage->getPage($page, $itemPerPage, $search);
         // TODO event post getPage
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function generateEntity(array $data = null): EntityInterface {
-        $entity = $this->getObjectPrototype() ? clone $this->getObjectPrototype() : new \stdClass();
-        if ($data) {
-            $this->getHydrator()->hydrate($data, $entity);
-        }
-        return $entity;
     }
 
     /**

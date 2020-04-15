@@ -3,32 +3,29 @@ declare(strict_types=1);
 
 namespace App\Module\Resource\Event;
 
-use Aws\Result;
-use Aws\S3\S3Client;
+use App\Module\Resource\Entity\Embedded\Dimension;
+use App\Module\Resource\Entity\ImageResourceEntity;
+use App\Module\Resource\Entity\VideoResourceEntity;
+use FFMpeg\FFProbe;
 use Laminas\EventManager\EventInterface;
-use function DI\get;
 
 /**
- * Class S3UploaderEvent
+ * Class MetadataEvent
  * @package App\Module\Resource\Event
  */
-class S3UploaderEvent {
+class MetadataEvent {
 
     /**
-     * @var string
+     * @var array
      */
-    protected $bucketName = '';
-
-    protected $s3Client;
+    protected $binary = [];
 
     /**
-     * S3UploaderEvent constructor.
-     * @param S3Client $s3Client
-     * @param string $bucketName
+     * MetadataEvent constructor.
+     * @param array $binary
      */
-    public function __construct(S3Client $s3Client, string $bucketName) {
-        $this->s3Client = $s3Client;
-        $this->bucketName = $bucketName;
+    public function __construct(array $binary) {
+        $this->binary = $binary;
     }
 
     /**
@@ -37,27 +34,23 @@ class S3UploaderEvent {
      */
     public function __invoke(EventInterface $event) {
 
-        /** @var Result $result */
-        $result = $this->s3Client->putObject(
-            array(
-                'Bucket'=> $this->bucketName,
-                'Key' =>  $this->uuid(),
-                'SourceFile' => $event->getTarget()->getSrc(),
-                'ACL'    => 'public-read'
-            )
-        );
+        $ffprobe = FFProbe::create([
+            'ffmpeg.binaries'  => '/usr/bin/ffmpeg',
+            'ffprobe.binaries'  => '/usr/bin/ffprobe',
+        ]);
 
-        $event->getTarget()->setSrc($result->get('@metadata')['effectiveUri']);
-    }
-
-    /**
-     * @return string
-     * @throws \Exception
-     */
-    protected function uuid(){
-        $data = random_bytes(16);
-        $data[6] = chr(ord($data[6]) & 0x0f | 0x40);
-        $data[8] = chr(ord($data[8]) & 0x3f | 0x80);
-        return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
+        switch (true) {
+            case $event->getTarget() instanceof ImageResourceEntity === true:
+                /** @var FFProbe\DataMapping\Stream $stream */
+                $stream = $ffprobe->streams($event->getTarget()->getSrc())->videos()->first();
+                $event->getTarget()->setDimension(new Dimension($stream->get('width'), $stream->get('height')));
+                break;
+            case $event->getTarget() instanceof VideoResourceEntity === true:
+                $stream = $ffprobe->streams($event->getTarget()->getSrc())->videos()->first();
+                $event->getTarget()->setDimension(new Dimension($stream->get('width'), $stream->get('height')));
+                $event->getTarget()->setDuration((float) $stream->get('duration'));
+                $event->getTarget()->setAspectRatio($stream->get('sample_aspect_ratio'));
+                break;
+        }
     }
 }

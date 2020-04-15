@@ -11,7 +11,7 @@ return function (&$setting) {
             "settings" => [
                 'storage' => [
                     'resource' => [
-                        'collection' => 'monitor'
+                        'collection' => 'resource'
                     ],
                 ],
                 'contentNegotiation' => [
@@ -24,12 +24,29 @@ return function (&$setting) {
                     ],
                     '/resource/{id:[0-9a-fA-F]{24}}' => [
                         'default' => [
-                            'acceptFilter' => ['/multipart\/form-data/'],
-                            'contentTypeFilter' => ['/application\/json/'],
+                            'acceptFilter' => ['/application\/json/'],
+                            'contentTypeFilter' => ['/multipart\/form-data/'],
                             'contentTypeService' => MultipartFormDataContentType::class
                         ]
                     ],
                 ],
+                's3Resource' => [
+                    'client' => [
+                        'version' => 'latest',
+                        'region'  => 'eu-central-1',
+                        'credentials' => [
+                            'key' => 'AKIAJUETFABXHRWGNGGQ',
+                            'secret' => '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'
+                        ]
+                    ],
+                    'bucket' => 'dsign-cdn-test'
+                ],
+                'ffmpeg' => [
+                    'binary' => [
+                        'ffmpeg.binaries'  => '/usr/bin/ffmpeg',
+                        'ffprobe.binaries'  => '/usr/bin/ffprobe',
+                    ]
+                ]
             ]
         ]
     );

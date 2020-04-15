@@ -3,8 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Middleware\ContentNegotiation\Accept\AcceptTransformInterface;
-use App\Middleware\ContentNegotiation\ContentType\ContentTypeTransformInterface;
+use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
 use App\Middleware\ContentNegotiation\Exception\ServiceNotFound;
 use App\Storage\StorageInterface;
 use Laminas\InputFilter\InputFilterInterface;
@@ -16,8 +15,10 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  * Class RestController
  * @package App\Controller
  */
-class RestController
+class RestController implements RestControllerInterface
 {
+    use AcceptServiceAwareTrait;
+
     /**
      * @var string
      */
@@ -44,10 +45,7 @@ class RestController
     }
 
     /**
-     * @param Request $request
-     * @param Response $response
-     * @return Response
-     * @throws ServiceNotFound
+     * @inheritDoc
      */
     public function get(Request $request, Response $response) {
 
@@ -63,10 +61,7 @@ class RestController
     }
 
     /**
-     * @param Request $request
-     * @param Response $response
-     * @return Response
-     * @throws ServiceNotFound
+     * @inheritDoc
      */
     public function post(Request $request, Response $response) {
 
@@ -88,7 +83,7 @@ class RestController
             $data = $validator->getValues();
         }
 
-        $entity = $this->storage->generateEntity($data);
+        $entity = $this->storage->getEntityPrototype()->getPrototype($data);
         $this->storage->save($entity);
 
         $acceptService = $this->getAcceptService($request);
@@ -96,10 +91,7 @@ class RestController
     }
 
     /**
-     * @param Request $request
-     * @param Response $response
-     * @return Response
-     * @throws ServiceNotFound
+     * @inheritDoc
      */
     public function put(Request $request, Response $response) {
 
@@ -128,7 +120,7 @@ class RestController
             $data = $validator->getValues();
         }
 
-        $putEntity = clone $this->storage->generateEntity($request->getParsedBody());
+        $putEntity = clone $this->storage->getEntityPrototype()->getPrototype($request->getParsedBody());
         $putEntity->setId($id);
         $this->storage->update($putEntity);
 
@@ -137,10 +129,7 @@ class RestController
     }
 
     /**
-     * @param Request $request
-     * @param Response $response
-     * @return Response
-     * @throws ServiceNotFound
+     * @inheritDoc
      */
     public function patch(Request $request, Response $response) {
 
@@ -162,9 +151,7 @@ class RestController
     }
 
     /**
-     * @param Request $request
-     * @param Response $response
-     * @return Response
+     * @inheritDoc
      */
     public function delete(Request $request, Response $response) {
 
@@ -180,10 +167,7 @@ class RestController
     }
 
     /**
-     * @param Request $request
-     * @param Response $response
-     * @return Response
-     * @throws ServiceNotFound
+     * @inheritDoc
      */
     public function paginate(Request $request, Response $response) {
 
@@ -194,26 +178,5 @@ class RestController
 
         $acceptService = $this->getAcceptService($request);
         return $acceptService->transformAccept($response, $pagination);
-    }
-
-    /**
-     * @param Request $request
-     * @return ContentTypeTransformInterface
-     * @throws ServiceNotFound
-     */
-    protected function getAcceptService(Request $request) {
-
-        /** @var AcceptTransformInterface $acceptService */
-        $acceptService = $request->getAttribute('AcceptService');
-
-        if (!$acceptService) {
-            throw new ServiceNotFound('ContentTypeService not found in request attribute');
-        }
-
-        if ($this->container->has('Rest' . $this->entityNameClass . 'Hydrator')) {
-            $acceptService->setHydrator($this->container->get('Rest' . $this->entityNameClass . 'Hydrator'));
-        }
-
-        return $acceptService;
     }
 }

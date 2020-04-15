@@ -6,7 +6,6 @@ namespace App\Mail\adapter;
 
 use App\Mail\MailerInterface;
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
 
 /**
  * Class GoogleMailer

@@ -36,6 +36,7 @@ class HydratorStrategy implements StrategyInterface {
      * @inheritDoc
      */
     public function extract($value, ?object $object = null) {
+
         if ($value) {
             $value =  $this->hydrator->extract($value);
         }

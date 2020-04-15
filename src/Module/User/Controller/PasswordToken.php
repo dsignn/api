@@ -6,7 +6,7 @@ namespace App\Module\User\Controller;
 use App\Controller\RpcControllerInterface;
 use App\Crypto\CryptoInterface;
 use App\Mail\MailerInterface;
-use App\Middleware\ContentNegotiation\ContentTypeAwareTrait;
+use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
 use App\Module\User\Entity\UserEntity;
 use App\Module\User\Mail\RecoverPasswordMailerInterface;
 use App\Module\User\Storage\UserStorageInterface;
@@ -21,7 +21,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 class PasswordToken implements RpcControllerInterface {
 
-    use ContentTypeAwareTrait;
+    use AcceptServiceAwareTrait;
 
     /**
      * @var string
@@ -93,8 +93,8 @@ class PasswordToken implements RpcControllerInterface {
         $url = $this->url . '?token=' . $user->getRecoverPassword()->getToken();
         $this->mailer->send([$user->getEmail()], $this->getBodyMessage($user, $url));
 
-        $contentTypeService = $this->getContentTypeService($request);
-        return $contentTypeService->transformContentType($response, $user);
+        $contentTypeService = $this->getAcceptService($request);
+        return $contentTypeService->transformAccept($response, $user);
     }
 
     /**

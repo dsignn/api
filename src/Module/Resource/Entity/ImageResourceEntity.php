@@ -6,36 +6,15 @@ namespace App\Module\Resource\Entity;
 use App\Module\Resource\Entity\Embedded\Dimension;
 
 /**
- * Class VideoResourceEntity
+ * Class ImageResourceEntity
  * @package App\Module\Resource\Entity
  */
-class VideoResourceEntity extends AbstractResourceEntity {
-
-    /**
-     * @var int
-     */
-    protected $duration = 0;
+class ImageResourceEntity extends AbstractResourceEntity {
 
     /**
      * @var Dimension|null
      */
     protected $dimension;
-
-    /**
-     * @return int
-     */
-    public function getDuration(): int {
-        return $this->duration;
-    }
-
-    /**
-     * @param int $duration
-     * @return VideoResourceEntity
-     */
-    public function setDuration(int $duration): VideoResourceEntity {
-        $this->duration = $duration;
-        return $this;
-    }
 
     /**
      * @return Dimension|null
@@ -46,9 +25,9 @@ class VideoResourceEntity extends AbstractResourceEntity {
 
     /**
      * @param Dimension|null $dimension
-     * @return VideoResourceEntity
+     * @return ImageResourceEntity
      */
-    public function setDimension(?Dimension $dimension): VideoResourceEntity {
+    public function setDimension(?Dimension $dimension): ImageResourceEntity {
         $this->dimension = $dimension;
         return $this;
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Storage;
 
 use App\Storage\Entity\EntityInterface;
+use App\Storage\Entity\EntityPrototypeAwareInterface;
 use App\Storage\ResultSet\ResultSetInterface;
 use App\Storage\ResultSet\ResultSetPaginateInterface;
 use Laminas\EventManager\EventsCapableInterface;
@@ -13,7 +14,7 @@ use Laminas\Hydrator\HydratorAwareInterface;
  * Interface StorageInterface
  * @package App\Storage
  */
-interface StorageInterface extends HydratorAwareInterface, ObjectPrototypeInterface, EventsCapableInterface {
+interface StorageInterface extends HydratorAwareInterface, EntityPrototypeAwareInterface, EventsCapableInterface {
 
 
 
@@ -54,10 +55,4 @@ interface StorageInterface extends HydratorAwareInterface, ObjectPrototypeInterf
      * @return ResultSetPaginateInterface
      */
     public function getPage($page = 1, $itemPerPage = 10, $search = null): ResultSetPaginateInterface;
-
-    /**
-     * @param array $data
-     * @return EntityInterface
-     */
-    public function generateEntity(array $data): EntityInterface;
 }

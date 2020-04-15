@@ -7,16 +7,11 @@ namespace App\Storage\Entity;
  * Interface EntityInterface
  * @package App\Storage\Entity
  */
-interface EntityInterface {
+interface EntityPrototypeInterface {
 
     /**
-     * @return string
+     * @param $data
+     * @return mixed
      */
-    public function getId() ;
-
-    /**
-     * @param $id
-     * @return EntityInterface
-     */
-    public function setId($id) ;
+    public function getPrototype($data = null);
 }

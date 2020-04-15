@@ -13,17 +13,17 @@ return function (App $app) {
 
     $app->group('/resource', function (Group $group) {
 
-     //   $group->get('', [MonitorController::class, 'paginate']);
+        $group->get('', [ResourceController::class, 'paginate']);
 
-    //    $group->get('/{id:[0-9a-fA-F]{24}}',  [MonitorController::class, 'get']);
+        $group->get('/{id:[0-9a-fA-F]{24}}',  [ResourceController::class, 'get']);
 
         $group->post('',  [ResourceController::class, 'post']);
 
-     //   $group->put('/{id:[0-9a-fA-F]{24}}',  [MonitorController::class, 'put']);
+        $group->put('/{id:[0-9a-fA-F]{24}}',  [ResourceController::class, 'put']);
 
        // $group->patch('/{id:[0-9a-fA-F]{24}}',  [MonitorController::class, 'patch']);
 
-    //    $group->delete('/{id:[0-9a-fA-F]{24}}',  [MonitorController::class, 'delete']);
+        $group->delete('/{id:[0-9a-fA-F]{24}}',  [ResourceController::class, 'delete']);
     })->add(
         new ValidationMiddleware(
             $app->getContainer()->get('settings')['validation'],

@@ -2,7 +2,7 @@
 FROM centos:centos7
 
 # prerequisites
-RUN yum install -y git gcc gcc-c++ cpp kernel-headers.x86_64 kernel-devel libxml2-devel libxslt-devel openssl-devel libcurl-devel readline-devel bzip2-devel tar wget make autoconf libpng-devel libssl-dev libsasl2-dev libjpeg-devel freetype-devel openldap-devel php-pear openssl
+RUN yum install -y curl cmake libtool  git gcc gcc-c++ cpp kernel-headers.x86_64 kernel-devel libxml2-devel libxslt-devel openssl-devel libcurl-devel readline-devel bzip2-devel tar wget make autoconf libpng-devel libssl-dev libsasl2-dev libjpeg-devel freetype-devel openldap-devel php-pear openssl
 
 # cmake # @see https://cmake.org/
 RUN wget http://files1.directadmin.com/services/custombuild/cmake-3.9.2.tar.gz
@@ -116,6 +116,119 @@ RUN php -r "if (hash_file('SHA384', 'composer-setup.php') === 'e0012edf3e80b6978
 RUN php composer-setup.php
 RUN php -r "unlink('composer-setup.php');"
 RUN mv composer.phar /usr/local/bin/composer
+
+# FFMGEG
+WORKDIR /tmp/ffmpeg_sources
+
+RUN curl -O -L https://www.nasm.us/pub/nasm/releasebuilds/2.14.02/nasm-2.14.02.tar.gz
+RUN tar zxvf nasm-2.14.02.tar.gz
+WORKDIR nasm-2.14.02
+RUN ls -l
+RUN ./autogen.sh
+RUN ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin"
+RUN make
+RUN make install
+RUN ln -s /tmp/ffmpeg_sources/nasm-2.14.02/nasm /usr/bin/nasm
+
+WORKDIR /tmp/ffmpeg_sources
+# Yasm
+
+RUN curl -O -L https://www.tortall.net/projects/yasm/releases/yasm-1.3.0.tar.gz
+RUN tar xzvf yasm-1.3.0.tar.gz
+WORKDIR yasm-1.3.0
+RUN ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin"
+RUN make
+RUN make install
+RUN ln -s /tmp/ffmpeg_sources/yasm-1.3.0/yasm /usr/bin/yasm
+
+WORKDIR /tmp/ffmpeg_sources
+# libx264
+
+# Found no assembler Minimum version is nasm-2.13
+RUN git clone --depth 1 https://code.videolan.org/videolan/x264.git
+WORKDIR x264
+RUN PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" --enable-static --disable-asm
+RUN make
+RUN make install
+
+WORKDIR /tmp/ffmpeg_sources
+# libx265
+
+RUN yum install -y hg
+RUN hg clone https://bitbucket.org/multicoreware/x265
+WORKDIR x265/build/linux
+RUN cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$HOME/ffmpeg_build" -DENABLE_SHARED:bool=off ../../source
+RUN make
+RUN make install
+RUN ln -s /tmp/ffmpeg_sources/x265/build/linux/x265 /usr/bin/x265
+
+WORKDIR /tmp/ffmpeg_sources
+# libfdk_aac
+
+RUN git clone --depth 1 https://github.com/mstorsjo/fdk-aac
+WORKDIR fdk-aac
+RUN autoreconf -fiv
+RUN ./configure --prefix="$HOME/ffmpeg_build" --disable-shared
+RUN make
+RUN make install
+
+WORKDIR /tmp/ffmpeg_sources
+# libmp3lame
+
+RUN curl -O -L https://downloads.sourceforge.net/project/lame/lame/3.100/lame-3.100.tar.gz
+RUN tar xzvf lame-3.100.tar.gz
+WORKDIR lame-3.100
+RUN ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" --disable-shared --enable-nasm
+RUN make
+RUN make install
+
+WORKDIR /tmp/ffmpeg_sources
+# libopus
+
+RUN curl -O -L https://archive.mozilla.org/pub/opus/opus-1.3.1.tar.gz
+RUN tar xzvf opus-1.3.1.tar.gz
+WORKDIR opus-1.3.1
+RUN ./configure --prefix="$HOME/ffmpeg_build" --disable-shared
+RUN make
+RUN make install
+
+WORKDIR /tmp/ffmpeg_sources
+# libvpx
+
+RUN git clone --depth 1 https://chromium.googlesource.com/webm/libvpx.git
+WORKDIR libvpx
+RUN ./configure --prefix="$HOME/ffmpeg_build" --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --as=yasm
+RUN make
+RUN make install
+
+WORKDIR /tmp/ffmpeg_sources
+# FFmpeg
+
+RUN curl -O -L https://ffmpeg.org/releases/ffmpeg-4.2.tar.gz
+RUN tar -xzvf ffmpeg-4.2.tar.gz
+WORKDIR ffmpeg-4.2
+RUN PATH="$HOME/bin:$PATH" PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ./configure \
+      --prefix="$HOME/ffmpeg_build" \
+      --pkg-config-flags="--static" \
+      --extra-cflags="-I$HOME/ffmpeg_build/include" \
+      --extra-ldflags="-L$HOME/ffmpeg_build/lib" \
+      --extra-libs=-lpthread \
+      --extra-libs=-lm \
+      --bindir="$HOME/bin" \
+      --enable-gpl \
+      --enable-libfdk_aac \
+      --enable-libfreetype \
+      --enable-libmp3lame \
+      --enable-libopus \
+      --enable-libvpx \
+      --enable-libx264 \
+      --enable-libx265 \
+      --enable-nonfree
+RUN make
+RUN ln -s /tmp/ffmpeg_sources/ffmpeg-4.2/ffmpeg /usr/bin/ffmpeg
+RUN ln -s /tmp/ffmpeg_sources/ffmpeg-4.2/ffprobe /usr/bin/ffprobe
+RUN hash -d ffmpeg
+
 
 WORKDIR /var/www/application
 

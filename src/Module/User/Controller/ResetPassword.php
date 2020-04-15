@@ -6,9 +6,8 @@ namespace App\Module\User\Controller;
 use App\Controller\RpcControllerInterface;
 use App\Crypto\CryptoInterface;
 use App\Mail\MailerInterface;
-use App\Middleware\ContentNegotiation\ContentTypeAwareTrait;
+use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
 use App\Module\User\Entity\UserEntity;
-use App\Module\User\Mail\RecoverPasswordMailerInterface;
 use App\Module\User\Storage\UserStorageInterface;
 use App\Storage\StorageInterface;
 use Psr\Container\ContainerInterface;
@@ -21,7 +20,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 class ResetPassword implements RpcControllerInterface {
 
-    use ContentTypeAwareTrait;
+    use AcceptServiceAwareTrait;
 
     /**
      * @var string
@@ -77,7 +76,7 @@ class ResetPassword implements RpcControllerInterface {
 
         $this->storage->update($user);
 
-        $contentTypeService = $this->getContentTypeService($request);
-        return $contentTypeService->transformContentType($response, $user);
+        $contentTypeService = $this->getAcceptService($request);
+        return $contentTypeService->transformAccept($response, $user);
     }
 }

@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 
-use App\Middleware\AuthMiddleware;
 use App\Middleware\AuthenticationMiddleware;
+use App\Middleware\AuthMiddleware;
 use App\Middleware\Validation\ValidationMiddleware;
 use App\Module\User\Controller\PasswordToken;
 use App\Module\User\Controller\ResetPassword;
