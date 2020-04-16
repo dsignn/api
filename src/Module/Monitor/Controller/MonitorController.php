@@ -16,7 +16,7 @@ class MonitorController extends RestController
     /**
      * @var string
      */
-    protected $entityNameClass = 'MonitorEntity';
+    protected $hydratorService = 'RestMonitorEntityHydrator';
 
     /**
      * MonitorController constructor.

@@ -16,8 +16,6 @@ use Laminas\Hydrator\HydratorAwareInterface;
  */
 interface StorageInterface extends HydratorAwareInterface, EntityPrototypeAwareInterface, EventsCapableInterface {
 
-
-
     /**
      * @param $id
      * @return null|EntityInterface

@@ -28,7 +28,7 @@ class Storage implements StorageInterface {
      */
     static public $AFTER_SAVE = 'after_save';
 
-    use ObjectPrototypeTrait, EntityPrototypeAwareTrait, HydratorAwareTrait;
+    use EntityPrototypeAwareTrait, HydratorAwareTrait;
 
     /**
      * @var StorageAdapterInterface

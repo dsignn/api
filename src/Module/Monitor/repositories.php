@@ -7,9 +7,11 @@ use App\Hydrator\Strategy\Mongo\NamingStrategy\UnderscoreNamingStrategy;
 use App\Module\Monitor\Entity\MonitorEntity;
 use App\Module\Monitor\Storage\MonitorStorage;
 use App\Module\Monitor\Storage\MonitorStorageInterface;
+use App\Module\User\Entity\UserEntity;
 use App\Storage\Adapter\Mongo\MongoAdapter;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydratePaginateResultSet;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
+use App\Storage\Entity\SingleEntityPrototype;
 use DI\ContainerBuilder;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Hydrator\Strategy\ClosureStrategy;
@@ -23,17 +25,15 @@ return function (ContainerBuilder $containerBuilder) {
             $settings = $c->get('settings');
             $serviceSetting = $settings['storage']['monitor'];
 
-            $hydrator = new ClassMethodsHydrator();
-            $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
-            $hydrator->addStrategy('id', new MongoIdStrategy());
+            $hydrator = $c->get('StorageMonitorEntityHydrator');
 
             $resultSet = new MongoHydrateResultSet();
             $resultSet->setHydrator($hydrator);
-            $resultSet->setObjectPrototype(new MonitorEntity());
+            $resultSet->setEntityPrototype($c->get('MonitorEntityPrototype'));
 
             $resultSetPaginator = new MongoHydratePaginateResultSet();
             $resultSetPaginator->setHydrator($hydrator);
-            $resultSetPaginator->setObjectPrototype(new MonitorEntity());
+            $resultSetPaginator->setEntityPrototype($c->get('MonitorEntityPrototype'));
 
             $mongoAdapter = new MongoAdapter($c->get(MongoClient::class), $settings['storage']['name'], $serviceSetting['collection']);
             $mongoAdapter->setResultSet($resultSet);
@@ -41,9 +41,13 @@ return function (ContainerBuilder $containerBuilder) {
 
             $storage = new MonitorStorage($mongoAdapter);
             $storage->setHydrator($hydrator);
-            $storage->setObjectPrototype(new MonitorEntity());
+            $storage->setEntityPrototype($c->get('MonitorEntityPrototype'));
 
             return $storage;
+        }
+    ])->addDefinitions([
+        'MonitorEntityPrototype' => function(ContainerInterface $c) {
+            return new SingleEntityPrototype(new MonitorEntity());
         }
     ])->addDefinitions([
         'RestMonitorEntityHydrator' => function(ContainerInterface $c) {
@@ -56,6 +60,15 @@ return function (ContainerBuilder $containerBuilder) {
                 }
                 return $data;
             }));
+
+            return $hydrator;
+        }
+    ])->addDefinitions([
+        'StorageMonitorEntityHydrator' => function(ContainerInterface $c) {
+
+            $hydrator = new ClassMethodsHydrator();
+            $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
+            $hydrator->addStrategy('id', new MongoIdStrategy());
 
             return $hydrator;
         }
