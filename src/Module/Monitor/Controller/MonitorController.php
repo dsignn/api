@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Module\Monitor\Controller;
 
 use App\Controller\RestController;
+use App\Controller\RestControllerInterface;
 use App\Module\Monitor\Storage\MonitorStorageInterface;
 use Psr\Container\ContainerInterface;
 
@@ -11,8 +12,7 @@ use Psr\Container\ContainerInterface;
  * Class MonitorController
  * @package App\Module\Monitor\Controller
  */
-class MonitorController extends RestController
-{
+class MonitorController extends RestController implements RestControllerInterface {
     /**
      * @var string
      */

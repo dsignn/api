@@ -86,7 +86,6 @@ class RestController implements RestControllerInterface
         $entity = $this->storage->getEntityPrototype()->getPrototype($data);
         $this->storage->getHydrator()->hydrate($data, $entity);
         $this->storage->save($entity);
-
         $acceptService = $this->getAcceptService($request);
         return $acceptService->transformAccept($response, $entity);
     }

@@ -18,4 +18,7 @@ return function (ContainerBuilder $containerBuilder) {
 
     $resourceRepositories = include_once __DIR__ . "/../src/Module/Resource/repositories.php";
     $resourceRepositories($containerBuilder);
+
+    $timeslotRepositories = include_once __DIR__ . "/../src/Module/Timeslot/repositories.php";
+    $timeslotRepositories($containerBuilder);
 };

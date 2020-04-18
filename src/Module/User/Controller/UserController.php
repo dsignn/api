@@ -5,6 +5,7 @@ namespace App\Module\User\Controller;
 
 
 use App\Controller\RestController;
+use App\Controller\RestControllerInterface;
 use App\Module\User\Storage\UserStorageInterface;
 use Psr\Container\ContainerInterface;
 
@@ -12,7 +13,7 @@ use Psr\Container\ContainerInterface;
  * Class UserController
  * @package App\Module\User\Controller
  */
-class UserController extends RestController {
+class UserController extends RestController implements RestControllerInterface {
 
     /**
      * @var string

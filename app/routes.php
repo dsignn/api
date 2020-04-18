@@ -23,4 +23,7 @@ return function (App $app) {
 
     $resourceRoute = include_once __DIR__ . "/../src/Module/Resource/routes.php";
     $resourceRoute($app);
+
+    $timeslotRoute = include_once __DIR__ . "/../src/Module/Timeslot/routes.php";
+    $timeslotRoute($app);
 };
