@@ -7,7 +7,6 @@ use App\Hydrator\Strategy\Mongo\NamingStrategy\UnderscoreNamingStrategy;
 use App\Module\Monitor\Entity\MonitorEntity;
 use App\Module\Monitor\Storage\MonitorStorage;
 use App\Module\Monitor\Storage\MonitorStorageInterface;
-use App\Module\User\Entity\UserEntity;
 use App\Storage\Adapter\Mongo\MongoAdapter;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydratePaginateResultSet;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;

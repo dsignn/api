@@ -5,9 +5,7 @@ namespace App\Module\Timeslot\Controller;
 
 use App\Controller\RestController;
 use App\Controller\RestControllerInterface;
-use App\Module\Timeslot\Storage\TimeslotStorage;
 use App\Module\Timeslot\Storage\TimeslotStorageInterface;
-use App\Module\User\Storage\UserStorageInterface;
 use Psr\Container\ContainerInterface;
 
 /**

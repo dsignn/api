@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
-use App\Middleware\ContentNegotiation\Exception\ServiceNotFound;
 use App\Storage\StorageInterface;
 use Laminas\InputFilter\InputFilterInterface;
 use Psr\Container\ContainerInterface;

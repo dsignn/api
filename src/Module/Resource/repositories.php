@@ -7,7 +7,6 @@ use App\Hydrator\Strategy\HydratorStrategy;
 use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\UnderscoreNamingStrategy;
-use App\Module\Monitor\Entity\MonitorEntity;
 use App\Module\Resource\Entity\Embedded\Dimension;
 use App\Module\Resource\Entity\ImageResourceEntity;
 use App\Module\Resource\Entity\VideoResourceEntity;

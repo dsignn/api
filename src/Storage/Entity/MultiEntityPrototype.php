@@ -5,7 +5,6 @@ namespace App\Storage\Entity;
 
 use Laminas\Hydrator\NamingStrategy\NamingStrategyInterface;
 use Laminas\Hydrator\NamingStrategy\UnderscoreNamingStrategy;
-use Laminas\Hydrator\NamingStrategy\UnderscoreNamingStrategy\CamelCaseToUnderscoreFilter;
 
 /**
  * Class SingleEntityPrototype
