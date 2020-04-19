@@ -15,6 +15,9 @@ return function (App $app) {
     $userRoute = include_once __DIR__ . "/../src/Module/User/routes.php";
     $userRoute($app);
 
+    $organizationRoute = include_once __DIR__ . "/../src/Module/Organization/routes.php";
+    $organizationRoute($app);
+
     $monitorRoute = include_once __DIR__ . "/../src/Module/Monitor/routes.php";
     $monitorRoute($app);
 

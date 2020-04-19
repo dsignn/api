@@ -38,6 +38,9 @@ return function (ContainerBuilder $containerBuilder) {
     $userSetting = include_once __DIR__ . "/../src/Module/User/setting.php";
     $userSetting($setting);
 
+    $organizationSetting = include_once __DIR__ . "/../src/Module/Organization/setting.php";
+    $organizationSetting($setting);
+
     $monitorSetting = include_once __DIR__ . "/../src/Module/Monitor/setting.php";
     $monitorSetting($setting);
 
@@ -46,7 +49,6 @@ return function (ContainerBuilder $containerBuilder) {
 
     $timeslotSetting = include_once __DIR__ . "/../src/Module/Timeslot/setting.php";
     $timeslotSetting($setting);
-
 
     // Global Settings Object
     $containerBuilder->addDefinitions($setting);
