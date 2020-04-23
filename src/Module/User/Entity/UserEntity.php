@@ -58,6 +58,11 @@ class UserEntity implements EntityInterface, UserEntityInterface, RoleInterface 
     protected $status = '';
 
     /**
+     * @var array
+     */
+    protected $organizations = [];
+
+    /**
      * @var RecoverPassword
      */
     protected $recoverPassword;
@@ -198,5 +203,19 @@ class UserEntity implements EntityInterface, UserEntityInterface, RoleInterface 
         return $this;
     }
 
+    /**
+     * @return array
+     */
+    public function getOrganizations(): array {
+        return $this->organizations;
+    }
 
+    /**
+     * @param array $organizations
+     * @return UserEntity
+     */
+    public function setOrganizations(array $organizations): UserEntity {
+        $this->organizations = $organizations;
+        return $this;
+    }
 }

@@ -119,7 +119,7 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addStrategy('id', new MongoIdStrategy());
             $hydrator->addStrategy('client', new HydratorStrategy(  new ClassMethodsHydrator(), new ClientEntity()));
             $hydrator->addStrategy('expiry_date_time', new MongoDateStrategy(new DateTimeImmutable()));
-            $hydrator->addStrategy('scopes', new HydratorArrayStrategy(  new ClassMethodsHydrator(), new ScopeEntity()));
+            $hydrator->addStrategy('scopes', new HydratorArrayStrategy(  new ClassMethodsHydrator(), new SingleEntityPrototype(new ScopeEntity())));
 
             return $hydrator;
         },
@@ -177,8 +177,8 @@ return function (ContainerBuilder $containerBuilder) {
         'StorageRefreshTokenEntityHydrator' => function(ContainerInterface $c) {
 
             $accessTokenHydrator = new ClassMethodsHydrator();
-            $accessTokenHydrator->addStrategy('client', new HydratorStrategy(new ClassMethodsHydrator(), new ClientEntity()));
-            $accessTokenHydrator->addStrategy('scopes', new HydratorArrayStrategy(  new ClassMethodsHydrator(), new ScopeEntity()));
+            $accessTokenHydrator->addStrategy('client', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new ClientEntity())));
+            $accessTokenHydrator->addStrategy('scopes', new HydratorArrayStrategy(  new ClassMethodsHydrator(), new SingleEntityPrototype(new ScopeEntity())));
             $accessTokenHydrator->addStrategy('expiry_date_time', new MongoDateStrategy(new DateTimeImmutable()));
 
             $hydrator = new ClassMethodsHydrator();

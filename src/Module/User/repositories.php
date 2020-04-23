@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 use App\Crypto\CryptoInterface;
 use App\Crypto\CryptoOpenSsl;
+use App\Hydrator\Strategy\HydratorArrayStrategy;
 use App\Hydrator\Strategy\HydratorStrategy;
 use App\Hydrator\Strategy\Mongo\MongoDateStrategy;
 use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
@@ -18,9 +19,11 @@ use App\Module\User\Storage\UserStorageInterface;
 use App\Storage\Adapter\Mongo\MongoAdapter;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydratePaginateResultSet;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
+use App\Storage\Entity\Reference;
 use App\Storage\Entity\SingleEntityPrototype;
 use App\Storage\Storage;
 use DI\ContainerBuilder;
+use Laminas\Filter\Callback;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Hydrator\Filter\FilterComposite;
 use Laminas\Hydrator\Filter\MethodMatchFilter;
@@ -29,6 +32,7 @@ use Laminas\InputFilter\Input;
 use Laminas\InputFilter\InputFilter;
 use Laminas\Validator\EmailAddress;
 use Laminas\Validator\InArray;
+use Laminas\Validator\NotEmpty;
 use Laminas\Validator\StringLength;
 use Psr\Container\ContainerInterface;
 
@@ -80,6 +84,17 @@ return function (ContainerBuilder $containerBuilder) {
             $recoverPasswordHydrator->addStrategy('date', new MongoDateStrategy());
             $hydrator->addStrategy('recoverPassword', new HydratorStrategy($recoverPasswordHydrator, new RecoverPassword()));
 
+            $organizationHydrator = new ClassMethodsHydrator();
+            $organizationHydrator->addStrategy('id', new ClosureStrategy(function ($data) {
+
+                if ($data instanceof MongoId) {
+                    $data = $data->__toString();
+                }
+                return $data;
+            }));
+            $hydrator->addStrategy('organizations', new HydratorArrayStrategy($organizationHydrator, new SingleEntityPrototype(new Reference())));
+
+
             return $hydrator;
         }
     ])->addDefinitions([
@@ -92,6 +107,10 @@ return function (ContainerBuilder $containerBuilder) {
             $recoverPasswordHydrator = new ClassMethodsHydrator();
             $recoverPasswordHydrator->addStrategy('date', new MongoDateStrategy());
             $hydrator->addStrategy('recoverPassword', new HydratorStrategy($recoverPasswordHydrator, new RecoverPassword()));
+
+            $organizationHydrator = new ClassMethodsHydrator();
+            $organizationHydrator->addStrategy('id', new MongoIdStrategy());
+            $hydrator->addStrategy('organizations', new HydratorArrayStrategy($organizationHydrator, new SingleEntityPrototype(new Reference())));
 
             return $hydrator;
         }
@@ -142,11 +161,20 @@ return function (ContainerBuilder $containerBuilder) {
                 'max' => 12
             ]));
 
+            $organizations = new Input('organizations');
+            $organizations->setRequired(false);
+            $organizations->getFilterChain()->attach(new Callback(function ($value) {
+
+                return $value ? $value : [];
+            }));
+
+
             $inputFilter->add($email)
                 ->add($name)
                 ->add($lastName)
                 ->add($role)
-                ->add($password);
+                ->add($password)
+                ->add($organizations);
 
             return $inputFilter;
         }

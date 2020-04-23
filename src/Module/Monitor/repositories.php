@@ -1,9 +1,11 @@
 <?php
 declare(strict_types=1);
 
+use App\Hydrator\Strategy\HydratorArrayStrategy;
 use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\UnderscoreNamingStrategy;
+use App\Module\Monitor\Entity\MonitorContainerEntity;
 use App\Module\Monitor\Entity\MonitorEntity;
 use App\Module\Monitor\Storage\MonitorStorage;
 use App\Module\Monitor\Storage\MonitorStorageInterface;
@@ -46,7 +48,7 @@ return function (ContainerBuilder $containerBuilder) {
         }
     ])->addDefinitions([
         'MonitorEntityPrototype' => function(ContainerInterface $c) {
-            return new SingleEntityPrototype(new MonitorEntity());
+            return new SingleEntityPrototype(new MonitorContainerEntity());
         }
     ])->addDefinitions([
         'RestMonitorEntityHydrator' => function(ContainerInterface $c) {
@@ -65,9 +67,15 @@ return function (ContainerBuilder $containerBuilder) {
     ])->addDefinitions([
         'StorageMonitorEntityHydrator' => function(ContainerInterface $c) {
 
+            $monitorHydrator = new ClassMethodsHydrator();
+            $monitorHydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
+            $monitorHydrator->addStrategy('monitors', new HydratorArrayStrategy($monitorHydrator, new SingleEntityPrototype(new MonitorEntity())));
+
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
             $hydrator->addStrategy('id', new MongoIdStrategy());
+            $hydrator->addStrategy('monitors', new HydratorArrayStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new MonitorEntity())));
+
 
             return $hydrator;
         }
