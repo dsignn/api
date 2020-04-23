@@ -53,6 +53,10 @@ return function (ContainerBuilder $containerBuilder) {
     ])->addDefinitions([
         'RestMonitorEntityHydrator' => function(ContainerInterface $c) {
 
+            $monitorHydrator = new ClassMethodsHydrator();
+            $monitorHydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
+            $monitorHydrator->addStrategy('monitors', new HydratorArrayStrategy($monitorHydrator, new SingleEntityPrototype(new MonitorEntity())));
+
             $hydrator = new ClassMethodsHydrator();
             $hydrator->addStrategy('id', new ClosureStrategy(function ($data) {
 
@@ -61,6 +65,7 @@ return function (ContainerBuilder $containerBuilder) {
                 }
                 return $data;
             }));
+            $hydrator->addStrategy('monitors', new HydratorArrayStrategy($monitorHydrator, new SingleEntityPrototype(new MonitorEntity())));
 
             return $hydrator;
         }
@@ -74,8 +79,7 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
             $hydrator->addStrategy('id', new MongoIdStrategy());
-            $hydrator->addStrategy('monitors', new HydratorArrayStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new MonitorEntity())));
-
+            $hydrator->addStrategy('monitors', new HydratorArrayStrategy($monitorHydrator, new SingleEntityPrototype(new MonitorEntity())));
 
             return $hydrator;
         }
