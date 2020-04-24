@@ -39,15 +39,15 @@ class Reference implements ReferenceInterface {
      * @return string
      */
     public function getCollection(): string {
-        return $this->name;
+        return $this->collection;
     }
 
     /**
-     * @param string $name
+     * @param string $collection
      * @return Reference
      */
-    public function SetCollection(string $name): Reference {
-        $this->name = $name;
+    public function SetCollection(string $collection): Reference {
+        $this->collection = $collection;
         return $this;
     }
 }
