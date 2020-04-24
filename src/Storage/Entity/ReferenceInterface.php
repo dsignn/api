@@ -18,6 +18,6 @@ interface ReferenceInterface {
     /**
      * @return string
      */
-    public function getName(): string ;
+    public function getCollection(): string ;
 
 }

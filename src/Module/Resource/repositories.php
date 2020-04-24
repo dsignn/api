@@ -18,6 +18,7 @@ use App\Storage\Adapter\Mongo\MongoAdapter;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydratePaginateResultSet;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
 use App\Storage\Entity\MultiEntityPrototype;
+use App\Storage\Entity\SingleEntityPrototype;
 use App\Storage\Storage;
 use Aws\S3\S3Client;
 use DI\ContainerBuilder;
@@ -93,7 +94,7 @@ return function (ContainerBuilder $containerBuilder) {
             $videoHydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
             $videoHydrator->addStrategy('id', new MongoIdStrategy());
 
-            $strategyDimension = new HydratorStrategy(new ClassMethodsHydrator(), new Dimension());
+            $strategyDimension = new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Dimension()));
 
             $imageHydrator->addStrategy('dimension', $strategyDimension);
             $videoHydrator->addStrategy('dimension', $strategyDimension);
@@ -135,8 +136,7 @@ return function (ContainerBuilder $containerBuilder) {
                 return $data;
             }));
 
-            $strategyDimension = new HydratorStrategy(new ClassMethodsHydrator(), new Dimension());
-
+            $strategyDimension = new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Dimension()));
             $imageHydrator->addStrategy('dimension', $strategyDimension);
             $videoHydrator->addStrategy('dimension', $strategyDimension);
 

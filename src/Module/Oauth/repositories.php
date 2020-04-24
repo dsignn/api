@@ -117,7 +117,7 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
             $hydrator->addStrategy('id', new MongoIdStrategy());
-            $hydrator->addStrategy('client', new HydratorStrategy(  new ClassMethodsHydrator(), new ClientEntity()));
+            $hydrator->addStrategy('client', new HydratorStrategy(  new ClassMethodsHydrator(), new SingleEntityPrototype(new ClientEntity())));
             $hydrator->addStrategy('expiry_date_time', new MongoDateStrategy(new DateTimeImmutable()));
             $hydrator->addStrategy('scopes', new HydratorArrayStrategy(  new ClassMethodsHydrator(), new SingleEntityPrototype(new ScopeEntity())));
 
@@ -185,7 +185,7 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
             $hydrator->addStrategy('id', new MongoIdStrategy());
             $hydrator->addStrategy('expiry_date_time', new MongoDateStrategy(new DateTimeImmutable()));
-            $hydrator->addStrategy('accessToken', new HydratorStrategy($accessTokenHydrator, new AccessTokenEntity()));
+            $hydrator->addStrategy('accessToken', new HydratorStrategy($accessTokenHydrator, new SingleEntityPrototype(new AccessTokenEntity())));
 
             return $hydrator;
         },
@@ -226,7 +226,7 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
             $hydrator->addStrategy('id', new MongoIdStrategy());
-            $hydrator->addStrategy('client', new HydratorStrategy(new ClassMethodsHydrator(), new ClientEntity()));
+            $hydrator->addStrategy('client', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new ClientEntity())));
 
             return $hydrator;
         },

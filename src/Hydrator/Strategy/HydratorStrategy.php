@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Hydrator\Strategy;
 
+use App\Storage\Entity\EntityPrototypeAwareTrait;
+use App\Storage\Entity\EntityPrototypeInterface;
 use Laminas\Hydrator\HydratorInterface;
 use Laminas\Hydrator\Strategy\StrategyInterface;
 
@@ -12,24 +14,21 @@ use Laminas\Hydrator\Strategy\StrategyInterface;
  */
 class HydratorStrategy implements StrategyInterface {
 
+    use EntityPrototypeAwareTrait;
+
     /**
      * @var HydratorInterface
      */
     protected $hydrator;
 
     /**
-     * @var
-     */
-    protected $objectPrototype;
-
-    /**
      * HydratorStrategy constructor.
      * @param HydratorInterface $hydrator
      * @param $objectPrototype
      */
-    public function __construct(HydratorInterface $hydrator, $objectPrototype) {
+    public function __construct(HydratorInterface $hydrator, EntityPrototypeInterface $entityPrototype) {
         $this->hydrator = $hydrator;
-        $this->objectPrototype = $objectPrototype ? $objectPrototype : new \stdClass();
+        $this->setEntityPrototype($entityPrototype);
     }
 
     /**
@@ -47,13 +46,13 @@ class HydratorStrategy implements StrategyInterface {
      * @inheritDoc
      */
     public function hydrate($value, ?array $data) {
-        if ($value) {
 
-            $hydrateValue = clone $this->objectPrototype;
+        $hydrateValue = clone $this->getEntityPrototype()->getPrototype($data);
+        if ($value) {
             $this->hydrator->hydrate($value, $hydrateValue);
             $value = $hydrateValue;
-        } else if($this->objectPrototype) {
-            $value =  clone $this->objectPrototype;
+        } else if($hydrateValue) {
+            $value =  $hydrateValue;
         }
         return $value;
     }

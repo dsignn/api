@@ -51,6 +51,8 @@ class RestController implements RestControllerInterface
         $id = $request->getAttribute('__route__')->getArgument('id');
         $entity = $this->storage->get($id);
 
+        var_dump($entity);
+        die();
         if (!$entity) {
             return $response->withStatus(404);
         }

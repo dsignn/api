@@ -1,5 +1,14 @@
 # Dsign Api
 
+This project is build on [Slim framework](http://www.slimframework.com/) and compose the rest api to usi dsign application.
+The development env in build with [Docker](https://www.docker.com/) and [Docker compose](https://docs.docker.com/compose/).
+
+## Install
+
+```bash
+docker-compose up 
+```
+
 ## Setup
 
 Steps to config the API.

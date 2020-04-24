@@ -17,7 +17,7 @@ class Reference implements ReferenceInterface {
     /**
      * @var string
      */
-    protected $name = '';
+    protected $collection = '';
 
     /**
      * @return string
@@ -38,7 +38,7 @@ class Reference implements ReferenceInterface {
     /**
      * @return string
      */
-    public function getName(): string {
+    public function getCollection(): string {
         return $this->name;
     }
 
@@ -46,7 +46,7 @@ class Reference implements ReferenceInterface {
      * @param string $name
      * @return Reference
      */
-    public function setName(string $name): Reference {
+    public function SetCollection(string $name): Reference {
         $this->name = $name;
         return $this;
     }

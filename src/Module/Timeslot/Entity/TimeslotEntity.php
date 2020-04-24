@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Module\Timeslot\Entity;
 
+use App\Module\Monitor\Entity\MonitorContainerEntity;
 use App\Storage\Entity\EntityInterface;
 use App\Storage\Entity\EntityTrait as StorageEntityTrait;
 
@@ -186,7 +187,7 @@ class TimeslotEntity implements EntityInterface {
     }
 
     /**
-     * @return null
+     * @return MonitorContainerEntity
      */
     public function getMonitorContainerReference() {
         return $this->monitorContainerReference;
@@ -196,7 +197,7 @@ class TimeslotEntity implements EntityInterface {
      * @param $monitorContainerReference
      * @return TimeslotEntity
      */
-    public function setMonitorContainerReference($monitorContainerReference): TimeslotEntity {
+    public function setMonitorContainerReference(MonitorContainerEntity $monitorContainerReference): TimeslotEntity {
         $this->monitorContainerReference = $monitorContainerReference;
         return $this;
     }

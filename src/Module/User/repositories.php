@@ -32,7 +32,6 @@ use Laminas\InputFilter\Input;
 use Laminas\InputFilter\InputFilter;
 use Laminas\Validator\EmailAddress;
 use Laminas\Validator\InArray;
-use Laminas\Validator\NotEmpty;
 use Laminas\Validator\StringLength;
 use Psr\Container\ContainerInterface;
 
@@ -82,7 +81,7 @@ return function (ContainerBuilder $containerBuilder) {
             }));
             $recoverPasswordHydrator = new ClassMethodsHydrator();
             $recoverPasswordHydrator->addStrategy('date', new MongoDateStrategy());
-            $hydrator->addStrategy('recoverPassword', new HydratorStrategy($recoverPasswordHydrator, new RecoverPassword()));
+            $hydrator->addStrategy('recoverPassword', new HydratorStrategy($recoverPasswordHydrator, new SingleEntityPrototype(new RecoverPassword())));
 
             $organizationHydrator = new ClassMethodsHydrator();
             $organizationHydrator->addStrategy('id', new ClosureStrategy(function ($data) {
@@ -106,7 +105,7 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addFilter('identifier', new MethodMatchFilter('getIdentifier'),  FilterComposite::CONDITION_AND);
             $recoverPasswordHydrator = new ClassMethodsHydrator();
             $recoverPasswordHydrator->addStrategy('date', new MongoDateStrategy());
-            $hydrator->addStrategy('recoverPassword', new HydratorStrategy($recoverPasswordHydrator, new RecoverPassword()));
+            $hydrator->addStrategy('recoverPassword', new HydratorStrategy($recoverPasswordHydrator, new SingleEntityPrototype(new RecoverPassword())));
 
             $organizationHydrator = new ClassMethodsHydrator();
             $organizationHydrator->addStrategy('id', new MongoIdStrategy());
@@ -129,7 +128,7 @@ return function (ContainerBuilder $containerBuilder) {
             }));
             $recoverPasswordHydrator = new ClassMethodsHydrator();
             $recoverPasswordHydrator->addStrategy('date', new MongoDateStrategy());
-            $hydrator->addStrategy('recoverPassword', new HydratorStrategy($recoverPasswordHydrator, new RecoverPassword()));
+            $hydrator->addStrategy('recoverPassword', new HydratorStrategy($recoverPasswordHydrator, new SingleEntityPrototype(new RecoverPassword())));
 
             return $hydrator;
         }
