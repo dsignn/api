@@ -3,16 +3,19 @@ declare(strict_types=1);
 
 namespace App\Module\Monitor\Entity;
 
+use App\Module\Organization\Entity\OrganizationAwareInterface;
+use App\Module\Organization\Entity\OrganizationAwareTrait;
 use App\Storage\Entity\EntityInterface;
 use App\Storage\Entity\EntityTrait as StorageEntityTrait;
+use App\Storage\Entity\Reference;
 
 /**
  * Class MonitorContainerEntity
  * @package App\Module\Monitor\Entity
  */
-class MonitorContainerEntity implements EntityInterface {
+class MonitorContainerEntity implements EntityInterface, OrganizationAwareInterface {
 
-    use StorageEntityTrait;
+    use StorageEntityTrait, OrganizationAwareTrait;
 
     /**
      * @var
@@ -29,7 +32,6 @@ class MonitorContainerEntity implements EntityInterface {
      * @var
      */
     protected $monitors = [];
-
 
     /**
      * @return mixed

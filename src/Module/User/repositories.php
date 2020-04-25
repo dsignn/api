@@ -16,6 +16,7 @@ use App\Module\User\Mail\adapter\UserGoogleMailer;
 use App\Module\User\Mail\RecoverPasswordMailerInterface;
 use App\Module\User\Storage\UserStorage;
 use App\Module\User\Storage\UserStorageInterface;
+use App\Module\User\Validator\EmailExistValidator;
 use App\Storage\Adapter\Mongo\MongoAdapter;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydratePaginateResultSet;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
@@ -28,6 +29,7 @@ use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Hydrator\Filter\FilterComposite;
 use Laminas\Hydrator\Filter\MethodMatchFilter;
 use Laminas\Hydrator\Strategy\ClosureStrategy;
+use Laminas\InputFilter\CollectionInputFilter;
 use Laminas\InputFilter\Input;
 use Laminas\InputFilter\InputFilter;
 use Laminas\Validator\EmailAddress;
@@ -38,7 +40,6 @@ use Psr\Container\ContainerInterface;
 return function (ContainerBuilder $containerBuilder) {
 
     $containerBuilder->addDefinitions([
-
         UserStorageInterface::class => function(ContainerInterface $c) {
             $settings = $c->get('settings');
             $serviceSetting = $settings['storage']['user'];
@@ -64,8 +65,7 @@ return function (ContainerBuilder $containerBuilder) {
             $storage->getEventManager()->attach(Storage::$BEFORE_SAVE, new UserPasswordEvent($c->get('OAuthCrypto')));
 
             return $storage;
-        }
-    ])->addDefinitions([
+        },
         'RestUserEntityHydrator' => function(ContainerInterface $c) {
 
             $hydrator = new ClassMethodsHydrator();
@@ -95,8 +95,7 @@ return function (ContainerBuilder $containerBuilder) {
 
 
             return $hydrator;
-        }
-    ])->addDefinitions([
+        },
         'StorageUserEntityHydrator' => function(ContainerInterface $c) {
 
             $hydrator = new ClassMethodsHydrator();
@@ -108,12 +107,10 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addStrategy('recoverPassword', new HydratorStrategy($recoverPasswordHydrator, new SingleEntityPrototype(new RecoverPassword())));
 
             $organizationHydrator = new ClassMethodsHydrator();
-            $organizationHydrator->addStrategy('id', new MongoIdStrategy());
             $hydrator->addStrategy('organizations', new HydratorArrayStrategy($organizationHydrator, new SingleEntityPrototype(new Reference())));
 
             return $hydrator;
-        }
-    ])->addDefinitions([
+        },
         'RpcPasswordUserEntityHydrator' => function(ContainerInterface $c) {
 
             $hydrator = new ClassMethodsHydrator();
@@ -131,12 +128,10 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addStrategy('recoverPassword', new HydratorStrategy($recoverPasswordHydrator, new SingleEntityPrototype(new RecoverPassword())));
 
             return $hydrator;
-        }
-    ])->addDefinitions([
+        },
         'UserEntityPrototype' => function(ContainerInterface $c) {
             return new SingleEntityPrototype(new UserEntity());
-        }
-    ])->addDefinitions([
+        },
         'UserPostValidation' => function(ContainerInterface $container) {
 
             $inputFilter = new InputFilter();
@@ -147,7 +142,10 @@ return function (ContainerBuilder $containerBuilder) {
             $lastName = new Input('lastName');
             // Email field
             $email= new Input('email');
-            $email->getValidatorChain()->attach(new EmailAddress());
+            $email->getValidatorChain()
+                ->attach(new EmailAddress())
+                //->attach($container->get(EmailExistValidator::class))
+            ;
             // Role field
             $role = new Input('role');
             $role->getValidatorChain()->attach(new InArray([
@@ -160,37 +158,42 @@ return function (ContainerBuilder $containerBuilder) {
                 'max' => 12
             ]));
 
-            $organizations = new Input('organizations');
-            $organizations->setRequired(false);
-            $organizations->getFilterChain()->attach(new Callback(function ($value) {
+            $organizationsCollectionInputFilter = new CollectionInputFilter();
+            $organizationsInputFilter = new InputFilter();
 
-                return $value ? $value : [];
-            }));
+            $organizationId = new Input('id');
+            $organizationId->setRequired(false);
+            $organizationsInputFilter->add($organizationId);
 
+            $organizationCollection = new Input('collection');
+            $organizationCollection->setRequired(false);
+            $organizationsInputFilter->add($organizationCollection);
+
+            $organizationsCollectionInputFilter->setInputFilter($organizationsInputFilter);
 
             $inputFilter->add($email)
                 ->add($name)
                 ->add($lastName)
                 ->add($role)
                 ->add($password)
-                ->add($organizations);
+                ->add($organizationsCollectionInputFilter, 'organizations');
 
             return $inputFilter;
-        }
-    ])->addDefinitions([
+        },
         'PasswordFilter' => function(ContainerInterface $container) {
             return new PasswordFilter($container->get('OAuthCrypto'));
-        }
-    ])->addDefinitions([
+        },
         CryptoInterface::class => function(ContainerInterface $container) {
             return $container->get('OAuthCrypto');
-        }
-    ])->addDefinitions([
+        },
         RecoverPasswordMailerInterface::class => function(ContainerInterface $container) {
             $settings = $container->get('settings');
             $serviceSetting = $settings['mail'];
 
             return new UserGoogleMailer($serviceSetting);
+        },
+        EmailExistValidator::class => function(ContainerInterface $container) {
+            return new EmailExistValidator($container->get(UserStorageInterface::class));
         }
     ]);
 };

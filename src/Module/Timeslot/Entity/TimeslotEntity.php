@@ -5,6 +5,8 @@ namespace App\Module\Timeslot\Entity;
 
 use App\Module\Monitor\Entity\MonitorContainerEntity;
 use App\Module\Monitor\Entity\MonitorReference;
+use App\Module\Organization\Entity\OrganizationAwareInterface;
+use App\Module\Organization\Entity\OrganizationAwareTrait;
 use App\Storage\Entity\EntityInterface;
 use App\Storage\Entity\EntityTrait as StorageEntityTrait;
 
@@ -12,9 +14,9 @@ use App\Storage\Entity\EntityTrait as StorageEntityTrait;
  * Class TimeslotEntity
  * @package App\Module\Timeslot\Entity
  */
-class TimeslotEntity implements EntityInterface {
+class TimeslotEntity implements EntityInterface, OrganizationAwareInterface {
 
-    use StorageEntityTrait;
+    use StorageEntityTrait, OrganizationAwareTrait;
 
     /**
      * Status variables

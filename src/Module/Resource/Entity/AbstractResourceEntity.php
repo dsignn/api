@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Module\Resource\Entity;
 
+use App\Module\Organization\Entity\OrganizationAwareInterface;
+use App\Module\Organization\Entity\OrganizationAwareTrait;
 use App\Storage\Entity\EntityInterface;
 use App\Storage\Entity\EntityTrait;
 
@@ -10,9 +12,9 @@ use App\Storage\Entity\EntityTrait;
  * Class AbstractResourceEntity
  * @package App\Module\Resource\Entity
  */
-abstract class AbstractResourceEntity implements EntityInterface {
+abstract class AbstractResourceEntity implements EntityInterface, OrganizationAwareInterface {
 
-    use EntityTrait;
+    use EntityTrait, OrganizationAwareTrait;
 
     /**
      * @var string
