@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Middleware;
+namespace App\Middleware\Authentication;
 
 use App\Module\Oauth\Entity\AccessTokenEntity;
 use App\Module\Oauth\Entity\ClientEntity;
@@ -38,15 +38,22 @@ class AuthenticationMiddleware implements Middleware {
     protected $tokenStorage;
 
     /**
-     * AuthMiddleware constructor.
+     * @var array
+     */
+    protected $settings;
+
+    /**
+     * AuthenticationMiddleware constructor.
      * @param ResourceServer $server
      * @param StorageInterface $userStorage
      * @param StorageInterface $tokenStorage
+     * @param $settings
      */
-    public function __construct(ResourceServer $server, StorageInterface $userStorage, StorageInterface $tokenStorage) {
+    public function __construct(ResourceServer $server, StorageInterface $userStorage, StorageInterface $tokenStorage, array $settings = []) {
         $this->server = $server;
         $this->userStorage = $userStorage;
         $this->tokenStorage = $tokenStorage;
+        $this->settings = $settings;
     }
 
     /**
@@ -55,6 +62,10 @@ class AuthenticationMiddleware implements Middleware {
      * @return ResponseInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
+
+        if ($this->skip($request)) {
+            return $handler->handle($request);
+        }
 
         try {
             $request = $this->server->validateAuthenticatedRequest($request);
@@ -109,5 +120,20 @@ class AuthenticationMiddleware implements Middleware {
         }
 
         return $client;
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @return bool
+     */
+    protected function skip(ServerRequestInterface $request) {
+
+        $skip = false;
+        $path = $request->getAttribute('__route__')->getPattern();
+        if (isset($this->settings[$path]) && is_array($this->settings[$path]) && isset($this->settings[$path][$request->getMethod()])) {
+            $skip = (bool) $this->settings[$path][$request->getMethod()];
+        }
+
+        return $skip;
     }
 }

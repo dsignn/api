@@ -7,7 +7,6 @@ use App\Module\Organization\Entity\OrganizationAwareInterface;
 use App\Module\Organization\Entity\OrganizationAwareTrait;
 use App\Storage\Entity\EntityInterface;
 use App\Storage\Entity\EntityTrait as StorageEntityTrait;
-use App\Storage\Entity\Reference;
 
 /**
  * Class MonitorContainerEntity

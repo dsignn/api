@@ -5,7 +5,6 @@ namespace App\Module\User\Validator;
 
 use App\Storage\StorageInterface;
 use Laminas\Validator\AbstractValidator;
-use Laminas\Validator\Exception;
 use Laminas\Validator\ValidatorInterface;
 
 /**

@@ -24,7 +24,6 @@ use App\Storage\Entity\Reference;
 use App\Storage\Entity\SingleEntityPrototype;
 use App\Storage\Storage;
 use DI\ContainerBuilder;
-use Laminas\Filter\Callback;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Hydrator\Filter\FilterComposite;
 use Laminas\Hydrator\Filter\MethodMatchFilter;

@@ -30,6 +30,13 @@ return function (&$setting) {
                     '/user' => [
                         'POST' => 'UserPostValidation'
                     ]
+                ],
+                'authentication' => [
+                    '/user' => [
+                        'POST' => [
+                            'skip' => true
+                        ]
+                    ]
                 ]
             ]
         ]
