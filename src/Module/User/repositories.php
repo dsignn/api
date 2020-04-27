@@ -144,7 +144,7 @@ return function (ContainerBuilder $containerBuilder) {
             $email= new Input('email');
             $email->getValidatorChain()
                 ->attach(new EmailAddress())
-                //->attach($container->get(EmailExistValidator::class))
+                ->attach($container->get(EmailExistValidator::class))
             ;
             // Role field
             $role = new Input('role');

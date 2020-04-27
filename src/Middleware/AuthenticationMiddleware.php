@@ -56,8 +56,6 @@ class AuthenticationMiddleware implements Middleware {
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
 
-        return $handler->handle($request);
-
         try {
             $request = $this->server->validateAuthenticatedRequest($request);
         } catch (OAuthServerException $exception) {

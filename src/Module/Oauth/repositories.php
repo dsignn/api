@@ -254,9 +254,12 @@ return function (ContainerBuilder $containerBuilder) {
                 $oauthSettings['encryption-key']
             );
 
+            /**
+             * Client grant
+             */
             $server->enableGrantType(
                 new ClientCredentialsGrant(),
-                new DateInterval('P1Y') // access tokens will expire after 1 hour
+                new DateInterval('P1M') // access tokens will expire after a month
             );
 
             /**
@@ -267,18 +270,21 @@ return function (ContainerBuilder $containerBuilder) {
                 $c->get(RefreshTokenRepository::class)
             );
 
-            $grant->setRefreshTokenTTL(new DateInterval('P1Y')); // refresh tokens will expire after 1 month
-            $server->enableGrantType($grant);
+            $grant->setRefreshTokenTTL(new DateInterval('P1M')); // refresh tokens will expire after a month
+            $server->enableGrantType(
+                $grant,
+                new DateInterval('P1Y')
+            );
 
             /**
              * Refresh token grant
              */
             $grant = new RefreshTokenGrant($c->get(RefreshTokenRepository::class));
-            $grant->setRefreshTokenTTL(new DateInterval('P1Y'));
+            $grant->setRefreshTokenTTL(new DateInterval('P1M'));
 
             $server->enableGrantType(
                 $grant,
-                new DateInterval('P1Y') // new access tokens will expire after an hour
+                new DateInterval('P1M') // new access tokens will expire after a month
             );
 
             /**
@@ -287,22 +293,22 @@ return function (ContainerBuilder $containerBuilder) {
             $grant = new AuthCodeGrant(
                 $c->get(AuthCodeRepository::class),
                 $c->get(RefreshTokenRepository::class),
-                new DateInterval('P1Y') // authorization codes will expire after 10 minutes
+                new DateInterval('P1M') // authorization codes will expire after a month
             );
 
-            $grant->setRefreshTokenTTL(new DateInterval('P1Y'));
+            $grant->setRefreshTokenTTL(new DateInterval('P1M'));
 
             $server->enableGrantType(
                 $grant,
-                new DateInterval('P1Y') // new access tokens will expire after an hour
+                new DateInterval('P1M') // new access tokens will expire after a month
             );
 
             /**
              * Implicit token grant
              */
             $server->enableGrantType(
-                new ImplicitGrant(new \DateInterval('P1Y')),
-                new DateInterval('P1Y') // access tokens will expire after 1 hour
+                new ImplicitGrant(new \DateInterval('P1M')),
+                new DateInterval('P1M') // access tokens will expire after a month
             );
 
             return $server;

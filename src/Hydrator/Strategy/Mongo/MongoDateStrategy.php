@@ -44,7 +44,14 @@ class MongoDateStrategy implements StrategyInterface {
     public function hydrate($value, ?array $data) {
         if ($value instanceof MongoDate) {
             $dateTime = clone $this->getDatePrototype();
-            $dateTime->setTimestamp($value->sec);
+            switch (true) {
+                case $dateTime instanceof \DateTimeImmutable === true:
+                    /** @var \DateTimeImmutable $dateTime */
+                    $dateTime = \DateTimeImmutable::createFromMutable((new \DateTime())->setTimestamp($value->sec));
+                    break;
+                default:
+                    $dateTime->setTimestamp($value->sec);
+            }
             $value = $dateTime;
         }
 
