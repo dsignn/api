@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace App\Module\User\Entity;
 
-use App\Auth\RoleInterface;
 use App\Module\User\Entity\Embedded\RecoverPassword;
 use App\Storage\Entity\EntityInterface;
 use App\Storage\Entity\EntityTrait as StorageEntityTrait;
+use Laminas\Permissions\Acl\Role\RoleInterface;
 use League\OAuth2\Server\Entities\UserEntityInterface;
 
 /**
@@ -50,7 +50,7 @@ class UserEntity implements EntityInterface, UserEntityInterface, RoleInterface 
     /**
      * @var string
      */
-    protected $role = '';
+    protected $roleId = '';
 
     /**
      * @var string
@@ -158,16 +158,16 @@ class UserEntity implements EntityInterface, UserEntityInterface, RoleInterface 
     /**
      * @return string
      */
-    public function getRole(): string {
-        return $this->role;
+    public function getRoleId(): string {
+        return $this->roleId;
     }
 
     /**
-     * @param string $role
+     * @param string $roleId
      * @return UserEntity
      */
-    public function setRole(string $role): UserEntity {
-        $this->role = $role;
+    public function setRoleId(string $roleId): UserEntity {
+        $this->roleId = $roleId;
         return $this;
     }
 

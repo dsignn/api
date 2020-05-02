@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use App\Middleware\Authentication\AuthenticationMiddleware;
+use App\Middleware\Authorization\AuthorizationMiddleware;
 use App\Middleware\ContentNegotiation\Accept\AcceptContainer;
 use App\Middleware\ContentNegotiation\Accept\JsonAccept;
 use App\Middleware\ContentNegotiation\ContentType\ContentTypeContainer;
@@ -73,7 +74,14 @@ return function (ContainerBuilder $containerBuilder) {
                 $c->get(ResourceServer::class),
                 $c->get(UserStorageInterface::class),
                 $c->get('AccessTokenStorage'),
+                $c->get('ClientStorage'),
                 $c->get('settings')['authentication']
+            );
+        },
+
+        AuthorizationMiddleware::class => function(ContainerInterface $c) {
+            return new AuthorizationMiddleware(
+                $c->get('settings')['authorization']
             );
         },
 

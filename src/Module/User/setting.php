@@ -37,6 +37,44 @@ return function (&$setting) {
                             'skip' => true
                         ]
                     ]
+                ],
+                'authorization' => [
+                    '/user' => [
+                        'admin' => [
+                            'allow' => true,
+                        //    'assertion' => 'Test',
+                            'privileges' => [
+                                [
+                                    "method" => "GET",
+                                    'allow' => true,
+                               //     'assertion' => 'Test',
+                                ],
+                                [
+                                    "method" => "POST",
+                                    'allow' => false,
+                             //       'assertion' => 'Test',
+                                ]
+                            ]
+                        ]
+                    ],
+                    '/user/{id:[0-9a-fA-F]{24}}' => [
+                        'admin' => [
+                            'allow' => false,
+                            'assertion' => 'Test',
+                            'privileges' => [
+                                [
+                                    "method" => "GET",
+                                    'allow' => true,
+                                    //     'assertion' => 'Test',
+                                ],
+                                [
+                                    "method" => "POST",
+                                    'allow' => false,
+                                    //       'assertion' => 'Test',
+                                ]
+                            ]
+                        ]
+                    ]
                 ]
             ]
         ]

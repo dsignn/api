@@ -38,6 +38,11 @@ class AuthenticationMiddleware implements Middleware {
     protected $tokenStorage;
 
     /**
+     * @var StorageInterface
+     */
+    protected $clientStorage;
+
+    /**
      * @var array
      */
     protected $settings;
@@ -47,12 +52,14 @@ class AuthenticationMiddleware implements Middleware {
      * @param ResourceServer $server
      * @param StorageInterface $userStorage
      * @param StorageInterface $tokenStorage
-     * @param $settings
+     * @param StorageInterface $clientStorage
+     * @param array $settings
      */
-    public function __construct(ResourceServer $server, StorageInterface $userStorage, StorageInterface $tokenStorage, array $settings = []) {
+    public function __construct(ResourceServer $server, StorageInterface $userStorage, StorageInterface $tokenStorage, StorageInterface $clientStorage, array $settings = []) {
         $this->server = $server;
         $this->userStorage = $userStorage;
         $this->tokenStorage = $tokenStorage;
+        $this->clientStorage = $clientStorage;
         $this->settings = $settings;
     }
 
@@ -91,7 +98,7 @@ class AuthenticationMiddleware implements Middleware {
         $user = null;
         if ($identifier) {
             $resultSet = $this->userStorage->getAll(
-                ['identifier' => $identifier]
+                ['email' => $identifier]
             );
 
             $user = $resultSet->current();
@@ -106,6 +113,7 @@ class AuthenticationMiddleware implements Middleware {
      */
     protected function getClient($accessTokenIdentifier) {
         $client = null;
+
         if ($accessTokenIdentifier) {
 
             $resultSet = $this->tokenStorage->getAll(
@@ -115,7 +123,10 @@ class AuthenticationMiddleware implements Middleware {
             /** @var AccessTokenEntity $token */
             $token = $resultSet->current();
             if ($token) {
-                $client = $token->getClient();
+                $resultSetClient = $this->clientStorage->getAll(['name' => $token->getClient()->getName()]);
+                if ($resultSetClient->count() > 0) {
+                    $client = $resultSetClient->current();
+                }
             }
         }
 
