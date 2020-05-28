@@ -70,7 +70,7 @@ class AuthenticationMiddleware implements Middleware {
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
 
-        if ($this->skip($request)) {
+        if ($this->skip($request) || $request->getMethod() === 'OPTIONS') {
             return $handler->handle($request);
         }
 

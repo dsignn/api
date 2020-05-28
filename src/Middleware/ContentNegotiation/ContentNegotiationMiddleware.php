@@ -90,6 +90,10 @@ class ContentNegotiationMiddleware implements Middleware
         $path = $request->getAttribute('__route__')->getPattern();
         $method = $request->getMethod();
 
+        if ($method === 'OPTIONS') {
+            return $handler->handle($request);
+        }
+
         $this->loadSettings($path, $method);
 
         if(!$this->isValidAcceptHeader($request)) {

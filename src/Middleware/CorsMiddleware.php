@@ -34,17 +34,14 @@ class CorsMiddleware implements Middleware
     public function process(Request $request, RequestHandler $handler): Response
     {
         $header = $request->getHeaderLine(CorsMiddleware::$ORIGIN_HEADER);
-        if ($this->isXhr($request)) {
+        if (CorsMiddleware::isXhr($request)) {
             switch (true) {
                 case $this->isWildCard === true:
-                    $response =  $handler->handle($request);
-                    return $this->addCorsHeader($response,'*', ['PUT', 'DELETE', 'POST', 'GET']);
+                    return CorsMiddleware::addCorsHeader($handler->handle($request),'*', ['PUT', 'DELETE', 'POST', 'GET', 'PATCH', 'OPTIONS']);
                     break;
                 default:
-
-                    if (in_array($this.$this->enableHost)) {
-                        $response =  $handler->handle($request);
-                        return $this->addCorsHeader($response, $header, ['PUT', 'DELETE', 'POST', 'GET']);
+                    if (in_array($this->enableHost)) {
+                        return CorsMiddleware::addCorsHeader($handler->handle($request), $header, ['PUT', 'DELETE', 'POST', 'GET', 'PATCH', 'OPTIONS']);
                     } else {
                         $response = new ResponseSlim();
                         return $response->withStatus(403);
@@ -62,24 +59,24 @@ class CorsMiddleware implements Middleware
      * @param array $allowMethod
      * @return Response
      */
-    protected function addCorsHeader(ResponseInterface $response, $allowOrigin, array $allowMethod) {
-
+    public static function addCorsHeader(ResponseInterface $response, $allowOrigin, array $allowMethod) {
         return $response->withHeader('Access-Control-Allow-Credentials', 'true')
             ->withHeader('Access-Control-Allow-Origin', $allowOrigin)
             ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-            ->withHeader('Access-Control-Allow-Methods', implode( ',', $allowMethod))
+            ->withHeader('Access-Control-Allow-Methods', implode( ', ', $allowMethod))
             ->withHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
             ->withAddedHeader('Cache-Control', 'post-check=0, pre-check=0')
-            ->withHeader('Pragma', 'no-cache');
+            ->withHeader('Pragma', 'no-cache')
+            ;
     }
 
     /**
      * @return boolean
      */
-    protected function isXhr(Request $request) {
+    public static function isXhr(Request $request) {
 
         $isXhr = false;
-        if ($request->getHeaderLine('X_REQUESTED_WITH') === 'XMLHttpRequest') {
+        if ($request->getHeaderLine('Origin')) {
             $isXhr = true;
         }
         return  $isXhr;

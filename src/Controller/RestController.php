@@ -179,4 +179,13 @@ class RestController implements RestControllerInterface
         $acceptService = $this->getAcceptService($request);
         return $acceptService->transformAccept($response, $pagination);
     }
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return mixed|Response
+     */
+    public function options(Request $request, Response $response) {
+        return $response;
+    }
 }

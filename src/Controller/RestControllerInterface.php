@@ -53,4 +53,11 @@ interface RestControllerInterface
      * @return Response
      */
     public function paginate(Request $request, Response $response);
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return mixed
+     */
+    public function options(Request $request, Response $response);
 }

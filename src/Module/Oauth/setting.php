@@ -7,6 +7,14 @@ return function (&$setting) {
         $setting,
         [
             "settings" => [
+                'contentNegotiation' => [
+                    '/me' => [
+                        'default' => [
+                            'acceptFilter' => ['/application\/json/'],
+                            'contentTypeFilter' => ['/application\/json/']
+                        ]
+                    ],
+                ],
                 'oauth' => [
                     'encryption-key' => 'h1Z6HajxU9ObuJKotafqqxriGuuuRhqSd1VZK7wAnXU=',
                     'path-private-key' => __DIR__ . '/../../../key/dsign-oauth-private.key',

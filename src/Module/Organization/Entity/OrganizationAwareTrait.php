@@ -25,7 +25,7 @@ trait OrganizationAwareTrait {
      * @param Reference $organizationReference
      * @return MonitorContainerEntity
      */
-    public function setOrganizationReference(Reference $organizationReference): MonitorContainerEntity {
+    public function setOrganizationReference(Reference $organizationReference = null): MonitorContainerEntity {
         $this->organizationReference = $organizationReference;
         return $this;
     }

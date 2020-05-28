@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace App\Module\Oauth\Controller;
 
+use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
 use App\Module\User\Entity\UserEntity;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Psr7\Factory\StreamFactory;
@@ -16,17 +18,30 @@ use Slim\Psr7\Factory\StreamFactory;
  */
 class OauthController {
 
+    use AcceptServiceAwareTrait;
+
+    /**
+     * @var string
+     */
+    protected $hydratorService = 'RestUserEntityHydrator';
+
     /**
      * @var AuthorizationServer
      */
     protected $oauthServer;
 
     /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    /**
      * OauthController constructor.
      * @param AuthorizationServer $oauthServer
      */
-    public function __construct(AuthorizationServer $oauthServer) {
+    public function __construct(AuthorizationServer $oauthServer, ContainerInterface $container) {
         $this->oauthServer = $oauthServer;
+        $this->container = $container;
     }
 
     /**
@@ -93,5 +108,23 @@ class OauthController {
                 $exception->getMessage()
             ));
         }
+    }
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return array
+     * @throws \App\Middleware\ContentNegotiation\Exception\ServiceNotFound
+     */
+    public function me(Request $request, Response $response) {
+
+        $user = $request->getAttribute('app-user');
+        $data = '';
+        if ($user) {
+            $acceptService = $this->getAcceptService($request);
+            $data = $acceptService->transformAccept($response, $user);
+        }
+
+        return $data;
     }
 }

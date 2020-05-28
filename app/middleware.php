@@ -28,6 +28,5 @@ return function (App $app) {
 
     $app->add($contentNegotiationMiddleware);
 
-    //$app->add(new AuthMiddleware($app->getContainer()->get(ResourceServer::class)));
     $app->add(new CorsMiddleware());
 };

@@ -56,6 +56,10 @@ class AuthorizationMiddleware implements Middleware {
         $resource = new GenericResource($request->getAttribute('__route__')->getPattern());
         $method = $request->getMethod();
 
+        if ($method === 'OPTIONS') {
+            return $handler->handle($request);
+        }
+
         $this->acl->addResource($resource);
         $this->loadPermission($resource, $request);
 

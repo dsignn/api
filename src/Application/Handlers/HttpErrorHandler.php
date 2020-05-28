@@ -5,6 +5,7 @@ namespace App\Application\Handlers;
 
 use App\Application\Actions\ActionError;
 use App\Application\Actions\ActionPayload;
+use App\Middleware\CorsMiddleware;
 use Exception;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Exception\HttpBadRequestException;
@@ -63,8 +64,10 @@ class HttpErrorHandler extends SlimErrorHandler
 
         $payload = new ActionPayload($statusCode, null, $error);
         $encodedPayload = json_encode($payload, JSON_PRETTY_PRINT);
-
+;
         $response = $this->responseFactory->createResponse($statusCode);
+        $response = CorsMiddleware::addCorsHeader($response,'*', ['PUT', 'DELETE', 'POST', 'GET']);
+
 
         $response->getBody()->write($encodedPayload);
 
