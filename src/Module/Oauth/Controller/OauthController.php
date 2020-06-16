@@ -21,11 +21,6 @@ class OauthController {
     use AcceptServiceAwareTrait;
 
     /**
-     * @var string
-     */
-    protected $hydratorService = 'RestUserEntityHydrator';
-
-    /**
      * @var AuthorizationServer
      */
     protected $oauthServer;
@@ -108,23 +103,5 @@ class OauthController {
                 $exception->getMessage()
             ));
         }
-    }
-
-    /**
-     * @param Request $request
-     * @param Response $response
-     * @return array
-     * @throws \App\Middleware\ContentNegotiation\Exception\ServiceNotFound
-     */
-    public function me(Request $request, Response $response) {
-
-        $user = $request->getAttribute('app-user');
-        $data = '';
-        if ($user) {
-            $acceptService = $this->getAcceptService($request);
-            $data = $acceptService->transformAccept($response, $user);
-        }
-
-        return $data;
     }
 }

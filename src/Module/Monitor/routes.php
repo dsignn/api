@@ -28,7 +28,8 @@ return function (App $app) {
         $group->patch('/{id:[0-9a-fA-F]{24}}',  [MonitorController::class, 'patch']);
 
         $group->delete('/{id:[0-9a-fA-F]{24}}',  [MonitorController::class, 'delete']);
-    })->add($app->getContainer()->get(ValidationMiddleware::class))
+    })//->add($app->getContainer()->get(ValidationMiddleware::class))
        // ->add($app->getContainer()->get(AuthorizationMiddleware::class))
-        ->add($app->getContainer()->get(AuthenticationMiddleware::class));
+      //  ->add($app->getContainer()->get(AuthenticationMiddleware::class))
+    ;
 };

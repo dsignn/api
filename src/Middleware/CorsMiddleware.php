@@ -66,8 +66,7 @@ class CorsMiddleware implements Middleware
             ->withHeader('Access-Control-Allow-Methods', implode( ', ', $allowMethod))
             ->withHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
             ->withAddedHeader('Cache-Control', 'post-check=0, pre-check=0')
-            ->withHeader('Pragma', 'no-cache')
-            ;
+            ->withHeader('Pragma', 'no-cache');
     }
 
     /**
@@ -76,7 +75,7 @@ class CorsMiddleware implements Middleware
     public static function isXhr(Request $request) {
 
         $isXhr = false;
-        if ($request->getHeaderLine('Origin')) {
+        if ($request->getHeaderLine('Origin') || $request->getHeaderLine('Referer')) {
             $isXhr = true;
         }
         return  $isXhr;
