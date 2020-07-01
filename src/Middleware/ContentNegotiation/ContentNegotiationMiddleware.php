@@ -30,6 +30,12 @@ class ContentNegotiationMiddleware implements Middleware
      */
     public static $ACCEPT = 'Accept';
 
+    protected $skipContentTypeMethod = [
+        'GET',
+        'DELETE',
+        'OPTION'
+    ];
+
     /**
      * @var array
      */
@@ -158,6 +164,10 @@ class ContentNegotiationMiddleware implements Middleware
     protected function isValidContentTypeHeader(Request $request) {
 
         $header = $request->getHeaderLine(ContentNegotiationMiddleware::$CONTENT_TYPE);
+
+        if (in_array($request->getMethod(), $this->skipContentTypeMethod)) {
+            return true;
+        }
 
         if (!$header) {
             return false;
