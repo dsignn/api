@@ -71,6 +71,9 @@ return function (ContainerBuilder $containerBuilder) {
                 'image/jpeg',
                 new ImageResourceEntity()
             )->addEntityPrototype(
+                'image/png',
+                new ImageResourceEntity()
+            )->addEntityPrototype(
                 'video/mp4',
                 new VideoResourceEntity()
             );
@@ -101,6 +104,9 @@ return function (ContainerBuilder $containerBuilder) {
 
             $hydrator->addHydrator(
                 'image/jpeg',
+                $imageHydrator
+            )->addHydrator(
+                'image/png',
                 $imageHydrator
             )->addHydrator(
                 'video/mp4',

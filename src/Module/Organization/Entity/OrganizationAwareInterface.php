@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Module\Organization\Entity;
 
 use App\Module\Monitor\Entity\MonitorContainerEntity;
+use App\Storage\Entity\EntityInterface;
 use App\Storage\Entity\Reference;
 
 /**
@@ -21,5 +22,5 @@ interface OrganizationAwareInterface {
      * @param Reference $organizationReference
      * @return MonitorContainerEntity
      */
-    public function setOrganizationReference(Reference $organizationReference): MonitorContainerEntity;
+    public function setOrganizationReference(Reference $organizationReference = null): EntityInterface;
 }

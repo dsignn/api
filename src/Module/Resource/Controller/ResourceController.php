@@ -70,6 +70,7 @@ class ResourceController implements RestControllerInterface {
 
         $file = $request->getUploadedFiles()['file'];
         $data = $request->getParsedBody();
+        unset( $data['dimension'] ); // TODO remove when add validation
         $data['size'] = $file->getSize();
         $data['mimeType'] = $file->getClientMediaType();
         $data['src'] = $file->getStream()->getMetadata('uri');
