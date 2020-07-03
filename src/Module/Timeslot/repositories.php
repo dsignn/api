@@ -65,6 +65,7 @@ return function (ContainerBuilder $containerBuilder) {
             }));
             $hydrator->addStrategy('binds', new HydratorArrayStrategy($timeslotHydrator, new SingleEntityPrototype(new Reference())));
             $hydrator->addStrategy('resources', new HydratorArrayStrategy($timeslotHydrator, new SingleEntityPrototype(new Reference())));
+            $hydrator->addStrategy('monitorContainerReference', new HydratorStrategy($timeslotHydrator, new SingleEntityPrototype(new MonitorReference())));
 
             return $hydrator;
         }
@@ -79,7 +80,7 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addStrategy('id', new MongoIdStrategy());
             $hydrator->addStrategy('binds', new HydratorArrayStrategy($timeslotHydrator, new SingleEntityPrototype(new Reference())));
             $hydrator->addStrategy('resources', new HydratorArrayStrategy($timeslotHydrator, new SingleEntityPrototype(new Reference())));
-            $hydrator->addStrategy('monitor_container_reference', new HydratorStrategy($timeslotHydrator, new SingleEntityPrototype(new MonitorReference())));
+            $hydrator->addStrategy('monitorContainerReference', new HydratorStrategy($timeslotHydrator, new SingleEntityPrototype(new MonitorReference())));
 
             return $hydrator;
         }

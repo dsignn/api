@@ -115,7 +115,7 @@ class ContentNegotiationMiddleware implements Middleware
         /** @var ContentTypeTransformInterface $contentTypeService */
         $contentTypeService = $this->getContentTypeService($path, $method, $request->getHeaderLine(self::$CONTENT_TYPE));
 
-        if ($acceptService) {
+        if ($contentTypeService) {
             try {
                 $request = $contentTypeService->transformContentType($request);
             } catch (\Exception $e) {
@@ -123,7 +123,7 @@ class ContentNegotiationMiddleware implements Middleware
             }
         }
 
-        if ($contentTypeService) {
+        if ($acceptService) {
             $request = $request->withAttribute(
                 'AcceptService',
                 $acceptService
