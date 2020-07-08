@@ -8,6 +8,7 @@ use App\Hydrator\Strategy\HydratorStrategy;
 use App\Hydrator\Strategy\Mongo\MongoDateStrategy;
 use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
+use App\Hydrator\Strategy\NamingStrategy\CamelCaseStrategy;
 use App\Module\Oauth\Filter\PasswordFilter;
 use App\Module\User\Entity\Embedded\RecoverPassword;
 use App\Module\User\Entity\UserEntity;
@@ -68,6 +69,7 @@ return function (ContainerBuilder $containerBuilder) {
         'RestUserEntityHydrator' => function(ContainerInterface $c) {
 
             $hydrator = new ClassMethodsHydrator();
+            $hydrator->setNamingStrategy(new CamelCaseStrategy());
             $hydrator->addFilter('password', new MethodMatchFilter('getPassword'),  FilterComposite::CONDITION_AND);
             $hydrator->addFilter('identifier', new MethodMatchFilter('getIdentifier'),  FilterComposite::CONDITION_AND);
             $hydrator->addFilter('recoverPassword', new MethodMatchFilter('getRecoverPassword'),  FilterComposite::CONDITION_AND);

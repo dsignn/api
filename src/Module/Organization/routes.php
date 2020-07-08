@@ -20,6 +20,8 @@ return function (App $app) {
         $group->put('/{id:[0-9a-fA-F]{24}}',  [OrganizationController::class, 'put']);
 
         $group->delete('/{id:[0-9a-fA-F]{24}}',  [OrganizationController::class, 'delete']);
-    })->add($app->getContainer()->get(ValidationMiddleware::class))
-        ->add($app->getContainer()->get(AuthenticationMiddleware::class));
+    })
+        //->add($app->getContainer()->get(ValidationMiddleware::class))
+        //->add($app->getContainer()->get(AuthenticationMiddleware::class))
+    ;
 };

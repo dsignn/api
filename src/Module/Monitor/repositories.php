@@ -5,6 +5,7 @@ use App\Hydrator\Strategy\HydratorArrayStrategy;
 use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\UnderscoreNamingStrategy;
+use App\Hydrator\Strategy\NamingStrategy\CamelCaseStrategy;
 use App\Module\Monitor\Entity\MonitorContainerEntity;
 use App\Module\Monitor\Entity\MonitorEntity;
 use App\Module\Monitor\Storage\MonitorStorage;
@@ -54,7 +55,7 @@ return function (ContainerBuilder $containerBuilder) {
         'RestMonitorEntityHydrator' => function(ContainerInterface $c) {
 
             $monitorHydrator = new ClassMethodsHydrator();
-            $monitorHydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
+            $monitorHydrator->setNamingStrategy(new CamelCaseStrategy());
             $monitorHydrator->addStrategy('monitors', new HydratorArrayStrategy($monitorHydrator, new SingleEntityPrototype(new MonitorEntity())));
 
             $hydrator = new ClassMethodsHydrator();

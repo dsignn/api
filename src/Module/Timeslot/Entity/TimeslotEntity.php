@@ -92,7 +92,6 @@ class TimeslotEntity implements EntityInterface, OrganizationAwareInterface {
      */
     protected $filters = [];
 
-
     /**
      * @return string
      */

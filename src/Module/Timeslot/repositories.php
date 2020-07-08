@@ -6,6 +6,7 @@ use App\Hydrator\Strategy\HydratorArrayStrategy;
 use App\Hydrator\Strategy\HydratorStrategy;
 use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
+use App\Hydrator\Strategy\NamingStrategy\CamelCaseStrategy;
 use App\Module\Monitor\Entity\MonitorReference;
 use App\Module\Timeslot\Entity\TimeslotEntity;
 use App\Module\Timeslot\Storage\TimeslotStorage;
@@ -53,9 +54,10 @@ return function (ContainerBuilder $containerBuilder) {
         'RestTimeslotEntityHydrator' => function(ContainerInterface $c) {
 
             $timeslotHydrator = new ClassMethodsHydrator();
-            $timeslotHydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
+            $timeslotHydrator->setNamingStrategy(new CamelCaseStrategy());
 
             $hydrator = new ClassMethodsHydrator();
+            $hydrator->setNamingStrategy(new CamelCaseStrategy());
             $hydrator->addStrategy('id', new ClosureStrategy(function ($data) {
 
                 if ($data instanceof MongoId) {

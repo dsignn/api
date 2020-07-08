@@ -7,6 +7,7 @@ use App\Hydrator\Strategy\HydratorStrategy;
 use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\UnderscoreNamingStrategy;
+use App\Hydrator\Strategy\NamingStrategy\CamelCaseStrategy;
 use App\Module\Resource\Entity\Embedded\Dimension;
 use App\Module\Resource\Entity\ImageResourceEntity;
 use App\Module\Resource\Entity\VideoResourceEntity;
@@ -125,6 +126,7 @@ return function (ContainerBuilder $containerBuilder) {
             );
 
             $imageHydrator = new ClassMethodsHydrator();
+            $imageHydrator->setNamingStrategy(new CamelCaseStrategy());
             $imageHydrator->addStrategy('id', new ClosureStrategy(function ($data) {
 
                 if ($data instanceof MongoId) {
@@ -134,6 +136,7 @@ return function (ContainerBuilder $containerBuilder) {
             }));
 
             $videoHydrator = new ClassMethodsHydrator();
+            $videoHydrator->setNamingStrategy(new CamelCaseStrategy());
             $videoHydrator->addStrategy('id', new ClosureStrategy(function ($data) {
 
                 if ($data instanceof MongoId) {

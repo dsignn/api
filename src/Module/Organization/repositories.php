@@ -4,6 +4,7 @@ declare(strict_types=1);
 use App\Crypto\CryptoOpenSsl;
 use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
+use App\Hydrator\Strategy\NamingStrategy\CamelCaseStrategy;
 use App\Module\Organization\Entity\OrganizationEntity;
 use App\Module\Organization\Storage\OrganizationStorage;
 use App\Module\Organization\Storage\OrganizationStorageInterface;
@@ -48,6 +49,7 @@ return function (ContainerBuilder $containerBuilder) {
         'RestOrganizationEntityHydrator' => function(ContainerInterface $c) {
 
             $hydrator = new ClassMethodsHydrator();
+            $hydrator->setNamingStrategy(new CamelCaseStrategy());
             $hydrator->addStrategy('id', new ClosureStrategy(function ($data) {
 
                 if ($data instanceof MongoId) {
