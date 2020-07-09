@@ -25,6 +25,8 @@ return function (App $app) {
 
         $group->put('/{id:[0-9a-fA-F]{24}}',  [UserController::class, 'put']);
 
+        $group->options('/{id:[0-9a-fA-F]{24}}', [UserController::class, 'options']);
+
         $group->delete('/{id:[0-9a-fA-F]{24}}',  [UserController::class, 'delete']);
     })
         //->add($app->getContainer()->get(ValidationMiddleware::class))
