@@ -1,10 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use App\Middleware\Authentication\AuthenticationMiddleware;
-use App\Middleware\Authorization\AuthorizationMiddleware;
-use App\Middleware\Validation\ValidationMiddleware;
-use App\Module\Monitor\Controller\MonitorController;
+use App\Module\User\Controller\ActivationToken;
 use App\Module\User\Controller\PasswordToken;
 use App\Module\User\Controller\ResetPassword;
 use App\Module\User\Controller\UserController;
@@ -37,4 +34,6 @@ return function (App $app) {
     $app->post('/recover-password', [PasswordToken::class, 'rpc']);
 
     $app->post('/reset-password', [ResetPassword::class, 'rpc']);
+
+    $app->get('/activation', [ActivationToken::class, 'rpc']);
 };

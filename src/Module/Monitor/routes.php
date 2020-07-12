@@ -2,9 +2,6 @@
 declare(strict_types=1);
 
 
-use App\Middleware\Authentication\AuthenticationMiddleware;
-use App\Middleware\Authorization\AuthorizationMiddleware;
-use App\Middleware\Validation\ValidationMiddleware;
 use App\Module\Monitor\Controller\MonitorController;
 use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;

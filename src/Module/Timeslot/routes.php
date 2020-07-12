@@ -1,10 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use App\Middleware\Authentication\AuthenticationMiddleware;
 use App\Middleware\AuthMiddleware;
-use App\Middleware\Validation\ValidationMiddleware;
-use App\Module\Resource\Controller\ResourceController;
 use App\Module\Timeslot\Controller\TimeslotController;
 use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;

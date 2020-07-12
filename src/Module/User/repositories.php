@@ -9,12 +9,15 @@ use App\Hydrator\Strategy\Mongo\MongoDateStrategy;
 use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
 use App\Hydrator\Strategy\NamingStrategy\CamelCaseStrategy;
+use App\Mail\Contact;
 use App\Module\Oauth\Filter\PasswordFilter;
+use App\Module\User\Entity\Embedded\ActivationCode;
 use App\Module\User\Entity\Embedded\RecoverPassword;
 use App\Module\User\Entity\UserEntity;
+use App\Module\User\Event\UserActivationCodeEvent;
 use App\Module\User\Event\UserPasswordEvent;
 use App\Module\User\Mail\adapter\UserGoogleMailer;
-use App\Module\User\Mail\RecoverPasswordMailerInterface;
+use App\Module\User\Mail\UserMailerInterface;
 use App\Module\User\Storage\UserStorage;
 use App\Module\User\Storage\UserStorageInterface;
 use App\Module\User\Validator\EmailExistValidator;
@@ -40,6 +43,7 @@ use Psr\Container\ContainerInterface;
 return function (ContainerBuilder $containerBuilder) {
 
     $containerBuilder->addDefinitions([
+
         UserStorageInterface::class => function(ContainerInterface $c) {
             $settings = $c->get('settings');
             $serviceSetting = $settings['storage']['user'];
@@ -63,6 +67,10 @@ return function (ContainerBuilder $containerBuilder) {
             $storage->setEntityPrototype($c->get('UserEntityPrototype'));
 
             $storage->getEventManager()->attach(Storage::$BEFORE_SAVE, new UserPasswordEvent($c->get('OAuthCrypto')));
+            $storage->getEventManager()->attach(
+                Storage::$BEFORE_SAVE,
+                new UserActivationCodeEvent($c->get('OAuthCrypto'), $c->get(UserMailerInterface::class), $c->get('UserFrom'), $settings['mail']['activationCode'])
+            );
 
             return $storage;
         },
@@ -103,9 +111,14 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
             $hydrator->addStrategy('id', new MongoIdStrategy());
             $hydrator->addFilter('identifier', new MethodMatchFilter('getIdentifier'),  FilterComposite::CONDITION_AND);
+
             $recoverPasswordHydrator = new ClassMethodsHydrator();
             $recoverPasswordHydrator->addStrategy('date', new MongoDateStrategy());
             $hydrator->addStrategy('recoverPassword', new HydratorStrategy($recoverPasswordHydrator, new SingleEntityPrototype(new RecoverPassword())));
+
+            $recoverPasswordHydrator = new ClassMethodsHydrator();
+            $recoverPasswordHydrator->addStrategy('date', new MongoDateStrategy());
+            $hydrator->addStrategy('activationCode', new HydratorStrategy($recoverPasswordHydrator, new SingleEntityPrototype(new ActivationCode())));
 
             $organizationHydrator = new ClassMethodsHydrator();
             $hydrator->addStrategy('organizations', new HydratorArrayStrategy($organizationHydrator, new SingleEntityPrototype(new Reference())));
@@ -187,7 +200,7 @@ return function (ContainerBuilder $containerBuilder) {
         CryptoInterface::class => function(ContainerInterface $container) {
             return $container->get('OAuthCrypto');
         },
-        RecoverPasswordMailerInterface::class => function(ContainerInterface $container) {
+        UserMailerInterface::class => function(ContainerInterface $container) {
             $settings = $container->get('settings');
             $serviceSetting = $settings['mail'];
 
@@ -195,6 +208,13 @@ return function (ContainerBuilder $containerBuilder) {
         },
         EmailExistValidator::class => function(ContainerInterface $container) {
             return new EmailExistValidator($container->get(UserStorageInterface::class));
+        },
+        'UserFrom' => function(ContainerInterface $container) {
+            $contact = new Contact();
+            $arrayFrom = $container->get('settings')['mail']['from'];
+            $contact->setName($arrayFrom['name']);
+            $contact->setEmail($arrayFrom['email']);
+            return $contact;
         }
     ]);
 };

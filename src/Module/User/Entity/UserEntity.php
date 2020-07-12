@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Module\User\Entity;
 
+use App\Module\User\Entity\Embedded\ActivationCode;
 use App\Module\User\Entity\Embedded\RecoverPassword;
 use App\Storage\Entity\EntityInterface;
 use App\Storage\Entity\EntityTrait as StorageEntityTrait;
@@ -68,11 +69,17 @@ class UserEntity implements EntityInterface, UserEntityInterface, RoleInterface 
     protected $recoverPassword;
 
     /**
+     * @var ActivationCode
+     */
+    protected $activationCode;
+
+    /**
      * UserEntity constructor.
      */
     public function __construct() {
         $this->status = UserEntity::$STATUS_NOT_VERIFY;
         $this->recoverPassword = new RecoverPassword();
+        $this->activationCode = new ActivationCode();
     }
 
     /**
@@ -216,6 +223,22 @@ class UserEntity implements EntityInterface, UserEntityInterface, RoleInterface 
      */
     public function setOrganizations(array $organizations): UserEntity {
         $this->organizations = $organizations;
+        return $this;
+    }
+
+    /**
+     * @return ActivationCode
+     */
+    public function getActivationCode(): ActivationCode {
+        return $this->activationCode;
+    }
+
+    /**
+     * @param ActivationCode $activationCode
+     * @return UserEntity
+     */
+    public function setActivationCode(ActivationCode $activationCode): UserEntity {
+        $this->activationCode = $activationCode;
         return $this;
     }
 }

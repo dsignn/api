@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Mail\adapter;
 
 
+use App\Mail\ContactInterface;
 use App\Mail\MailerInterface;
 use PHPMailer\PHPMailer\PHPMailer;
 
@@ -51,7 +52,7 @@ class GoogleMailer implements MailerInterface {
     /**
      * @inheritDoc
      */
-    public function send(array $to, $content) {
+    public function send(array $to, ContactInterface $from, string $subject, $content) {
 
         $mail = new PHPMailer(true);
 
@@ -64,18 +65,19 @@ class GoogleMailer implements MailerInterface {
         $mail->Username = $this->username;
         $mail->Password = $this->password;
 
-        $mail->setFrom('from@example.com', 'First Last');
-        $mail->addReplyTo('replyto@example.com', 'First Last');
+        $mail->setFrom($from->getEmail(), $from->getName());
         foreach ($to as $destination) {
-            $mail->addAddress($destination, );
+            /** @var $destination ContactInterface */
+            $mail->addAddress($destination->getEmail(), $destination->getName());
         }
-        $mail->Subject = 'Reset password';
+        $mail->Subject = $subject;
         $mail->msgHTML($content);
-        $mail->AltBody = 'This is a plain-text message body';
 
         if (!$mail->send()) {
             // TODO
         }
+
+        return $this;
     }
 
 

@@ -7,6 +7,10 @@ return function (&$setting) {
         $setting,
         [
             "settings" => [
+                'mail' => [
+                    "resetPassword" => "http://127.0.0.150/reset-password",
+                    "activationCode" => "http://127.0.0.150/activation",
+                ],
                 'storage' => [
                     'user' => [
                         'collection' => 'user'

@@ -4,7 +4,6 @@ namespace App\Module\Oauth\Controller;
 
 use App\Controller\RpcControllerInterface;
 use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
-use League\OAuth2\Server\AuthorizationServer;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;

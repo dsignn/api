@@ -10,9 +10,11 @@ namespace App\Mail;
 interface MailerInterface {
 
     /**
-     * @param array $to
+     * @param array<ContactInterface> $to
+     * @param ContactInterface $from
+     * @param string $subject
      * @param $content
-     * @return mixed
+     * @return MailerInterface
      */
-    public function send(array $to, $content);
+    public function send(array $to, ContactInterface $from, string $subject, $content);
 }

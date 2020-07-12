@@ -6,7 +6,7 @@ namespace App\Module\User\Mail;
 use App\Mail\MailerInterface;
 
 /**
- * Interface RecoverPasswordMailerInterface
+ * Interface UserMailerInterface
  * @package App\Module\User\Mail
  */
-interface RecoverPasswordMailerInterface extends MailerInterface { }
+interface UserMailerInterface extends MailerInterface { }
