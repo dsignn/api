@@ -4,9 +4,13 @@ declare(strict_types=1);
 namespace App\Module\Oauth\Repository;
 
 use App\Crypto\CryptoInterface;
+use App\Module\Oauth\Exception\UserNotEnableException;
+use App\Module\User\Entity\UserEntity;
 use App\Storage\StorageInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\UserRepositoryInterface;
+use Slim\Exception\HttpException;
+use Slim\Psr7\Request;
 
 /**
  * Class UserRepository
@@ -46,7 +50,16 @@ class UserRepository implements UserRepositoryInterface {
 
             $userEntity = $resultSet->current();
             if ($this->crypto->deCrypto($userEntity->getPassword()) === $password) {
+                /** @var UserEntity $user */
                 $user = $userEntity;
+                switch (true) {
+                    case $user->getStatus() === UserEntity::$STATUS_NOT_VERIFY:
+                        throw new UserNotEnableException(
+                            //json_encode(["suca" => "suca"]),
+                        "",
+                            401);
+                        break;
+                }
             }
         }
         return $user;

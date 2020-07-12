@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Module\Oauth\Controller;
 
 use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
+use App\Module\Oauth\Exception\UserNotEnableException;
 use App\Module\User\Entity\UserEntity;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
@@ -58,9 +59,19 @@ class OauthController {
         } catch (\Exception $exception) {
 
             $streamFactory = new StreamFactory();
-            return $response->withStatus(500)->withBody($streamFactory->createStream(
-                $exception->getMessage()
-            ));
+            switch (true) {
+                case $exception instanceof UserNotEnableException === true:
+                    $response =  $response->withStatus(401)->withBody($streamFactory->createStream(
+                        $exception->getMessage()
+                    ));
+                    break;
+                default:
+                    $response =  $response->withStatus(500)->withBody($streamFactory->createStream(
+                        $exception->getMessage()
+                    ));
+            }
+
+            return $response;
         }
     }
 

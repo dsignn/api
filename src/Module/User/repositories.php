@@ -81,6 +81,7 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addFilter('password', new MethodMatchFilter('getPassword'),  FilterComposite::CONDITION_AND);
             $hydrator->addFilter('identifier', new MethodMatchFilter('getIdentifier'),  FilterComposite::CONDITION_AND);
             $hydrator->addFilter('recoverPassword', new MethodMatchFilter('getRecoverPassword'),  FilterComposite::CONDITION_AND);
+            $hydrator->addFilter('activationCode', new MethodMatchFilter('getActivationCode'),  FilterComposite::CONDITION_AND);
             $hydrator->addStrategy('id', new ClosureStrategy(function ($data) {
 
                 if ($data instanceof MongoId) {
@@ -91,6 +92,10 @@ return function (ContainerBuilder $containerBuilder) {
             $recoverPasswordHydrator = new ClassMethodsHydrator();
             $recoverPasswordHydrator->addStrategy('date', new MongoDateStrategy());
             $hydrator->addStrategy('recoverPassword', new HydratorStrategy($recoverPasswordHydrator, new SingleEntityPrototype(new RecoverPassword())));
+
+            $activationCode = new ClassMethodsHydrator();
+            $activationCode->addStrategy('date', new MongoDateStrategy());
+            $hydrator->addStrategy('activationCode', new HydratorStrategy($activationCode, new SingleEntityPrototype(new ActivationCode())));
 
             $organizationHydrator = new ClassMethodsHydrator();
             $organizationHydrator->addStrategy('id', new ClosureStrategy(function ($data) {
@@ -116,9 +121,9 @@ return function (ContainerBuilder $containerBuilder) {
             $recoverPasswordHydrator->addStrategy('date', new MongoDateStrategy());
             $hydrator->addStrategy('recoverPassword', new HydratorStrategy($recoverPasswordHydrator, new SingleEntityPrototype(new RecoverPassword())));
 
-            $recoverPasswordHydrator = new ClassMethodsHydrator();
-            $recoverPasswordHydrator->addStrategy('date', new MongoDateStrategy());
-            $hydrator->addStrategy('activationCode', new HydratorStrategy($recoverPasswordHydrator, new SingleEntityPrototype(new ActivationCode())));
+            $activationCode = new ClassMethodsHydrator();
+            $activationCode->addStrategy('date', new MongoDateStrategy());
+            $hydrator->addStrategy('activationCode', new HydratorStrategy($activationCode, new SingleEntityPrototype(new ActivationCode())));
 
             $organizationHydrator = new ClassMethodsHydrator();
             $hydrator->addStrategy('organizations', new HydratorArrayStrategy($organizationHydrator, new SingleEntityPrototype(new Reference())));

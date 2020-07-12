@@ -28,11 +28,4 @@ class MonitorController extends RestController implements RestControllerInterfac
     public function __construct(MonitorStorageInterface $storage, ContainerInterface $container) {
         parent::__construct($storage, $container);
     }
-
-    public function get(Request $request, Response $response)
-    {
-        //var_dump('test');
-        return parent::get($request, $response);
-        // TODO: Implement get() method.
-    }
 }
