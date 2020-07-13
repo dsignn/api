@@ -39,13 +39,13 @@ class MeController implements RpcControllerInterface {
      */
     public function rpc(Request $request, Response $response) {
         $user = $request->getAttribute('app-user');
-        $data = '';
-        if ($user) {
-            $acceptService = $this->getAcceptService($request);
-            $data = $acceptService->transformAccept($response, $user);
+
+        if (!$user) {
+            return $response->withStatus(404);
         }
 
-        return $data;
+        $acceptService = $this->getAcceptService($request);
+        return $acceptService->transformAccept($response, $user);
     }
 
     /**

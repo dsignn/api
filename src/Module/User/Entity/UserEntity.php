@@ -78,6 +78,7 @@ class UserEntity implements EntityInterface, UserEntityInterface, RoleInterface 
      */
     public function __construct() {
         $this->status = UserEntity::$STATUS_NOT_VERIFY;
+        $this->roleId = 'guest';
         $this->recoverPassword = new RecoverPassword();
         $this->activationCode = new ActivationCode();
     }
