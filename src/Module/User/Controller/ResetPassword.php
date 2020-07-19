@@ -76,7 +76,7 @@ class ResetPassword implements RpcControllerInterface {
 
         $this->storage->update($user);
 
-        $contentTypeService = $this->getAcceptService($request);
-        return $contentTypeService->transformAccept($response, $user);
+        $AcceptService = $this->getAcceptService($request);
+        return $AcceptService->transformAccept($response, $user);
     }
 }

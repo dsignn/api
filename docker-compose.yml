@@ -7,6 +7,8 @@ services:
       - .:/var/www/application
     networks:
       app_network:
+        aliases:
+          - api.dev
     ports:
       - "127.0.0.150:80:80"
 
@@ -14,6 +16,8 @@ services:
     build: docker/php-fpm
     networks:
       app_network:
+        aliases:
+          - api.dev
     volumes:
       - ./docker/php-fpm/etc:/usr/local/php/etc
       - .:/var/www/application
@@ -25,6 +29,8 @@ services:
     image: mongo:4.2
     networks:
       app_network:
+        aliases:
+          - api.dev
     volumes:
       - ./docker/mongo/data:/data/db
       - .:/var/www/application

@@ -112,6 +112,7 @@ class ContentNegotiationMiddleware implements Middleware
 
         /** @var AcceptTransformInterface $acceptService */
         $acceptService = $this->getAcceptService($path, $method, $request->getHeaderLine(self::$ACCEPT));
+
         /** @var ContentTypeTransformInterface $contentTypeService */
         $contentTypeService = $this->getContentTypeService($path, $method, $request->getHeaderLine(self::$CONTENT_TYPE));
 
@@ -195,12 +196,12 @@ class ContentNegotiationMiddleware implements Middleware
 
         $settings = $this->getSetting($path, $method);
 
-        if ($settings['acceptFilter']) {
+        if (isset($settings['acceptFilter']) && $settings['acceptFilter']) {
             $this->acceptFilter = $settings['acceptFilter'];
             $this->isCustomAccept = true;
         }
 
-        if ($settings['contentTypeFilter']) {
+        if (isset($settings['contentTypeFilter']) && $settings['contentTypeFilter']) {
             $this->contentTypeFilter = $settings['contentTypeFilter'];
             $this->isCustomContentType = true;
         }
@@ -234,7 +235,6 @@ class ContentNegotiationMiddleware implements Middleware
      * @return AcceptTransformInterface|null
      */
     protected function getAcceptService($path, $method, $header) {
-
         $settings = $this->getSetting($path, $method);
 
         $service = null;

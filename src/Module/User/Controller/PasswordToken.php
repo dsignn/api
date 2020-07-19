@@ -67,6 +67,7 @@ class PasswordToken implements RpcControllerInterface {
         // TODO best way to inject service...
         $this->from = $container->get('UserFrom');
         $this->url = $container->get('settings')['mail']['resetPassword'];
+        $this->container = $container;
     }
 
     /**
@@ -96,8 +97,8 @@ class PasswordToken implements RpcControllerInterface {
         $toContact->setName($user->getName());
         $this->mailer->send([$toContact], $this->from ,'Change password' ,$this->getBodyMessage($user, $url));
 
-        $contentTypeService = $this->getAcceptService($request);
-        return $contentTypeService->transformAccept($response, $user);
+        $AcceptService = $this->getAcceptService($request);
+        return $AcceptService->transformAccept($response, $user);
     }
 
     /**

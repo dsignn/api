@@ -2,7 +2,7 @@
 FROM centos:centos7
 
 # prerequisites
-RUN yum install -y curl cmake libtool  git gcc gcc-c++ cpp kernel-headers.x86_64 kernel-devel libxml2-devel libxslt-devel openssl-devel libcurl-devel readline-devel bzip2-devel tar wget make autoconf libpng-devel libssl-dev libsasl2-dev libjpeg-devel freetype-devel openldap-devel php-pear openssl
+RUN yum install -y  libcurl4-openssl-dev ldconfig curl cmake libtool  git gcc gcc-c++ cpp kernel-headers.x86_64 kernel-devel libxml2-devel libxslt-devel openssl-devel libcurl-devel readline-devel bzip2-devel tar wget make autoconf libpng-devel libssl-dev libsasl2-dev libjpeg-devel freetype-devel openldap-devel php-pear openssl
 
 # cmake # @see https://cmake.org/
 RUN wget http://files1.directadmin.com/services/custombuild/cmake-3.9.2.tar.gz
@@ -14,16 +14,16 @@ RUN make install
 RUN cmake  --version
 
 # libzip # @see https://libzip.org/
-RUN wget https://libzip.org/download/libzip-1.5.2.tar.gz
+RUN wget https://nih.at/libzip/libzip-1.5.2.tar.gz
 RUN tar zxvf libzip-1.5.2.tar.gz
 WORKDIR  libzip-1.5.2
 RUN mkdir build
 WORKDIR  build
-RUN ls -l ..
 RUN cmake ..
 RUN make
-RUN make test
 RUN make install
+#RUN export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$PHP_DIR/libzip-1.4.0/lib"
+#RUN ln -s ../lib/zipconf.h $PHP_DIR//build-src/srclib/libzip-1.2.0/include/zipconf.h
 
 # locale
 RUN localedef -c -i en_GB -f UTF-8 en_GB.UTF-8
@@ -34,18 +34,18 @@ ENV LC_ALL en_GB.UTF-8
 WORKDIR /tmp
 
 # icu4c # @see http://www.linuxfromscratch.org/blfs/view/svn/general/icu.html
-RUN wget -nv -O - http://download.icu-project.org/files/icu4c/55.1/icu4c-55_1-src.tgz | tar zx
+RUN wget -nv -O - https://github.com/unicode-org/icu/releases/download/release-66-1/icu4c-66_1-src.tgz | tar zx
 WORKDIR icu/source
-RUN ./configure
-RUN make -j
+RUN ./configure --prefix=/usr
+RUN make
 RUN make install
 
 WORKDIR /tmp
 
 # php
 RUN ls
-RUN wget -nv -O - http://php.net/distributions/php-7.3.12.tar.gz | tar zx
-WORKDIR php-7.3.12
+RUN wget -nv -O - http://php.net/distributions/php-7.2.32.tar.gz | tar zx
+WORKDIR php-7.2.32
 RUN rm configure
 RUN ./buildconf --force
 RUN ./configure --prefix=/usr/local/php \
@@ -55,6 +55,7 @@ RUN ./configure --prefix=/usr/local/php \
 	 --enable-sockets \
 	 --without-pear \
 	 --without-sqlite3 \
+	 --with-libzip \
 	 --with-zlib \
 	 --without-pdo-sqlite \
 	 --with-curl=/usr/bin/curl \
@@ -67,7 +68,7 @@ RUN ./configure --prefix=/usr/local/php \
 	 --with-readline \
 	 --enable-fpm \
 	 --enable-zip \
-	 --enable-intl \
+#	 --enable-intl \
 	 --with-pdo-mysql \
 	 --with-mysqli \
 	 --with-gettext \
@@ -112,7 +113,7 @@ WORKDIR /tmp
 # Composer
 # Composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-RUN php -r "if (hash_file('SHA384', 'composer-setup.php') === 'e0012edf3e80b6978849f5eff0d4b4e4c79ff1609dd1e613307e16318854d24ae64f26d17af3ef0bf7cfb710ca74755a') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+RUN php -r "if (hash_file('SHA384', 'composer-setup.php') === 'e5325b19b381bfd88ce90a5ddb7823406b2a38cff6bb704b0acc289a09c8128d4a8ce2bbafcd1fcbdc38666422fe2806') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
 RUN php composer-setup.php
 RUN php -r "unlink('composer-setup.php');"
 RUN mv composer.phar /usr/local/bin/composer
@@ -229,6 +230,28 @@ RUN ln -s /tmp/ffmpeg_sources/ffmpeg-4.2/ffmpeg /usr/bin/ffmpeg
 RUN ln -s /tmp/ffmpeg_sources/ffmpeg-4.2/ffprobe /usr/bin/ffprobe
 RUN hash -d ffmpeg
 
+WORKDIR /tmp/imageMagick
+# ImageMagick
+
+RUN yum install -y libtool-ltdl-devel fftw3-devel djvulibre-devel perl-devel
+
+RUN curl -sfLO https://www.imagemagick.org/download/ImageMagick.tar.gz
+#RUN echo 'cf51a1c6ebf627c627a8e6ac20aecce5f1425907c2cdb98c5a60f329c5c6caf2  ImageMagick-7.0.10-23.tar.gz' | sha256sum -c
+RUN mkdir -p ImageMagick && tar -xzf ImageMagick.tar.gz -C ImageMagick --strip-components=1
+WORKDIR ImageMagick
+RUN ./configure --prefix=/usr/local --sysconfdir=/etc --enable-hdri --with-modules --with-perl --disable-static
+RUN make install
+
+WORKDIR /tmp/imageMagickModule
+# imageMagickModule
+
+RUN wget https://pecl.php.net/get/imagick
+RUN mkdir -p imagick-module && tar zxvf imagick -C imagick-module --strip-components=1
+WORKDIR imagick-module
+RUN phpize
+RUN ./configure
+RUN make
+RUN make install
 
 WORKDIR /var/www/application
 

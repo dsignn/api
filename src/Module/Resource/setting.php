@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use App\Middleware\ContentNegotiation\ContentType\JsonContentType;
 use App\Middleware\ContentNegotiation\ContentType\MultipartFormDataContentType;
 
 return function (&$setting) {
@@ -27,6 +28,11 @@ return function (&$setting) {
                             'acceptFilter' => ['/application\/json/'],
                             'contentTypeFilter' => ['/multipart\/form-data/'],
                             'contentTypeService' => MultipartFormDataContentType::class
+                        ],
+                        'PUT' => [
+                            'acceptFilter' => ['/application\/json/'],
+                            'contentTypeFilter' => ['/application\/json/'],
+                            'contentTypeService' => JsonContentType::class
                         ]
                     ],
                 ],

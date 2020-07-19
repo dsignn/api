@@ -20,4 +20,18 @@ interface ReferenceInterface {
      */
     public function getCollection(): string ;
 
+
+    /**
+     * @param string $id
+     * @return ReferenceInterface
+     */
+    public function setId(string $id): ReferenceInterface ;
+
+
+    /**
+     * @param string $collection
+     * @return ReferenceInterface
+     */
+    public function setCollection(string $collection): ReferenceInterface ;
+
 }

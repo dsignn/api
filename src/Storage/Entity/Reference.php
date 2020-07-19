@@ -30,7 +30,7 @@ class Reference implements ReferenceInterface {
      * @param string $id
      * @return Reference
      */
-    public function setId(string $id): Reference {
+    public function setId(string $id): ReferenceInterface {
         $this->id = $id;
         return $this;
     }
@@ -46,7 +46,7 @@ class Reference implements ReferenceInterface {
      * @param string $collection
      * @return Reference
      */
-    public function SetCollection(string $collection): Reference {
+    public function SetCollection(string $collection): ReferenceInterface {
         $this->collection = $collection;
         return $this;
     }

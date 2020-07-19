@@ -20,8 +20,6 @@ return function (App $app) {
 
         $group->put('/{id:[0-9a-fA-F]{24}}',  [ResourceController::class, 'put']);
 
-       // $group->patch('/{id:[0-9a-fA-F]{24}}',  [MonitorController::class, 'patch']);
-
         $group->options('/{id:[0-9a-fA-F]{24}}',  [ResourceController::class, 'options']);
 
         $group->delete('/{id:[0-9a-fA-F]{24}}',  [ResourceController::class, 'delete']);

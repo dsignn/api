@@ -153,6 +153,9 @@ return function (ContainerBuilder $containerBuilder) {
                 'image/jpeg',
                 $imageHydrator
             )->addHydrator(
+                'image/png',
+                $imageHydrator
+            )->addHydrator(
                 'video/mp4',
                 $videoHydrator
             );

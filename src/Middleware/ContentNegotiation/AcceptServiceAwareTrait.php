@@ -13,6 +13,8 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 trait AcceptServiceAwareTrait {
 
+    protected $container;
+
     /**
      * Add in the class where extends
      *

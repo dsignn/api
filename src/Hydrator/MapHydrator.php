@@ -91,7 +91,7 @@ class MapHydrator implements HydratorInterface, EntityPrototypeAwareInterface {
         $field = $this->extractTypeField($object);
 
         if (!isset($this->hydrators[$field])) {
-            throw new \Exception('Field $field not set');
+            throw new \Exception(sprintf('Field %field not set', $field));
         }
 
         return $this->hydrators[$field]->extract($object);
@@ -112,7 +112,7 @@ class MapHydrator implements HydratorInterface, EntityPrototypeAwareInterface {
         $field = isset($data[$this->typeField]) ? $data[$this->typeField] : $data[$this->getNameStrategy()->extract($this->typeField)];
 
         if (!isset($this->hydrators[$field])) {
-            throw new \Exception('Field $field not set');
+            throw new \Exception(sprintf('Field %field not set', $field));
         }
 
         $object = $object ? $object : $this->getEntityPrototype()->getPrototype($data);

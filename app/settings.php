@@ -8,6 +8,7 @@ return function (ContainerBuilder $containerBuilder) {
 
     $setting = [
         'settings' => [
+            'tmp' => '../tmp',
             'determineRouteBeforeAppMiddleware' => true,
             'debug' => true,
             'displayErrorDetails' => true, // Should be set to false in production
@@ -31,6 +32,9 @@ return function (ContainerBuilder $containerBuilder) {
                     "name" => "toni",
                     "email" => "antonino.visalli@gmail.com"
                 ]
+            ],
+            'httpClient' => [
+                'url' => 'nginx'
             ]
         ],
     ];

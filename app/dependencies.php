@@ -11,6 +11,7 @@ use App\Middleware\ContentNegotiation\ContentType\MultipartFormDataContentType;
 use App\Middleware\Validation\ValidationMiddleware;
 use App\Module\User\Storage\UserStorageInterface;
 use DI\ContainerBuilder;
+use GuzzleHttp\Client;
 use League\OAuth2\Server\ResourceServer;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -90,6 +91,10 @@ return function (ContainerBuilder $containerBuilder) {
                 $c->get('settings')['validation'],
                 $c
             );
+        },
+
+        Client::class => function(ContainerInterface $c) {
+            return $client = new \GuzzleHttp\Client();
         }
     ]);
 };

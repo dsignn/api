@@ -33,16 +33,23 @@ class ResourceController implements RestControllerInterface {
     /**
      * @var string
      */
+    protected $tmp;
+
+    /**
+     * @var string
+     */
     protected $hydratorService = 'RestResourceEntityHydrator';
 
 
     /**
      * ResourceController constructor.
      * @param ResourceStorageInterface $storage
+     * @param ContainerInterface $container
      */
     public function __construct(ResourceStorageInterface $storage, ContainerInterface $container ) {
         $this->storage = $storage;
         $this->container = $container;
+        $this->tmp = $container->get('settings')['tmp'];
     }
 
     /**
@@ -87,7 +94,7 @@ class ResourceController implements RestControllerInterface {
      * @inheritDoc
      */
     public function put(Request $request, Response $response) {
-
+        throw new \Exception('TODO implements');
         $id = $request->getAttribute('__route__')->getArgument('id');
         $entity = $this->storage->get($id);
 
@@ -113,9 +120,17 @@ class ResourceController implements RestControllerInterface {
             $data = $validator->getValues();
         }
 
-
+        $id = uniqid();
+        $content = base64_decode($data['file']);
+        var_dump($content);
+        file_put_contents($this->tmp . "/" . $id, imagecreatefromstring());
+        var_dump($this->tmp);
+        die();
+        $data['size'] = strlen($data['file']);
+        $data['mimeType'] = $file->getClientMediaType();
+        $data['src'] = $file->getStream()->getMetadata('uri');
         $putEntity = $this->storage->getEntityPrototype()->getPrototype($data);
-        var_dump($putEntity);
+
    //     $putEntity->setId($id);
        // $this->storage->update($putEntity);
         //var_dump($this->storage->getEntityPrototype());

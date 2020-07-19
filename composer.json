@@ -1,24 +1,18 @@
 {
-    "name": "slim/slim-skeleton",
-    "description": "A Slim Framework skeleton application for rapid development",
+    "name": "dsignn/api",
+    "description": "Rest full Api of dsignn application",
     "keywords": [
         "microframework",
         "rest",
         "router",
         "psr7"
     ],
-    "homepage": "http://github.com/slimphp/Slim-Skeleton",
+    "homepage": "https://github.com/dsignn/api",
     "license": "MIT",
     "authors": [
         {
-            "name": "Josh Lockhart",
-            "email": "info@joshlockhart.com",
-            "homepage": "http://www.joshlockhart.com/"
-        },
-        {
-            "name": "Pierre Berube",
-            "email": "pierre@lgse.com",
-            "homepage": "http://www.lgse.com/"
+            "name": "Antonino Visalli",
+            "email": "antonino.visalli@gmail.com"
         }
     ],
     "require": {
@@ -41,6 +35,8 @@
         "slim/psr7": "^0.5",
         "slim/slim": "^4.4",
         "symfony/console": "^5.0.2",
+        "bacon/bacon-qr-code": "~2.0.0",
+        "guzzlehttp/guzzle": "~7.0.0",
         "twig/twig": "^3.0"
     },
     "require-dev": {

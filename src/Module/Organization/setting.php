@@ -19,18 +19,23 @@ return function (&$setting) {
                             'contentTypeFilter' => ['/application\/json/']
                         ]
                     ],
-                    '/timeslot/{id:[0-9a-fA-F]{24}}' => [
+                    '/organization/{id:[0-9a-fA-F]{24}}' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
                             'contentTypeFilter' => ['/application\/json/']
                         ]
                     ],
+                    '/generate-qrcode/{id:[0-9a-fA-F]{24}}' => [
+                        'default' => [
+                            'acceptFilter' => ['/application\/json/']
+                        ]
+                    ],
                 ],
                 'validation' => [
-                    '/timeslot' => [
-
+                    '/organization' => [
+                        'POST' => 'PostOrganizationValidator'
                     ]
-                ]
+                ],
             ]
         ]
     );
