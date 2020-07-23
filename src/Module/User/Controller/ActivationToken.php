@@ -8,6 +8,7 @@ use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
 use App\Module\User\Entity\UserEntity;
 use App\Module\User\Storage\UserStorageInterface;
 use App\Storage\StorageInterface;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -22,7 +23,7 @@ class ActivationToken implements RpcControllerInterface {
     /**
      * @var string
      */
-    protected $hydratorService = 'RpcPasswordUserEntityHydrator';
+    protected $hydratorService = 'RestUserEntityHydrator';
 
     /**
      * @var StorageInterface
@@ -32,9 +33,11 @@ class ActivationToken implements RpcControllerInterface {
     /**
      * ActivationToken constructor.
      * @param UserStorageInterface $storage
+     * @param ContainerInterface $container
      */
-    public function __construct(UserStorageInterface $storage) {
+    public function __construct(UserStorageInterface $storage, ContainerInterface $container) {
         $this->storage = $storage;
+        $this->container =  $container;
     }
 
     /**
@@ -42,12 +45,11 @@ class ActivationToken implements RpcControllerInterface {
      */
     public function rpc(Request $request, Response $response) {
 
-        $query = $request->getQueryParams();
-        if (!isset($query['token'])) {
-            return $response->withStatus(400);
-        }
+        $data = $request->getParsedBody();
 
-        $resultSet = $this->storage->getAll(['activation_code.token' => $query['token']]);
+        // TODO validation
+
+        $resultSet = $this->storage->getAll(['activation_code.token' => $data['token']]);
         /** @var UserEntity $user */
         $user = $resultSet->current();
         if (!$user) {
@@ -56,6 +58,8 @@ class ActivationToken implements RpcControllerInterface {
 
         $user->setStatus(UserEntity::$STATUS_ENABLE);
         $this->storage->update($user);
-        return $response->withStatus(200);
+
+        $AcceptService = $this->getAcceptService($request);
+        return $AcceptService->transformAccept($response, $user);
     }
 }

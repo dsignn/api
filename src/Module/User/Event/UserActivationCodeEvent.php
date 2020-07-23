@@ -74,18 +74,20 @@ class UserActivationCodeEvent
         $toContact = new Contact();
         $toContact->setEmail($user->getEmail());
         $toContact->setName($user->getName());
-        $this->mailer->send([$toContact], $this->from, 'Activation code', $this->getBodyMessage($user, $this->url));
+        $url = $this->url . '?token=' . $user->getActivationCode()->getToken();
+        $this->mailer->send([$toContact], $this->from, 'Activation code', $this->getBodyMessage($user, $url));
     }
 
 
     /**
      * @param UserEntity $user
+     * @param string $url
      * @return string
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
-    protected function getBodyMessage(UserEntity $user, $url) {
+    protected function getBodyMessage(UserEntity $user, string $url) {
 
         $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../Mail/Template/');
         $twig = new \Twig\Environment($loader, []);

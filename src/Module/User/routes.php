@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use App\Controller\OptionController;
 use App\Middleware\Authentication\AuthenticationMiddleware;
 use App\Middleware\Authorization\AuthorizationMiddleware;
 use App\Module\User\Controller\ActivationToken;
@@ -35,7 +36,13 @@ return function (App $app) {
 
     $app->post('/recover-password', [PasswordToken::class, 'rpc']);
 
+    $app->options('/recover-password', [OptionController::class, 'options']);
+
     $app->post('/reset-password', [ResetPassword::class, 'rpc']);
 
-    $app->get('/activation', [ActivationToken::class, 'rpc']);
+    $app->options('/reset-password', [OptionController::class, 'options']);
+
+    $app->post('/activation-code', [ActivationToken::class, 'rpc']);
+
+    $app->options('/activation-code', [OptionController::class, 'options']);
 };

@@ -8,8 +8,8 @@ return function (&$setting) {
         [
             "settings" => [
                 'mail' => [
-                    "resetPassword" => "http://127.0.0.150/reset-password",
-                    "activationCode" => "http://127.0.0.150/activation",
+                    "resetPassword" => "http://127.0.0.1:8081/reset-password",
+                    "activationCode" => "http://127.0.0.1:8081/activation-code",
                 ],
                 'storage' => [
                     'user' => [
@@ -24,6 +24,12 @@ return function (&$setting) {
                         ]
                     ],
                     '/user/{id:[0-9a-fA-F]{24}}' => [
+                        'default' => [
+                            'acceptFilter' => ['/application\/json/'],
+                            'contentTypeFilter' => ['/application\/json/']
+                        ]
+                    ],
+                    '/activation-code' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
                             'contentTypeFilter' => ['/application\/json/']
