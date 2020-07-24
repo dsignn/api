@@ -37,6 +37,11 @@ abstract class AbstractResourceEntity implements EntityInterface, OrganizationAw
     protected $src = '';
 
     /**
+     * @var string
+     */
+    protected $S3path = '';
+
+    /**
      * @return string
      */
     public function getMimeType(): string
@@ -101,6 +106,22 @@ abstract class AbstractResourceEntity implements EntityInterface, OrganizationAw
      */
     public function setSrc(string $src): AbstractResourceEntity {
         $this->src = $src;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getS3path(): string {
+        return $this->S3path;
+    }
+
+    /**
+     * @param string $S3path
+     * @return AbstractResourceEntity
+     */
+    public function setS3path(string $S3path): AbstractResourceEntity {
+        $this->S3path = $S3path;
         return $this;
     }
 }

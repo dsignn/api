@@ -58,6 +58,16 @@ return function (ContainerBuilder $containerBuilder) {
             );
 
             $storage->getEventManager()->attach(
+                Storage::$BEFORE_UPDATE,
+                new MetadataEvent($c->get('settings')['ffmpeg']['binary'])
+            );
+
+            $storage->getEventManager()->attach(
+                Storage::$BEFORE_UPDATE,
+                new S3UploaderEvent($c->get('S3Client'), $c->get('settings')['s3Resource']['bucket'])
+            );
+
+            $storage->getEventManager()->attach(
                 Storage::$BEFORE_SAVE,
                 new S3UploaderEvent($c->get('S3Client'), $c->get('settings')['s3Resource']['bucket'])
             );

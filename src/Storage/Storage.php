@@ -19,6 +19,11 @@ use Laminas\Hydrator\HydratorAwareTrait;
 class Storage implements StorageInterface {
 
     /**
+     * Traits
+     */
+    use EntityPrototypeAwareTrait, HydratorAwareTrait;
+
+    /**
      * @var string
      */
     static public $BEFORE_SAVE = 'before_save';
@@ -28,7 +33,15 @@ class Storage implements StorageInterface {
      */
     static public $AFTER_SAVE = 'after_save';
 
-    use EntityPrototypeAwareTrait, HydratorAwareTrait;
+    /**
+     * @var string
+     */
+    static public $BEFORE_UPDATE = 'before_update';
+
+    /**
+     * @var string
+     */
+    static public $AFTER_UPDATE = 'after_update';
 
     /**
      * @var StorageAdapterInterface
@@ -84,9 +97,20 @@ class Storage implements StorageInterface {
      * @inheritDoc
      */
     public function update(EntityInterface $entity): EntityInterface {
-        // TODO event pre update
+
+        $this->events->trigger(
+            Storage::$BEFORE_UPDATE,
+            $entity
+        );
+
         $dataToUpdate = $this->storage->update($this->hydrator->extract($entity));
-        // TODO event post update
+        $this->hydrator->hydrate($dataToUpdate, $entity);
+
+        $this->events->trigger(
+            Storage::$AFTER_UPDATE,
+            $entity
+        );
+
         return $entity;
     }
 

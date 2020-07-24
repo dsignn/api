@@ -31,8 +31,8 @@ return function (&$setting) {
                         ],
                         'PUT' => [
                             'acceptFilter' => ['/application\/json/'],
-                            'contentTypeFilter' => ['/application\/json/'],
-                            'contentTypeService' => JsonContentType::class
+                            'contentTypeFilter' => ['/multipart\/form-data/'],
+                            'contentTypeService' => MultipartFormDataContentType::class
                         ]
                     ],
                 ],

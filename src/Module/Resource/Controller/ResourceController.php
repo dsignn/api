@@ -5,9 +5,13 @@ namespace App\Module\Resource\Controller;
 
 use App\Controller\RestControllerInterface;
 use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
+use App\Module\Resource\Entity\Embedded\Dimension;
+use App\Module\Resource\Entity\ImageResourceEntity;
+use App\Module\Resource\Entity\VideoResourceEntity;
 use App\Module\Resource\Storage\ResourceStorageInterface;
 use App\Storage\StorageInterface;
 use Laminas\InputFilter\InputFilterInterface;
+use Notihnio\RequestParser\RequestParser;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -83,7 +87,6 @@ class ResourceController implements RestControllerInterface {
         $data['src'] = $file->getStream()->getMetadata('uri');
 
         $entity = $this->storage->getHydrator()->hydrate($data, $this->storage->getEntityPrototype()->getPrototype($data));
-
         $this->storage->save($entity);
 
         $acceptService = $this->getAcceptService($request);
@@ -94,7 +97,9 @@ class ResourceController implements RestControllerInterface {
      * @inheritDoc
      */
     public function put(Request $request, Response $response) {
-        throw new \Exception('TODO implements');
+
+        $requestParams = RequestParser::parse();
+
         $id = $request->getAttribute('__route__')->getArgument('id');
         $entity = $this->storage->get($id);
 
@@ -102,7 +107,7 @@ class ResourceController implements RestControllerInterface {
             return $response->withStatus(404);
         }
 
-        $data = array_merge($request->getParsedBody(), $request->getUploadedFiles());
+        $data = array_merge($requestParams->files, $requestParams->params);
 
         if ($request->getAttribute('app-validation')) {
             /** @var InputFilterInterface $validator */
@@ -120,23 +125,21 @@ class ResourceController implements RestControllerInterface {
             $data = $validator->getValues();
         }
 
-        $id = uniqid();
-        $content = base64_decode($data['file']);
-        var_dump($content);
-        file_put_contents($this->tmp . "/" . $id, imagecreatefromstring());
-        var_dump($this->tmp);
-        die();
-        $data['size'] = strlen($data['file']);
-        $data['mimeType'] = $file->getClientMediaType();
-        $data['src'] = $file->getStream()->getMetadata('uri');
-        $putEntity = $this->storage->getEntityPrototype()->getPrototype($data);
 
-   //     $putEntity->setId($id);
-       // $this->storage->update($putEntity);
-        //var_dump($this->storage->getEntityPrototype());
-        //var_dump($putEntity);
-        var_dump(__FUNCTION__);
-        die();
+        $data['size'] = filesize($data['file']['tmp_name']);
+        $data['mimeType'] = $data['file']['type'];
+        $data['src'] = $data['file']['tmp_name'];
+        unset($data['file']);
+
+        $putEntity = $this->storage->getEntityPrototype()->getPrototype($data);
+        $oldEntityData = $this->storage->getHydrator()->extract($entity);
+
+        $this->storage->getHydrator()->hydrate($oldEntityData, $putEntity);
+        $this->storage->getHydrator()->hydrate($data, $putEntity);
+        $this->storage->update($putEntity);
+
+        $acceptService = $this->getAcceptService($request);
+        return $acceptService->transformAccept($response, $putEntity);
     }
 
     public function patch(Request $request, Response $response) {

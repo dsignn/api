@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Module\Resource\Event;
 
+use App\Module\Resource\Entity\AbstractResourceEntity;
 use Aws\Result;
 use Aws\S3\S3Client;
 use Laminas\EventManager\EventInterface;
@@ -220,18 +221,23 @@ class S3UploaderEvent {
      */
     public function __invoke(EventInterface $event) {
 
-        $nameFile = $this->uuid() . '.' . S3UploaderEvent::mime2ext($event->getTarget()->getMimeType());
+        /** @var AbstractResourceEntity $entity */
+        $entity = $event->getTarget();
+
+        $nameFile = $entity->getS3path() ? $entity->getS3path() : $this->uuid();
+
         /** @var Result $result */
         $result = $this->s3Client->putObject(
             array(
                 'Bucket'=> $this->bucketName,
                 'Key' =>  $nameFile,
-                'SourceFile' => $event->getTarget()->getSrc(),
+                'SourceFile' => $entity->getSrc(),
                 'ACL'    => 'public-read'
             )
         );
 
-        $event->getTarget()->setSrc($result->get('@metadata')['effectiveUri']);
+        $entity->setS3path($nameFile);
+        $entity->setSrc($result->get('@metadata')['effectiveUri']);
     }
 
     /**
@@ -250,9 +256,6 @@ class S3UploaderEvent {
      * @return string|false
      */
     static function mime2ext($mime) {
-
         return isset(S3UploaderEvent::$mimeMap[$mime]) === true ? S3UploaderEvent::$mimeMap[$mime] : false;
     }
 }
-
-// 880000
