@@ -27,7 +27,7 @@ class JsonAccept implements AcceptTransformInterface {
 
         switch (true) {
             case $data instanceof ResultSetPaginateInterface === true:
-                var_dump('suca');
+
                 /** @var ResultSetPaginateInterface $data */
 
                 if ($data instanceof HydratorAwareInterface && $this->getHydrator()) {

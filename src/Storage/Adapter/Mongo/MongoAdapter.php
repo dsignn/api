@@ -131,10 +131,19 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
     }
 
     /**
-     * @param array $search
-     * @return array
+     * @param $search
+     * @return mixed
+     * @throws \MongoException
      */
     public function search($search) {
+
+        foreach ($search as $key => $value) {
+
+            if (is_string($value)) {
+                $search[$key] = new \MongoRegex('/.*' . $value . '.*/');;
+            }
+        }
+
         return $search;
     }
 
