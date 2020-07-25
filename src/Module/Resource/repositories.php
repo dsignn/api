@@ -39,6 +39,7 @@ return function (ContainerBuilder $containerBuilder) {
 
             $resultSet = new MongoHydrateResultSet();
             $resultSet->setHydrator($hydrator);
+            $resultSet->setEntityPrototype($c->get('ResourceEntityPrototype'));
 
             $resultSetPaginator = new MongoHydratePaginateResultSet();
             $resultSetPaginator->setHydrator($hydrator);

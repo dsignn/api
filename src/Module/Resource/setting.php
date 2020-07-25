@@ -23,6 +23,13 @@ return function (&$setting) {
                             'contentTypeService' => MultipartFormDataContentType::class
                         ]
                     ],
+                    '/resource/all' => [
+                        'default' => [
+                            'acceptFilter' => ['/application\/json/'],
+                            'contentTypeFilter' => ['/multipart\/form-data/'],
+                            'contentTypeService' => MultipartFormDataContentType::class
+                        ]
+                    ],
                     '/resource/{id:[0-9a-fA-F]{24}}' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],

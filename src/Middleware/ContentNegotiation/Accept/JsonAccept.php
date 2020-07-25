@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Middleware\ContentNegotiation\Accept;
 
 use App\Storage\Entity\EntityInterface;
+use App\Storage\ResultSet\ResultSetInterface;
 use App\Storage\ResultSet\ResultSetPaginateInterface;
 use Laminas\Hydrator\HydratorAwareInterface;
 use Laminas\Hydrator\HydratorAwareTrait;
@@ -26,6 +27,7 @@ class JsonAccept implements AcceptTransformInterface {
 
         switch (true) {
             case $data instanceof ResultSetPaginateInterface === true:
+                var_dump('suca');
                 /** @var ResultSetPaginateInterface $data */
 
                 if ($data instanceof HydratorAwareInterface && $this->getHydrator()) {
@@ -39,6 +41,14 @@ class JsonAccept implements AcceptTransformInterface {
                 ];
 
                 $computeData['data'] = $data->toArray();
+                break;
+            case $data instanceof ResultSetInterface:
+
+                if ($data instanceof HydratorAwareInterface && $this->getHydrator()) {
+                    $data->setHydrator($this->getHydrator());
+                }
+
+                $computeData = $data->toArray();
                 break;
             case $data instanceof EntityInterface === true:
                 $computeData = $this->getHydrator()->extract($data);

@@ -14,6 +14,8 @@ return function (App $app) {
 
         $group->get('', [OrganizationController::class, 'paginate']);
 
+        $group->options('', [OrganizationController::class, 'options']);
+
         $group->get('/{id:[0-9a-fA-F]{24}}',  [OrganizationController::class, 'get']);
 
         $group->post('',  [OrganizationController::class, 'post']);

@@ -38,7 +38,7 @@ $repositories($containerBuilder);
 $container = $containerBuilder->build();
 
 // Instantiate the app
-$app =  \DI\Bridge\Slim\Bridge::create($container);
+$app = \DI\Bridge\Slim\Bridge::create($container);
 $callableResolver = $app->getCallableResolver();
 
 // Register middleware

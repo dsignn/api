@@ -88,12 +88,10 @@ class GenerateQrCodeRpc implements RpcControllerInterface {
 
         $tmpFile = $this->generateQrCode($entity);
         $method = $entity->getQrCode()->getId() ? 'put' : 'post';
-        $ur = $this->url . '/resource';
-        $ur = $method === 'put' ? $ur .'/' .$entity->getQrCode()->getId() : $ur;
 
         try {
            /** @var \GuzzleHttp\Psr7\Response $responseResource */
-           $responseResource =$this->getRequest($entity, $method, $tmpFile);
+           $responseResource = $this->getRequest($entity, $method, $tmpFile);
 
        } catch (\Exception $e){
             throw new HttpException($request, 'Qr code generator error',500, $e);
@@ -134,10 +132,9 @@ class GenerateQrCodeRpc implements RpcControllerInterface {
 
         ];
 
-        $response = $this->client->post(
-            $this->url . '/resource',
-            $data
-        );
+
+        $url = $this->url . ($entity->getQrCode()->getId() ? '/resource/' .$entity->getQrCode()->getId() : '/resource');
+        $response = $this->client->{$method}($url, $data);
 
         return json_decode($response->getBody()->getContents());
     }
