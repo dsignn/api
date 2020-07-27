@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace App\Module\Organization\Validator;
 
-use App\Module\Organization\Util\UrlNormalizer;
+use App\Module\Organization\Url\GenericSlugify;
+use App\Module\Organization\Url\SlugifyInterface;
 use App\Storage\StorageInterface;
 use Laminas\Validator\AbstractValidator;
 use Laminas\Validator\ValidatorInterface;
@@ -26,14 +27,19 @@ class UniqueNameOrganization extends AbstractValidator implements ValidatorInter
     ];
 
     /**
+     * @var SlugifyInterface
+     */
+    protected $slugifyService;
+
+    /**
      * EmailExistValidator constructor.
      * @param StorageInterface $storage
      */
-    public function __construct(StorageInterface $storage) {
+    public function __construct(StorageInterface $storage, SlugifyInterface $slugify = null) {
         $this->storage = $storage;
+        $this->slugifyService = $slugify ? $slugify : new GenericSlugify();
         parent::__construct([]);
     }
-
 
     /**
      * @param mixed $value
@@ -43,9 +49,9 @@ class UniqueNameOrganization extends AbstractValidator implements ValidatorInter
 
         $this->setValue($value);
         // TODO Configurable
-        $normalize = UrlNormalizer::normalize($this->getValue());
-        $isValid = true;
 
+        $normalize = $this->slugifyService->slugify($this->getValue());
+        $isValid = true;
         $resultSet = $this->storage->getAll(['normalize_name'=> $normalize ]);
 
         if ($resultSet->count() > 0) {
@@ -54,5 +60,7 @@ class UniqueNameOrganization extends AbstractValidator implements ValidatorInter
         }
         return $isValid;
     }
+
+
 
 }

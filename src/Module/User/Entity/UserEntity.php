@@ -26,6 +26,11 @@ class UserEntity implements EntityInterface, UserEntityInterface, RoleInterface 
     /**
      * @var string
      */
+    static public $STATUS_ACTIVATION_MAIL_ERROR = 'activation-mail-error';
+
+    /**
+     * @var string
+     */
     static public $STATUS_ENABLE = 'enable';
 
     /**

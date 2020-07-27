@@ -11,6 +11,7 @@ use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
 use App\Hydrator\Strategy\NamingStrategy\CamelCaseStrategy;
 use App\Mail\Contact;
 use App\Module\Oauth\Filter\PasswordFilter;
+use App\Module\Organization\Validator\UniqueNameOrganization;
 use App\Module\User\Entity\Embedded\ActivationCode;
 use App\Module\User\Entity\Embedded\RecoverPassword;
 use App\Module\User\Entity\UserEntity;
@@ -163,12 +164,17 @@ return function (ContainerBuilder $containerBuilder) {
             $email= new Input('email');
             $email->getValidatorChain()
                 ->attach(new EmailAddress())
-                ->attach($container->get(EmailExistValidator::class))
-            ;
+                ->attach($container->get(EmailExistValidator::class));
+
+            $nameOrganization = new Input('nameOrganization');
+            $nameOrganization->setRequired(false);
+            $nameOrganization->getValidatorChain()
+                ->attach($container->get(UniqueNameOrganization::class));
+
             // Role field
             $role = new Input('role');
             $role->getValidatorChain()->attach(new InArray([
-                'haystack' => ['guest', 'companyOwner', 'admin']
+                'haystack' => ['guest', 'restaurantOwner', 'admin']
             ]));
             // Password field
             $password = $password = new Input('password');
@@ -190,7 +196,9 @@ return function (ContainerBuilder $containerBuilder) {
 
             $organizationsCollectionInputFilter->setInputFilter($organizationsInputFilter);
 
-            $inputFilter->add($email)
+            $inputFilter
+                ->add($nameOrganization)
+                ->add($email)
                 ->add($name)
                 ->add($lastName)
                 ->add($role)
