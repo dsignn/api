@@ -7,6 +7,8 @@ use App\Module\User\Entity\Embedded\ActivationCode;
 use App\Module\User\Entity\Embedded\RecoverPassword;
 use App\Storage\Entity\EntityInterface;
 use App\Storage\Entity\EntityTrait as StorageEntityTrait;
+use App\Storage\Entity\Reference;
+use App\Storage\Entity\ReferenceInterface;
 use Laminas\Permissions\Acl\Role\RoleInterface;
 use League\OAuth2\Server\Entities\UserEntityInterface;
 
@@ -229,6 +231,15 @@ class UserEntity implements EntityInterface, UserEntityInterface, RoleInterface 
      */
     public function setOrganizations(array $organizations): UserEntity {
         $this->organizations = $organizations;
+        return $this;
+    }
+
+    /**
+     * @param Reference $reference
+     * @return UserEntity
+     */
+    public function appendOrganization(ReferenceInterface $reference) {
+        array_push($this->organizations, $reference);
         return $this;
     }
 

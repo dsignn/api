@@ -20,6 +20,16 @@ class Reference implements ReferenceInterface {
     protected $collection = '';
 
     /**
+     * Reference constructor.
+     * @param string $id
+     * @param string $collection
+     */
+    public function __construct(string $id = '', string $collection = '') {
+        $this->id = $id;
+        $this->collection = $collection;
+    }
+
+    /**
      * @return string
      */
     public function getId(): string {

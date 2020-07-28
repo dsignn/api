@@ -8,10 +8,11 @@ use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
 use App\Hydrator\Strategy\NamingStrategy\CamelCaseStrategy;
 use App\Module\Monitor\Entity\MonitorReference;
 use App\Module\Organization\Entity\OrganizationEntity;
-use App\Module\Organization\Event\GenerateQrCodeEvent;
-use App\Module\Organization\Event\NormalizeNameEvent;
+use App\Module\Organization\Event\SluggerNameEvent;
 use App\Module\Organization\Storage\OrganizationStorage;
 use App\Module\Organization\Storage\OrganizationStorageInterface;
+use App\Module\Organization\Url\GenericSlugify;
+use App\Module\Organization\Url\SlugifyInterface;
 use App\Module\Organization\Validator\UniqueNameOrganization;
 use App\Module\User\Event\UserPasswordEvent;
 use App\Module\User\Validator\EmailExistValidator;
@@ -56,7 +57,7 @@ return function (ContainerBuilder $containerBuilder) {
             $storage->setHydrator($hydrator);
             $storage->setEntityPrototype($c->get('OrganizationEntityPrototype'));
 
-            $storage->getEventManager()->attach(Storage::$BEFORE_SAVE, new NormalizeNameEvent());
+            $storage->getEventManager()->attach(Storage::$BEFORE_SAVE, new SluggerNameEvent($c->get(SlugifyInterface::class)));
             return $storage;
         }
     ])->addDefinitions([
@@ -109,6 +110,10 @@ return function (ContainerBuilder $containerBuilder) {
     ])->addDefinitions([
         UniqueNameOrganization::class => function(ContainerInterface $c) {
             return new UniqueNameOrganization($c->get(OrganizationStorageInterface::class));
+        }
+    ])->addDefinitions([
+        SlugifyInterface::class => function(ContainerInterface $c) {
+            return new GenericSlugify();
         }
     ]);
 };

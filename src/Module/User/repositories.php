@@ -15,6 +15,7 @@ use App\Module\Organization\Validator\UniqueNameOrganization;
 use App\Module\User\Entity\Embedded\ActivationCode;
 use App\Module\User\Entity\Embedded\RecoverPassword;
 use App\Module\User\Entity\UserEntity;
+use App\Module\User\Event\AppendOrganizationEvent;
 use App\Module\User\Event\UserActivationCodeEvent;
 use App\Module\User\Event\UserPasswordEvent;
 use App\Module\User\Mail\adapter\UserGoogleMailer;
@@ -29,6 +30,7 @@ use App\Storage\Entity\Reference;
 use App\Storage\Entity\SingleEntityPrototype;
 use App\Storage\Storage;
 use DI\ContainerBuilder;
+use GuzzleHttp\Client;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Hydrator\Filter\FilterComposite;
 use Laminas\Hydrator\Filter\MethodMatchFilter;
@@ -72,6 +74,12 @@ return function (ContainerBuilder $containerBuilder) {
                 Storage::$BEFORE_SAVE,
                 new UserActivationCodeEvent($c->get('OAuthCrypto'), $c->get(UserMailerInterface::class), $c->get('UserFrom'), $settings['mail']['activationCode'])
             );
+
+            $storage->getEventManager()->attach(Storage::$PREPROCESS_SAVE, new AppendOrganizationEvent(
+                $c->get(Client::class),
+                $c->get('settings')['httpClient']["url"],
+                $c->get('RestOrganizationEntityHydrator')
+            ));
 
             return $storage;
         },
@@ -172,7 +180,7 @@ return function (ContainerBuilder $containerBuilder) {
                 ->attach($container->get(UniqueNameOrganization::class));
 
             // Role field
-            $role = new Input('role');
+            $role = new Input('roleId');
             $role->getValidatorChain()->attach(new InArray([
                 'haystack' => ['guest', 'restaurantOwner', 'admin']
             ]));

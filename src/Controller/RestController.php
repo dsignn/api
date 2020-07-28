@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
+use App\Storage\Event\PreProcess;
+use App\Storage\Storage;
 use App\Storage\StorageInterface;
 use Laminas\InputFilter\InputFilterInterface;
 use Psr\Container\ContainerInterface;
@@ -84,6 +86,12 @@ class RestController implements RestControllerInterface
 
         $entity = $this->storage->getEntityPrototype()->getPrototype($data);
         $this->storage->getHydrator()->hydrate($data, $entity);
+        // Preprocess data we can manipulate data and entity
+        $this->storage->getEventManager()->trigger(
+            Storage::$PREPROCESS_SAVE,
+            new PreProcess($entity, $data)
+        );
+
         $this->storage->save($entity);
         $acceptService = $this->getAcceptService($request);
         return $acceptService->transformAccept($response, $entity);
