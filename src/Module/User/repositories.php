@@ -182,7 +182,7 @@ return function (ContainerBuilder $containerBuilder) {
             // Role field
             $role = new Input('roleId');
             $role->getValidatorChain()->attach(new InArray([
-                'haystack' => ['guest', 'restaurantOwner', 'admin']
+                'haystack' => ['guest', 'restaurantOwner']
             ]));
             // Password field
             $password = $password = new Input('password');
