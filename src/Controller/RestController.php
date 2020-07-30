@@ -66,7 +66,7 @@ class RestController implements RestControllerInterface
      */
     public function post(Request $request, Response $response) {
 
-        $data = $request->getParsedBody();
+        $data = $request->getParsedBody() ? $request->getParsedBody() : [];
 
         if ($request->getAttribute('app-validation')) {
             /** @var InputFilterInterface $validator */

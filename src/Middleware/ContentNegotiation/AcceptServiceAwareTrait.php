@@ -35,7 +35,7 @@ trait AcceptServiceAwareTrait {
             throw new ServiceNotFound('AcceptService not found in request attribute');
         }
 
-        if ($this->container->has($this->hydratorService)) {
+        if (property_exists($this, 'hydratorService') && $this->container->has($this->hydratorService)) {
             $acceptService->setHydrator($this->container->get($this->hydratorService));
         }
 

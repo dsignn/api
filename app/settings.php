@@ -57,6 +57,9 @@ return function (ContainerBuilder $containerBuilder) {
     $timeslotSetting = include_once __DIR__ . "/../src/Module/Timeslot/setting.php";
     $timeslotSetting($setting);
 
+    $restaurantSetting = include_once __DIR__ . "/../src/Module/Restaurant/setting.php";
+    $restaurantSetting($setting);
+
     // Global Settings Object
     $containerBuilder->addDefinitions($setting);
 };
