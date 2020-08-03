@@ -55,7 +55,6 @@ class UserRepository implements UserRepositoryInterface {
                 switch (true) {
                     case $user->getStatus() === UserEntity::$STATUS_NOT_VERIFY:
                         throw new UserNotEnableException(
-                            //json_encode(["suca" => "suca"]),
                         "",
                             401);
                         break;

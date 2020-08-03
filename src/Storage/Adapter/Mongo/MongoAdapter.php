@@ -111,7 +111,9 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
     public function getAll(array $search = null): ResultSetInterface {
         $resultSet = clone $this->getResultSet();
         return $resultSet->setDataSource(
-            $this->getCollection()->find($this->search($search ?  $search : []))
+            $this->searchDataSource(
+                $search ?  $search : []
+            )
         );
     }
 
@@ -121,30 +123,49 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
     public function getPage($page = 1, $itemPerPage = 10, $search = null): ResultSetPaginateInterface {
 
         $resultSet = clone $this->getResultSetPaginate();
+
+
         return $resultSet->setPage($page)
             ->setItemPerPage($itemPerPage)
             ->setDataSource(
-                $this->getCollection()->find($this->search($search ?  $search : []))
-                    ->limit($itemPerPage)
-                    ->skip(($page-1)*$itemPerPage)
-        );
+                $this->searchDataSource(
+                    $search ?  $search : [],
+                    $itemPerPage,
+                    ($page-1)*$itemPerPage
+                )
+            );
     }
 
     /**
      * @param $search
-     * @return mixed
-     * @throws \MongoException
+     * @param null $limit
+     * @param null $skip
+     * @return \MongoCursor
+     * @throws \MongoCursorException
      */
-    public function search($search) {
+    protected function searchDataSource(array $search, $limit = null, $skip = null) {
 
         foreach ($search as $key => $value) {
-
-            if (is_string($value)) {
-                $search[$key] = new \MongoRegex('/.*' . $value . '.*/');;
+            switch ($key) {
+                case 'page':
+                case  'item-per-page':
+                    unset($search[$key]);
+                    break;
             }
         }
 
-        return $search;
-    }
+        $dataSource = $this->getCollection()->find(
+            $search
+        );
 
+        if ($limit !== null) {
+            $dataSource->limit($limit);
+        }
+
+        if ($skip !== null) {
+            $dataSource->skip($skip);
+        }
+
+        return $dataSource;
+    }
 }

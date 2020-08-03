@@ -28,6 +28,9 @@ class MenuEntity implements EntityInterface
      */
     protected $organization;
 
+    /**
+     * MenuEntity constructor.
+     */
     public function __construct() {
         $this->organization = new Reference();
     }

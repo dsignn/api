@@ -107,13 +107,19 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addStrategy('activationCode', new HydratorStrategy($activationCode, new SingleEntityPrototype(new ActivationCode())));
 
             $organizationHydrator = new ClassMethodsHydrator();
-            $organizationHydrator->addStrategy('id', new ClosureStrategy(function ($data) {
+            $organizationHydrator->addStrategy('id', new ClosureStrategy(
+                function ($data) {
+                    return $data;
+                },
+                function ($data) {
 
-                if ($data instanceof MongoId) {
-                    $data = $data->__toString();
+                    if ($data instanceof \MongoId) {
+                        $data = $data->__toString();
+                    }
+                    return $data;
                 }
-                return $data;
-            }));
+            ));
+
             $hydrator->addStrategy('organizations', new HydratorArrayStrategy($organizationHydrator, new SingleEntityPrototype(new Reference())));
 
 
@@ -135,6 +141,7 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addStrategy('activationCode', new HydratorStrategy($activationCode, new SingleEntityPrototype(new ActivationCode())));
 
             $organizationHydrator = new ClassMethodsHydrator();
+            $organizationHydrator->addStrategy('id', new MongoIdStrategy());
             $hydrator->addStrategy('organizations', new HydratorArrayStrategy($organizationHydrator, new SingleEntityPrototype(new Reference())));
 
             return $hydrator;
@@ -154,6 +161,10 @@ return function (ContainerBuilder $containerBuilder) {
             $recoverPasswordHydrator = new ClassMethodsHydrator();
             $recoverPasswordHydrator->addStrategy('date', new MongoDateStrategy());
             $hydrator->addStrategy('recoverPassword', new HydratorStrategy($recoverPasswordHydrator, new SingleEntityPrototype(new RecoverPassword())));
+
+            $organizationHydrator = new ClassMethodsHydrator();
+            $organizationHydrator->addStrategy('id', new MongoIdStrategy());
+            $hydrator->addStrategy('organizations', new HydratorArrayStrategy($organizationHydrator, new SingleEntityPrototype(new Reference())));
 
             return $hydrator;
         },
@@ -187,7 +198,7 @@ return function (ContainerBuilder $containerBuilder) {
             // Password field
             $password = $password = new Input('password');
             $password->getValidatorChain()->attach(new StringLength([
-                'min' => 8,
+                'min' => 4,
                 'max' => 12
             ]));
 

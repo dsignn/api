@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+use App\Middleware\Authentication\AuthenticationMiddleware;
+use App\Middleware\Authorization\AuthorizationMiddleware;
 use App\Module\Restaurant\Controller\MenuController;
 use App\Module\Restaurant\Controller\RpcMenuController;
 use App\Module\Timeslot\Controller\TimeslotController;
@@ -23,7 +25,8 @@ return function (App $app) {
 
     })
         //->add($app->getContainer()->get(ValidationMiddleware::class))
-        //->add($app->getContainer()->get(AuthenticationMiddleware::class))
+        ->add($app->getContainer()->get(AuthorizationMiddleware::class))
+        ->add($app->getContainer()->get(AuthenticationMiddleware::class))
     ;
 
     $app->get('/restaurant-menu/{slug}',  [RpcMenuController::class, 'rpc']);

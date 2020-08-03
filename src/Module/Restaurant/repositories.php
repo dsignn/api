@@ -10,6 +10,7 @@ use App\Hydrator\Strategy\NamingStrategy\CamelCaseStrategy;
 use App\Module\Monitor\Entity\MonitorReference;
 use App\Module\Restaurant\Entity\Embedded\MenuItem;
 use App\Module\Restaurant\Entity\MenuEntity;
+use App\Module\Restaurant\Storage\Adapeter\Mongo\MenuMongoAdapter;
 use App\Module\Restaurant\Storage\MenuStorage;
 use App\Module\Restaurant\Storage\MenuStorageInterface;
 use App\Module\Timeslot\Entity\TimeslotEntity;
@@ -43,7 +44,7 @@ return function (ContainerBuilder $containerBuilder) {
             $resultSetPaginator->setHydrator($hydrator);
             $resultSetPaginator->setEntityPrototype($c->get('MenuEntityPrototype'));
 
-            $mongoAdapter = new MongoAdapter($c->get(MongoClient::class), $settings['storage']['name'], $serviceSetting['collection']);
+            $mongoAdapter = new MenuMongoAdapter($c->get(MongoClient::class), $settings['storage']['name'], $serviceSetting['collection']);
             $mongoAdapter->setResultSet($resultSet);
             $mongoAdapter->setResultSetPaginate($resultSetPaginator);
 
@@ -59,6 +60,7 @@ return function (ContainerBuilder $containerBuilder) {
 
             $menuItemHydrator = new ClassMethodsHydrator();
             $menuItemHydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
+            $menuItemHydrator->addStrategy('_id', new MongoIdStrategy());
 
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
@@ -73,6 +75,7 @@ return function (ContainerBuilder $containerBuilder) {
 
             $menuItemHydrator = new ClassMethodsHydrator();
             $menuItemHydrator->setNamingStrategy(new CamelCaseStrategy());
+            $menuItemHydrator->addStrategy('_id', new MongoIdStrategy());
 
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new CamelCaseStrategy());

@@ -179,10 +179,11 @@ class RestController implements RestControllerInterface
      */
     public function paginate(Request $request, Response $response) {
 
-        $query = $request->getQueryParams();
+        $filter = $request->getAttribute('app-data-filter');
+        $query =  array_merge($filter ? $filter : [], $request->getQueryParams());
         $page = isset($query['page']) ? intval($query['page']) ? intval($query['page']) : 1 : 1;
         $itemPerPage = isset($query['item-per-page']) ? intval($query['item-per-page']) ? intval($query['item-per-page']) : 10 : 10;
-        $pagination = $this->storage->getPage($page, $itemPerPage);
+        $pagination = $this->storage->getPage($page, $itemPerPage, $query);
 
         $acceptService = $this->getAcceptService($request);
         return $acceptService->transformAccept($response, $pagination);
