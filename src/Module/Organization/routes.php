@@ -35,5 +35,7 @@ return function (App $app) {
         //->add($app->getContainer()->get(AuthenticationMiddleware::class))
     ;
 
+    $app->options('/generate-qrcode/{id:[0-9a-fA-F]{24}}',  [OptionController::class, 'options']);
+
     $app->get('/generate-qrcode/{id:[0-9a-fA-F]{24}}', [GenerateQrCodeRpc::class, 'rpc']);
 };

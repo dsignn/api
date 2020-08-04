@@ -34,6 +34,9 @@ return function (&$setting) {
                 'validation' => [
                     '/organization' => [
                         'POST' => 'PostOrganizationValidator'
+                    ],
+                    '/organization/{id:[0-9a-fA-F]{24}}' => [
+                        'PUT' => 'PutOrganizationValidator'
                     ]
                 ],
             ]

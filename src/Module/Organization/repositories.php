@@ -30,6 +30,7 @@ use Laminas\InputFilter\Input;
 use Laminas\InputFilter\InputFilter;
 use Laminas\Validator\EmailAddress;
 use Psr\Container\ContainerInterface;
+use function DI\get;
 
 return function (ContainerBuilder $containerBuilder) {
 
@@ -58,6 +59,7 @@ return function (ContainerBuilder $containerBuilder) {
             $storage->setEntityPrototype($c->get('OrganizationEntityPrototype'));
 
             $storage->getEventManager()->attach(Storage::$BEFORE_SAVE, new SluggerNameEvent($c->get(SlugifyInterface::class)));
+            $storage->getEventManager()->attach(Storage::$BEFORE_UPDATE, new SluggerNameEvent($c->get(SlugifyInterface::class)));
             return $storage;
         }
     ])->addDefinitions([
@@ -94,6 +96,27 @@ return function (ContainerBuilder $containerBuilder) {
             return $inputFilter;
         }
     ])->addDefinitions([
+        'PutOrganizationValidator' => function(ContainerInterface $c) {
+
+            $inputFilter = new InputFilter();
+
+            // Name field
+            $name = new Input('name');
+
+            $name->getFilterChain()
+                ->attach(new StringToLower());
+
+            $name->getValidatorChain()
+                ->attach($c->get(UniqueNameOrganization::class)->setFindIdInRequest(true));
+
+            $inputFilter->add($name);
+
+            $qrCode = new Input('qrCode');
+            $inputFilter->add($qrCode);
+
+            return $inputFilter;
+        }
+    ])->addDefinitions([
         'StorageOrganizationEntityHydrator' => function(ContainerInterface $c) {
 
             $hydrator = new ClassMethodsHydrator();
@@ -109,7 +132,7 @@ return function (ContainerBuilder $containerBuilder) {
         }
     ])->addDefinitions([
         UniqueNameOrganization::class => function(ContainerInterface $c) {
-            return new UniqueNameOrganization($c->get(OrganizationStorageInterface::class));
+            return new UniqueNameOrganization($c->get(OrganizationStorageInterface::class), $c);
         }
     ])->addDefinitions([
         SlugifyInterface::class => function(ContainerInterface $c) {

@@ -153,7 +153,8 @@ class GenerateQrCodeRpc implements RpcControllerInterface {
         );
         $writer = new Writer($renderer);
         // TODO url from config
-        $string =  $renderer->render(Encoder::encode($this->url . $entity->getNormalizeName(),  ErrorCorrectionLevel::L()));
+
+        $string =  $renderer->render(Encoder::encode($this->url . '/' . $entity->getNormalizeName(),  ErrorCorrectionLevel::L()));
 
         $path = $this->tmp . "/" . uniqid() . '.png';
         $im = imagecreatefromstring($string);

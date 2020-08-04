@@ -49,10 +49,10 @@ class ValidationMiddleware implements Middleware {
             return $handler->handle($request);
         }
 
-        return $handler->handle($request->withAttribute(
-            'app-validation',
-            $this->getValidationFilter($path, $method)
-        ));
+        $request = $request->withAttribute('app-validation', $this->getValidationFilter($path, $method));
+        $this->container->set('Request', $request);
+
+        return $handler->handle($request);
     }
 
     /**

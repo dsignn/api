@@ -55,6 +55,7 @@ $displayErrorDetails = $container->get('settings')['displayErrorDetails'];
 // Create Request object from globals
 $serverRequestCreator = ServerRequestCreatorFactory::create();
 $request = $serverRequestCreator->createServerRequestFromGlobals();
+$container->set('Request', $request);
 
 // Create Error Handler
 $responseFactory = $app->getResponseFactory();
