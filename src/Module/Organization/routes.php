@@ -25,6 +25,8 @@ return function (App $app) {
 
         $group->put('/{id:[0-9a-fA-F]{24}}',  [OrganizationController::class, 'put']);
 
+        $group->options('/{id:[0-9a-fA-F]{24}}', [OrganizationController::class, 'options']);
+
         $group->delete('/{id:[0-9a-fA-F]{24}}',  [OrganizationController::class, 'delete']);
 
         $group->get('/all',  [AllRpcOrganizationController::class, 'rpc']);

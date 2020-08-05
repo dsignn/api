@@ -149,10 +149,27 @@ class RestController implements RestControllerInterface
             return $response->withStatus(404);
         }
 
-        /**
-         * TODO override total entity?? REST complient
-         */
-        $this->storage->getHydrator()->hydrate($request->getParsedBody(), $entity);
+        $data = $request->getParsedBody();
+
+        if ($request->getAttribute('app-validation')) {
+            /** @var InputFilterInterface $validator */
+            $validator = $request->getAttribute('app-validation');
+            $validator->setData($data);
+            if (!$validator->isValid()) {
+                $acceptService = $this->getAcceptService($request);
+                $response = $acceptService->transformAccept(
+                    $response,
+                    ['errors' => $validator->getMessages()]
+                );
+                return $response->withStatus(422);
+            }
+
+            $data = $validator->getValues();
+        }
+
+        $this->storage->getHydrator()->hydrate($data, $entity);
+        $entity->setId($id);
+
         $this->storage->update($entity);
 
         $acceptService = $this->getAcceptService($request);

@@ -5,6 +5,7 @@ namespace App\Module\Resource\Controller;
 
 use App\Controller\RestControllerInterface;
 use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
+use App\Module\Resource\Entity\AbstractResourceEntity;
 use App\Module\Resource\Entity\Embedded\Dimension;
 use App\Module\Resource\Entity\ImageResourceEntity;
 use App\Module\Resource\Entity\VideoResourceEntity;
@@ -143,7 +144,65 @@ class ResourceController implements RestControllerInterface {
     }
 
     public function patch(Request $request, Response $response) {
-        throw new \Exception('TODO implements');
+        $requestParams = RequestParser::parse();
+
+        $id = $request->getAttribute('__route__')->getArgument('id');
+        /** @var AbstractResourceEntity $entity */
+        $entity = $this->storage->get($id);
+
+        if (!$entity) {
+            return $response->withStatus(404);
+        }
+
+        $data = array_merge($requestParams->files, $requestParams->params);
+
+        if ($request->getAttribute('app-validation')) {
+            /** @var InputFilterInterface $validator */
+            $validator = $request->getAttribute('app-validation');
+            $validator->setData($data);
+            if (!$validator->isValid()) {
+                $acceptService = $this->getAcceptService($request);
+                $response = $acceptService->transformAccept(
+                    $response,
+                    ['errors' => $validator->getMessages()]
+                );
+                return $response->withStatus(422);
+            }
+
+            $dataFilter = $validator->getValues();
+            foreach ($dataFilter as $key => $value) {
+                if(!isset($data[$key])) {
+                    unset($dataFilter[$key]);
+                }
+
+            }
+            $data = $dataFilter;
+        }
+
+        if (isset($data['file'])) {
+            $data['size'] = filesize($data['file']['tmp_name']);
+            $data['mimeType'] = $data['file']['type'];
+            $data['src'] = $data['file']['tmp_name'];
+            unset($data['file']);
+        }
+
+        /** @var AbstractResourceEntity $dataEntity */
+        $dataEntity = $this->storage->getEntityPrototype()->getPrototype($data);
+        if ($dataEntity !== null && !($dataEntity instanceof $entity)) {
+            $this->storage->getHydrator()->hydrate($data, $dataEntity);
+            $dataEntity->setId($entity->getId());
+            $dataEntity->setS3path($entity->getS3path());
+            $dataEntity->setOrganizationReference($entity->getOrganizationReference());
+            $entity = $dataEntity;
+        } else {
+            $data['mimeType'] = $entity->getMimeType();
+            $this->storage->getHydrator()->hydrate($data, $entity);
+        }
+
+        $this->storage->update($entity);
+
+        $acceptService = $this->getAcceptService($request);
+        return $acceptService->transformAccept($response, $entity);
     }
 
     /**
@@ -198,6 +257,6 @@ class ResourceController implements RestControllerInterface {
      * @return mixed|Response
      */
     public function options(Request $request, Response $response) {
-        return $response;
+        return $response->withStatus(200);
     }
 }

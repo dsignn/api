@@ -59,7 +59,15 @@ return function (&$setting) {
                         'ffmpeg.binaries'  => '/usr/bin/ffmpeg',
                         'ffprobe.binaries'  => '/usr/bin/ffprobe',
                     ]
-                ]
+                ],
+                'validation' => [
+                    '/resource' => [
+                        'POST' => 'ResourceValidator'
+                    ],
+                    '/resource/{id:[0-9a-fA-F]{24}}' => [
+                        'PATCH' => 'ResourceValidator'
+                    ]
+                ],
             ]
         ]
     );

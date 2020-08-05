@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 
+use App\Middleware\Validation\ValidationMiddleware;
 use App\Module\Resource\Controller\AllRpcResourceController;
 use App\Module\Resource\Controller\ResourceController;
 use Slim\App;
@@ -19,7 +20,7 @@ return function (App $app) {
 
         $group->post('',  [ResourceController::class, 'post']);
 
-        $group->put('/{id:[0-9a-fA-F]{24}}',  [ResourceController::class, 'put']);
+        $group->patch('/{id:[0-9a-fA-F]{24}}',  [ResourceController::class, 'patch']);
 
         $group->options('/{id:[0-9a-fA-F]{24}}',  [ResourceController::class, 'options']);
 
@@ -28,7 +29,7 @@ return function (App $app) {
         $group->get('/all',  [AllRpcResourceController::class, 'rpc']);
 
     })
-        //->add($app->getContainer()->get(ValidationMiddleware::class))
+        ->add($app->getContainer()->get(ValidationMiddleware::class))
         //->add($app->getContainer()->get(AuthenticationMiddleware::class))
     ;
 };

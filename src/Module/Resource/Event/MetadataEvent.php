@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Module\Resource\Event;
 
+use App\Module\Resource\Entity\AbstractResourceEntity;
 use App\Module\Resource\Entity\Embedded\Dimension;
 use App\Module\Resource\Entity\ImageResourceEntity;
 use App\Module\Resource\Entity\VideoResourceEntity;
@@ -34,23 +35,38 @@ class MetadataEvent {
      */
     public function __invoke(EventInterface $event) {
 
+        /** @var AbstractResourceEntity $entity */
+        $entity = $event->getTarget();
+        if ($this->skipProbe($entity)) {
+            return;
+        }
+
         $ffprobe = FFProbe::create([
             'ffmpeg.binaries'  => '/usr/bin/ffmpeg',
             'ffprobe.binaries'  => '/usr/bin/ffprobe',
         ]);
 
         switch (true) {
-            case $event->getTarget() instanceof ImageResourceEntity === true:
-                /** @var FFProbe\DataMapping\Stream $stream */
-                $stream = $ffprobe->streams($event->getTarget()->getSrc())->videos()->first();
-                $event->getTarget()->setDimension(new Dimension($stream->get('width'), $stream->get('height')));
+            case $entity instanceof ImageResourceEntity === true:
+                /** @var ImageResourceEntity $entity */
+                $stream = $ffprobe->streams($entity->getSrc())->videos()->first();
+                $entity->setDimension(new Dimension($stream->get('width'), $stream->get('height')));
                 break;
-            case $event->getTarget() instanceof VideoResourceEntity === true:
-                $stream = $ffprobe->streams($event->getTarget()->getSrc())->videos()->first();
-                $event->getTarget()->setDimension(new Dimension($stream->get('width'), $stream->get('height')));
-                $event->getTarget()->setDuration((float) $stream->get('duration'));
-                $event->getTarget()->setAspectRatio($stream->get('sample_aspect_ratio'));
+            case $entity instanceof VideoResourceEntity === true:
+                /** @var VideoResourceEntity $entity */
+                $stream = $ffprobe->streams($entity->getSrc())->videos()->first();
+                $entity->setDimension(new Dimension($stream->get('width'), $stream->get('height')));
+                $entity->setDuration((float) $stream->get('duration'));
+                $entity->setAspectRatio($stream->get('sample_aspect_ratio'));
                 break;
         }
+    }
+
+    /**
+     * @param AbstractResourceEntity $entity
+     * @return bool
+     */
+    protected function skipProbe(AbstractResourceEntity $entity) {
+        return strpos($entity->getSrc(), "http") === false ? false : true;
     }
 }

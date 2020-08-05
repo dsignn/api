@@ -8,6 +8,7 @@ use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\UnderscoreNamingStrategy;
 use App\Hydrator\Strategy\NamingStrategy\CamelCaseStrategy;
+use App\Module\Organization\Validator\UniqueNameOrganization;
 use App\Module\Resource\Entity\Embedded\Dimension;
 use App\Module\Resource\Entity\ImageResourceEntity;
 use App\Module\Resource\Entity\VideoResourceEntity;
@@ -23,8 +24,11 @@ use App\Storage\Entity\SingleEntityPrototype;
 use App\Storage\Storage;
 use Aws\S3\S3Client;
 use DI\ContainerBuilder;
+use Laminas\Filter\StringToLower;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Hydrator\Strategy\ClosureStrategy;
+use Laminas\InputFilter\Input;
+use Laminas\InputFilter\InputFilter;
 use Psr\Container\ContainerInterface;
 
 return function (ContainerBuilder $containerBuilder) {
@@ -180,6 +184,26 @@ return function (ContainerBuilder $containerBuilder) {
             $client = new S3Client( $setting['client']);
 
             return $client;
+        }
+    ])->addDefinitions([
+        'ResourceValidator' => function(ContainerInterface $c) {
+
+            $inputFilter = new InputFilter();
+
+            // Name field
+            $file = new Input('file');
+            $file->setRequired(false);
+            $inputFilter->add($file);
+
+            $name = new Input('name');
+            $name->setRequired(false);
+            $inputFilter->add($name);
+
+            $tags = new Input('tags');
+            $tags->setRequired(false);
+            $inputFilter->add($tags);
+
+            return $inputFilter;
         }
     ]);
 };
