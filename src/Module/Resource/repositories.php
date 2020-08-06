@@ -14,6 +14,8 @@ use App\Module\Resource\Entity\ImageResourceEntity;
 use App\Module\Resource\Entity\VideoResourceEntity;
 use App\Module\Resource\Event\MetadataEvent;
 use App\Module\Resource\Event\S3UploaderEvent;
+use App\Module\Resource\Filter\FileUnpacking;
+use App\Module\Resource\Filter\StringToArray;
 use App\Module\Resource\Storage\ResourceStorage;
 use App\Module\Resource\Storage\ResourceStorageInterface;
 use App\Storage\Adapter\Mongo\MongoAdapter;
@@ -193,6 +195,7 @@ return function (ContainerBuilder $containerBuilder) {
             // Name field
             $file = new Input('file');
             $file->setRequired(false);
+            $file->getFilterChain()->attach(new FileUnpacking());
             $inputFilter->add($file);
 
             $name = new Input('name');
@@ -201,6 +204,7 @@ return function (ContainerBuilder $containerBuilder) {
 
             $tags = new Input('tags');
             $tags->setRequired(false);
+            $tags->getFilterChain()->attach(new StringToArray());
             $inputFilter->add($tags);
 
             return $inputFilter;

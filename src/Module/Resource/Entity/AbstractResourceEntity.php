@@ -39,7 +39,12 @@ abstract class AbstractResourceEntity implements EntityInterface, OrganizationAw
     /**
      * @var string
      */
-    protected $S3path = '';
+    protected $s3path = '';
+
+    /**
+     * @var array
+     */
+    protected $tags = [];
 
     /**
      * @return string
@@ -113,7 +118,7 @@ abstract class AbstractResourceEntity implements EntityInterface, OrganizationAw
      * @return string
      */
     public function getS3path(): string {
-        return $this->S3path;
+        return $this->s3path;
     }
 
     /**
@@ -121,7 +126,25 @@ abstract class AbstractResourceEntity implements EntityInterface, OrganizationAw
      * @return AbstractResourceEntity
      */
     public function setS3path(string $S3path): AbstractResourceEntity {
-        $this->S3path = $S3path;
+        $this->s3path = $S3path;
         return $this;
     }
+
+    /**
+     * @return array
+     */
+    public function getTags(): array {
+        return $this->tags;
+    }
+
+    /**
+     * @param array $tags
+     * @return AbstractResourceEntity
+     */
+    public function setTags(array $tags): AbstractResourceEntity {
+        $this->tags = $tags;
+        return $this;
+    }
+
+
 }

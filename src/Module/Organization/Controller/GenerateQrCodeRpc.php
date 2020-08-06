@@ -87,7 +87,7 @@ class GenerateQrCodeRpc implements RpcControllerInterface {
         }
 
         $tmpFile = $this->generateQrCode($entity);
-        $method = $entity->getQrCode()->getId() ? 'put' : 'post';
+        $method = $entity->getQrCode()->getId() ? 'patch' : 'post';
 
         try {
            /** @var \GuzzleHttp\Psr7\Response $responseResource */

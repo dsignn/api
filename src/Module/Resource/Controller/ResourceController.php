@@ -16,6 +16,7 @@ use Notihnio\RequestParser\RequestParser;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use function DI\value;
 
 /**
  * Class ResourceController
@@ -79,17 +80,18 @@ class ResourceController implements RestControllerInterface {
 
             $data = $validator->getValues();
         }
+        // TODO REMOVE
+        $data['size'] = filesize($data['file']['src']);
+        $data['mimeType'] = $data['file']['mimeType'];
+        $data['src'] = $data['file']['src'];
+        unset($data['file']);
 
-        $file = $request->getUploadedFiles()['file'];
-        $data = $request->getParsedBody();
-        unset( $data['dimension'] ); // TODO remove when add validation
-        $data['size'] = $file->getSize();
-        $data['mimeType'] = $file->getClientMediaType();
-        $data['src'] = $file->getStream()->getMetadata('uri');
+        $entity = $this->storage->getHydrator()->hydrate(
+            $data,
+            $this->storage->getEntityPrototype()->getPrototype($data)
+        );
 
-        $entity = $this->storage->getHydrator()->hydrate($data, $this->storage->getEntityPrototype()->getPrototype($data));
         $this->storage->save($entity);
-
         $acceptService = $this->getAcceptService($request);
         return $acceptService->transformAccept($response, $entity);
     }
@@ -125,11 +127,10 @@ class ResourceController implements RestControllerInterface {
 
             $data = $validator->getValues();
         }
-
-
-        $data['size'] = filesize($data['file']['tmp_name']);
-        $data['mimeType'] = $data['file']['type'];
-        $data['src'] = $data['file']['tmp_name'];
+        // TODO REMOVE
+        $data['size'] = filesize($data['file']['src']);
+        $data['mimeType'] = $data['file']['mimeType'];
+        $data['src'] = $data['file']['src'];
         unset($data['file']);
 
         $putEntity = $this->storage->getEntityPrototype()->getPrototype($data);
@@ -180,9 +181,10 @@ class ResourceController implements RestControllerInterface {
         }
 
         if (isset($data['file'])) {
-            $data['size'] = filesize($data['file']['tmp_name']);
-            $data['mimeType'] = $data['file']['type'];
-            $data['src'] = $data['file']['tmp_name'];
+            // TODO REMOVE
+            $data['size'] = filesize($data['file']['src']);
+            $data['mimeType'] = $data['file']['mimeType'];
+            $data['src'] = $data['file']['src'];
             unset($data['file']);
         }
 
