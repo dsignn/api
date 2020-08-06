@@ -37,6 +37,11 @@ class MenuItem {
     protected $new = 0;
 
     /**
+     * @var
+     */
+    protected $status;
+
+    /**
      * @var array<ReferenceInterface>
      */
     protected $photos = [];
@@ -138,4 +143,22 @@ class MenuItem {
         $this->photos = $photos;
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getStatus() {
+        return $this->status;
+    }
+
+    /**
+     * @param $status
+     * @return MenuItem
+     */
+    public function setStatus($status): MenuItem {
+        $this->status = $status;
+        return  $this;
+    }
+
+
 }

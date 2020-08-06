@@ -74,7 +74,35 @@ return function (ContainerBuilder $containerBuilder) {
                 }
                 return $data;
             }));
-            $hydrator->addStrategy('qrCode', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Reference())));
+
+            $qrcodenHydrator = new ClassMethodsHydrator();
+            $qrcodenHydrator->addStrategy('id', new ClosureStrategy(
+                function ($data) {
+                    return $data;
+                },
+                function ($data) {
+
+                    if ($data instanceof \MongoId) {
+                        $data = $data->__toString();
+                    }
+                    return $data;
+                }
+            ));
+
+            $hydrator->addStrategy('qrCode', new HydratorStrategy($qrcodenHydrator, new SingleEntityPrototype(new Reference())));
+            return $hydrator;
+        }
+    ])->addDefinitions([
+        'StorageOrganizationEntityHydrator' => function(ContainerInterface $c) {
+
+            $hydrator = new ClassMethodsHydrator();
+            $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
+            $hydrator->addStrategy('id', new MongoIdStrategy());
+
+            $qrcodenHydrator = new ClassMethodsHydrator();
+            $qrcodenHydrator->addStrategy('id', new MongoIdStrategy());
+            $hydrator->addStrategy('qrCode', new HydratorStrategy($qrcodenHydrator, new SingleEntityPrototype(new Reference())));
+
             return $hydrator;
         }
     ])->addDefinitions([
@@ -91,7 +119,7 @@ return function (ContainerBuilder $containerBuilder) {
             $name->getValidatorChain()
                 ->attach($c->get(UniqueNameOrganization::class));
 
-             $inputFilter->add($name);
+            $inputFilter->add($name);
 
             return $inputFilter;
         }
@@ -115,16 +143,6 @@ return function (ContainerBuilder $containerBuilder) {
             $inputFilter->add($qrCode);
 
             return $inputFilter;
-        }
-    ])->addDefinitions([
-        'StorageOrganizationEntityHydrator' => function(ContainerInterface $c) {
-
-            $hydrator = new ClassMethodsHydrator();
-            $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
-            $hydrator->addStrategy('id', new MongoIdStrategy());
-            $hydrator->addStrategy('qrCode', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Reference())));
-
-            return $hydrator;
         }
     ])->addDefinitions([
         'OrganizationEntityPrototype' => function(ContainerInterface $c) {

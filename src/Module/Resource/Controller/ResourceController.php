@@ -101,8 +101,6 @@ class ResourceController implements RestControllerInterface {
      */
     public function put(Request $request, Response $response) {
 
-        $requestParams = RequestParser::parse();
-
         $id = $request->getAttribute('__route__')->getArgument('id');
         $entity = $this->storage->get($id);
 
@@ -110,6 +108,7 @@ class ResourceController implements RestControllerInterface {
             return $response->withStatus(404);
         }
 
+        $requestParams = RequestParser::parse();
         $data = array_merge($requestParams->files, $requestParams->params);
 
         if ($request->getAttribute('app-validation')) {
@@ -145,9 +144,6 @@ class ResourceController implements RestControllerInterface {
     }
 
     public function patch(Request $request, Response $response) {
-        $requestParams = RequestParser::parse();
-        var_dump($requestParams);
-        die();
 
         $id = $request->getAttribute('__route__')->getArgument('id');
         /** @var AbstractResourceEntity $entity */
@@ -157,6 +153,7 @@ class ResourceController implements RestControllerInterface {
             return $response->withStatus(404);
         }
 
+        $requestParams = RequestParser::parse();
         $data = array_merge($requestParams->files, $requestParams->params);
 
         if ($request->getAttribute('app-validation')) {
