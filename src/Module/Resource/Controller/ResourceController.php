@@ -146,6 +146,8 @@ class ResourceController implements RestControllerInterface {
 
     public function patch(Request $request, Response $response) {
         $requestParams = RequestParser::parse();
+        var_dump($requestParams);
+        die();
 
         $id = $request->getAttribute('__route__')->getArgument('id');
         /** @var AbstractResourceEntity $entity */

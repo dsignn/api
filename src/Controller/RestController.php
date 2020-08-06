@@ -8,6 +8,7 @@ use App\Storage\Event\PreProcess;
 use App\Storage\Storage;
 use App\Storage\StorageInterface;
 use Laminas\InputFilter\InputFilterInterface;
+use Notihnio\RequestParser\RequestParser;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -66,7 +67,7 @@ class RestController implements RestControllerInterface
      */
     public function post(Request $request, Response $response) {
 
-        $data = array_merge($request->getParsedBody(), $request->getUploadedFiles());
+        $data = $this->getData($request);
 
         if ($request->getAttribute('app-validation')) {
             /** @var InputFilterInterface $validator */
@@ -109,7 +110,7 @@ class RestController implements RestControllerInterface
             return $response->withStatus(404);
         }
 
-        $data = $request->getParsedBody();
+        $data = $this->getData($request);
 
         if ($request->getAttribute('app-validation')) {
             /** @var InputFilterInterface $validator */
@@ -149,7 +150,7 @@ class RestController implements RestControllerInterface
             return $response->withStatus(404);
         }
 
-        $data = $request->getParsedBody();
+        $data = $this->getData($request);
 
         if ($request->getAttribute('app-validation')) {
             /** @var InputFilterInterface $validator */
@@ -214,5 +215,21 @@ class RestController implements RestControllerInterface
      */
     public function options(Request $request, Response $response) {
         return $response;
+    }
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    protected function getData(Request $request) {
+
+        $data = array_merge($request->getParsedBody(), $request->getUploadedFiles());
+
+        if (count($data) === 0) {
+            $requestParams = RequestParser::parse();
+            $data = array_merge($requestParams->files, $requestParams->params);
+        }
+
+        return $data;
     }
 }
