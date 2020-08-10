@@ -10,4 +10,7 @@ return function (Application $app, ContainerInterface $container) {
 
     $userCommands = include_once __DIR__ . "/../src/Module/User/commands.php";
     $userCommands($app, $container);
+
+    $restaurantCommands = include_once __DIR__ . "/../src/Module/Restaurant/commands.php";
+    $restaurantCommands($app, $container);
 };

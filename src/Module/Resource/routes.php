@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-
 use App\Middleware\Validation\ValidationMiddleware;
 use App\Module\Resource\Controller\AllRpcResourceController;
 use App\Module\Resource\Controller\ResourceController;

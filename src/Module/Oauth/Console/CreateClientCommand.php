@@ -37,7 +37,6 @@ class CreateClientCommand extends SymfonyCommand {
      * CreateClientCommand constructor.
      * @param StorageInterface $storage
      * @param CryptoInterface $crypto
-     * @param HydratorInterface|null $hydrator
      */
     public function __construct(StorageInterface $storage, CryptoInterface $crypto) {
 

@@ -84,9 +84,11 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
      * @inheritDoc
      */
     public function update(array $data): array {
+
         $dbInfo = $this->getCollection()->update(
             ["_id" => $data["_id"] ? $data['_id'] :  ''],
-            $data
+            $data,
+            ['upsert' => true]
         );
         if ($dbInfo['errmsg'] !== null) {
             throw new \MongoException($dbInfo['errmsg']);

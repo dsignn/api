@@ -2,34 +2,67 @@
 declare(strict_types=1);
 
 use App\Crypto\CryptoOpenSsl;
+use App\Hydrator\Filter\PropertyFilter;
 use App\Hydrator\Strategy\HydratorArrayStrategy;
 use App\Hydrator\Strategy\HydratorStrategy;
 use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
 use App\Hydrator\Strategy\NamingStrategy\CamelCaseStrategy;
 use App\Module\Monitor\Entity\MonitorReference;
+use App\Module\Restaurant\Entity\CategoryEntity;
 use App\Module\Restaurant\Entity\Embedded\MenuItem;
 use App\Module\Restaurant\Entity\MenuEntity;
 use App\Module\Restaurant\Storage\Adapeter\Mongo\MenuMongoAdapter;
+use App\Module\Restaurant\Storage\MenuCategoryStorage;
+use App\Module\Restaurant\Storage\MenuCategoryStorageInterface;
 use App\Module\Restaurant\Storage\MenuStorage;
 use App\Module\Restaurant\Storage\MenuStorageInterface;
 use App\Module\Timeslot\Entity\TimeslotEntity;
 use App\Module\Timeslot\Storage\TimeslotStorage;
 use App\Module\Timeslot\Storage\TimeslotStorageInterface;
 use App\Storage\Adapter\Mongo\MongoAdapter;
+use App\Storage\Storage;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydratePaginateResultSet;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
 use App\Storage\Entity\Reference;
 use App\Storage\Entity\SingleEntityPrototype;
 use DI\ContainerBuilder;
 use Laminas\Hydrator\ClassMethodsHydrator;
+use Laminas\Hydrator\Filter\FilterComposite;
+use Laminas\Hydrator\Filter\MethodMatchFilter;
+use Laminas\Hydrator\ObjectPropertyHydrator;
 use Laminas\Hydrator\Strategy\ClosureStrategy;
 use Psr\Container\ContainerInterface;
 
 return function (ContainerBuilder $containerBuilder) {
 
     $containerBuilder->addDefinitions([
+        MenuCategoryStorageInterface::class => function(ContainerInterface $c) {
+            $settings = $c->get('settings');
+            $serviceSetting = $settings['storage']['menu-category'];
 
+            $hydrator = $c->get('StorageMenuCategoryEntityHydrator')
+            ;
+            $resultSet = new MongoHydrateResultSet();
+            $resultSet->setHydrator($hydrator);
+            $resultSet->setEntityPrototype($c->get('MenuCategoryEntityPrototype'));
+
+            $resultSetPaginator = new MongoHydratePaginateResultSet();
+            $resultSetPaginator->setHydrator($hydrator);
+            $resultSetPaginator->setEntityPrototype($c->get('MenuCategoryEntityPrototype'));
+
+            $mongoAdapter = new MongoAdapter($c->get(MongoClient::class), $settings['storage']['name'], $serviceSetting['collection']);
+            $mongoAdapter->setResultSet($resultSet);
+            $mongoAdapter->setResultSetPaginate($resultSetPaginator);
+
+            $storage = new MenuCategoryStorage($mongoAdapter);
+            $storage->setHydrator($hydrator);
+            $storage->setEntityPrototype($c->get('MenuCategoryEntityPrototype'));
+
+            return $storage;
+
+        }
+    ])->addDefinitions([
         MenuStorageInterface::class => function(ContainerInterface $c) {
             $settings = $c->get('settings');
             $serviceSetting = $settings['storage']['menu'];
@@ -54,6 +87,18 @@ return function (ContainerBuilder $containerBuilder) {
 
 
             return $storage;
+        }
+    ])->addDefinitions([
+        'RpcMenuCategoryEntityHydrator' => function(ContainerInterface $c) {
+            $hydrator = new ObjectPropertyHydrator();
+            $hydrator->addFilter('_id', new PropertyFilter('_id'),  FilterComposite::CONDITION_AND);
+            return $hydrator;
+        }
+    ])->addDefinitions([
+        'StorageMenuCategoryEntityHydrator' => function(ContainerInterface $c) {
+
+            $hydrator = new ObjectPropertyHydrator();
+            return $hydrator;
         }
     ])->addDefinitions([
         'StorageMenuEntityHydrator' => function(ContainerInterface $c) {
@@ -96,5 +141,9 @@ return function (ContainerBuilder $containerBuilder) {
         'MenuEntityPrototype' => function(ContainerInterface $c) {
             return new SingleEntityPrototype(new MenuEntity());
         }
-    ]);;
+    ])->addDefinitions([
+        'MenuCategoryEntityPrototype' => function(ContainerInterface $c) {
+            return new SingleEntityPrototype(new CategoryEntity());
+        }
+    ]);
 };

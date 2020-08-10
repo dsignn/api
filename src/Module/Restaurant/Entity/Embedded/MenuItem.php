@@ -11,15 +11,19 @@ use App\Storage\Entity\ReferenceInterface;
  */
 class MenuItem {
 
-    /**
-     * @var string
-     */
-    protected $name;
+    const STATUS_AVAILABLE = 'available';
+    const STATUS_OVER = 'over';
+    const STATUS_NOT_AVAILABLE = 'not-available';
 
     /**
-     * @var string
+     * @var array
      */
-    protected $description;
+    protected $name = [];
+
+    /**
+     * @var array
+     */
+    protected $description = [];
 
     /**
      * @var string
@@ -47,9 +51,9 @@ class MenuItem {
     protected $photos = [];
 
     /**
-     * @return string
+     * @return array
      */
-    public function getName(): string {
+    public function getName(): array {
         return $this->name;
     }
 
@@ -57,15 +61,15 @@ class MenuItem {
      * @param string $name
      * @return MenuItem
      */
-    public function setName(string $name): MenuItem {
+    public function setName(array $name): MenuItem {
         $this->name = $name;
         return $this;
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getDescription(): string {
+    public function getDescription(): array {
         return $this->description;
     }
 
@@ -73,7 +77,7 @@ class MenuItem {
      * @param string $description
      * @return MenuItem
      */
-    public function setDescription(string $description): MenuItem {
+    public function setDescription(array $description): MenuItem {
         $this->description = $description;
         return $this;
     }
@@ -159,6 +163,4 @@ class MenuItem {
         $this->status = $status;
         return  $this;
     }
-
-
 }

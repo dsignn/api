@@ -19,6 +19,11 @@ class MenuEntity implements EntityInterface
     use EntityTrait;
 
     /**
+     * @var string
+     */
+    protected $name;
+
+    /**
      * @var array<MenuItem>
      */
     protected $items = [];
@@ -27,6 +32,16 @@ class MenuEntity implements EntityInterface
      * @var ReferenceInterface
      */
     protected $organization;
+
+    /**
+     * @var string
+     */
+    protected $backgroundHeader;
+
+    /**
+     * @var string
+     */
+    protected $colorHeader;
 
     /**
      * MenuEntity constructor.
@@ -73,6 +88,54 @@ class MenuEntity implements EntityInterface
      */
     public function setOrganization(ReferenceInterface $organization): MenuEntity {
         $this->organization = $organization;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     * @return MenuEntity
+     */
+    public function setName(string $name): MenuEntity {
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBackgroundHeader(): string {
+        return $this->backgroundHeader;
+    }
+
+    /**
+     * @param string $backgroundHeader
+     * @return MenuEntity
+     */
+    public function setBackgroundHeader(string $backgroundHeader): MenuEntity {
+        $this->backgroundHeader = $backgroundHeader;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getColorHeader(): string {
+        return $this->colorHeader;
+    }
+
+    /**
+     * @param string $colorHeader
+     * @return MenuEntity
+     */
+    public function setColorHeader(string $colorHeader): MenuEntity {
+        $this->colorHeader = $colorHeader;
         return $this;
     }
 }
