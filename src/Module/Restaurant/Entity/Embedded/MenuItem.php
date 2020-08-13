@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Module\Restaurant\Entity\Embedded;
 
+use App\Module\Restaurant\Entity\Embedded\Price\Price;
 use App\Storage\Entity\ReferenceInterface;
 
 /**
@@ -28,7 +29,7 @@ class MenuItem {
     /**
      * @var string
      */
-    protected $category;
+    protected $category = '';
 
     /**
      * @var string
@@ -43,12 +44,19 @@ class MenuItem {
     /**
      * @var
      */
-    protected $status;
+    protected $status = MenuItem::STATUS_AVAILABLE;
 
     /**
      * @var array<ReferenceInterface>
      */
     protected $photos = [];
+
+    /**
+     * MenuItem constructor.
+     */
+    public function __construct() {
+        $this->price = new Price();
+    }
 
     /**
      * @return array
@@ -99,17 +107,17 @@ class MenuItem {
     }
 
     /**
-     * @return string
+     * @return Price
      */
-    public function getPrice(): string {
+    public function getPrice(): Price {
         return $this->price;
     }
 
     /**
-     * @param string $price
+     * @param Price $price
      * @return MenuItem
      */
-    public function setPrice(string $price): MenuItem {
+    public function setPrice(Price $price): MenuItem {
         $this->price = $price;
         return $this;
     }

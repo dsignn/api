@@ -21,7 +21,7 @@ class MenuEntity implements EntityInterface
     /**
      * @var string
      */
-    protected $name;
+    protected $name = '';
 
     /**
      * @var array<MenuItem>
@@ -36,12 +36,17 @@ class MenuEntity implements EntityInterface
     /**
      * @var string
      */
-    protected $backgroundHeader;
+    protected $backgroundHeader = '';
 
     /**
      * @var string
      */
-    protected $colorHeader;
+    protected $colorHeader = '';
+
+    /**
+     * @var bool
+     */
+    protected $enable = false;
 
     /**
      * MenuEntity constructor.
@@ -136,6 +141,22 @@ class MenuEntity implements EntityInterface
      */
     public function setColorHeader(string $colorHeader): MenuEntity {
         $this->colorHeader = $colorHeader;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnable(): bool {
+        return $this->enable;
+    }
+
+    /**
+     * @param bool $enable
+     * @return MenuEntity
+     */
+    public function setEnable(bool $enable): MenuEntity {
+        $this->enable = $enable;
         return $this;
     }
 }

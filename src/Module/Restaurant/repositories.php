@@ -8,9 +8,9 @@ use App\Hydrator\Strategy\HydratorStrategy;
 use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
 use App\Hydrator\Strategy\NamingStrategy\CamelCaseStrategy;
-use App\Module\Monitor\Entity\MonitorReference;
 use App\Module\Restaurant\Entity\CategoryEntity;
 use App\Module\Restaurant\Entity\Embedded\MenuItem;
+use App\Module\Restaurant\Entity\Embedded\Price\Price;
 use App\Module\Restaurant\Entity\MenuEntity;
 use App\Module\Restaurant\Storage\Adapeter\Mongo\MenuMongoAdapter;
 use App\Module\Restaurant\Storage\MenuCategoryStorage;
@@ -27,11 +27,17 @@ use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
 use App\Storage\Entity\Reference;
 use App\Storage\Entity\SingleEntityPrototype;
 use DI\ContainerBuilder;
+use Laminas\Filter\Callback;
+use Laminas\Filter\ToInt;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Hydrator\Filter\FilterComposite;
-use Laminas\Hydrator\Filter\MethodMatchFilter;
+
 use Laminas\Hydrator\ObjectPropertyHydrator;
 use Laminas\Hydrator\Strategy\ClosureStrategy;
+use Laminas\InputFilter\CollectionInputFilter;
+use Laminas\InputFilter\InputFilter;
+use Laminas\InputFilter\Input;
+use Laminas\Validator\NotEmpty;
 use Psr\Container\ContainerInterface;
 
 return function (ContainerBuilder $containerBuilder) {
@@ -106,6 +112,10 @@ return function (ContainerBuilder $containerBuilder) {
             $menuItemHydrator = new ClassMethodsHydrator();
             $menuItemHydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
             $menuItemHydrator->addStrategy('_id', new MongoIdStrategy());
+            $menuItemHydrator->addStrategy('price', new HydratorStrategy(
+                new ClassMethodsHydrator(),
+                new SingleEntityPrototype(new Price()))
+            );
 
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
@@ -121,6 +131,10 @@ return function (ContainerBuilder $containerBuilder) {
             $menuItemHydrator = new ClassMethodsHydrator();
             $menuItemHydrator->setNamingStrategy(new CamelCaseStrategy());
             $menuItemHydrator->addStrategy('_id', new MongoIdStrategy());
+            $menuItemHydrator->addStrategy('price', new HydratorStrategy(
+                    new ClassMethodsHydrator(),
+                    new SingleEntityPrototype(new Price()))
+            );
 
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new CamelCaseStrategy());
@@ -133,7 +147,7 @@ return function (ContainerBuilder $containerBuilder) {
             }));
 
             $hydrator->addStrategy('organization', new HydratorStrategy($menuItemHydrator, new SingleEntityPrototype(new Reference())));
-            $hydrator->addStrategy('items', new HydratorArrayStrategy($menuItemHydrator, new SingleEntityPrototype(new MonitorReference())));
+            $hydrator->addStrategy('items', new HydratorArrayStrategy($menuItemHydrator, new SingleEntityPrototype(new MenuItem())));
 
             return $hydrator;
         }
@@ -144,6 +158,82 @@ return function (ContainerBuilder $containerBuilder) {
     ])->addDefinitions([
         'MenuCategoryEntityPrototype' => function(ContainerInterface $c) {
             return new SingleEntityPrototype(new CategoryEntity());
+        }
+    ])->addDefinitions([
+        'MenuValidation' => function(ContainerInterface $container) {
+
+            $organization = new InputFilter();
+            $input = new Input('id');
+            $organization->add($input, 'id');
+            $input = new Input('collection');
+            $input->setRequired(false);
+            $organization->add($input, 'collection');
+
+            $filter = new Callback([], ['collection' => 'organization']);
+            $filter->setCallback(function ($value) {
+
+                if (!$value) {
+                    $value = 'organization';
+                }
+                return $value;
+            });
+
+            $input->getFilterChain()->attach($filter);
+
+            $price = new InputFilter();
+            $input = new Input('value');
+            $input->getFilterChain()->attach(new ToInt());
+            $price->add($input, 'value');
+
+            $menuItem = new InputFilter();
+            $menuItem->add($price, 'price');
+
+            $input = new Input('name');
+            $menuItem->add($input, 'name');
+
+            $input = new Input('description');
+            $menuItem->add($input, 'description');
+
+            $input = new Input('category');
+            $menuItem->add($input, 'category');
+
+            $input = new Input('status');
+            $menuItem->add($input, 'status');
+
+            $collectionItem = new CollectionInputFilter();
+            $collectionItem->setInputFilter($menuItem);
+
+            $inputFilter = new InputFilter();
+            $inputFilter->add($organization, 'organization');
+            $inputFilter->add($collectionItem, 'items');
+
+            $input = new Input('name');
+            $inputFilter->add($input, 'name');
+
+            $input = new Input('backgroundHeader');
+            $inputFilter->add($input, 'backgroundHeader');
+
+            $input = new Input('colorHeader');
+            $inputFilter->add($input, 'colorHeader');
+
+            $input = new Input('enable');
+            $inputFilter->add($input, 'enable');
+
+            $validator = new NotEmpty([
+                NotEmpty::INTEGER,
+                NotEmpty::FLOAT,
+                NotEmpty::STRING,
+                NotEmpty::ZERO,
+                NotEmpty::EMPTY_ARRAY,
+                NotEmpty::SPACE,
+                NotEmpty::OBJECT,
+                NotEmpty::OBJECT_STRING,
+                NotEmpty::OBJECT_COUNT
+            ]);
+
+            $input->getValidatorChain()->attach($validator);
+
+            return $inputFilter;
         }
     ]);
 };

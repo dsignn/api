@@ -16,13 +16,13 @@ return function (&$setting) {
                     ]
                 ],
                 'contentNegotiation' => [
-                    '/restaurant/{id:[0-9a-fA-F]{24}}/menu' => [
+                    '/menu' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
                             'contentTypeFilter' => ['/application\/json/']
                         ]
                     ],
-                    '/restaurant/{id:[0-9a-fA-F]{24}}/menu/{id:[0-9a-fA-F]{24}}' => [
+                    '/menu/{id:[0-9a-fA-F]{24}}' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
                             'contentTypeFilter' => ['/application\/json/']
@@ -34,7 +34,12 @@ return function (&$setting) {
                             'contentTypeFilter' => ['/application\/json/']
                         ]
                     ],
-                ]
+                ],
+                'validation' => [
+                    '/menu' => [
+                        'POST' => 'MenuValidation'
+                    ]
+                ],
             ]
         ]
     );
