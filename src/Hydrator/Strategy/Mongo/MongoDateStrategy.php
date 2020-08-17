@@ -6,6 +6,7 @@ namespace App\Hydrator\Strategy\Mongo;
 use DateTimeInterface;
 use Laminas\Hydrator\Strategy\StrategyInterface;
 use MongoDate;
+use MongoDB\BSON\UTCDateTime;
 
 /**
  * Class MongoDateStrategy
@@ -32,7 +33,7 @@ class MongoDateStrategy implements StrategyInterface {
     public function extract($value, ?object $object = null) {
 
         if ($value instanceof DateTimeInterface) {
-            $value = new MongoDate($value->getTimestamp());
+            $value = new UTCDateTime($value->getTimestamp());
         }
 
         return $value;
@@ -42,19 +43,28 @@ class MongoDateStrategy implements StrategyInterface {
      * @inheritDoc
      */
     public function hydrate($value, ?array $data) {
-        if ($value instanceof MongoDate) {
-            $dateTime = clone $this->getDatePrototype();
-            switch (true) {
-                case $dateTime instanceof \DateTimeImmutable === true:
-                    /** @var \DateTimeImmutable $dateTime */
-                    $dateTime = \DateTimeImmutable::createFromMutable((new \DateTime())->setTimestamp($value->sec));
-                    break;
-                default:
-                    $dateTime->setTimestamp($value->sec);
-            }
-            $value = $dateTime;
-        }
 
+        $dateTime = clone $this->getDatePrototype();
+        switch (true) {
+            /*
+            case $value instanceof MongoDate === true && $dateTime instanceof \DateTimeImmutable === true:
+                /** @var MongoDate $value
+                $value = \DateTimeImmutable::createFromMutable((new \DateTime())->setTimestamp($value->sec));
+                break;
+            case $value instanceof MongoDate === true && $dateTime instanceof \DateTime === true:
+                /** @var MongoDate $value
+                $value = $dateTime->setTimestamp($value->sec);
+                break;
+            */
+            case $value instanceof UTCDateTime === true && $dateTime instanceof \DateTimeImmutable === true:
+                /** @var UTCDateTime $value */
+                $value = \DateTimeImmutable::createFromMutable($value->toDateTime());
+                break;
+            case $value instanceof UTCDateTime === true && $dateTime instanceof \DateTime === true:
+                /** @var UTCDateTime $value */
+                $value = $value->toDateTime();
+                break;
+        }
         return $value;
     }
 

@@ -100,11 +100,10 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
             // TODO
             throw new \Exception('Id not set', 500);
         }
-        $id = $data['_id'];
-        unset($data['_id']);
+
         /** @var UpdateResult $result */
         $result = $this->getCollection()->updateOne(
-            ["_id" =>   $id],
+            ["_id" =>   $data['_id']],
             ['$set' => $data],
             ['upsert' => true]
         );
@@ -112,7 +111,7 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
         if (!$result->isAcknowledged()) {
             throw new \Exception('TODOOOOOOOOOOOOOOOOOOOO UPDATE');
         }
-        $data['_id'] = $result->getUpsertedId();
+
         return $data;
     }
 

@@ -133,6 +133,6 @@ return function (ContainerBuilder $containerBuilder) {
                     return $value;
                 }
             );
-        }
+        },
     ]);
 };

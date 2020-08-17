@@ -65,44 +65,30 @@ return function (ContainerBuilder $containerBuilder) {
     ])->addDefinitions([
         'RestOrganizationEntityHydrator' => function(ContainerInterface $c) {
 
-            $hydrator = new ClassMethodsHydrator();
-            $hydrator->setNamingStrategy(new CamelCaseStrategy());
-            $hydrator->addStrategy('id', new ClosureStrategy(function ($data) {
-
-                if ($data instanceof MongoId) {
-                    $data = $data->__toString();
-                }
-                return $data;
-            }));
 
             $qrcodenHydrator = new ClassMethodsHydrator();
-            $qrcodenHydrator->addStrategy('id', new ClosureStrategy(
-                function ($data) {
-                    return $data;
-                },
-                function ($data) {
+            $qrcodenHydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
+            $qrcodenHydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
 
-                    if ($data instanceof \MongoId) {
-                        $data = $data->__toString();
-                    }
-                    return $data;
-                }
-            ));
-
+            $hydrator = new ClassMethodsHydrator();
+            $hydrator->setNamingStrategy(new CamelCaseStrategy());
+            $hydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
+            $hydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
             $hydrator->addStrategy('qrCode', new HydratorStrategy($qrcodenHydrator, new SingleEntityPrototype(new Reference())));
             return $hydrator;
         }
     ])->addDefinitions([
         'StorageOrganizationEntityHydrator' => function(ContainerInterface $c) {
 
+            $qrcodenHydrator = new ClassMethodsHydrator();
+            $qrcodenHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
+            $qrcodenHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
+
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
-            $hydrator->addStrategy('id', new MongoIdStrategy());
-
-            $qrcodenHydrator = new ClassMethodsHydrator();
-            $qrcodenHydrator->addStrategy('id', new MongoIdStrategy());
+            $hydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
+            $hydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
             $hydrator->addStrategy('qrCode', new HydratorStrategy($qrcodenHydrator, new SingleEntityPrototype(new Reference())));
-
             return $hydrator;
         }
     ])->addDefinitions([

@@ -92,34 +92,21 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addFilter('identifier', new MethodMatchFilter('getIdentifier'),  FilterComposite::CONDITION_AND);
             $hydrator->addFilter('recoverPassword', new MethodMatchFilter('getRecoverPassword'),  FilterComposite::CONDITION_AND);
             $hydrator->addFilter('activationCode', new MethodMatchFilter('getActivationCode'),  FilterComposite::CONDITION_AND);
-            $hydrator->addStrategy('id', new ClosureStrategy(function ($data) {
-
-                if ($data instanceof MongoId) {
-                    $data = $data->__toString();
-                }
-                return $data;
-            }));
+            $hydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
+            $hydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
             $recoverPasswordHydrator = new ClassMethodsHydrator();
+            $recoverPasswordHydrator->setNamingStrategy(new CamelCaseStrategy());
             $recoverPasswordHydrator->addStrategy('date', new MongoDateStrategy());
             $hydrator->addStrategy('recoverPassword', new HydratorStrategy($recoverPasswordHydrator, new SingleEntityPrototype(new RecoverPassword())));
 
             $activationCode = new ClassMethodsHydrator();
+            $activationCode->setNamingStrategy(new CamelCaseStrategy());
             $activationCode->addStrategy('date', new MongoDateStrategy());
             $hydrator->addStrategy('activationCode', new HydratorStrategy($activationCode, new SingleEntityPrototype(new ActivationCode())));
 
             $organizationHydrator = new ClassMethodsHydrator();
-            $organizationHydrator->addStrategy('id', new ClosureStrategy(
-                function ($data) {
-                    return $data;
-                },
-                function ($data) {
-
-                    if ($data instanceof \MongoId) {
-                        $data = $data->__toString();
-                    }
-                    return $data;
-                }
-            ));
+            $organizationHydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
+            $organizationHydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
 
             $hydrator->addStrategy('organizations', new HydratorArrayStrategy($organizationHydrator, new SingleEntityPrototype(new Reference())));
 
@@ -130,7 +117,8 @@ return function (ContainerBuilder $containerBuilder) {
 
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
-            $hydrator->addStrategy('id', new MongoIdStrategy());
+            $hydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
+            $hydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
             $hydrator->addFilter('identifier', new MethodMatchFilter('getIdentifier'),  FilterComposite::CONDITION_AND);
 
             $recoverPasswordHydrator = new ClassMethodsHydrator();
@@ -142,7 +130,9 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addStrategy('activationCode', new HydratorStrategy($activationCode, new SingleEntityPrototype(new ActivationCode())));
 
             $organizationHydrator = new ClassMethodsHydrator();
-            $organizationHydrator->addStrategy('id', new MongoIdStrategy());
+            $organizationHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
+            $organizationHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
+
             $hydrator->addStrategy('organizations', new HydratorArrayStrategy($organizationHydrator, new SingleEntityPrototype(new Reference())));
 
             return $hydrator;
