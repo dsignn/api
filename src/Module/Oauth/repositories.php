@@ -34,6 +34,7 @@ use League\OAuth2\Server\Grant\ImplicitGrant;
 use League\OAuth2\Server\Grant\PasswordGrant;
 use League\OAuth2\Server\Grant\RefreshTokenGrant;
 use League\OAuth2\Server\ResourceServer;
+use MongoDB\Client;
 use Psr\Container\ContainerInterface;
 
 return function (ContainerBuilder $containerBuilder) {
@@ -60,7 +61,7 @@ return function (ContainerBuilder $containerBuilder) {
             $resultSet->setHydrator($hydrator);
             $resultSet->setEntityPrototype($c->get('ClientEntityPrototype'));
 
-            $mongoAdapter = new MongoAdapter($c->get(MongoClient::class), $serviceSetting['name'], $serviceSetting['collection']);
+            $mongoAdapter = new MongoAdapter($c->get(Client::class), $serviceSetting['name'], $serviceSetting['collection']);
             $mongoAdapter->setResultSet($resultSet);
 
             $storage = new Storage($mongoAdapter);
@@ -98,7 +99,7 @@ return function (ContainerBuilder $containerBuilder) {
             $resultSet->setHydrator($hydrator);
             $resultSet->setEntityPrototype($c->get('AccessTokenEntityPrototype'));
 
-            $mongoAdapter = new MongoAdapter($c->get(MongoClient::class), $serviceSetting['name'], $serviceSetting['collection']);
+            $mongoAdapter = new MongoAdapter($c->get(Client::class), $serviceSetting['name'], $serviceSetting['collection']);
             $mongoAdapter->setResultSet($resultSet);
 
             $storage = new Storage($mongoAdapter);
@@ -139,7 +140,7 @@ return function (ContainerBuilder $containerBuilder) {
             $resultSet->setHydrator($hydrator);
             $resultSet->setEntityPrototype($c->get('UserEntityPrototype'));
 
-            $mongoAdapter = new MongoAdapter($c->get(MongoClient::class), $serviceSetting['name'], $serviceSetting['collection']);
+            $mongoAdapter = new MongoAdapter($c->get(Client::class), $serviceSetting['name'], $serviceSetting['collection']);
             $mongoAdapter->setResultSet($resultSet);
 
             $storage = new Storage($mongoAdapter);
@@ -164,7 +165,7 @@ return function (ContainerBuilder $containerBuilder) {
             $resultSet->setHydrator($hydrator);
             $resultSet->setEntityPrototype($c->get('RefreshTokenEntityPrototype'));
 
-            $mongoAdapter = new MongoAdapter($c->get(MongoClient::class), $serviceSetting['name'], $serviceSetting['collection']);
+            $mongoAdapter = new MongoAdapter($c->get(Client::class), $serviceSetting['name'], $serviceSetting['collection']);
             $mongoAdapter->setResultSet($resultSet);
 
             $storage = new Storage($mongoAdapter);
@@ -209,7 +210,7 @@ return function (ContainerBuilder $containerBuilder) {
             $resultSet->setHydrator($hydrator);
             $resultSet->setEntityPrototype($c->get('AuthCodeEntityPrototype'));
 
-            $mongoAdapter = new MongoAdapter($c->get(MongoClient::class), $serviceSetting['name'], $serviceSetting['collection']);
+            $mongoAdapter = new MongoAdapter($c->get(Client::class), $serviceSetting['name'], $serviceSetting['collection']);
             $mongoAdapter->setResultSet($resultSet);
 
             $storage = new Storage($mongoAdapter);

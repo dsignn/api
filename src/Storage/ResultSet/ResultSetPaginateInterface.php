@@ -30,4 +30,10 @@ interface ResultSetPaginateInterface extends ResultSetInterface {
      * @return self
      */
     public function setItemPerPage(int $itemPerPage): self;
+
+    /**
+     * @param int $count
+     * @return self
+     */
+    public function setCount(int $count): self;
 }

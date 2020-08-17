@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Storage;
 
+use App\Storage\Adapter\StorageAdapterAwareTrait;
 use App\Storage\Adapter\StorageAdapterInterface;
 use App\Storage\Entity\EntityInterface;
 use App\Storage\Entity\EntityPrototypeAwareTrait;
@@ -21,7 +22,7 @@ class Storage implements StorageInterface {
     /**
      * Traits
      */
-    use EntityPrototypeAwareTrait, HydratorAwareTrait;
+    use EntityPrototypeAwareTrait, HydratorAwareTrait, StorageAdapterAwareTrait;
 
     /**
      * @var string

@@ -24,6 +24,11 @@ class MongoHydratePaginateResultSet extends MongoHydrateResultSet implements Mon
     protected $itemPerPage;
 
     /**
+     * @var int
+     */
+    protected $count = 0;
+
+    /**
      * @return int
      */
     public function getPage(): int {
@@ -53,5 +58,20 @@ class MongoHydratePaginateResultSet extends MongoHydrateResultSet implements Mon
     public function setItemPerPage(int $itemPerPage): ResultSetPaginateInterface {
         $this->itemPerPage = $itemPerPage;
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setCount(int $count): ResultSetPaginateInterface {
+        $this->count = $count;
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function count() {
+        return $this->count;
     }
 }

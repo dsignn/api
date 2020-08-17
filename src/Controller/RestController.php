@@ -201,7 +201,9 @@ class RestController implements RestControllerInterface
         $filter = $request->getAttribute('app-data-filter');
         $query =  array_merge($filter ? $filter : [], $request->getQueryParams());
         $page = isset($query['page']) ? intval($query['page']) ? intval($query['page']) : 1 : 1;
+        unset($query['page']);
         $itemPerPage = isset($query['item-per-page']) ? intval($query['item-per-page']) ? intval($query['item-per-page']) : 10 : 10;
+        unset($query['item-per-page']);
         $pagination = $this->storage->getPage($page, $itemPerPage, $query);
 
         $acceptService = $this->getAcceptService($request);

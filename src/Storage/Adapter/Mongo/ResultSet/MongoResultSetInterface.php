@@ -5,6 +5,7 @@ namespace App\Storage\Adapter\Mongo\ResultSet;
 
 use App\Storage\ResultSet\ResultSetInterface;
 use MongoCursor;
+use MongoDB\Driver\Cursor;
 
 /**
  * Class MongoResultSet
@@ -13,13 +14,13 @@ use MongoCursor;
 interface MongoResultSetInterface extends ResultSetInterface {
 
     /**
-     * @param MongoCursor $dataSource
-     * @return mixed
+     * @param Cursor $dataSource
+     * @return MongoResultSetInterface
      */
-    public function setDataSource(MongoCursor $dataSource): MongoResultSetInterface;
+    public function setDataSource(Cursor $dataSource): MongoResultSetInterface;
 
     /**
-     * @return MongoCursor
+     * @return Cursor
      */
-    public function getDataSource(): MongoCursor;
+    public function getDataSource(): Cursor;
 }

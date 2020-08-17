@@ -38,6 +38,9 @@ return function (&$setting) {
                 'validation' => [
                     '/menu' => [
                         'POST' => 'MenuValidation'
+                    ],
+                    '/menu/{id:[0-9a-fA-F]{24}}' => [
+                        'PUT' => 'MenuValidation'
                     ]
                 ],
             ]

@@ -39,7 +39,7 @@ interface StorageAdapterInterface {
      * @param array $search
      * @return
      */
-    public function getAll(array $search = null): ResultSetInterface;
+    public function getAll(array $search = []): ResultSetInterface;
 
     /**
      * @param int $page
@@ -47,5 +47,5 @@ interface StorageAdapterInterface {
      * @param null $search
      * @return ResultSetPaginateInterface
      */
-    public function getPage($page = 1, $itemPerPage = 10, $search = null): ResultSetPaginateInterface;
+    public function getPage($page = 1, $itemPerPage = 10, array $search = []): ResultSetPaginateInterface;
 }

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Storage;
 
+use App\Storage\Adapter\StorageAdapterAwareInterface;
 use App\Storage\Entity\EntityInterface;
 use App\Storage\Entity\EntityPrototypeAwareInterface;
 use App\Storage\ResultSet\ResultSetInterface;
@@ -14,7 +15,7 @@ use Laminas\Hydrator\HydratorAwareInterface;
  * Interface StorageInterface
  * @package App\Storage
  */
-interface StorageInterface extends HydratorAwareInterface, EntityPrototypeAwareInterface, EventsCapableInterface {
+interface StorageInterface extends HydratorAwareInterface, EntityPrototypeAwareInterface, EventsCapableInterface, StorageAdapterAwareInterface {
 
     /**
      * @param $id

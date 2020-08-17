@@ -18,6 +18,7 @@
     "require": {
         "php": ">=7.1",
         "ext-json": "*",
+        "ext-mongodb": "*",
         "alcaeus/mongo-php-adapter": "^1.1.11",
         "aws/aws-sdk-php": "^3.1.0",
         "bacon/bacon-qr-code": "~2.0.0",

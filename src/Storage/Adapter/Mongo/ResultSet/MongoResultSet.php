@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace App\Storage\Adapter\Mongo\ResultSet;
 
-use MongoCursor;
+use MongoDB\ChangeStream;
+use MongoDB\Driver\Cursor;
 
 /**
  * Class MongoResultSet
@@ -12,27 +13,37 @@ use MongoCursor;
 class MongoResultSet implements MongoResultSetInterface {
 
     /**
-     * @var MongoCursor
+     * @var Cursor
      */
     protected $dataSource;
 
     /**
-     * @return MongoCursor
+     * @var array
      */
-    public function getDataSource(): MongoCursor
-    {
+    protected $data = [];
+
+    /**
+     * @var int
+     */
+    protected $index = 0;
+
+    /**
+     * @return Cursor
+     */
+    public function getDataSource(): Cursor {
         return $this->dataSource;
     }
 
     /**
-     * @param MongoCursor $dataSource
+     * @param Cursor $dataSource
      * @return MongoResultSetInterface
      * @throws \MongoConnectionException
      * @throws \MongoCursorTimeoutException
      */
-    public function setDataSource(MongoCursor $dataSource): MongoResultSetInterface {
+    public function setDataSource(Cursor $dataSource): MongoResultSetInterface {
+
         $this->dataSource = $dataSource;
-        $this->dataSource->next();
+        $this->data = $dataSource->toArray();
         return $this;
     }
 
@@ -40,49 +51,49 @@ class MongoResultSet implements MongoResultSetInterface {
      * @inheritDoc
      */
     public function current() {
-        return $this->dataSource->current();
+        return $this->data[$this->index];
     }
 
     /**
      * @inheritDoc
      */
     public function key() {
-        return $this->dataSource->key();
+        return $this->index;
     }
 
     /**
      * @inheritDoc
      */
     public function next() {
-        return $this->dataSource->next();
+        $this->index = $this->index + 1;
+        $this->data[$this->index];
     }
 
     /**
      * @inheritDoc
      */
     public function rewind() {
-        $this->dataSource->reset();
-        $this->dataSource->next();
+        $this->index = 0;
     }
 
     /**
      * @inheritDoc
      */
     public function valid() {
-        return $this->dataSource->valid();
+        return isset($this->data[$this->index]);
     }
 
     /**
      * @inheritDoc
      */
     public function count() {
-        return $this->dataSource->count();
+        return count($this->data);
     }
 
     /**
      * @inheritDoc
      */
     public function toArray(): array {
-        return iterator_to_array($this->dataSource);
+        return $this->data;
     }
 }

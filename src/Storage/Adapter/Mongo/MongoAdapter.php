@@ -11,8 +11,14 @@ use App\Storage\Adapter\Mongo\ResultSet\MongoResultSetPaginateAwareTrait;
 use App\Storage\Adapter\StorageAdapterInterface;
 use App\Storage\ResultSet\ResultSetInterface;
 use App\Storage\ResultSet\ResultSetPaginateInterface;
-use MongoClient;
-use MongoId;
+use MongoDB\BSON\ObjectId;
+use MongoDB\Client;
+use MongoDB\Collection;
+use MongoDB\DeleteResult;
+use MongoDB\Driver\Cursor;
+use MongoDB\Driver\Query;
+use MongoDB\InsertOneResult;
+use MongoDB\UpdateResult;
 
 /**
  * Class MongoAdapter
@@ -32,17 +38,17 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
     protected $collectionName;
 
     /**
-     * @var MongoClient
+     * @var Client
      */
     protected $client;
 
     /**
      * MongoCollection constructor.
-     * @param MongoClient $client
+     * @param Client $client
      * @param string $dbName
      * @param string $collectionName
      */
-    public function __construct(MongoClient $client, string $dbName, string $collectionName) {
+    public function __construct(Client $client, string $dbName, string $collectionName) {
 
         $this->client = $client;
 
@@ -54,9 +60,9 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
     }
 
     /**
-     * @return \MongoCollection
+     * @return Collection
      */
-    protected function getCollection() {
+    public function getCollection() {
         return $this->client->{$this->dbName}->{$this->collectionName};
     }
 
@@ -65,7 +71,8 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
      */
     public function get($id) {
         return $this->getCollection()->findOne(
-            ['_id' => new MongoId($id)]
+            ['_id' => new ObjectId($id)],
+            ['typeMap' => ['root' => 'array', 'document' => 'array', 'array' => 'array']]
         );
     }
 
@@ -73,10 +80,14 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
      * @inheritDoc
      */
     public function save(array $data): array {
-        $dbInfo = $this->getCollection()->insert($data);
-        if ($dbInfo['errmsg'] !== null) {
-            throw new \MongoException($dbInfo['errmsg']);
+
+        unset($data['_id']);
+        /** @var InsertOneResult $result */
+        $result = $this->getCollection()->insertOne($data);
+        if (!$result->isAcknowledged()) {
+            throw new \Exception('TODOOOOOOOOOOOOOOOOOOOO SAVE');
         }
+        $data['_id'] = $result->getInsertedId();
         return $data;
     }
 
@@ -85,14 +96,23 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
      */
     public function update(array $data): array {
 
-        $dbInfo = $this->getCollection()->update(
-            ["_id" => $data["_id"] ? $data['_id'] :  ''],
-            $data,
+        if (!isset($data['_id'])) {
+            // TODO
+            throw new \Exception('Id not set', 500);
+        }
+        $id = $data['_id'];
+        unset($data['_id']);
+        /** @var UpdateResult $result */
+        $result = $this->getCollection()->updateOne(
+            ["_id" =>   $id],
+            ['$set' => $data],
             ['upsert' => true]
         );
-        if ($dbInfo['errmsg'] !== null) {
-            throw new \MongoException($dbInfo['errmsg']);
+
+        if (!$result->isAcknowledged()) {
+            throw new \Exception('TODOOOOOOOOOOOOOOOOOOOO UPDATE');
         }
+        $data['_id'] = $result->getUpsertedId();
         return $data;
     }
 
@@ -100,21 +120,24 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
      * @inheritDoc
      */
     public function delete($id): bool {
-        $dbInfo = $this->getCollection()->remove(['_id' => new \MongoId($id)]);
-        if ($dbInfo['errmsg'] !== null) {
-            throw new \MongoException($dbInfo['errmsg']);
+        /** @var DeleteResult $result */
+        $result = $this->getCollection()->deleteOne(['_id' => new ObjectId($id)]);
+
+        if (!$result->isAcknowledged()) {
+            throw new \Exception('TODOOOOOOOOOOOOOOOOOOOO DELETE');
         }
-        return !!$dbInfo['ok'];
+
+        return !!$result->getDeletedCount();
     }
 
     /**
      * @inheritDoc
      */
-    public function getAll(array $search = null): ResultSetInterface {
+    public function getAll(array $search = []): ResultSetInterface {
         $resultSet = clone $this->getResultSet();
         return $resultSet->setDataSource(
             $this->searchDataSource(
-                $search ?  $search : []
+                $search
             )
         );
     }
@@ -122,16 +145,16 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
     /**
      * @inheritDoc
      */
-    public function getPage($page = 1, $itemPerPage = 10, $search = null): ResultSetPaginateInterface {
+    public function getPage($page = 1, $itemPerPage = 10, array $search = []): ResultSetPaginateInterface {
 
         $resultSet = clone $this->getResultSetPaginate();
 
-
         return $resultSet->setPage($page)
             ->setItemPerPage($itemPerPage)
+            ->setCount($this->getCount($search))
             ->setDataSource(
                 $this->searchDataSource(
-                    $search ?  $search : [],
+                    $search,
                     $itemPerPage,
                     ($page-1)*$itemPerPage
                 )
@@ -139,35 +162,36 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
     }
 
     /**
-     * @param $search
+     * @param array $search
      * @param null $limit
      * @param null $skip
-     * @return \MongoCursor
-     * @throws \MongoCursorException
+     * @return Cursor
      */
     protected function searchDataSource(array $search, $limit = null, $skip = null) {
 
-        foreach ($search as $key => $value) {
-            switch ($key) {
-                case 'page':
-                case  'item-per-page':
-                    unset($search[$key]);
-                    break;
-            }
-        }
-
-        $dataSource = $this->getCollection()->find(
-            $search
-        );
+        $options = [
+            'typeMap' => ['root' => 'array', 'document' => 'array', 'array' => 'array'],
+        ];
 
         if ($limit !== null) {
-            $dataSource->limit($limit);
+            $options['limit'] = $limit;
         }
 
         if ($skip !== null) {
-            $dataSource->skip($skip);
+            $options['skip'] = $skip;
         }
 
-        return $dataSource;
+        return $this->getCollection()->find(
+            $search,
+            $options
+        );
+    }
+
+    /**
+     * @param $search
+     * @return mixed
+     */
+    protected function getCount(array  $search) {
+        return $this->getCollection()->count($search);
     }
 }

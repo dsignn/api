@@ -147,7 +147,7 @@ class MenuEntity implements EntityInterface
     /**
      * @return bool
      */
-    public function isEnable(): bool {
+    public function getEnable(): bool {
         return $this->enable;
     }
 

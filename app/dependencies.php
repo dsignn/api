@@ -12,12 +12,15 @@ use App\Middleware\Validation\ValidationMiddleware;
 use App\Module\User\Storage\UserStorageInterface;
 use DI\ContainerBuilder;
 use GuzzleHttp\Client;
+use Laminas\Hydrator\Strategy\ClosureStrategy;
 use League\OAuth2\Server\ResourceServer;
+use MongoDB\BSON\ObjectId;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use MongoDB\Client as MongoClient;
 
 return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions([
@@ -95,6 +98,41 @@ return function (ContainerBuilder $containerBuilder) {
 
         Client::class => function(ContainerInterface $c) {
             return $client = new \GuzzleHttp\Client();
+        },
+
+        "MongoIdStorageStrategy" => function() {
+            return new ClosureStrategy(
+                function ($value) {
+
+                    if ($value && is_string($value)) {
+                        $value = new ObjectId($value);
+                    }
+                    return $value;
+                },
+                function ($value) {
+                    if ($value instanceof ObjectId) {
+                        $value = $value->__toString();
+                    }
+                    return $value;
+                }
+            );
+        },
+
+        "MongoIdRestStrategy" => function() {
+            return new ClosureStrategy(
+                function ($value) {
+                    if ($value instanceof ObjectId) {
+                        $value = $value->__toString();
+                    }
+                    return $value;
+                },
+                function ($value) {
+                    if ($value instanceof ObjectId) {
+                        $value = $value->__toString();
+                    }
+                    return $value;
+                }
+            );
         }
     ]);
 };

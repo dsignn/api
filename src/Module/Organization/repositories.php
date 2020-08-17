@@ -28,9 +28,9 @@ use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Hydrator\Strategy\ClosureStrategy;
 use Laminas\InputFilter\Input;
 use Laminas\InputFilter\InputFilter;
-use Laminas\Validator\EmailAddress;
+use MongoDB\Client;
 use Psr\Container\ContainerInterface;
-use function DI\get;
+
 
 return function (ContainerBuilder $containerBuilder) {
 
@@ -50,7 +50,7 @@ return function (ContainerBuilder $containerBuilder) {
             $resultSetPaginator->setHydrator($hydrator);
             $resultSetPaginator->setEntityPrototype($c->get('OrganizationEntityPrototype'));
 
-            $mongoAdapter = new MongoAdapter($c->get(MongoClient::class), $settings['storage']['name'], $serviceSetting['collection']);
+            $mongoAdapter = new MongoAdapter($c->get(Client::class), $settings['storage']['name'], $serviceSetting['collection']);
             $mongoAdapter->setResultSet($resultSet);
             $mongoAdapter->setResultSetPaginate($resultSetPaginator);
 

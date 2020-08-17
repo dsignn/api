@@ -41,6 +41,7 @@ use Laminas\InputFilter\InputFilter;
 use Laminas\Validator\EmailAddress;
 use Laminas\Validator\InArray;
 use Laminas\Validator\StringLength;
+use MongoDB\Client as MongoClient;
 use Psr\Container\ContainerInterface;
 
 return function (ContainerBuilder $containerBuilder) {

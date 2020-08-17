@@ -19,6 +19,7 @@ use App\Storage\Entity\SingleEntityPrototype;
 use DI\ContainerBuilder;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Hydrator\Strategy\ClosureStrategy;
+use MongoDB\Client;
 use Psr\Container\ContainerInterface;
 
 return function (ContainerBuilder $containerBuilder) {
@@ -39,7 +40,7 @@ return function (ContainerBuilder $containerBuilder) {
             $resultSetPaginator->setHydrator($hydrator);
             $resultSetPaginator->setEntityPrototype($c->get('TimeslotEntityPrototype'));
 
-            $mongoAdapter = new MongoAdapter($c->get(MongoClient::class), $settings['storage']['name'], $serviceSetting['collection']);
+            $mongoAdapter = new MongoAdapter($c->get(Client::class), $settings['storage']['name'], $serviceSetting['collection']);
             $mongoAdapter->setResultSet($resultSet);
             $mongoAdapter->setResultSetPaginate($resultSetPaginator);
 

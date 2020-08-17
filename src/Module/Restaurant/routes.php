@@ -24,6 +24,8 @@ return function (App $app) {
 
         $group->options('/{id:[0-9a-fA-F]{24}}', [MenuController::class, 'options']);
 
+        $group->put('/{id:[0-9a-fA-F]{24}}', [MenuController::class, 'put']);
+
         $group->get('/{id:[0-9a-fA-F]{24}}',  [MenuController::class, 'get']);
 
         $group->delete('/{id:[0-9a-fA-F]{24}}',  [MenuController::class, 'delete']);

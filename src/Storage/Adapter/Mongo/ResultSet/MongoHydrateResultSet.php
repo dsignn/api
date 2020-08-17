@@ -53,7 +53,7 @@ class MongoHydrateResultSet extends MongoResultSet implements HydratorAwareInter
         // TODO Better solution
         $data = parent::toArray();
 
-        if ($this->getHydrator() && count($data) > 0) {
+        if ($this->getHydrator()) {
             $hydrateArray = [];
             foreach ($data as $item) {
                 $prototype = clone $this->getEntityPrototype()->getPrototype($item);
@@ -62,6 +62,7 @@ class MongoHydrateResultSet extends MongoResultSet implements HydratorAwareInter
             }
             $data = $hydrateArray;
         }
+
         return $data;
     }
 }

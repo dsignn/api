@@ -12,6 +12,7 @@ use App\Module\Restaurant\Entity\CategoryEntity;
 use App\Module\Restaurant\Entity\Embedded\MenuItem;
 use App\Module\Restaurant\Entity\Embedded\Price\Price;
 use App\Module\Restaurant\Entity\MenuEntity;
+use App\Module\Restaurant\Event\DisableMenu;
 use App\Module\Restaurant\Storage\Adapeter\Mongo\MenuMongoAdapter;
 use App\Module\Restaurant\Storage\MenuCategoryStorage;
 use App\Module\Restaurant\Storage\MenuCategoryStorageInterface;
@@ -20,6 +21,8 @@ use App\Module\Restaurant\Storage\MenuStorageInterface;
 use App\Module\Timeslot\Entity\TimeslotEntity;
 use App\Module\Timeslot\Storage\TimeslotStorage;
 use App\Module\Timeslot\Storage\TimeslotStorageInterface;
+use App\Module\User\Event\UserActivationCodeEvent;
+use App\Module\User\Mail\UserMailerInterface;
 use App\Storage\Adapter\Mongo\MongoAdapter;
 use App\Storage\Storage;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydratePaginateResultSet;
@@ -38,6 +41,7 @@ use Laminas\InputFilter\CollectionInputFilter;
 use Laminas\InputFilter\InputFilter;
 use Laminas\InputFilter\Input;
 use Laminas\Validator\NotEmpty;
+use MongoDB\Client;
 use Psr\Container\ContainerInterface;
 
 return function (ContainerBuilder $containerBuilder) {
@@ -57,7 +61,7 @@ return function (ContainerBuilder $containerBuilder) {
             $resultSetPaginator->setHydrator($hydrator);
             $resultSetPaginator->setEntityPrototype($c->get('MenuCategoryEntityPrototype'));
 
-            $mongoAdapter = new MongoAdapter($c->get(MongoClient::class), $settings['storage']['name'], $serviceSetting['collection']);
+            $mongoAdapter = new MongoAdapter($c->get(Client::class), $settings['storage']['name'], $serviceSetting['collection']);
             $mongoAdapter->setResultSet($resultSet);
             $mongoAdapter->setResultSetPaginate($resultSetPaginator);
 
@@ -83,14 +87,24 @@ return function (ContainerBuilder $containerBuilder) {
             $resultSetPaginator->setHydrator($hydrator);
             $resultSetPaginator->setEntityPrototype($c->get('MenuEntityPrototype'));
 
-            $mongoAdapter = new MenuMongoAdapter($c->get(MongoClient::class), $settings['storage']['name'], $serviceSetting['collection']);
+            $mongoAdapter = new MenuMongoAdapter($c->get(Client::class), $settings['storage']['name'], $serviceSetting['collection']);
             $mongoAdapter->setResultSet($resultSet);
             $mongoAdapter->setResultSetPaginate($resultSetPaginator);
 
             $storage = new MenuStorage($mongoAdapter);
             $storage->setHydrator($hydrator);
-            $storage->setEntityPrototype($c->get('MenuEntityPrototype'));
 
+            $storage->getEventManager()->attach(
+                Storage::$AFTER_SAVE,
+                new DisableMenu($storage)
+            );
+
+            $storage->getEventManager()->attach(
+                Storage::$AFTER_UPDATE,
+                new DisableMenu($storage)
+            );
+
+            $storage->setEntityPrototype($c->get('MenuEntityPrototype'));
 
             return $storage;
         }
@@ -111,15 +125,14 @@ return function (ContainerBuilder $containerBuilder) {
 
             $menuItemHydrator = new ClassMethodsHydrator();
             $menuItemHydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
-            $menuItemHydrator->addStrategy('_id', new MongoIdStrategy());
-            $menuItemHydrator->addStrategy('price', new HydratorStrategy(
-                new ClassMethodsHydrator(),
-                new SingleEntityPrototype(new Price()))
-            );
+            $menuItemHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
+            $menuItemHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
+            $menuItemHydrator->addStrategy('price', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Price())));
 
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
-            $hydrator->addStrategy('id', new MongoIdStrategy());
+            $hydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
+            $hydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
             $hydrator->addStrategy('organization', new HydratorStrategy($menuItemHydrator, new SingleEntityPrototype(new Reference())));
             $hydrator->addStrategy('items', new HydratorArrayStrategy($menuItemHydrator, new SingleEntityPrototype(new MenuItem())));
 
@@ -130,22 +143,14 @@ return function (ContainerBuilder $containerBuilder) {
 
             $menuItemHydrator = new ClassMethodsHydrator();
             $menuItemHydrator->setNamingStrategy(new CamelCaseStrategy());
-            $menuItemHydrator->addStrategy('_id', new MongoIdStrategy());
-            $menuItemHydrator->addStrategy('price', new HydratorStrategy(
-                    new ClassMethodsHydrator(),
-                    new SingleEntityPrototype(new Price()))
-            );
+            $menuItemHydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
+            $menuItemHydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
+            $menuItemHydrator->addStrategy('price', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Price())));
 
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new CamelCaseStrategy());
-            $hydrator->addStrategy('id', new ClosureStrategy(function ($data) {
-
-                if ($data instanceof MongoId) {
-                    $data = $data->__toString();
-                }
-                return $data;
-            }));
-
+            $hydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
+            $hydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
             $hydrator->addStrategy('organization', new HydratorStrategy($menuItemHydrator, new SingleEntityPrototype(new Reference())));
             $hydrator->addStrategy('items', new HydratorArrayStrategy($menuItemHydrator, new SingleEntityPrototype(new MenuItem())));
 

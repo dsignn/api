@@ -10,6 +10,7 @@ use Laminas\Hydrator\HydratorAwareInterface;
 use Laminas\Hydrator\HydratorAwareTrait;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Psr7\Stream;
+use function DI\value;
 
 /**
  * Class JsonAccept
@@ -29,7 +30,6 @@ class JsonAccept implements AcceptTransformInterface {
             case $data instanceof ResultSetPaginateInterface === true:
 
                 /** @var ResultSetPaginateInterface $data */
-
                 if ($data instanceof HydratorAwareInterface && $this->getHydrator()) {
                     $data->setHydrator($this->getHydrator());
                 }
@@ -45,9 +45,9 @@ class JsonAccept implements AcceptTransformInterface {
             case $data instanceof ResultSetInterface:
 
                 if ($data instanceof HydratorAwareInterface && $this->getHydrator()) {
+
                     $data->setHydrator($this->getHydrator());
                 }
-
                 $computeData = $data->toArray();
                 break;
             case $data instanceof EntityInterface === true:
