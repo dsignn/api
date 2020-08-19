@@ -141,7 +141,7 @@ class Storage implements StorageInterface {
     /**
      * @inheritDoc
      */
-    public function getPage($page = 1, $itemPerPage = 10, $search = null): ResultSetPaginateInterface {
+    public function getPage($page = 1, $itemPerPage = 10, $search = []): ResultSetPaginateInterface {
         // TODO event pre getPage
         return $this->storage->getPage($page, $itemPerPage, $search);
         // TODO event post getPage

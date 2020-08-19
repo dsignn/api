@@ -110,11 +110,13 @@ return function (ContainerBuilder $containerBuilder) {
 
             $imageHydrator = new ClassMethodsHydrator();
             $imageHydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
-            $imageHydrator->addStrategy('id', new MongoIdStrategy());
+            $imageHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
+            $imageHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
 
             $videoHydrator = new ClassMethodsHydrator();
             $videoHydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
-            $videoHydrator->addStrategy('id', new MongoIdStrategy());
+            $videoHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
+            $videoHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
 
             $strategyDimension = new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Dimension()));
 
@@ -139,29 +141,17 @@ return function (ContainerBuilder $containerBuilder) {
 
             $hydrator = new MapHydrator();
             $hydrator->setTypeField('mimeType');
-            $hydrator->setEntityPrototype(
-                $c->get('ResourceEntityPrototype')
-            );
+            $hydrator->setEntityPrototype($c->get('ResourceEntityPrototype'));
 
             $imageHydrator = new ClassMethodsHydrator();
             $imageHydrator->setNamingStrategy(new CamelCaseStrategy());
-            $imageHydrator->addStrategy('id', new ClosureStrategy(function ($data) {
-
-                if ($data instanceof MongoId) {
-                    $data = $data->__toString();
-                }
-                return $data;
-            }));
+            $imageHydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
+            $imageHydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
 
             $videoHydrator = new ClassMethodsHydrator();
             $videoHydrator->setNamingStrategy(new CamelCaseStrategy());
-            $videoHydrator->addStrategy('id', new ClosureStrategy(function ($data) {
-
-                if ($data instanceof MongoId) {
-                    $data = $data->__toString();
-                }
-                return $data;
-            }));
+            $videoHydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
+            $videoHydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
 
             $strategyDimension = new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Dimension()));
             $imageHydrator->addStrategy('dimension', $strategyDimension);

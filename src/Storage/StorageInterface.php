@@ -50,8 +50,8 @@ interface StorageInterface extends HydratorAwareInterface, EntityPrototypeAwareI
     /**
      * @param int $page
      * @param int $itemPerPage
-     * @param null $search
+     * @param array $search
      * @return ResultSetPaginateInterface
      */
-    public function getPage($page = 1, $itemPerPage = 10, $search = null): ResultSetPaginateInterface;
+    public function getPage($page = 1, $itemPerPage = 10, $search = []): ResultSetPaginateInterface;
 }

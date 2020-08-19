@@ -59,13 +59,9 @@ return function (ContainerBuilder $containerBuilder) {
             $monitorHydrator->addStrategy('monitors', new HydratorArrayStrategy($monitorHydrator, new SingleEntityPrototype(new MonitorEntity())));
 
             $hydrator = new ClassMethodsHydrator();
-            $hydrator->addStrategy('id', new ClosureStrategy(function ($data) {
-
-                if ($data instanceof MongoId) {
-                    $data = $data->__toString();
-                }
-                return $data;
-            }));
+            $hydrator->setNamingStrategy(new CamelCaseStrategy());
+            $hydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
+            $hydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
             $hydrator->addStrategy('monitors', new HydratorArrayStrategy($monitorHydrator, new SingleEntityPrototype(new MonitorEntity())));
 
             return $hydrator;
@@ -79,7 +75,9 @@ return function (ContainerBuilder $containerBuilder) {
 
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
-            $hydrator->addStrategy('id', new MongoIdStrategy());
+            $hydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
+            $hydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
+
             $hydrator->addStrategy('monitors', new HydratorArrayStrategy($monitorHydrator, new SingleEntityPrototype(new MonitorEntity())));
 
             return $hydrator;

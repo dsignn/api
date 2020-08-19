@@ -45,7 +45,8 @@ class RpcMenuCategoryController implements RpcControllerInterface {
      */
     public function rpc(Request $request, Response $response) {
 
-        $categories = $this->storage->getAll();
+        $params = $request->getQueryParams();
+        $categories = $this->storage->getAll($params);
 
         $acceptService = $this->getAcceptService($request);
         return $acceptService->transformAccept($response, $categories);

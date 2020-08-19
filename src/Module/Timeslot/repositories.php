@@ -56,16 +56,13 @@ return function (ContainerBuilder $containerBuilder) {
 
             $timeslotHydrator = new ClassMethodsHydrator();
             $timeslotHydrator->setNamingStrategy(new CamelCaseStrategy());
+            $timeslotHydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
+            $timeslotHydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
 
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new CamelCaseStrategy());
-            $hydrator->addStrategy('id', new ClosureStrategy(function ($data) {
-
-                if ($data instanceof MongoId) {
-                    $data = $data->__toString();
-                }
-                return $data;
-            }));
+            $hydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
+            $hydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
             $hydrator->addStrategy('binds', new HydratorArrayStrategy($timeslotHydrator, new SingleEntityPrototype(new Reference())));
             $hydrator->addStrategy('resources', new HydratorArrayStrategy($timeslotHydrator, new SingleEntityPrototype(new Reference())));
             $hydrator->addStrategy('monitorContainerReference', new HydratorStrategy($timeslotHydrator, new SingleEntityPrototype(new MonitorReference())));
@@ -77,14 +74,17 @@ return function (ContainerBuilder $containerBuilder) {
 
             $timeslotHydrator = new ClassMethodsHydrator();
             $timeslotHydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
+            $timeslotHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
+            $timeslotHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
 
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
-            $hydrator->addStrategy('id', new MongoIdStrategy());
+            $hydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
+            $hydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
             $hydrator->addStrategy('binds', new HydratorArrayStrategy($timeslotHydrator, new SingleEntityPrototype(new Reference())));
             $hydrator->addStrategy('resources', new HydratorArrayStrategy($timeslotHydrator, new SingleEntityPrototype(new Reference())));
             $hydrator->addStrategy('monitorContainerReference', new HydratorStrategy($timeslotHydrator, new SingleEntityPrototype(new MonitorReference())));
-
+            // TODO split hydrator
             return $hydrator;
         }
     ])->addDefinitions([

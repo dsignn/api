@@ -147,7 +147,6 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
     public function getPage($page = 1, $itemPerPage = 10, array $search = []): ResultSetPaginateInterface {
 
         $resultSet = clone $this->getResultSetPaginate();
-
         return $resultSet->setPage($page)
             ->setItemPerPage($itemPerPage)
             ->setCount($this->getCount($search))
