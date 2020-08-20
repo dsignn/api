@@ -4,13 +4,17 @@ declare(strict_types=1);
 namespace App\Module\Restaurant\Entity\Embedded;
 
 use App\Module\Restaurant\Entity\Embedded\Price\Price;
+use App\Storage\Entity\EntityInterface;
+use App\Storage\Entity\EntityTrait;
 use App\Storage\Entity\ReferenceInterface;
 
 /**
  * Class MenuItem
  * @package App\Module\Restaurant\Entity\Embedded
  */
-class MenuItem {
+class MenuItem implements EntityInterface {
+
+    use EntityTrait;
 
     const STATUS_AVAILABLE = 'available';
     const STATUS_OVER = 'over';
@@ -125,8 +129,7 @@ class MenuItem {
     /**
      * @return int
      */
-    public function getNew(): int
-    {
+    public function getNew(): int {
         return $this->new;
     }
 

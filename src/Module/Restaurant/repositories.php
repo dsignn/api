@@ -125,8 +125,8 @@ return function (ContainerBuilder $containerBuilder) {
 
             $menuItemHydrator = new ClassMethodsHydrator();
             $menuItemHydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
-            $menuItemHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
-            $menuItemHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
+            $menuItemHydrator->addStrategy('_id', new MongoIdStrategy(true));
+            $menuItemHydrator->addStrategy('id', new MongoIdStrategy(true));
             $menuItemHydrator->addStrategy('price', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Price())));
 
             $hydrator = new ClassMethodsHydrator();
@@ -192,6 +192,10 @@ return function (ContainerBuilder $containerBuilder) {
 
             $menuItem = new InputFilter();
             $menuItem->add($price, 'price');
+
+            $input = new Input('id');
+            $input->setRequired(false);
+            $menuItem->add($input, 'id');
 
             $input = new Input('name');
             $menuItem->add($input, 'name');

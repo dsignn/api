@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace App\Hydrator\Strategy\Mongo;
 
 use Laminas\Hydrator\Strategy\StrategyInterface;
+use MongoDB\BSON\ObjectId;
 use MongoId;
+use phpDocumentor\Reflection\Types\This;
 
 /**
  * Class MongoIdStrategy
@@ -13,12 +15,30 @@ use MongoId;
 class MongoIdStrategy implements StrategyInterface {
 
     /**
+     * @var bool
+     */
+    protected $autoGenerate = false;
+
+    /**
+     * MongoIdStrategy constructor.
+     * @param bool $autoGenerate
+     */
+    public function __construct(bool $autoGenerate) {
+        $this->autoGenerate = $autoGenerate;
+    }
+
+    /**
      * @inheritDoc
      */
     public function extract($value, ?object $object = null) {
 
-        if ($value && is_string($value)) {
-            $value = new MongoId($value);
+        switch (true) {
+            case !!$value && is_string($value) === true:
+                $value = new ObjectId($value);
+                break;
+            case !$value === true && $this->autoGenerate === true:
+                $value = new ObjectId();
+                break;
         }
 
         return $value;
@@ -29,8 +49,14 @@ class MongoIdStrategy implements StrategyInterface {
      */
     public function hydrate($value, ?array $data) {
 
-        if ($value instanceof MongoId) {
-            $value = $value->__toString();
+        switch (true) {
+            case $value instanceof ObjectId === true:
+                $value = $value->__toString();
+                break;
+            case is_array($value) === true:
+            case is_object($value) === true:
+                $value = '';
+                break;
         }
 
         return $value;
