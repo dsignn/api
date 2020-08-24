@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+use App\Middleware\ContentNegotiation\ContentType\MultipartFormDataContentType;
+
 return function (&$setting) {
 
     $setting = array_merge_recursive(
@@ -32,8 +34,15 @@ return function (&$setting) {
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
                             'contentTypeFilter' => ['/application\/json/']
-                        ]
+                        ],
                     ],
+                    '/menu/upload-resource' => [
+                        'default' => [
+                            'acceptFilter' => ['/application\/json/'],
+                            'contentTypeFilter' => ['/multipart\/form-data/'],
+                            'contentTypeService' => MultipartFormDataContentType::class
+                        ],
+                    ]
                 ],
                 'validation' => [
                     '/menu' => [
@@ -41,6 +50,9 @@ return function (&$setting) {
                     ],
                     '/menu/{id:[0-9a-fA-F]{24}}' => [
                         'PUT' => 'MenuValidation'
+                    ],
+                    '/menu/upload-resource' => [
+                        'POST' => 'ResourceMenuItemValidation'
                     ]
                 ],
             ]

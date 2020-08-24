@@ -179,6 +179,27 @@ return function (ContainerBuilder $containerBuilder) {
             return $client;
         }
     ])->addDefinitions([
+        'ResourcePostValidator' => function(ContainerInterface $c) {
+
+            $inputFilter = new InputFilter();
+
+            // Name field
+            $file = new Input('file');
+            $file->getFilterChain()->attach(new FileUnpacking());
+            $inputFilter->add($file);
+
+            $name = new Input('name');
+            $name->setRequired(false);
+            $inputFilter->add($name);
+
+            $tags = new Input('tags');
+            $tags->setRequired(false);
+            $tags->getFilterChain()->attach(new StringToArray());
+            $inputFilter->add($tags);
+
+            return $inputFilter;
+        }
+    ])->addDefinitions([
         'ResourceValidator' => function(ContainerInterface $c) {
 
             $inputFilter = new InputFilter();

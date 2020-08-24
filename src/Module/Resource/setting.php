@@ -47,6 +47,7 @@ return function (&$setting) {
                     'client' => [
                         'version' => 'latest',
                         'region'  => 'eu-central-1',
+                  //      'debug'   => true,
                         'credentials' => [
                             'key' => 'AKIAJUETFABXHRWGNGGQ',
                             'secret' => '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'
@@ -62,7 +63,7 @@ return function (&$setting) {
                 ],
                 'validation' => [
                     '/resource' => [
-                        'POST' => 'ResourceValidator'
+                        'POST' => 'ResourcePostValidator'
                     ],
                     '/resource/{id:[0-9a-fA-F]{24}}' => [
                         'PATCH' => 'ResourceValidator'

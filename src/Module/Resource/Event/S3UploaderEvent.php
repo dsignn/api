@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Module\Resource\Event;
 
 use App\Module\Resource\Entity\AbstractResourceEntity;
+use Aws\Exception\AwsException;
 use Aws\Result;
 use Aws\S3\S3Client;
 use Laminas\EventManager\EventInterface;

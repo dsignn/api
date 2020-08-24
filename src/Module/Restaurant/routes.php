@@ -8,6 +8,7 @@ use App\Middleware\Validation\ValidationMiddleware;
 use App\Module\Restaurant\Controller\MenuController;
 use App\Module\Restaurant\Controller\RpcMenuCategoryController;
 use App\Module\Restaurant\Controller\RpcMenuController;
+use App\Module\Restaurant\Controller\RpcUploadResourceMenuItem;
 use App\Module\Timeslot\Controller\TimeslotController;
 use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
@@ -29,6 +30,10 @@ return function (App $app) {
         $group->get('/{id:[0-9a-fA-F]{24}}',  [MenuController::class, 'get']);
 
         $group->delete('/{id:[0-9a-fA-F]{24}}',  [MenuController::class, 'delete']);
+
+        $group->options('/upload-resource', [OptionController::class, 'options']);
+
+        $group->post('/upload-resource',  [RpcUploadResourceMenuItem::class, 'rpc']);
 
     })
         ->add($app->getContainer()->get(ValidationMiddleware::class))

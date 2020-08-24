@@ -13,6 +13,9 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 class RpcMenuController implements RpcControllerInterface {
 
+    /**
+     * @inheritDoc
+     */
     public function rpc(Request $request, Response $response) {
 
         $slug = $request->getAttribute('__route__')->getArgument('slug');

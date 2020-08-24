@@ -29,6 +29,7 @@ use App\Storage\Adapter\Mongo\ResultSet\MongoHydratePaginateResultSet;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
 use App\Storage\Entity\Reference;
 use App\Storage\Entity\SingleEntityPrototype;
+use App\Validator\Mongo\ObjectIdValidator;
 use DI\ContainerBuilder;
 use Laminas\Filter\Callback;
 use Laminas\Filter\ToInt;
@@ -123,11 +124,14 @@ return function (ContainerBuilder $containerBuilder) {
     ])->addDefinitions([
         'StorageMenuEntityHydrator' => function(ContainerInterface $c) {
 
+
+
             $menuItemHydrator = new ClassMethodsHydrator();
             $menuItemHydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
             $menuItemHydrator->addStrategy('_id', new MongoIdStrategy(true));
             $menuItemHydrator->addStrategy('id', new MongoIdStrategy(true));
             $menuItemHydrator->addStrategy('price', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Price())));
+            $menuItemHydrator->addStrategy('photos', new HydratorArrayStrategy($c->get('ReferenceMongoHydrator'), new SingleEntityPrototype(new Reference())));
 
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
@@ -146,6 +150,7 @@ return function (ContainerBuilder $containerBuilder) {
             $menuItemHydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
             $menuItemHydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
             $menuItemHydrator->addStrategy('price', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Price())));
+            $menuItemHydrator->addStrategy('photos', new HydratorArrayStrategy($c->get('ReferenceRestHydrator'), new SingleEntityPrototype(new Reference())));
 
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new CamelCaseStrategy());
@@ -209,6 +214,10 @@ return function (ContainerBuilder $containerBuilder) {
             $input = new Input('status');
             $menuItem->add($input, 'status');
 
+            $input = new Input('photos');
+            $input->setRequired(false);
+            $menuItem->add($input, 'photos');
+
             $collectionItem = new CollectionInputFilter();
             $collectionItem->setInputFilter($menuItem);
 
@@ -241,6 +250,24 @@ return function (ContainerBuilder $containerBuilder) {
             ]);
 
             $input->getValidatorChain()->attach($validator);
+
+            return $inputFilter;
+        }
+    ])->addDefinitions([
+        'ResourceMenuItemValidation' => function(ContainerInterface $container) {
+
+            $inputFilter = new InputFilter();
+
+            $input = new Input('menu_id');
+            $input->getValidatorChain()->attach(new ObjectIdValidator());
+            $inputFilter->add($input, 'menu_id');
+
+            $input = new Input('resource_menu_id');
+            $input->getValidatorChain()->attach(new ObjectIdValidator());
+            $inputFilter->add($input, 'resource_menu_id');
+
+            $input = new Input('file');
+            $inputFilter->add($input, 'file');
 
             return $inputFilter;
         }

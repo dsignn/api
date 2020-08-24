@@ -12,6 +12,7 @@ use App\Middleware\Validation\ValidationMiddleware;
 use App\Module\User\Storage\UserStorageInterface;
 use DI\ContainerBuilder;
 use GuzzleHttp\Client;
+use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Hydrator\Strategy\ClosureStrategy;
 use League\OAuth2\Server\ResourceServer;
 use MongoDB\BSON\ObjectId;
@@ -100,7 +101,7 @@ return function (ContainerBuilder $containerBuilder) {
             return $client = new \GuzzleHttp\Client();
         },
 
-        "MongoIdStorageStrategy" => function() {
+        "MongoIdStorageStrategy" => function(ContainerInterface $c) {
             return new ClosureStrategy(
                 function ($value) {
 
@@ -118,7 +119,7 @@ return function (ContainerBuilder $containerBuilder) {
             );
         },
 
-        "MongoIdRestStrategy" => function() {
+        "MongoIdRestStrategy" => function(ContainerInterface $c) {
             return new ClosureStrategy(
                 function ($value) {
                     if ($value instanceof ObjectId) {
@@ -134,5 +135,21 @@ return function (ContainerBuilder $containerBuilder) {
                 }
             );
         },
+
+        "ReferenceMongoHydrator" =>  function(ContainerInterface $c) {
+            $hydrator = new ClassMethodsHydrator();
+            $hydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
+            $hydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
+            return $hydrator;
+        },
+
+        "ReferenceRestHydrator" =>  function(ContainerInterface $c) {
+            $hydrator = new ClassMethodsHydrator();
+            $hydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
+            $hydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
+            return $hydrator;
+        }
+
+
     ]);
 };

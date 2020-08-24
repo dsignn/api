@@ -80,9 +80,10 @@ class ResourceController implements RestControllerInterface {
 
             $data = $validator->getValues();
         }
+
         // TODO REMOVE
         $data['size'] = filesize($data['file']['src']);
-        $data['mimeType'] = $data['file']['mimeType'];
+        $data['mimeType'] = mime_content_type($data['file']['src']);
         $data['src'] = $data['file']['src'];
         unset($data['file']);
 
