@@ -23,10 +23,10 @@ use Slim\Psr7\Factory\StreamFactory;
 use Slim\Psr7\UploadedFile;
 
 /**
- * Class RpcUploadResourceMenuItem
+ * Class RpcDeleteResourceMenuItem
  * @package App\Module\Restaurant\Controller
  */
-class RpcUploadResourceMenuItem implements RpcControllerInterface {
+class RpcDeleteResourceMenuItem implements RpcControllerInterface {
 
     use AcceptServiceAwareTrait;
 
@@ -75,7 +75,7 @@ class RpcUploadResourceMenuItem implements RpcControllerInterface {
      */
     public function rpc(Request $request, Response $response) {
 
-        $data = array_merge($request->getParsedBody(), $request->getUploadedFiles());
+        $data = array_merge($request->getParsedBody());
 
         if ($request->getAttribute('app-validation')) {
             /** @var InputFilterInterface $validator */
@@ -109,12 +109,16 @@ class RpcUploadResourceMenuItem implements RpcControllerInterface {
             }
         }
 
-        if ($notFoundMenuItem) {
-            return $response->withStatus(404);
+        switch (true) {
+            case $notFoundMenuItem === true;
+            case count($menuItem->getPhotos()) < 1;
+                return $response->withStatus(404);
+                break;
         }
 
+
         try {
-            $resourceResponse = $this->getRequest($menuItem, $data['file']->getStream()->getMetadata('uri'));
+            $resourceResponse = $this->getRequest($menuItem);
         } catch (ClientException $exception) {
             $streamFactory = new StreamFactory();
             return $response->withStatus($exception->getCode())->withBody($streamFactory->createStream(
@@ -122,10 +126,7 @@ class RpcUploadResourceMenuItem implements RpcControllerInterface {
             ));
         }
 
-
-        $resourceEntity = $this->resourceStorage->getEntityPrototype()->getPrototype($resourceResponse);
-        $this->resourceStorage->getHydrator()->hydrate($resourceResponse, $resourceEntity);
-        $menuItem->setPhotos([new Reference($resourceEntity->getId(), 'resource')]);
+        $menuItem->setPhotos([]);
         $this->menuStorage->update($entity);
 
         $acceptService = $this->getAcceptService($request);
@@ -138,39 +139,18 @@ class RpcUploadResourceMenuItem implements RpcControllerInterface {
      * @param string $srcFile
      * @return mixed
      */
-    protected function getRequest(MenuItem $menuItem, string $srcFile) {
+    protected function getRequest(MenuItem $menuItem) {
         $data = [
             //'debug' => true,
             'headers' => [
                 'Accept' => 'application/json'
-            ],
-
-            'multipart' => [
-                [
-                    'name' => 'name',
-                    'contents' => 'photo menù'
-                ],
-
-                [
-                    'name'     => 'file',
-                    'contents' => fopen($srcFile, 'r')
-                ]
-
             ]
-
         ];
 
-        $id = '';
-        $method = 'POST';
-        if (count($menuItem->getPhotos()) > 0) {
-            $id = '/' . $menuItem->getPhotos()[0]->getId();
-        }
+        $method = 'delete';
+        $url = $this->url . '/resource/' . $menuItem->getPhotos()[0]->getId();
 
-        /** @var UploadedFile $file */
-        $method = count($menuItem->getPhotos()) === 0 ? 'POST' : 'PATCH';
-        $url = $this->url . '/resource' . $id;
-
-        $response = $this->client->{strtolower($method)}($url, $data);
+        $response = $this->client->{$method}($url, $data);
 
         return json_decode($response->getBody()->getContents(), true);
     }

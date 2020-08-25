@@ -2,6 +2,8 @@
 declare(strict_types=1);
 
 use App\Crypto\CryptoOpenSsl;
+use App\Filter\File\FileTransform;
+use App\Filter\StringToArray;
 use App\Hydrator\MapHydrator;
 use App\Hydrator\Strategy\HydratorStrategy;
 use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
@@ -13,9 +15,8 @@ use App\Module\Resource\Entity\Embedded\Dimension;
 use App\Module\Resource\Entity\ImageResourceEntity;
 use App\Module\Resource\Entity\VideoResourceEntity;
 use App\Module\Resource\Event\MetadataEvent;
+use App\Module\Resource\Event\S3DeleteEvent;
 use App\Module\Resource\Event\S3UploaderEvent;
-use App\Module\Resource\Filter\FileUnpacking;
-use App\Module\Resource\Filter\StringToArray;
 use App\Module\Resource\Storage\ResourceStorage;
 use App\Module\Resource\Storage\ResourceStorageInterface;
 use App\Storage\Adapter\Mongo\MongoAdapter;
@@ -24,6 +25,8 @@ use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
 use App\Storage\Entity\MultiEntityPrototype;
 use App\Storage\Entity\SingleEntityPrototype;
 use App\Storage\Storage;
+use App\Validator\File\FileMimeType;
+use App\Validator\File\FileSize;
 use Aws\S3\S3Client;
 use DI\ContainerBuilder;
 use Laminas\Filter\StringToLower;
@@ -31,6 +34,7 @@ use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Hydrator\Strategy\ClosureStrategy;
 use Laminas\InputFilter\Input;
 use Laminas\InputFilter\InputFilter;
+use Laminas\Validator\File\MimeType;
 use MongoDB\Client;
 use Psr\Container\ContainerInterface;
 
@@ -78,6 +82,11 @@ return function (ContainerBuilder $containerBuilder) {
             $storage->getEventManager()->attach(
                 Storage::$BEFORE_SAVE,
                 new S3UploaderEvent($c->get('S3Client'), $c->get('settings')['s3Resource']['bucket'])
+            );
+
+            $storage->getEventManager()->attach(
+                Storage::$BEFORE_DELETE,
+                new S3DeleteEvent($c->get('S3Client'), $c->get('settings')['s3Resource']['bucket'])
             );
 
             return $storage;
@@ -184,18 +193,22 @@ return function (ContainerBuilder $containerBuilder) {
             $inputFilter = new InputFilter();
 
             // Name field
-            $file = new Input('file');
-            $file->getFilterChain()->attach(new FileUnpacking());
-            $inputFilter->add($file);
+            $input = new Input('file');
+            $input->getFilterChain()->attach(new FileTransform());
+            $input->getValidatorChain()->attach(new FileSize(['max' => '20MB',]));
+            $input->getValidatorChain()->attach(new FileMimeType(
+                ['mimeTypes' => ['image/png', 'image/jpeg', 'image/jpg', 'video/mp4', 'video/webm'],])
+            );
+            $inputFilter->add($input);
 
-            $name = new Input('name');
-            $name->setRequired(false);
-            $inputFilter->add($name);
+            $input = new Input('name');
+            $input->setRequired(false);
+            $inputFilter->add($input);
 
-            $tags = new Input('tags');
-            $tags->setRequired(false);
-            $tags->getFilterChain()->attach(new StringToArray());
-            $inputFilter->add($tags);
+            $input = new Input('tags');
+            $input->setRequired(false);
+            $input->getFilterChain()->attach(new StringToArray());
+            $inputFilter->add($input);
 
             return $inputFilter;
         }
@@ -205,19 +218,23 @@ return function (ContainerBuilder $containerBuilder) {
             $inputFilter = new InputFilter();
 
             // Name field
-            $file = new Input('file');
-            $file->setRequired(false);
-            $file->getFilterChain()->attach(new FileUnpacking());
-            $inputFilter->add($file);
+            $input = new Input('file');
+            $input->setRequired(false);
+            $input->getFilterChain()->attach(new FileTransform());
+            $input->getValidatorChain()->attach(new FileSize(['max' => '20MB',]));
+            $input->getValidatorChain()->attach(new FileMimeType(
+                    ['mimeTypes' => ['image/png', 'image/jpeg', 'image/jpg', 'video/mp4', 'video/webm'],])
+            );
+            $inputFilter->add($input);
 
-            $name = new Input('name');
-            $name->setRequired(false);
-            $inputFilter->add($name);
+            $input = new Input('name');
+            $input->setRequired(false);
+            $inputFilter->add($input);
 
-            $tags = new Input('tags');
-            $tags->setRequired(false);
-            $tags->getFilterChain()->attach(new StringToArray());
-            $inputFilter->add($tags);
+            $input = new Input('tags');
+            $input->setRequired(false);
+            $input->getFilterChain()->attach(new StringToArray());
+            $inputFilter->add($input);
 
             return $inputFilter;
         }

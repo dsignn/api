@@ -184,13 +184,11 @@ class RestController implements RestControllerInterface
     public function delete(Request $request, Response $response) {
 
         $id = $request->getAttribute('__route__')->getArgument('id');
-        $entity = $this->storage->get($id);
 
-        if (!$entity) {
+        if (!$this->storage->delete($id)) {
             return $response->withStatus(404);
         }
 
-        $this->storage->delete($id);
         return $response->withStatus(200);
     }
 

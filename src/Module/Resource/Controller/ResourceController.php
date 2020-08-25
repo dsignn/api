@@ -82,8 +82,8 @@ class ResourceController implements RestControllerInterface {
         }
 
         // TODO REMOVE
-        $data['size'] = filesize($data['file']['src']);
-        $data['mimeType'] = mime_content_type($data['file']['src']);
+        $data['size'] = $data['file']['size'];
+        $data['mimeType'] = $data['file']['mimeType'];
         $data['src'] = $data['file']['src'];
         unset($data['file']);
 
@@ -128,10 +128,11 @@ class ResourceController implements RestControllerInterface {
             $data = $validator->getValues();
         }
         // TODO REMOVE
-        $data['size'] = filesize($data['file']['src']);
+        $data['size'] = $data['file']['size'];
         $data['mimeType'] = $data['file']['mimeType'];
         $data['src'] = $data['file']['src'];
         unset($data['file']);
+
 
         $putEntity = $this->storage->getEntityPrototype()->getPrototype($data);
         $oldEntityData = $this->storage->getHydrator()->extract($entity);
@@ -182,22 +183,25 @@ class ResourceController implements RestControllerInterface {
 
         if (isset($data['file'])) {
             // TODO REMOVE
-            $data['size'] = filesize($data['file']['src']);
+            $data['size'] = $data['file']['size'];
             $data['mimeType'] = $data['file']['mimeType'];
             $data['src'] = $data['file']['src'];
             unset($data['file']);
         }
 
+
         /** @var AbstractResourceEntity $dataEntity */
         $dataEntity = $this->storage->getEntityPrototype()->getPrototype($data);
         if ($dataEntity !== null && !($dataEntity instanceof $entity)) {
             $this->storage->getHydrator()->hydrate($data, $dataEntity);
+
+
             $dataEntity->setId($entity->getId());
             $dataEntity->setS3path($entity->getS3path());
             $dataEntity->setOrganizationReference($entity->getOrganizationReference());
             $entity = $dataEntity;
         } else {
-            $data['mimeType'] = $entity->getMimeType();
+            $data['mimeType'] = isset($data['mimeType']) ? $data['mimeType'] : $entity->getMimeType();
             $this->storage->getHydrator()->hydrate($data, $entity);
         }
 
@@ -213,14 +217,11 @@ class ResourceController implements RestControllerInterface {
     public function delete(Request $request, Response $response) {
 
         $id = $request->getAttribute('__route__')->getArgument('id');
-        $entity = $this->storage->get($id);
 
-        if (!$entity) {
+        if (!$this->storage->delete($id)) {
             return $response->withStatus(404);
         }
 
-
-        $this->storage->delete($id);
         return $response->withStatus(200);
     }
 

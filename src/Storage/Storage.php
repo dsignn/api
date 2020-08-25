@@ -51,6 +51,11 @@ class Storage implements StorageInterface {
     static public $AFTER_UPDATE = 'after_update';
 
     /**
+     * @var string
+     */
+    static public $BEFORE_DELETE = 'before_delete';
+
+    /**
      * @var StorageAdapterInterface
      */
     protected $storage;
@@ -125,6 +130,17 @@ class Storage implements StorageInterface {
      * @inheritDoc
      */
     public function delete(string $id): bool {
+
+        $entity = $this->get($id);
+        if (!$entity) {
+            return false;
+        }
+
+        $this->events->trigger(
+            Storage::$BEFORE_DELETE,
+            $entity
+        );
+
         // TODO event pre delete
         return $this->storage->delete($id);
         // TODO event post delete

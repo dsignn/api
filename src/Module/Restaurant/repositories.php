@@ -271,5 +271,20 @@ return function (ContainerBuilder $containerBuilder) {
 
             return $inputFilter;
         }
-    ]);
+    ])->addDefinitions([
+        'ResourceMenuItemDeleteValidation' => function(ContainerInterface $container) {
+
+            $inputFilter = new InputFilter();
+
+            $input = new Input('menu_id');
+            $input->getValidatorChain()->attach(new ObjectIdValidator());
+            $inputFilter->add($input, 'menu_id');
+
+            $input = new Input('resource_menu_id');
+            $input->getValidatorChain()->attach(new ObjectIdValidator());
+            $inputFilter->add($input, 'resource_menu_id');
+
+            return $inputFilter;
+        }
+    ]);;
 };

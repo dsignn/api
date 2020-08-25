@@ -1,17 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Module\Resource\Filter;
+namespace App\Filter\File;
 
-use Laminas\Filter\Exception;
 use Laminas\Filter\FilterInterface;
 use Slim\Psr7\UploadedFile;
 
 /**
- * Class FileUnpacking
+ * Class FileTransform
  * @package App\Module\Resource\Filter
  */
-class FileUnpacking implements FilterInterface {
+class FileTransform implements FilterInterface {
 
     /**
      * @param mixed $value
@@ -21,15 +20,16 @@ class FileUnpacking implements FilterInterface {
 
         switch (true) {
             case $value instanceof  UploadedFile === true:
-                $data['size'] = $value->getSize();
-                $data['mimeType'] = $value->getClientMediaType();
                 $data['src'] = $value->getStream()->getMetadata('uri');
+                $data['mimeType'] = mime_content_type($data['src']);
+                $data['size'] = filesize($data['src']);
                 $value = $data;
                 break;
             case is_array($value) === true:
-                $data['size'] = $value['size'];
-                $data['mimeType'] = $value['type'];
+
                 $data['src'] = $value['tmp_name'];
+                $data['mimeType'] = mime_content_type($data['src']);
+                $data['size'] = filesize($data['src']);
                 $value = $data;
                 break;
         }

@@ -42,7 +42,14 @@ return function (&$setting) {
                             'contentTypeFilter' => ['/multipart\/form-data/'],
                             'contentTypeService' => MultipartFormDataContentType::class
                         ],
+                    ],
+                    '/menu/delete-resource' => [
+                        'default' => [
+                            'acceptFilter' => ['/application\/json/'],
+                            'contentTypeFilter' => ['/application\/json/']
+                        ],
                     ]
+
                 ],
                 'validation' => [
                     '/menu' => [
@@ -53,6 +60,9 @@ return function (&$setting) {
                     ],
                     '/menu/upload-resource' => [
                         'POST' => 'ResourceMenuItemValidation'
+                    ],
+                    '/menu/delete-resource' => [
+                        'POST' => 'ResourceMenuItemDeleteValidation'
                     ]
                 ],
             ]
