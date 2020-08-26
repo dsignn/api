@@ -16,4 +16,5 @@ return function (App $app) {
 
     $app->get('/me', [MeController::class, 'rpc'])
         ->add($app->getContainer()->get(AuthenticationMiddleware::class));
+    ;
 };

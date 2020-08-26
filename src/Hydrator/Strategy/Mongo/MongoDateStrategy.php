@@ -32,8 +32,9 @@ class MongoDateStrategy implements StrategyInterface {
      */
     public function extract($value, ?object $object = null) {
 
+
         if ($value instanceof DateTimeInterface) {
-            $value = new UTCDateTime($value->getTimestamp());
+            $value = new UTCDateTime($value);
         }
 
         return $value;
