@@ -18,6 +18,7 @@ class OrganizationEntity implements EntityInterface {
 
     public function __construct() {
         $this->qrCode = new Reference();
+        $this->logo = new Reference();
     }
 
     /**
@@ -34,6 +35,11 @@ class OrganizationEntity implements EntityInterface {
      * @var ReferenceInterface
      */
     protected $qrCode;
+
+    /**
+     * @var ReferenceInterface
+     */
+    protected $logo;
 
 
     /**
@@ -81,6 +87,22 @@ class OrganizationEntity implements EntityInterface {
      */
     public function setQrCode(ReferenceInterface $qrCode): OrganizationEntity {
         $this->qrCode = $qrCode;
+        return $this;
+    }
+
+    /**
+     * @return ReferenceInterface
+     */
+    public function getLogo(): ReferenceInterface {
+        return $this->logo;
+    }
+
+    /**
+     * @param ReferenceInterface $logo
+     * @return OrganizationEntity
+     */
+    public function setLogo(ReferenceInterface $logo): OrganizationEntity {
+        $this->logo = $logo;
         return $this;
     }
 }

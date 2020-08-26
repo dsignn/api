@@ -30,6 +30,11 @@ return function (&$setting) {
                             'acceptFilter' => ['/application\/json/']
                         ]
                     ],
+                    '/organization/upload-resource' => [
+                        'default' => [
+                            'acceptFilter' => ['/application\/json/']
+                        ]
+                    ],
                 ],
                 'validation' => [
                     '/organization' => [

@@ -1,20 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Module\Restaurant\Controller;
+namespace App\Module\Organization\Controller;
 
 use App\Controller\RpcControllerInterface;
 use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
 use App\Module\Organization\Entity\OrganizationEntity;
+use App\Module\Organization\Storage\OrganizationStorageInterface;
 use App\Module\Resource\Storage\ResourceStorageInterface;
 use App\Module\Restaurant\Entity\Embedded\MenuItem;
 use App\Module\Restaurant\Entity\MenuEntity;
-use App\Module\Restaurant\Storage\MenuStorageInterface;
 use App\Storage\Entity\Reference;
 use App\Storage\StorageInterface;
-use Aws\Exception\AwsException;use GuzzleHttp\Client;
+use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ServerException;
 use Laminas\InputFilter\InputFilterInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -23,17 +22,23 @@ use Slim\Psr7\Factory\StreamFactory;
 use Slim\Psr7\UploadedFile;
 
 /**
- * Class RpcUploadResourceMenuItem
- * @package App\Module\Restaurant\Controller
+ * Class RpcUploadResourceOrganization
+ * @package App\Module\Organization\Entity
  */
-class RpcUploadResourceMenuItem implements RpcControllerInterface {
+class RpcUploadResourceOrganization implements RpcControllerInterface {
 
     use AcceptServiceAwareTrait;
 
     /**
      * @var string
      */
-    protected $hydratorService = 'RestMenuEntityHydrator';
+    protected $hydratorService = 'RestOrganizationEntityHydrator';
+
+
+    /**
+     * @var StorageInterface
+     */
+    protected $organizationStorage;
 
     /**
      * @var StorageInterface
@@ -41,30 +46,20 @@ class RpcUploadResourceMenuItem implements RpcControllerInterface {
     protected $resourceStorage;
 
     /**
-     * @var StorageInterface
-     */
-    protected $menuStorage;
-
-    /**
-     * @var Client
-     */
-    protected $client;
-
-    /**
-     * @var
+     * @var ContainerInterface
      */
     protected $container;
 
     /**
-     * RpcUploadResourceMenuItem constructor.
+     * RpcUploadResourceOrganization constructor.
      * @param ResourceStorageInterface $resourceStorage
-     * @param MenuStorageInterface $menuStorage
+     * @param OrganizationStorageInterface $organizationStorage
      * @param Client $client
      * @param ContainerInterface $container
      */
-    public function __construct(ResourceStorageInterface $resourceStorage, MenuStorageInterface $menuStorage, Client $client, ContainerInterface $container) {
+    public function __construct(ResourceStorageInterface $resourceStorage, OrganizationStorageInterface $organizationStorage, Client $client, ContainerInterface $container) {
+        $this->organizationStorage = $organizationStorage;
         $this->resourceStorage = $resourceStorage;
-        $this->menuStorage = $menuStorage;
         $this->url = $container->get('settings')['httpClient']["url"];
         $this->client = $client;
         $this->container = $container;
@@ -93,28 +88,14 @@ class RpcUploadResourceMenuItem implements RpcControllerInterface {
             $data = $validator->getValues();
         }
 
-        /** @var MenuEntity $entity */
-        $entity = $this->menuStorage->get($data['menu_id']);
+        /** @var OrganizationEntity $entity */
+        $entity = $this->organizationStorage->get($data['organization_id']);
         if (!$entity) {
             return $response->withStatus(404);
         }
 
-        $notFoundMenuItem = true;
-        /** @var MenuItem $item */
-        foreach ($entity->getItems() as $item) {
-            if ($item->getId() === $data['resource_menu_id']) {
-                $menuItem = $item;
-                $notFoundMenuItem = false;
-                break;
-            }
-        }
-
-        if ($notFoundMenuItem) {
-            return $response->withStatus(404);
-        }
-
         try {
-            $resourceResponse = $this->getRequest($menuItem, $data['file']->getStream()->getMetadata('uri'));
+            $resourceResponse = $this->getRequest($entity, $data['file']->getStream()->getMetadata('uri'));
         } catch (ClientException $exception) {
             $streamFactory = new StreamFactory();
             return $response->withStatus($exception->getCode())->withBody($streamFactory->createStream(
@@ -124,20 +105,20 @@ class RpcUploadResourceMenuItem implements RpcControllerInterface {
 
         $resourceEntity = $this->resourceStorage->getEntityPrototype()->getPrototype($resourceResponse);
         $this->resourceStorage->getHydrator()->hydrate($resourceResponse, $resourceEntity);
-        $menuItem->setPhotos([new Reference($resourceEntity->getId(), 'resource')]);
-        $this->menuStorage->update($entity);
+
+        $entity->setLogo(new Reference($resourceEntity->getId(), 'resource'));
+        $this->organizationStorage->update($entity);
 
         $acceptService = $this->getAcceptService($request);
         return $acceptService->transformAccept($response, $entity);
     }
 
     /**
-     * @param MenuItem $menuItem
-     * @param string $method
+     * @param OrganizationEntity $entity
      * @param string $srcFile
      * @return mixed
      */
-    protected function getRequest(MenuItem $menuItem, string $srcFile) {
+    protected function getRequest(OrganizationEntity $entity, string $srcFile) {
         $data = [
             //'debug' => true,
             'headers' => [
@@ -147,7 +128,7 @@ class RpcUploadResourceMenuItem implements RpcControllerInterface {
             'multipart' => [
                 [
                     'name' => 'name',
-                    'contents' => 'photo menù'
+                    'contents' => 'logo organization'
                 ],
 
                 [
@@ -160,15 +141,13 @@ class RpcUploadResourceMenuItem implements RpcControllerInterface {
         ];
 
         $id = '';
-        $method = 'POST';
-        if (count($menuItem->getPhotos()) > 0) {
-            $id = '/' . $menuItem->getPhotos()[0]->getId();
+        $method = 'post';
+        if (!!$entity->getLogo()->getId()) {
+            $id = '/' . $entity->getLogo()->getId();
+            $method = 'patch';
         }
 
-        /** @var UploadedFile $file */
-        $method = count($menuItem->getPhotos()) === 0 ? 'POST' : 'PATCH';
         $url = $this->url . '/resource' . $id;
-
         $response = $this->client->{strtolower($method)}($url, $data);
 
         return json_decode($response->getBody()->getContents(), true);
