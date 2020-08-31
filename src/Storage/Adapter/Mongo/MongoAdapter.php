@@ -60,10 +60,12 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
     }
 
     /**
+     * @param string $name
      * @return Collection
      */
-    public function getCollection() {
-        return $this->client->{$this->dbName}->{$this->collectionName};
+    public function getCollection(string $name = null) {
+        $name = $name ? $name : $this->collectionName;
+        return $this->client->{$this->dbName}->{$name};
     }
 
     /**

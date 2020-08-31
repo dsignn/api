@@ -49,5 +49,5 @@ return function (App $app) {
 
     $app->get('/menu-category', [RpcMenuCategoryController::class, 'rpc']);
 
-    $app->get('/restaurant-menu/{slug}',  [RpcMenuController::class, 'rpc']);
+    $app->get('/restaurant/{slug}/menu',  [RpcMenuController::class, 'rpc']);
 };

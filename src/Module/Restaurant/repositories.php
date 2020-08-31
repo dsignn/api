@@ -44,6 +44,9 @@ use Laminas\InputFilter\Input;
 use Laminas\Validator\NotEmpty;
 use MongoDB\Client;
 use Psr\Container\ContainerInterface;
+use Slim\App;
+use Slim\Views\Twig;
+use Slim\Views\TwigMiddleware;
 
 return function (ContainerBuilder $containerBuilder) {
 
@@ -285,6 +288,24 @@ return function (ContainerBuilder $containerBuilder) {
             $inputFilter->add($input, 'resource_menu_id');
 
             return $inputFilter;
+        }
+    ])->addDefinitions([
+        Twig::class => function(ContainerInterface $container) {
+
+            $settings = $container->get('settings')['twig'];
+            $twig = Twig::create($settings['paths'], $settings['options']);
+
+            // TODO Add extension
+
+            return $twig;
+        }
+    ])->addDefinitions([
+        TwigMiddleware::class => function(ContainerInterface $container) {
+
+            return TwigMiddleware::createFromContainer(
+                $container->get(App::class),
+                Twig::class
+            );
         }
     ]);;
 };

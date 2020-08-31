@@ -65,6 +65,17 @@ return function (&$setting) {
                         'POST' => 'ResourceMenuItemDeleteValidation'
                     ]
                 ],
+                'twig' => [
+                    'path-js' => 'http://127.0.0.150/js',
+                    'paths' => [
+                        __DIR__ . '/View/restaurant-menu'
+                    ],
+                    'options' => [
+                        // Should be set to true in production
+                        'cache' => false,
+                        'cache_path' => __DIR__ . '/../../../tmp/twig',
+                    ],
+                ]
             ]
         ]
     );

@@ -9,9 +9,9 @@ use App\Middleware\ContentNegotiation\ContentType\ContentTypeContainer;
 use App\Middleware\ContentNegotiation\ContentType\JsonContentType;
 use App\Middleware\CorsMiddleware;
 use App\Middleware\SessionMiddleware;
-use League\OAuth2\Server\Middleware\ResourceServerMiddleware;
-use League\OAuth2\Server\ResourceServer;
 use Slim\App;
+use Slim\Views\Twig;
+use Slim\Views\TwigMiddleware;
 
 return function (App $app) {
 
@@ -27,6 +27,8 @@ return function (App $app) {
     ]);
 
     $app->add($contentNegotiationMiddleware);
+
+    $app->add(TwigMiddleware::create($app, $app->getContainer()->get(Twig::class)));
 
     $app->add(new CorsMiddleware());
 };
