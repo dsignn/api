@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace App\Module\Restaurant\Storage;
 
+use App\Storage\Adapter\Mongo\MongoAdapter;
 use App\Storage\Storage;
+use MongoDB\Driver\Cursor;
 
 /**
  * Class MenuStorage
@@ -11,4 +13,50 @@ use App\Storage\Storage;
  */
 class MenuStorage extends Storage implements MenuStorageInterface {
 
+    /**
+     * @param string $slug
+     * @return \App\Storage\Entity\EntityInterface|mixed|object|null
+     */
+    public function getMenuByRestaurantSlug(string $slug) {
+
+        $menu = null;
+        if ($this->storage instanceof MongoAdapter) {
+
+            $pipeline = [
+                [
+                    '$match' =>
+                        ['normalize_name' => $slug],
+                ],
+                [
+                    '$lookup' => [
+                        'from' => 'menu',
+                        'localField' => 'id',
+                        'foreignField' => 'organization.id',
+                        'as' => 'menu'
+                    ]
+                ],
+                [
+                    '$unwind' => '$menu'
+                ],
+                [
+                    '$match' =>
+                        ['menu.enable' => true],
+                ],
+            ];
+
+            /** @var Cursor $cursor */
+            $cursor = $this->storage->getCollection('organization')->aggregate(
+                $pipeline,
+                ['typeMap' => ['root' => 'array', 'document' => 'array', 'array' => 'array']]
+            );
+
+            $arraySearch = $cursor->toArray();
+            if (is_array($arraySearch) && count($arraySearch) > 0 && isset($arraySearch[0]['menu'])) {
+                $menu =  clone $this->getEntityPrototype()->getPrototype($arraySearch[0]['menu']);
+                $this->getHydrator()->hydrate($arraySearch[0]['menu'], $menu);
+            }
+        }
+
+        return $menu;
+    }
 }

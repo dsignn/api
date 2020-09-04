@@ -78,6 +78,8 @@ class UserActivationCodeEvent
         try {
             $this->mailer->send([$toContact], $this->from, 'Activation code', $this->getBodyMessage($user, $url));
         } catch (\Exception $exception) {
+            var_dump($exception->getMessage());
+            die();
             $user->setStatus(UserEntity::$STATUS_ACTIVATION_MAIL_ERROR);
         }
     }

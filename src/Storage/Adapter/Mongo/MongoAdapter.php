@@ -43,6 +43,11 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
     protected $client;
 
     /**
+     * @var array
+     */
+    protected $arrayOptions = ['typeMap' => ['root' => 'array', 'document' => 'array', 'array' => 'array']];
+
+    /**
      * MongoCollection constructor.
      * @param Client $client
      * @param string $dbName
@@ -74,7 +79,7 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
     public function get($id) {
         return $this->getCollection()->findOne(
             ['_id' => new ObjectId($id)],
-            ['typeMap' => ['root' => 'array', 'document' => 'array', 'array' => 'array']]
+            $this->arrayOptions
         );
     }
 
@@ -169,9 +174,7 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
      */
     protected function searchDataSource(array $search, $limit = null, $skip = null) {
 
-        $options = [
-            'typeMap' => ['root' => 'array', 'document' => 'array', 'array' => 'array'],
-        ];
+        $options = array_merge($this->arrayOptions, []);
 
         if ($limit !== null) {
             $options['limit'] = $limit;

@@ -136,6 +136,27 @@ return function (ContainerBuilder $containerBuilder) {
             );
         },
 
+
+        "EntityDateRestStrategy" => function(ContainerInterface $c) {
+            return new ClosureStrategy(
+                function ($value) {
+
+                    if ($value instanceof DateTimeInterface) {
+                        $value = $value->format(DateTimeInterface::ATOM);
+                    }
+                    return $value;
+                },
+                function ($value) {
+                    if (is_string($value)) {
+                        // TODO controll
+                        $value = DateTime::createFromFormat(DateTimeInterface::ATOM, $value);
+                    }
+                    return $value;
+                }
+            );
+        },
+
+
         "ReferenceMongoHydrator" =>  function(ContainerInterface $c) {
             $hydrator = new ClassMethodsHydrator();
             $hydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));

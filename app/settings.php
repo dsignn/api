@@ -27,10 +27,10 @@ return function (ContainerBuilder $containerBuilder) {
                 "port" => 587,
                 "host" => 'smtp.gmail.com',
                 "username" => 'antonino.visalli@gmail.com',
-                "password" => 'xhveatyfvxscmrco',
+                "password" => 'wiqgqflrpscqoblj',
                 "from" => [
-                    "name" => "toni",
-                    "email" => "antonino.visalli@gmail.com"
+                    "name" => "Dsign",
+                    "email" => "dsign-noreply@gmail.com"
                 ]
             ],
             'httpClient' => [

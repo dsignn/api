@@ -142,19 +142,16 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator = new ClassMethodsHydrator();
             $hydrator->addFilter('password', new MethodMatchFilter('getPassword'),  FilterComposite::CONDITION_AND);
             $hydrator->addFilter('identifier', new MethodMatchFilter('getIdentifier'),  FilterComposite::CONDITION_AND);
-            $hydrator->addStrategy('id', new ClosureStrategy(function ($data) {
+            $hydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
+            $hydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
 
-                if ($data instanceof MongoId) {
-                    $data = $data->__toString();
-                }
-                return $data;
-            }));
             $recoverPasswordHydrator = new ClassMethodsHydrator();
-            $recoverPasswordHydrator->addStrategy('date', new MongoDateStrategy());
+            $recoverPasswordHydrator->addStrategy('date', $c->get('EntityDateRestStrategy'));
             $hydrator->addStrategy('recoverPassword', new HydratorStrategy($recoverPasswordHydrator, new SingleEntityPrototype(new RecoverPassword())));
 
             $organizationHydrator = new ClassMethodsHydrator();
-            $organizationHydrator->addStrategy('id', new MongoIdStrategy());
+            $organizationHydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
+            $organizationHydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
             $hydrator->addStrategy('organizations', new HydratorArrayStrategy($organizationHydrator, new SingleEntityPrototype(new Reference())));
 
             return $hydrator;

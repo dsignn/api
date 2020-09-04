@@ -17,8 +17,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  * Class RestController
  * @package App\Controller
  */
-class RestController implements RestControllerInterface
-{
+class RestController implements RestControllerInterface {
     use AcceptServiceAwareTrait;
 
     /**

@@ -51,7 +51,7 @@ class MongoResultSet implements MongoResultSetInterface {
      * @inheritDoc
      */
     public function current() {
-        return $this->data[$this->index];
+        return isset($this->data[$this->index]) ? $this->data[$this->index] : null;
     }
 
     /**

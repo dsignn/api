@@ -13,46 +13,4 @@ use MongoDB\Driver\Cursor;
  */
 class OrganizationStorage extends Storage implements OrganizationStorageInterface {
 
-    /**
-     * @param string $slug
-     * @return \App\Storage\Entity\EntityInterface|mixed|object|null
-     */
-    public function getMenuBySlug(string $slug) {
-
-        if ($this->storage instanceof MongoAdapter) {
-            var_dump(__FUNCTION__);
-            $pipeline = [
-                [
-                    '$match' =>
-                        ['normalize_name' => $slug],
-                ],
-                [
-                    '$lookup' => [
-                        'from' => 'menu',
-                        'localField' => 'id',
-                        'foreignField' => 'organization.id',
-                        'as' => 'menu'
-                    ]
-                ],
-                [
-                    '$unwind' => '$menu'
-                ],
-                [
-                    '$match' =>
-                        ['menu.enable' => true],
-                ],
-            ];
-
-            /** @var Cursor $aggregation */
-            $aggregation = $this->storage->getCollection()->aggregate($pipeline);
-            $l = $aggregation->toArray();
-            var_dump( count($l));
-            var_dump( $l[0]);
-
-
-        }
-
-
-        var_dump($slug);
-    }
 }
