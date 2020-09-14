@@ -3,9 +3,12 @@ declare(strict_types=1);
 
 namespace App\Module\Restaurant\Storage;
 
+use App\Module\Restaurant\Entity\Embedded\MenuItem;
+use App\Module\Restaurant\Entity\MenuEntity;
 use App\Storage\Adapter\Mongo\MongoAdapter;
 use App\Storage\Storage;
 use MongoDB\Driver\Cursor;
+use function DI\value;
 
 /**
  * Class MenuStorage
@@ -52,6 +55,7 @@ class MenuStorage extends Storage implements MenuStorageInterface {
 
             $arraySearch = $cursor->toArray();
             if (is_array($arraySearch) && count($arraySearch) > 0 && isset($arraySearch[0]['menu'])) {
+                /** @var MenuEntity $menu */
                 $menu =  clone $this->getEntityPrototype()->getPrototype($arraySearch[0]['menu']);
                 $this->getHydrator()->hydrate($arraySearch[0]['menu'], $menu);
             }

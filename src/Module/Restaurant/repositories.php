@@ -24,6 +24,7 @@ use App\Module\Timeslot\Storage\TimeslotStorageInterface;
 use App\Module\User\Event\UserActivationCodeEvent;
 use App\Module\User\Mail\UserMailerInterface;
 use App\Storage\Adapter\Mongo\MongoAdapter;
+use App\Storage\Entity\MultiEntityPrototype;
 use App\Storage\Storage;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydratePaginateResultSet;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
@@ -159,7 +160,26 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->setNamingStrategy(new CamelCaseStrategy());
             $hydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
             $hydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
-            $hydrator->addStrategy('organization', new HydratorStrategy($menuItemHydrator, new SingleEntityPrototype(new Reference())));
+            $hydrator->addStrategy('organization', new HydratorStrategy($c->get('ReferenceRestHydrator'), new SingleEntityPrototype(new Reference())));
+            $hydrator->addStrategy('items', new HydratorArrayStrategy($menuItemHydrator, new SingleEntityPrototype(new MenuItem())));
+
+            return $hydrator;
+        }
+    ])->addDefinitions([
+        'RestMenuEntityWithResourceHydrator' => function(ContainerInterface $c) {
+
+            $menuItemHydrator = new ClassMethodsHydrator();
+            $menuItemHydrator->setNamingStrategy(new CamelCaseStrategy());
+            $menuItemHydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
+            $menuItemHydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
+            $menuItemHydrator->addStrategy('price', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Price())));
+            $menuItemHydrator->addStrategy('photos', new HydratorArrayStrategy($c->get('RestResourceEntityHydrator'), $c->get('ResourceEntityPrototype')));
+
+            $hydrator = new ClassMethodsHydrator();
+            $hydrator->setNamingStrategy(new CamelCaseStrategy());
+            $hydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
+            $hydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
+            $hydrator->addStrategy('organization', new HydratorStrategy($c->get('ReferenceRestHydrator'), new SingleEntityPrototype(new Reference())));
             $hydrator->addStrategy('items', new HydratorArrayStrategy($menuItemHydrator, new SingleEntityPrototype(new MenuItem())));
 
             return $hydrator;

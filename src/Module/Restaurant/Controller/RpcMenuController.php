@@ -7,8 +7,11 @@ use App\Controller\RpcControllerInterface;
 use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
 use App\Module\Organization\Storage\OrganizationStorage;
 use App\Module\Organization\Storage\OrganizationStorageInterface;
+use App\Module\Resource\Storage\ResourceStorageInterface;
+use App\Module\Restaurant\Entity\Embedded\MenuItem;
 use App\Module\Restaurant\Storage\MenuStorage;
 use App\Module\Restaurant\Storage\MenuStorageInterface;
+use App\Storage\Entity\Reference;
 use App\Storage\StorageInterface;
 use Laminas\Hydrator\HydrationInterface;
 use Laminas\Hydrator\HydratorInterface;
@@ -26,7 +29,7 @@ class RpcMenuController implements RpcControllerInterface {
     /**
      * @var string
      */
-    protected $hydratorService = 'RestMenuEntityHydrator';
+    protected $hydratorService = 'RestMenuEntityWithResourceHydrator';
 
     /**
      * @var Twig
@@ -49,6 +52,11 @@ class RpcMenuController implements RpcControllerInterface {
     protected $organizationStorage;
 
     /**
+     * @var StorageInterface
+     */
+    protected $resourceStorage;
+
+    /**
      * @var ContainerInterface
      */
     protected $container;
@@ -57,14 +65,20 @@ class RpcMenuController implements RpcControllerInterface {
      * RpcMenuController constructor.
      * @param MenuStorageInterface $menuStorage
      * @param OrganizationStorageInterface $organizationStorage
+     * @param ResourceStorageInterface $resourceStorage
      * @param Twig $twig
      * @param ContainerInterface $container
      */
-    public function __construct(MenuStorageInterface $menuStorage, OrganizationStorageInterface $organizationStorage, Twig $twig, ContainerInterface $container) {
+    public function __construct(MenuStorageInterface $menuStorage,
+                                OrganizationStorageInterface $organizationStorage,
+                                ResourceStorageInterface $resourceStorage,
+                                Twig $twig,
+                                ContainerInterface $container) {
         $this->twig = $twig;
         $this->jsPath = $container->get('settings')['twig']['path-js'];
         $this->menuStorage = $menuStorage;
         $this->organizationStorage = $organizationStorage;
+        $this->resourceStorage = $resourceStorage;
         $this->container = $container;
     }
 
@@ -81,14 +95,34 @@ class RpcMenuController implements RpcControllerInterface {
             return $this->get404($response);
         }
 
-
         $menu = $this->menuStorage->getMenuByRestaurantSlug($slug);
+        // inject Resource
+        // TODO transport this logic in the query
+        /** @var MenuItem $menuItem */
+        foreach($menu->getItems() as $menuItem) {
+            $photos = $menuItem->getPhotos();
+            /** @var Reference $photo */
+            for ($cont = 0; $cont < count($photos); $cont++) {
+                $resource = $this->resourceStorage->get($photos[$cont]->getId());
+                if ($resource) {
+                    $photos[$cont] = $resource;
+                } else {
+                    unset($photos[$cont]);
+                }
+            }
+            $menuItem->setPhotos($photos);
+        }
+
 
         if (!$menu) {
             return $this->get404($response);
         }
         /** @var HydratorInterface $hydrator */
         $hydrator =  $this->container->get($this->hydratorService);
+var_dump(      $hydrator->extract($menu));
+
+      //  var_dump($menu);
+        die();
 
         return $this->twig->render(
             $response,
