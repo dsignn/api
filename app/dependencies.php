@@ -22,6 +22,7 @@ use Monolog\Processor\UidProcessor;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use MongoDB\Client as MongoClient;
+use Slim\Views\Twig;
 
 return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions([
@@ -72,6 +73,16 @@ return function (ContainerBuilder $containerBuilder) {
             );
 
             return $container;
+        },
+
+        Twig::class => function(ContainerInterface $container) {
+
+            $settings = $container->get('settings')['twig'];
+            $twig = Twig::create($settings['paths'], $settings['options']);
+
+            // TODO Add extension
+
+            return $twig;
         },
 
         AuthenticationMiddleware::class => function(ContainerInterface $c) {

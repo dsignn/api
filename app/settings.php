@@ -6,38 +6,10 @@ use Monolog\Logger;
 
 return function (ContainerBuilder $containerBuilder) {
 
-    $setting = [
-        'settings' => [
-            'tmp' => '../tmp',
-            'determineRouteBeforeAppMiddleware' => true,
-            'debug' => true,
-            'displayErrorDetails' => true, // Should be set to false in production
-            'logger' => [
-                'name' => 'slim-app',
-                'path' => __DIR__ . '/../logs/app.log',
-                'level' => Logger::DEBUG,
-            ],
-            "mongodb" => [
-                "host" => "mongo"
-            ],
-            'storage' => [
-                'name' => 'dsign'
-            ],
-            'mail' => [
-                "port" => 587,
-                "host" => 'smtp.gmail.com',
-                "username" => 'antonino.visalli@gmail.com',
-                "password" => 'wiqgqflrpscqoblj',
-                "from" => [
-                    "name" => "Dsign",
-                    "email" => "dsign-noreply@gmail.com"
-                ]
-            ],
-            'httpClient' => [
-                'url' => 'nginx'
-            ]
-        ],
-    ];
+    $setting = [];
+
+    $localSetting = include_once __DIR__ . "/local-setting.php";
+    $localSetting($setting);
 
     $oauthSetting = include_once __DIR__ . "/../src/Module/Oauth/setting.php";
     $oauthSetting($setting);

@@ -309,23 +309,5 @@ return function (ContainerBuilder $containerBuilder) {
 
             return $inputFilter;
         }
-    ])->addDefinitions([
-        Twig::class => function(ContainerInterface $container) {
-
-            $settings = $container->get('settings')['twig'];
-            $twig = Twig::create($settings['paths'], $settings['options']);
-
-            // TODO Add extension
-
-            return $twig;
-        }
-    ])->addDefinitions([
-        TwigMiddleware::class => function(ContainerInterface $container) {
-
-            return TwigMiddleware::createFromContainer(
-                $container->get(App::class),
-                Twig::class
-            );
-        }
-    ]);;
+    ]);
 };

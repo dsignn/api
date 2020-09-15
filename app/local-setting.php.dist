@@ -1,0 +1,56 @@
+<?php
+declare(strict_types=1);
+
+use Monolog\Logger;
+
+return function (&$setting) {
+
+    $setting = array_merge_recursive(
+        $setting,
+        [
+            'settings' => [
+                'tmp' => '../tmp',
+                'determineRouteBeforeAppMiddleware' => true,
+                'debug' => true,
+                'displayErrorDetails' => true, // Should be set to false in production
+                'logger' => [
+                    'name' => 'slim-app',
+                    'path' => __DIR__ . '/../logs/app.log',
+                    'level' => Logger::DEBUG,
+                ],
+                "mongodb" => [
+                    "host" => "mongo"
+                ],
+                'storage' => [
+                    'name' => 'dsign'
+                ],
+                'mail' => [
+                    "port" => 587,
+                    "host" => 'smtp.gmail.com',
+                    "username" => 'antonino.visalli@gmail.com',
+                    "password" => 'wiqgqflrpscqoblj',
+                    "from" => [
+                        "name" => "Dsign",
+                        "email" => "dsign-noreply@gmail.com"
+                    ]
+                ],
+                'httpClient' => [
+                    'url' => 'nginx'
+                ],
+                'contentNegotiation' => [],
+                'twig' => [
+                    'path-js' => 'http://127.0.0.150/js',
+                    'paths' => [
+                        __DIR__ . '/../src/Module/Restaurant/View/restaurant-menu',
+                        __DIR__ . '/../src/Module/User/Mail/Template'
+                    ],
+                    'options' => [
+                        // Should be set to true in production
+                        'cache' => false,
+                        'cache_path' => __DIR__ . '/../tmp/twig',
+                    ],
+                ]
+            ],
+        ]
+    );
+};

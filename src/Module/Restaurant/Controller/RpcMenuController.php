@@ -119,10 +119,6 @@ class RpcMenuController implements RpcControllerInterface {
         }
         /** @var HydratorInterface $hydrator */
         $hydrator =  $this->container->get($this->hydratorService);
-var_dump(      $hydrator->extract($menu));
-
-      //  var_dump($menu);
-        die();
 
         return $this->twig->render(
             $response,

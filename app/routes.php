@@ -32,4 +32,5 @@ return function (App $app) {
 
     $restaurantRoute = include_once __DIR__ . "/../src/Module/Restaurant/routes.php";
     $restaurantRoute($app);
+
 };

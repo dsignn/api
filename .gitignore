@@ -5,7 +5,7 @@
 !/logs/README.md
 /key
 composer.lock
-
+app/local-setting.php
 
 # Mac
 .DS_Store
