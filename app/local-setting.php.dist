@@ -5,7 +5,6 @@ use Monolog\Logger;
 
 return function (&$setting) {
 
-
     $setting = array_merge_recursive(
         $setting,
         [
@@ -23,7 +22,7 @@ return function (&$setting) {
                     "host" => "mongo"
                 ],
                 'storage' => [
-                    'name' => 'dsign'
+                    'name' => 'dsign-staging'
                 ],
                 'mail' => [
                     "port" => 587,
@@ -49,6 +48,33 @@ return function (&$setting) {
                         // Should be set to true in production
                         'cache' => false,
                         'cache_path' => __DIR__ . '/../tmp/twig',
+                    ],
+                ],
+                'oauth' => [
+                    'client' => [
+                        'storage' => [
+                            'name' => 'dsign-oauth-staging',
+                        ]
+                    ],
+                    'access-token' => [
+                        'storage' => [
+                            'name' => 'dsign-oauth-staging'
+                        ]
+                    ],
+                    'user' => [
+                        'storage' => [
+                            'name' => 'dsign-staging',
+                        ]
+                    ],
+                    'auth-code' => [
+                        'storage' => [
+                            'name' => 'dsign-oauth-staging',
+                        ]
+                    ],
+                    'refresh-token' => [
+                        'storage' => [
+                            'name' => 'dsign-oauth-staging',
+                        ]
                     ],
                 ]
             ],
