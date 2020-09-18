@@ -12,18 +12,18 @@ return function (App $app) {
         return $response;
     });
 
-    /*
+    $oauthRoute = include_once __DIR__ . "/../src/Module/Oauth/routes.php";
+    $oauthRoute($app);
+
     $userRoute = include_once __DIR__ . "/../src/Module/User/routes.php";
     $userRoute($app);
 
     $organizationRoute = include_once __DIR__ . "/../src/Module/Organization/routes.php";
     $organizationRoute($app);
 
+    /*
     $monitorRoute = include_once __DIR__ . "/../src/Module/Monitor/routes.php";
     $monitorRoute($app);
-
-    $oauthRoute = include_once __DIR__ . "/../src/Module/Oauth/routes.php";
-    $oauthRoute($app);
 
     $resourceRoute = include_once __DIR__ . "/../src/Module/Resource/routes.php";
     $resourceRoute($app);
