@@ -12,6 +12,7 @@ return function (App $app) {
         return $response;
     });
 
+    /*
     $userRoute = include_once __DIR__ . "/../src/Module/User/routes.php";
     $userRoute($app);
 
@@ -32,5 +33,5 @@ return function (App $app) {
 
     $restaurantRoute = include_once __DIR__ . "/../src/Module/Restaurant/routes.php";
     $restaurantRoute($app);
-
+*/
 };

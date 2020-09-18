@@ -6,7 +6,7 @@ use App\Infrastructure\Persistence\User\InMemoryUserRepository;
 use DI\ContainerBuilder;
 
 return function (ContainerBuilder $containerBuilder) {
-
+/*
     $oauthRepositories = include_once __DIR__ . "/../src/Module/Oauth/repositories.php";
     $oauthRepositories($containerBuilder);
 
@@ -27,5 +27,5 @@ return function (ContainerBuilder $containerBuilder) {
 
     $restaurantRepositories = include_once __DIR__ . "/../src/Module/Restaurant/repositories.php";
     $restaurantRepositories($containerBuilder);
-
+*/
 };
