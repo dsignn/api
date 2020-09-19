@@ -1,11 +1,16 @@
 <?php
 declare(strict_types=1);
 
+use Graze\ArrayMerger\RecursiveArrayMerger;
 use Monolog\Logger;
 
+/**
+ * Local settings
+ */
 return function (&$setting) {
 
-    $setting = array_merge_recursive(
+    $merger = new RecursiveArrayMerger();
+    $setting = $merger->merge(
         $setting,
         [
             'settings' => [
@@ -63,7 +68,7 @@ return function (&$setting) {
                     ],
                     'user' => [
                         'storage' => [
-                            'name' => 'dsign-staging',
+                            'name1' => 'dsign-staging',
                         ]
                     ],
                     'auth-code' => [
