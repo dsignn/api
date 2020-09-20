@@ -21,7 +21,6 @@ return function (App $app) {
     $organizationRoute = include_once __DIR__ . "/../src/Module/Organization/routes.php";
     $organizationRoute($app);
 
-    /*
     $monitorRoute = include_once __DIR__ . "/../src/Module/Monitor/routes.php";
     $monitorRoute($app);
 
@@ -33,5 +32,4 @@ return function (App $app) {
 
     $restaurantRoute = include_once __DIR__ . "/../src/Module/Restaurant/routes.php";
     $restaurantRoute($app);
-*/
 };

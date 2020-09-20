@@ -20,7 +20,6 @@ return function (ContainerBuilder $containerBuilder) {
     $localSetting = include_once __DIR__ . "/local-setting.php";
     $localSetting($setting);
 
-    /*
     $monitorSetting = include_once __DIR__ . "/../src/Module/Monitor/setting.php";
     $monitorSetting($setting);
 
@@ -32,7 +31,7 @@ return function (ContainerBuilder $containerBuilder) {
 
     $restaurantSetting = include_once __DIR__ . "/../src/Module/Restaurant/setting.php";
     $restaurantSetting($setting);
-*/
+
     // Global Settings Object
     $containerBuilder->addDefinitions($setting);
 };
