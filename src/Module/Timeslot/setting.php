@@ -1,6 +1,11 @@
 <?php
 declare(strict_types=1);
 
+use Graze\ArrayMerger\RecursiveArrayMerger;
+
+/**
+ * Timeslot settings
+ */
 return function (&$setting) {
 
     $setting = array_merge_recursive(

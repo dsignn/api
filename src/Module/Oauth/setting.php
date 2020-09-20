@@ -1,9 +1,12 @@
 <?php
 declare(strict_types=1);
 
+use Graze\ArrayMerger\RecursiveArrayMerger;
+
 return function (&$setting) {
 
-    $setting = array_merge_recursive(
+    $merger = new RecursiveArrayMerger();
+    $setting = $merger->merge(
         $setting,
         [
             "settings" => [
@@ -29,7 +32,7 @@ return function (&$setting) {
                     'access-token' => [
                         'storage' => [
                             'type' => 'mongo',
-                            'name' => 'dsign-oauth',
+                         //   'name' => 'dsign-oauth',
                             'collection' => 'access-token'
                         ]
                     ],

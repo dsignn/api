@@ -8,9 +8,6 @@ return function (ContainerBuilder $containerBuilder) {
 
     $setting = [];
 
-    $localSetting = include_once __DIR__ . "/local-setting.php";
-    $localSetting($setting);
-
     $oauthSetting = include_once __DIR__ . "/../src/Module/Oauth/setting.php";
     $oauthSetting($setting);
 
@@ -19,6 +16,9 @@ return function (ContainerBuilder $containerBuilder) {
 
     $organizationSetting = include_once __DIR__ . "/../src/Module/Organization/setting.php";
     $organizationSetting($setting);
+
+    $localSetting = include_once __DIR__ . "/local-setting.php";
+    $localSetting($setting);
 
     $monitorSetting = include_once __DIR__ . "/../src/Module/Monitor/setting.php";
     $monitorSetting($setting);

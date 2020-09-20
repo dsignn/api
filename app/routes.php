@@ -12,6 +12,9 @@ return function (App $app) {
         return $response;
     });
 
+    $oauthRoute = include_once __DIR__ . "/../src/Module/Oauth/routes.php";
+    $oauthRoute($app);
+
     $userRoute = include_once __DIR__ . "/../src/Module/User/routes.php";
     $userRoute($app);
 
@@ -21,9 +24,6 @@ return function (App $app) {
     $monitorRoute = include_once __DIR__ . "/../src/Module/Monitor/routes.php";
     $monitorRoute($app);
 
-    $oauthRoute = include_once __DIR__ . "/../src/Module/Oauth/routes.php";
-    $oauthRoute($app);
-
     $resourceRoute = include_once __DIR__ . "/../src/Module/Resource/routes.php";
     $resourceRoute($app);
 
@@ -32,5 +32,4 @@ return function (App $app) {
 
     $restaurantRoute = include_once __DIR__ . "/../src/Module/Restaurant/routes.php";
     $restaurantRoute($app);
-
 };

@@ -1,12 +1,16 @@
 <?php
 declare(strict_types=1);
 
-use App\Middleware\ContentNegotiation\ContentType\JsonContentType;
+use Graze\ArrayMerger\RecursiveArrayMerger;
 use App\Middleware\ContentNegotiation\ContentType\MultipartFormDataContentType;
 
+/**
+ * Resource settings
+ */
 return function (&$setting) {
 
-    $setting = array_merge_recursive(
+    $merger = new RecursiveArrayMerger();
+    $setting = $merger->merge(
         $setting,
         [
             "settings" => [
