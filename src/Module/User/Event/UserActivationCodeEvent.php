@@ -56,7 +56,7 @@ class UserActivationCodeEvent
      * @throws \Exception
      */
     public function __invoke(EventInterface $event) {
-var_dump( $event->getTarget());
+var_dump( 'fdsfdsfds');
 die();
         $event->getTarget()->getActivationCode()->setDate(new \DateTime())
             ->setToken($this->crypto->crypto($event->getTarget()->getActivationCode()->getDate()->format('Y-m-d H:i:s')));
