@@ -49,11 +49,6 @@ return function (ContainerBuilder $containerBuilder) {
                 $key = Key::loadFromAsciiSafeString($content);
             }
 
-            $crypto = new DefuseCrypto($key);
-            var_dump($content);
-            var_dump($key);
-            var_dump($crypto->crypto('fffffff'));
-            die();
             return new DefuseCrypto($key);
         },
 
