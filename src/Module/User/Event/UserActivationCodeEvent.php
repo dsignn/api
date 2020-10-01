@@ -45,6 +45,8 @@ class UserActivationCodeEvent
      * @param $url
      */
     public function __construct(CryptoInterface $crypto, UserMailerInterface $mailer, ContactInterface $from, string $url) {
+        var_dump( UserActivationCodeEvent::class);
+        die();
         $this->crypto = $crypto;
         $this->mailer = $mailer;
         $this->from = $from;
@@ -56,8 +58,7 @@ class UserActivationCodeEvent
      * @throws \Exception
      */
     public function __invoke(EventInterface $event) {
-var_dump( 'fdsfdsfds');
-die();
+
         $event->getTarget()->getActivationCode()->setDate(new \DateTime())
             ->setToken($this->crypto->crypto($event->getTarget()->getActivationCode()->getDate()->format('Y-m-d H:i:s')));
 
