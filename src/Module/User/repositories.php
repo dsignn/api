@@ -76,11 +76,13 @@ return function (ContainerBuilder $containerBuilder) {
                 new UserActivationCodeEvent($c->get('OAuthCrypto'), $c->get(UserMailerInterface::class), $c->get('UserFrom'), $settings['mail']['activationCode'])
             );
 
+            /*
             $storage->getEventManager()->attach(Storage::$PREPROCESS_SAVE, new AppendOrganizationEvent(
                 $c->get(Client::class),
                 $c->get('settings')['httpClient']["url"],
                 $c->get('RestOrganizationEntityHydrator')
             ));
+            */
 
             return $storage;
         },
