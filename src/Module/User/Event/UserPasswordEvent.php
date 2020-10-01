@@ -29,10 +29,12 @@ class UserPasswordEvent {
      * @param EventInterface $event
      */
     public function __invoke(EventInterface $event) {
-        var_dump( $event->getTarget());
-        die();
+
         $event->getTarget()->setPassword($this->crypto->crypto(
             $event->getTarget()->getPassword()
         ));
+
+        var_dump( $event->getTarget());
+        die();
     }
 }
