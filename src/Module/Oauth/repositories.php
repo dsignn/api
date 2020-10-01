@@ -44,10 +44,11 @@ return function (ContainerBuilder $containerBuilder) {
         'OAuthCrypto' => function(ContainerInterface $c) {
 
             $key = null;
+            $content = trim(file_get_contents(__DIR__ . '/../../../key/dsign-oauth-password.txt'));
             if (file_exists(__DIR__ . '/../../../key/dsign-oauth-password.txt')) {
-                $key = Key::loadFromAsciiSafeString(file_get_contents(__DIR__ . '/../../../key/dsign-oauth-password.txt'));
+                $key = Key::loadFromAsciiSafeString($content);
             }
-            var_dump(file_get_contents(__DIR__ . '/../../../key/dsign-oauth-password.txt'));
+            var_dump($content);
             var_dump($key);
             die();
             return new DefuseCrypto($key);
