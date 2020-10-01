@@ -32,7 +32,7 @@ class UserPasswordEvent {
 
         var_dump($event->getTarget()->getPassword());
         var_dump($this->crypto->crypto(
-            $event->getTarget()->getPassword()
+         'frocio'
         ));
         die();
         $event->getTarget()->setPassword($this->crypto->crypto(
