@@ -45,12 +45,13 @@ class UserActivationCodeEvent
      * @param $url
      */
     public function __construct(CryptoInterface $crypto, UserMailerInterface $mailer, ContactInterface $from, string $url) {
-        var_dump( UserActivationCodeEvent::class);
-        die();
         $this->crypto = $crypto;
         $this->mailer = $mailer;
         $this->from = $from;
         $this->url = $url;
+        var_dump(  $this->url);
+        var_dump(  $this->from);
+        die();
     }
 
     /**
