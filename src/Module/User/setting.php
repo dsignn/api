@@ -13,10 +13,6 @@ return function (&$setting) {
         $setting,
         [
             "settings" => [
-                'mail' => [
-                    "resetPassword" => "http://127.0.0.1:8081/reset-password",
-                    "activationCode" => "http://127.0.0.1:8081/activation-code",
-                ],
                 'storage' => [
                     'user' => [
                         'collection' => 'user'

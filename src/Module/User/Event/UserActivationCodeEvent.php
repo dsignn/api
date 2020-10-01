@@ -49,9 +49,7 @@ class UserActivationCodeEvent
         $this->mailer = $mailer;
         $this->from = $from;
         $this->url = $url;
-        var_dump(  $this->url);
-        var_dump(  $this->from);
-        die();
+
     }
 
     /**
@@ -59,7 +57,8 @@ class UserActivationCodeEvent
      * @throws \Exception
      */
     public function __invoke(EventInterface $event) {
-
+        var_dump(  'please');
+        die();
         $event->getTarget()->getActivationCode()->setDate(new \DateTime())
             ->setToken($this->crypto->crypto($event->getTarget()->getActivationCode()->getDate()->format('Y-m-d H:i:s')));
 
