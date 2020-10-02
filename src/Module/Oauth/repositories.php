@@ -45,9 +45,11 @@ return function (ContainerBuilder $containerBuilder) {
         'OAuthCrypto' => function(ContainerInterface $c) {
 
             $key = null;
-            $content = trim(file_get_contents(__DIR__ . '/../../../key/dsign-oauth-password.txt'));
+
             if (file_exists(__DIR__ . '/../../../key/dsign-oauth-password.txt')) {
-                $key = Key::loadFromAsciiSafeString($content);
+                $content = trim(file_get_contents(__DIR__ . '/../../../key/dsign-oauth-password.txt'));
+            } else {
+                throw  new  RuntimeException('File ' . __DIR__ . '/../../../key/dsign-oauth-password.txt' .' not found');
             }
 
             return new LaminasCrypto($content);
