@@ -50,11 +50,7 @@ return function (ContainerBuilder $containerBuilder) {
                 $key = Key::loadFromAsciiSafeString($content);
             }
 
-            $crypto = new LaminasCrypto($content);
-            var_dump($crypto->crypto('tetettetetetesdvvdcv'));
-            die();
-
-            return new DefuseCrypto($key);
+            return new LaminasCrypto($content);
         },
 
         'ClientStorage' => function(ContainerInterface $c) {
