@@ -59,7 +59,7 @@ class UserActivationCodeEvent
         $event->getTarget()->getActivationCode()->setDate(new \DateTime())
             ->setToken($this->crypto->crypto($event->getTarget()->getActivationCode()->getDate()->format('Y-m-d H:i:s')));
 
-      //  $this->sendActivationMail($event->getTarget());
+        $this->sendActivationMail($event->getTarget());
     }
 
     /**

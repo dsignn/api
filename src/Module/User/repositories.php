@@ -71,12 +71,12 @@ return function (ContainerBuilder $containerBuilder) {
             $storage->setEntityPrototype($c->get('UserEntityPrototype'));
 
             $storage->getEventManager()->attach(Storage::$BEFORE_SAVE, new UserPasswordEvent($c->get('OAuthCrypto')));
-       /*
+
             $storage->getEventManager()->attach(
                 Storage::$BEFORE_SAVE,
                 new UserActivationCodeEvent($c->get('OAuthCrypto'), $c->get(UserMailerInterface::class), $c->get('UserFrom'), $settings['mail']['activationCode'])
             );
-
+/*
                    $storage->getEventManager()->attach(Storage::$PREPROCESS_SAVE, new AppendOrganizationEvent(
                 $c->get(Client::class),
                 $c->get('settings')['httpClient']["url"],
