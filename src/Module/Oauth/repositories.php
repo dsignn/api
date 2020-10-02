@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 use App\Crypto\CryptoOpenSsl;
 use App\Crypto\DefuseCrypto;
+use App\Crypto\LaminasCrypto;
 use App\Hydrator\Strategy\HydratorArrayStrategy;
 use App\Hydrator\Strategy\HydratorStrategy;
 use App\Hydrator\Strategy\Mongo\MongoDateStrategy;
@@ -48,6 +49,10 @@ return function (ContainerBuilder $containerBuilder) {
             if (file_exists(__DIR__ . '/../../../key/dsign-oauth-password.txt')) {
                 $key = Key::loadFromAsciiSafeString($content);
             }
+
+            $crypto = new LaminasCrypto($content);
+            var_dump($crypto->crypto('tetettetetetesdvvdcv'));
+            die();
 
             return new DefuseCrypto($key);
         },
