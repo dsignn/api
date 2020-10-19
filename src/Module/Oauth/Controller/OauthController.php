@@ -62,6 +62,8 @@ class OauthController {
         } catch (\Exception $exception) {
 
             $streamFactory = new StreamFactory();
+            var_dump('test');
+            die();
             switch (true) {
                 case $exception instanceof UsernameConflictException === true:
                     $response =  $response->withStatus(409)->withBody($streamFactory->createStream(
