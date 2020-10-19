@@ -48,6 +48,7 @@ class UserRepository implements UserRepositoryInterface {
         $user = null;
         if ($resultSet->count() === 1) {
             $userEntity = $resultSet->current();
+            var_dump('toni');
             var_dump($username);
             die();
             if ($this->crypto->deCrypto($userEntity->getPassword()) === $password) {
