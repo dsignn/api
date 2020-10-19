@@ -45,9 +45,6 @@ class UserRepository implements UserRepositoryInterface {
     public function getUserEntityByUserCredentials($username, $password, $grantType, ClientEntityInterface $clientEntity) {
 
         $resultSet = $this->storage->getAll(['email' => $username]);
-        var_dump('toni');
-        var_dump($username);
-        die();
         $user = null;
         if ($resultSet->count() === 1) {
             $userEntity = $resultSet->current();
@@ -63,6 +60,10 @@ class UserRepository implements UserRepositoryInterface {
                 }
             }
         }
+        var_dump($resultSet->count());
+        var_dump($username);
+        var_dump($user);
+        die();
         return $user;
     }
 }
