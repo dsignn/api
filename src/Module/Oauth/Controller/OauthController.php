@@ -48,6 +48,8 @@ class OauthController {
     public function accessToken(Request $request, Response $response) {
 
         try {
+            var_dump('poauth');
+            die();
             // Try to respond to the request
             return $this->oauthServer->respondToAccessTokenRequest($request, $response);
 
