@@ -45,13 +45,14 @@ class ActivationToken implements RpcControllerInterface {
      */
     public function rpc(Request $request, Response $response) {
 
-        $data = $request->getParsedBody();
+        $data = $request->getQueryParams();
 
         // TODO validation
 
         $resultSet = $this->storage->getAll(['activation_code.token' => $data['token']]);
         /** @var UserEntity $user */
         $user = $resultSet->current();
+
         if (!$user) {
             return $response->withStatus(404);
         }

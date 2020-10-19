@@ -43,7 +43,7 @@ return function (App $app) {
 
     $app->options('/reset-password', [OptionController::class, 'options']);
 
-    $app->post('/activation-code', [ActivationToken::class, 'rpc']);
+    $app->get('/activation-code', [ActivationToken::class, 'rpc']);
 
     $app->options('/activation-code', [OptionController::class, 'options']);
 };
