@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace App\Module\Oauth\Repository;
 
 use App\Crypto\CryptoInterface;
+use App\Module\Oauth\Exception\UsernameConflictException;
+use App\Module\Oauth\Exception\UsernameNotFoundException;
 use App\Module\Oauth\Exception\UserNotEnableException;
 use App\Module\User\Entity\UserEntity;
 use App\Storage\StorageInterface;
@@ -46,19 +48,26 @@ class UserRepository implements UserRepositoryInterface {
 
         $resultSet = $this->storage->getAll(['email' => $username]);
         $user = null;
-        if ($resultSet->count() === 1) {
-            $userEntity = $resultSet->current();
-            if ($this->crypto->deCrypto($userEntity->getPassword()) === $password) {
-                /** @var UserEntity $user */
-                $user = $userEntity;
-                switch (true) {
-                    case $user->getStatus() === UserEntity::$STATUS_NOT_VERIFY:
-                        throw new UserNotEnableException(
-                        "",
-                            401);
-                        break;
+        switch (true) {
+            case $resultSet->count() === 1:
+                $userEntity = $resultSet->current();
+                if ($this->crypto->deCrypto($userEntity->getPassword()) === $password) {
+                    /** @var UserEntity $user */
+                    $user = $userEntity;
+                    switch (true) {
+                        case $user->getStatus() === UserEntity::$STATUS_NOT_VERIFY:
+                            throw new UserNotEnableException(
+                                "",
+                                401);
+                            break;
+                    }
                 }
-            }
+                break;
+            case $resultSet->count() === 0:
+                throw new UsernameNotFoundException();
+                break;
+            default:
+                throw new UsernameConflictException();
         }
         return $user;
     }

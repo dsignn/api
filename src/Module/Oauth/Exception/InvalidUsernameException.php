@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace App\Module\Oauth\Exception;
 
 /**
- * Class UserNotEnableException
+ * Class InvalidUsernameException
  * @package App\Module\Oauth\Exception
  */
-class UserNotEnableException extends \Exception {
+class InvalidUsernameException extends \Exception {
 
 }
