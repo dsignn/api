@@ -55,15 +55,15 @@ class OauthController {
             return $this->oauthServer->respondToAccessTokenRequest($request, $response);
 
         } catch (OAuthServerException $exception) {
-
+            var_dump('dio');
+            die();
             // All instances of OAuthServerException can be formatted into a HTTP response
             return $exception->generateHttpResponse($response);
 
         } catch (\Exception $exception) {
-
-            $streamFactory = new StreamFactory();
-            var_dump('test');
+            var_dump('cane');
             die();
+            $streamFactory = new StreamFactory();
             switch (true) {
                 case $exception instanceof UsernameConflictException === true:
                     $response =  $response->withStatus(409)->withBody($streamFactory->createStream(
