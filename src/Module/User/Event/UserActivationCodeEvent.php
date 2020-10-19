@@ -57,7 +57,7 @@ class UserActivationCodeEvent
      */
     public function __invoke(EventInterface $event) {
         $event->getTarget()->getActivationCode()->setDate(new \DateTime())
-            ->setToken(urlencode($this->crypto->crypto($event->getTarget()->getActivationCode()->getDate()->format('Y-m-d H:i:s'))));
+            ->setToken($this->crypto->crypto($event->getTarget()->getActivationCode()->getDate()->format('Y-m-d H:i:s')));
 
         $this->sendActivationMail($event->getTarget());
     }
@@ -73,7 +73,7 @@ class UserActivationCodeEvent
         $toContact = new Contact();
         $toContact->setEmail($user->getEmail());
         $toContact->setName($user->getName());
-        $url = $this->url . '?token=' . $user->getActivationCode()->getToken();
+        $url = $this->url . '?token=' . urlencode($user->getActivationCode()->getToken());
         try {
             $this->mailer->send([$toContact], $this->from, 'Activation code', $this->getBodyMessage($user, $url));
         } catch (\Exception $exception) {

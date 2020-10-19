@@ -87,11 +87,11 @@ class PasswordToken implements RpcControllerInterface {
         }
 
         $user->getRecoverPassword()->setDate(new \DateTime())
-            ->setToken(urlencode($this->crypto->crypto($user->getRecoverPassword()->getDate()->format('Y-m-d H:i:s'))));
+            ->setToken($this->crypto->crypto($user->getRecoverPassword()->getDate()->format('Y-m-d H:i:s')));
 
         $this->storage->update($user);
 
-        $url = $this->url . '?token=' . $user->getRecoverPassword()->getToken();
+        $url = $this->url . '?token=' . urlencode($user->getRecoverPassword()->getToken());
         $toContact = new Contact();
         $toContact->setEmail($user->getEmail());
         $toContact->setName($user->getName());
