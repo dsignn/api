@@ -60,10 +60,6 @@ class UserRepository implements UserRepositoryInterface {
                 }
             }
         }
-        var_dump($resultSet->count());
-        var_dump($username);
-        var_dump($user);
-        die();
         return $user;
     }
 }

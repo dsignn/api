@@ -57,7 +57,8 @@ class OauthController {
             return $exception->generateHttpResponse($response);
 
         } catch (\Exception $exception) {
-
+var_dump('test');
+die();
             $streamFactory = new StreamFactory();
             switch (true) {
                 case $exception instanceof UserNotEnableException === true:
