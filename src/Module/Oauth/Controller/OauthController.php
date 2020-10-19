@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace App\Module\Oauth\Controller;
 
 use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
+use App\Module\Oauth\Exception\UsernameConflictException;
+use App\Module\Oauth\Exception\UsernameNotFoundException;
 use App\Module\Oauth\Exception\UserNotEnableException;
 use App\Module\User\Entity\UserEntity;
 use League\OAuth2\Server\AuthorizationServer;
@@ -12,6 +14,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Psr7\Factory\StreamFactory;
+use function DI\get;
 
 /**
  * Class OauthController
@@ -57,12 +60,21 @@ class OauthController {
             return $exception->generateHttpResponse($response);
 
         } catch (\Exception $exception) {
-var_dump('test');
-die();
+
             $streamFactory = new StreamFactory();
             switch (true) {
+                case $exception instanceof UsernameConflictException === true:
+                    $response =  $response->withStatus(409)->withBody($streamFactory->createStream(
+                        $exception->getMessage()
+                    ));
+                    break;
                 case $exception instanceof UserNotEnableException === true:
                     $response =  $response->withStatus(401)->withBody($streamFactory->createStream(
+                        $exception->getMessage()
+                    ));
+                    break;
+                case $exception instanceof UsernameNotFoundException === true:
+                    $response =  $response->withStatus(404)->withBody($streamFactory->createStream(
                         $exception->getMessage()
                     ));
                     break;
