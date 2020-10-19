@@ -69,6 +69,8 @@ class UserRepository implements UserRepositoryInterface {
             default:
                 throw new UsernameConflictException();
         }
+        var_dump('ttttt');
+        die();
         return $user;
     }
 }
