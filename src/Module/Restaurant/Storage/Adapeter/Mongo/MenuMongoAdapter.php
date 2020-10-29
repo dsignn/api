@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Module\Restaurant\Storage\Adapeter\Mongo;
 
 use App\Storage\Adapter\Mongo\MongoAdapter;
+use MongoDB\BSON\ObjectId;
 
 /**
  * Class MenuMongoAdapter
@@ -27,10 +28,10 @@ class MenuMongoAdapter extends MongoAdapter {
                 case 'organizations':
                     $ids = [];
                     foreach ($value as $id) {
-                        array_push($ids, new \MongoId($id));
+                        array_push($ids, new ObjectId($id));
                     }
-                //    $search['organization._id'] = ['$in' => $ids];
-                //    unset($search[$key]);
+                    $search['organization._id'] = ['$in' => $ids];
+                    unset($search[$key]);
                     break;
             }
         }
