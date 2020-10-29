@@ -41,8 +41,8 @@ return function (App $app) {
         $group->post('/delete-resource',  [RpcDeleteResourceMenuItem::class, 'rpc']);
     })
         ->add($app->getContainer()->get(ValidationMiddleware::class))
-        //->add($app->getContainer()->get(AuthorizationMiddleware::class))
-        //->add($app->getContainer()->get(AuthenticationMiddleware::class))
+        ->add($app->getContainer()->get(AuthorizationMiddleware::class))
+        ->add($app->getContainer()->get(AuthenticationMiddleware::class))
     ;
 
     $app->options('/menu-category', [OptionController::class, 'options']);

@@ -29,8 +29,8 @@ class MenuMongoAdapter extends MongoAdapter {
                     foreach ($value as $id) {
                         array_push($ids, new \MongoId($id));
                     }
-                    $search['organization._id'] = ['$in' => $ids];
-                    unset($search[$key]);
+                //    $search['organization._id'] = ['$in' => $ids];
+                //    unset($search[$key]);
                     break;
             }
         }

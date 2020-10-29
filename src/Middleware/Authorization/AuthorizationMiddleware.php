@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Middleware\Authorization;
 
 use App\Auth\RoleInterface;
+use App\Middleware\Authentication\AuthenticationMiddleware;
 use App\Module\User\Entity\UserEntity;
 use App\Storage\Entity\ReferenceInterface;
 use Laminas\Permissions\Acl\Acl;

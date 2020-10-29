@@ -9,6 +9,7 @@ use App\Hydrator\Strategy\NamingStrategy\CamelCaseStrategy;
 use App\Module\Monitor\Entity\MonitorReference;
 use App\Module\Organization\Entity\OrganizationEntity;
 use App\Module\Organization\Event\SluggerNameEvent;
+use App\Module\Organization\Storage\adapter\Mongo\OrganizationMongoAdapter;
 use App\Module\Organization\Storage\OrganizationStorage;
 use App\Module\Organization\Storage\OrganizationStorageInterface;
 use App\Module\Organization\Url\GenericSlugify;
@@ -50,7 +51,7 @@ return function (ContainerBuilder $containerBuilder) {
             $resultSetPaginator->setHydrator($hydrator);
             $resultSetPaginator->setEntityPrototype($c->get('OrganizationEntityPrototype'));
 
-            $mongoAdapter = new MongoAdapter($c->get(Client::class), $settings['storage']['name'], $serviceSetting['collection']);
+            $mongoAdapter = new OrganizationMongoAdapter($c->get(Client::class), $settings['storage']['name'], $serviceSetting['collection']);
             $mongoAdapter->setResultSet($resultSet);
             $mongoAdapter->setResultSetPaginate($resultSetPaginator);
 

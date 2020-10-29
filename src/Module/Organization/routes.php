@@ -2,6 +2,8 @@
 declare(strict_types=1);
 
 use App\Controller\OptionController;
+use App\Middleware\Authentication\AuthenticationMiddleware;
+use App\Middleware\Authorization\AuthorizationMiddleware;
 use App\Middleware\Validation\ValidationMiddleware;
 use App\Module\Organization\Controller\AllRpcOrganizationController;
 use App\Module\Organization\Controller\GenerateQrCodeRpc;
@@ -41,7 +43,8 @@ return function (App $app) {
 
     })
         ->add($app->getContainer()->get(ValidationMiddleware::class))
-        //->add($app->getContainer()->get(AuthenticationMiddleware::class))
+        ->add($app->getContainer()->get(AuthorizationMiddleware::class))
+        ->add($app->getContainer()->get(AuthenticationMiddleware::class))
     ;
 
     $app->options('/generate-qrcode/{id:[0-9a-fA-F]{24}}',  [OptionController::class, 'options']);
