@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use App\Module\Restaurant\Console\CreateMenuCategoryCommand;
+use App\Module\Restaurant\Storage\MenuCategoryStorageInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Application;
 
