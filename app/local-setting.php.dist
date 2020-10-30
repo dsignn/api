@@ -27,7 +27,7 @@ return function (&$setting) {
                     "host" => "mongo"
                 ],
                 'storage' => [
-                    'name' => 'dsign-staging'
+                    'name' => 'dsign'
                 ],
                 'mail' => [
                     "port" => 587,
@@ -37,7 +37,9 @@ return function (&$setting) {
                     "from" => [
                         "name" => "Dsign",
                         "email" => "dsign-noreply@gmail.com"
-                    ]
+                    ],
+                    "resetPassword" => "http://127.0.0.1:8081/reset-password",
+                    "activationCode" => "http://127.0.0.1:8081/activation-code",
                 ],
                 'httpClient' => [
                     'url' => 'nginx'
@@ -55,32 +57,11 @@ return function (&$setting) {
                         'cache_path' => __DIR__ . '/../tmp/twig',
                     ],
                 ],
-                'oauth' => [
-                    'client' => [
-                        'storage' => [
-                            'name' => 'dsign-oauth-staging',
-                        ]
-                    ],
-                    'access-token' => [
-                        'storage' => [
-                            'name' => 'dsign-oauth-staging'
-                        ]
-                    ],
-                    'user' => [
-                        'storage' => [
-                            'name1' => 'dsign-staging',
-                        ]
-                    ],
-                    'auth-code' => [
-                        'storage' => [
-                            'name' => 'dsign-oauth-staging',
-                        ]
-                    ],
-                    'refresh-token' => [
-                        'storage' => [
-                            'name' => 'dsign-oauth-staging',
-                        ]
-                    ],
+                'client' => [
+                    'grant_type' => 'client_credentials',
+                    'client_id' => 'dsign-client',
+                    'client_secret' => 'dsign4!',
+                    'scope' => 'basic email'
                 ]
             ],
         ]
