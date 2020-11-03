@@ -36,7 +36,6 @@ class HttpErrorHandler extends SlimErrorHandler
         if ($exception instanceof HttpException) {
             $statusCode = $exception->getCode();
             $error->setDescription($exception->getMessage());
-
             if ($exception instanceof HttpNotFoundException) {
                 $error->setType(ActionError::RESOURCE_NOT_FOUND);
             } elseif ($exception instanceof HttpMethodNotAllowedException) {
