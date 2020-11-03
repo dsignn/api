@@ -4,16 +4,9 @@ declare(strict_types=1);
 namespace App\Module\Organization\Controller;
 
 use App\Controller\RpcControllerInterface;
-use App\Crypto\CryptoInterface;
-use App\Hydrator\Strategy\HydratorStrategy;
 use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
 use App\Module\Organization\Entity\OrganizationEntity;
 use App\Module\Organization\Storage\OrganizationStorageInterface;
-use App\Module\Resource\Entity\ImageResourceEntity;
-use App\Module\User\Mail\UserMailerInterface;
-use App\Module\User\Storage\UserStorageInterface;
-use App\Storage\Entity\Reference;
-use App\Storage\Entity\SingleEntityPrototype;
 use App\Storage\StorageInterface;
 use BaconQrCode\Common\ErrorCorrectionLevel;
 use BaconQrCode\Encoder\Encoder;
@@ -22,8 +15,6 @@ use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
 use GuzzleHttp\Client;
-use Laminas\Hydrator\ClassMethodsHydrator;
-use mysql_xdevapi\Exception;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -146,18 +137,35 @@ class GenerateQrCodeRpc implements RpcControllerInterface {
      * @throws \Exception
      */
     protected function generateQrCode(OrganizationEntity $entity) {
+        $pathLogo = __DIR__ . '/../../../../asset/logo_bordo.png';
 
+        $qrCode = new \Endroid\QrCode\QrCode($this->url . '/' . $entity->getNormalizeName());
+        $qrCode->setSize(300);
+        $qrCode->setMargin(10);
+        $qrCode->setWriterByName('png');
+        $qrCode->setEncoding('UTF-8');
+        $qrCode->setErrorCorrectionLevel(\Endroid\QrCode\ErrorCorrectionLevel::HIGH());
+        $qrCode->setForegroundColor(['r' => 1, 'g' => 91, 'b' => 96, 'a' => 0]);
+        $qrCode->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255, 'a' => 0]);
+        $qrCode->setLogoPath($pathLogo);
+        $qrCode->setLogoSize(100);
+        $qrCode->setValidateResult(false);
+/*
+        header('Content-Type: '.$qrCode->getContentType());
+        echo $qrCode->writeString();
+        die();
+*/
         $renderer = new ImageRenderer(
             new RendererStyle(400),
             new ImagickImageBackEnd()
         );
+
         $writer = new Writer($renderer);
         // TODO url from config
 
-        $string =  $renderer->render(Encoder::encode($this->url . '/' . $entity->getNormalizeName(),  ErrorCorrectionLevel::L()));
 
         $path = $this->tmp . "/" . uniqid() . '.png';
-        $im = imagecreatefromstring($string);
+        $im = imagecreatefromstring($qrCode->writeString());
         $resp = imagepng($im, $path);
         imagedestroy($im);
 
