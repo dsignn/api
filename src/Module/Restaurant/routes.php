@@ -48,6 +48,4 @@ return function (App $app) {
     $app->options('/menu-category', [OptionController::class, 'options']);
 
     $app->get('/menu-category', [RpcMenuCategoryController::class, 'rpc']);
-
-    $app->get('/restaurant/{slug}/menu',  [RpcMenuController::class, 'rpc']);
 };
