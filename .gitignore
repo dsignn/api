@@ -6,7 +6,7 @@
 /key
 composer.lock
 app/local-setting.php
-app/menu-dependencies.php
+app/menu-local-setting.php
 
 # Mac
 .DS_Store
