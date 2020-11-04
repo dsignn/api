@@ -44,6 +44,11 @@ class GenerateQrCodeRpc implements RpcControllerInterface {
     protected $url;
 
     /**
+     * @var
+     */
+    protected $urlMenu;
+
+    /**
      * @var StorageInterface
      */
     protected $storage;
@@ -62,6 +67,7 @@ class GenerateQrCodeRpc implements RpcControllerInterface {
         $this->client = $client;
         $this->tmp = $container->get('settings')['tmp'];
         $this->url = $container->get('settings')['httpClient']["url"];
+        $this->urlMenu = $container->get('settings')['urlMenu'];
         $this->container = $container;
     }
 
@@ -139,7 +145,7 @@ class GenerateQrCodeRpc implements RpcControllerInterface {
     protected function generateQrCode(OrganizationEntity $entity) {
         $pathLogo = __DIR__ . '/../../../../asset/logo_bordo.png';
 
-        $qrCode = new \Endroid\QrCode\QrCode($this->url . '/' . $entity->getNormalizeName());
+        $qrCode = new \Endroid\QrCode\QrCode($this->urlMenu . '/' . $entity->getNormalizeName());
         $qrCode->setSize(300);
         $qrCode->setMargin(10);
         $qrCode->setWriterByName('png');
@@ -150,11 +156,7 @@ class GenerateQrCodeRpc implements RpcControllerInterface {
         $qrCode->setLogoPath($pathLogo);
         $qrCode->setLogoSize(100);
         $qrCode->setValidateResult(false);
-/*
-        header('Content-Type: '.$qrCode->getContentType());
-        echo $qrCode->writeString();
-        die();
-*/
+
         $renderer = new ImageRenderer(
             new RendererStyle(400),
             new ImagickImageBackEnd()

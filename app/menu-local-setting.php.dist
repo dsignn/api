@@ -17,6 +17,7 @@ return function (&$setting) {
                 'tmp' => '../tmp',
                 'determineRouteBeforeAppMiddleware' => true,
                 'debug' => true,
+                'urlMenu' => 'http://127.0.0.200',
                 'displayErrorDetails' => true, // Should be set to false in production
                 "mongodb" => [
                     "host" => "mongo"

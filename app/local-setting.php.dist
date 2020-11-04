@@ -18,6 +18,7 @@ return function (&$setting) {
                 'determineRouteBeforeAppMiddleware' => true,
                 'debug' => true,
                 'displayErrorDetails' => true, // Should be set to false in production
+                'urlMenu' => 'http://127.0.0.200',
                 'logger' => [
                     'name' => 'slim-app',
                     'path' => __DIR__ . '/../logs/app.log',

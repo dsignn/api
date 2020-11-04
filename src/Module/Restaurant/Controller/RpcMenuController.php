@@ -91,13 +91,18 @@ class RpcMenuController implements RpcControllerInterface {
 
 
         $resultSet = $this->organizationStorage->getAll(['normalize_name' => $slug]);
+        // Restaurant not found
         if (!$resultSet->current()) {
             return $this->get404($response);
         }
 
         $menu = $this->menuStorage->getMenuByRestaurantSlug($slug);
-        // inject Resource
-        // TODO transport this logic in the query
+
+        // Menu not found
+        if (!$menu) {
+            return $this->get404($response);
+        }
+
         /** @var MenuItem $menuItem */
         foreach($menu->getItems() as $menuItem) {
             $photos = $menuItem->getPhotos();

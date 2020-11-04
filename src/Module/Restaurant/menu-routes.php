@@ -16,5 +16,5 @@ use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 
 return function (App $app) {
 
-    $app->get('/menu/{slug}',  [RpcMenuController::class, 'rpc']);
+    $app->get('/{slug}',  [RpcMenuController::class, 'rpc']);
 };

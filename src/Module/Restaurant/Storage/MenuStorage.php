@@ -41,13 +41,10 @@ class MenuStorage extends Storage implements MenuStorageInterface {
                 [
                     '$unwind' => '$menu'
                 ],
-                /*
-                 // TODO REMOVE
                 [
                     '$match' =>
                         ['menu.enable' => true],
-                ],
-                */
+                ]
             ];
 
             /** @var Cursor $cursor */
