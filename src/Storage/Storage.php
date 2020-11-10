@@ -28,11 +28,6 @@ class Storage implements StorageInterface {
     /**
      * @var string
      */
-    static public $PREPROCESS_SAVE = 'preprocess_save';
-
-    /**
-     * @var string
-     */
     static public $BEFORE_SAVE = 'before_save';
 
     /**

@@ -10,8 +10,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  * Class RestControllerInterface
  * @package App\Controller
  */
-interface RestControllerInterface
-{
+interface RestControllerInterface {
     /**
      * @param Request $request
      * @param Response $response

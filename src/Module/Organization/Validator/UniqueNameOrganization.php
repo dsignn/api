@@ -95,7 +95,7 @@ class UniqueNameOrganization extends AbstractValidator implements ValidatorInter
      * @return bool
      */
     protected function excludeCurrentNameEntity() {
-        return $this->entity && $this->entity->getName() !== $this->getValue();
+        return !$this->entity || $this->entity->getName() !== $this->getValue();
     }
 
     /**

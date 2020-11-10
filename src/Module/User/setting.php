@@ -41,6 +41,9 @@ return function (&$setting) {
                 'validation' => [
                     '/user' => [
                         'POST' => 'UserPostValidation'
+                    ],
+                    '/user/{id:[0-9a-fA-F]{24}}' => [
+                        'PATCH' => 'UserPatchValidation'
                     ]
                 ],
                 'authentication' => [

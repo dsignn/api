@@ -7,6 +7,7 @@ use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
 use App\Storage\Event\PreProcess;
 use App\Storage\Storage;
 use App\Storage\StorageInterface;
+use Laminas\EventManager\EventManagerAwareTrait;
 use Laminas\InputFilter\InputFilterInterface;
 use Notihnio\RequestParser\RequestParser;
 use Psr\Container\ContainerInterface;
@@ -18,6 +19,20 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  * @package App\Controller
  */
 class RestController implements RestControllerInterface {
+
+    /**
+     * @var string
+     */
+    static public $PREPROCESS_POST = 'preprocess_post';
+
+    /**
+     * @var string
+     */
+    static public $PREPROCESS_PATCH = 'preprocess_patch';
+
+    /**
+     *
+     */
     use AcceptServiceAwareTrait;
 
     /**
@@ -85,12 +100,13 @@ class RestController implements RestControllerInterface {
         }
 
         $entity = $this->storage->getEntityPrototype()->getPrototype($data);
+
+        $preprocess = new PreProcess($entity, $data);
+        $this->storage->getEventManager()->trigger(RestController::$PREPROCESS_POST, $preprocess);
+        $data = $preprocess->getData();
+
         $this->storage->getHydrator()->hydrate($data, $entity);
         // Preprocess data we can manipulate data and entity
-        $this->storage->getEventManager()->trigger(
-            Storage::$PREPROCESS_SAVE,
-            new PreProcess($entity, $data)
-        );
 
         $this->storage->save($entity);
         $acceptService = $this->getAcceptService($request);
@@ -168,9 +184,15 @@ class RestController implements RestControllerInterface {
             $data = $validator->getValues();
         }
 
-        $this->storage->getHydrator()->hydrate($data, $entity);
-        $entity->setId($id);
+        $preprocess = new PreProcess($entity, $data);
+        $this->storage->getEventManager()->trigger(
+            RestController::$PREPROCESS_PATCH,
+            $preprocess
+        );
 
+        $data = $preprocess->getData();
+
+        $this->storage->getHydrator()->hydrate($data, $entity);
         $this->storage->update($entity);
 
         $acceptService = $this->getAcceptService($request);

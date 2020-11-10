@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use App\Controller\RestController;
 use App\Crypto\CryptoInterface;
 use App\Crypto\CryptoOpenSsl;
 use App\Hydrator\Strategy\HydratorArrayStrategy;
@@ -12,6 +13,7 @@ use App\Hydrator\Strategy\NamingStrategy\CamelCaseStrategy;
 use App\Mail\Contact;
 use App\Module\Oauth\Filter\PasswordFilter;
 use App\Module\Organization\Validator\UniqueNameOrganization;
+use App\Module\User\Controller\UserController;
 use App\Module\User\Entity\Embedded\ActivationCode;
 use App\Module\User\Entity\Embedded\RecoverPassword;
 use App\Module\User\Entity\UserEntity;
@@ -38,6 +40,7 @@ use Laminas\Hydrator\Strategy\ClosureStrategy;
 use Laminas\InputFilter\CollectionInputFilter;
 use Laminas\InputFilter\Input;
 use Laminas\InputFilter\InputFilter;
+use App\InputFilter\InputFilter as AppInputFilter;;
 use Laminas\Validator\EmailAddress;
 use Laminas\Validator\InArray;
 use Laminas\Validator\StringLength;
@@ -80,14 +83,14 @@ return function (ContainerBuilder $containerBuilder) {
             $storage->setHydrator($hydrator);
             $storage->setEntityPrototype($c->get('UserEntityPrototype'));
 
-            $storage->getEventManager()->attach(Storage::$BEFORE_SAVE, new UserPasswordEvent($c->get('OAuthCrypto')));
-
             $storage->getEventManager()->attach(
                 Storage::$BEFORE_SAVE,
                 new UserActivationCodeEvent($c->get('OAuthCrypto'), $c->get(UserMailerInterface::class), $c->get('UserFrom'), $settings['mail']['activationCode'])
             );
 
-            $storage->getEventManager()->attach(Storage::$PREPROCESS_SAVE, $c->get(AppendOrganizationEvent::class));
+            $storage->getEventManager()->attach(RestController::$PREPROCESS_POST, $c->get(AppendOrganizationEvent::class));
+            $storage->getEventManager()->attach(RestController::$PREPROCESS_POST, new UserPasswordEvent($c->get('OAuthCrypto')));
+            $storage->getEventManager()->attach(RestController::$PREPROCESS_PATCH, new UserPasswordEvent($c->get('OAuthCrypto')));
 
             return $storage;
         },
@@ -168,7 +171,19 @@ return function (ContainerBuilder $containerBuilder) {
         },
         'UserPostValidation' => function(ContainerInterface $container) {
 
-            $inputFilter = new InputFilter();
+            $inputFilter = new AppInputFilter();
+
+            $inputFilter->addPropertiesIfEmpty([
+                'id',
+                'name',
+                'lastName',
+                'email',
+                'password',
+                'roleId',
+                'nameOrganization',
+                'organizations'
+            ]);
+
 
             // Name field
             $name = new Input('name');
@@ -218,6 +233,47 @@ return function (ContainerBuilder $containerBuilder) {
                 ->add($role)
                 ->add($password)
                 ->add($organizationsCollectionInputFilter, 'organizations');
+
+            return $inputFilter;
+        },
+
+        'UserPatchValidation' => function(ContainerInterface $container) {
+
+            $inputFilter = new AppInputFilter();
+
+            $inputFilter->addPropertiesIfEmpty([
+                'name',
+                'lastName',
+                'email',
+                'password'
+            ]);
+
+            // Name field
+            $name = new Input('name');
+            $name->setRequired(false);
+            // Last name field
+            $lastName = new Input('lastName');
+            $lastName->setRequired(false);
+            // Email field
+            $email= new Input('email');
+            $email->setRequired(false);
+            $email->getValidatorChain()
+                ->attach(new EmailAddress())
+                ->attach($container->get(EmailExistValidator::class));
+
+            // Password field
+            $password = $password = new Input('password');
+            $password->getValidatorChain()->attach(new StringLength([
+                'min' => 4,
+                'max' => 12
+            ]));
+            $password->setRequired(false);
+
+            $inputFilter
+                ->add($email)
+                ->add($name)
+                ->add($lastName)
+                ->add($password);
 
             return $inputFilter;
         },
