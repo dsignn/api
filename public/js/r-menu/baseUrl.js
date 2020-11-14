@@ -1,0 +1,1 @@
+const baseUrlJs = "{{ base_url }}";

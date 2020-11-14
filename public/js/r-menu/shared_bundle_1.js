@@ -60,53 +60,7 @@ define(["exports"], function (_exports) {
   var Event$1 = {
     Event: Event
   };
-  /**
-   * @class
-   * Listener
-   */
-
   _exports.$Event = Event$1;
-
-  var Listener =
-  /*#__PURE__*/
-  function () {
-    /**
-     * @param fn
-     */
-    function Listener(fn) {
-      babelHelpers.classCallCheck(this, Listener);
-
-      if (typeof fn !== 'function') {
-        throw "Wrong fn param, must be a function given ".concat(babelHelpers.typeof(fn));
-      }
-      /**
-       * @type {Function}
-       */
-
-
-      this.fn = fn;
-    }
-    /**
-     * @param {Event} event
-     * @return {Event}
-     */
-
-
-    babelHelpers.createClass(Listener, [{
-      key: "execute",
-      value: function execute(event) {
-        this.fn(event);
-        return event;
-      }
-    }]);
-    return Listener;
-  }();
-
-  _exports.Listener$1 = _exports.Listener = Listener;
-  var Listener$1 = {
-    Listener: Listener
-  };
-  _exports.$Listener = Listener$1;
 
   var EventManager =
   /*#__PURE__*/
@@ -152,7 +106,7 @@ define(["exports"], function (_exports) {
 
           for (var cont = 0; this.listeners[evtName].length > cont; cont++) {
             switch (true) {
-              case babelHelpers.instanceof(this.listeners[evtName][cont], Listener) === true:
+              case babelHelpers.typeof(this.listeners[evtName][cont]) === 'object' && typeof this.listeners[evtName][cont]['execute'] == 'function':
                 this.listeners[evtName][cont].execute(event);
                 break;
 
@@ -241,7 +195,53 @@ define(["exports"], function (_exports) {
   var EventManagerAware$1 = {
     EventManagerAware: EventManagerAware
   };
+  /**
+   * @class
+   * Listener
+   */
+
   _exports.$EventManagerAware = EventManagerAware$1;
+
+  var Listener =
+  /*#__PURE__*/
+  function () {
+    /**
+     * @param fn
+     */
+    function Listener(fn) {
+      babelHelpers.classCallCheck(this, Listener);
+
+      if (typeof fn !== 'function') {
+        throw "Wrong fn param, must be a function given ".concat(babelHelpers.typeof(fn));
+      }
+      /**
+       * @type {Function}
+       */
+
+
+      this.fn = fn;
+    }
+    /**
+     * @param {Event} event
+     * @return {Event}
+     */
+
+
+    babelHelpers.createClass(Listener, [{
+      key: "execute",
+      value: function execute(event) {
+        this.fn(event);
+        return event;
+      }
+    }]);
+    return Listener;
+  }();
+
+  _exports.Listener$1 = _exports.Listener = Listener;
+  var Listener$1 = {
+    Listener: Listener
+  };
+  _exports.$Listener = Listener$1;
   var index = {
     Event: Event,
     EventManager: EventManager,
