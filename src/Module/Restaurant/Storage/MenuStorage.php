@@ -40,7 +40,10 @@ class MenuStorage extends Storage implements MenuStorageInterface {
                     ]
                 ],
                 [
-                    '$unwind' => '$menu'
+                    '$unwind' => [
+                        "path" => '$menu',
+                        "preserveNullAndEmptyArrays"=> true
+                    ]
                 ],
                 [
                     '$match' =>
@@ -55,7 +58,10 @@ class MenuStorage extends Storage implements MenuStorageInterface {
                     ]
                 ],
                 [
-                    '$unwind' => '$logo'
+                    '$unwind' => [
+                        "path" => '$logo',
+                        "preserveNullAndEmptyArrays"=> true
+                    ]
                 ]
             ];
 
