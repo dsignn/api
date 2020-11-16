@@ -27109,7 +27109,15 @@ define(["meta",  baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _sha
         babelHelpers.createClass(DsignMenu, [{
             key: "ready", value: function ready() {
                 babelHelpers.get(babelHelpers.getPrototypeOf(DsignMenu.prototype), "ready", this).call(this);
-                this.menu = mockMenu;
+
+                switch (true) {
+                    case menu !== undefined || menu !== null:
+                        this.menu = menu;
+                        break;
+                    case dev === true:
+                        this.menu = mockMenu;
+                        break;
+                }
             }
         }, {
             key: "parseUrlParam", value: function parseUrlParam() {

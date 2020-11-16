@@ -52,11 +52,6 @@ class RpcMenuController implements RpcControllerInterface {
     protected $organizationStorage;
 
     /**
-     * @var StorageInterface
-     */
-    protected $resourceStorage;
-
-    /**
      * @var ContainerInterface
      */
     protected $container;
@@ -65,20 +60,17 @@ class RpcMenuController implements RpcControllerInterface {
      * RpcMenuController constructor.
      * @param MenuStorageInterface $menuStorage
      * @param OrganizationStorageInterface $organizationStorage
-     * @param ResourceStorageInterface $resourceStorage
      * @param Twig $twig
      * @param ContainerInterface $container
      */
     public function __construct(MenuStorageInterface $menuStorage,
                                 OrganizationStorageInterface $organizationStorage,
-                                ResourceStorageInterface $resourceStorage,
                                 Twig $twig,
                                 ContainerInterface $container) {
         $this->twig = $twig;
         $this->jsPath = $container->get('settings')['twig']['path-js'];
         $this->menuStorage = $menuStorage;
         $this->organizationStorage = $organizationStorage;
-        $this->resourceStorage = $resourceStorage;
         $this->container = $container;
     }
 
@@ -88,7 +80,6 @@ class RpcMenuController implements RpcControllerInterface {
     public function rpc(Request $request, Response $response) {
 
         $slug = $request->getAttribute('__route__')->getArgument('slug');
-
 
         $resultSet = $this->organizationStorage->getAll(['normalize_name' => $slug]);
         // Restaurant not found
@@ -103,34 +94,16 @@ class RpcMenuController implements RpcControllerInterface {
             return $this->get404($response);
         }
 
-        /** @var MenuItem $menuItem */
-        foreach($menu->getItems() as $menuItem) {
-            $photos = $menuItem->getPhotos();
-            /** @var Reference $photo */
-            for ($cont = 0; $cont < count($photos); $cont++) {
-                $resource = $this->resourceStorage->get($photos[$cont]->getId());
-                if ($resource) {
-                    $photos[$cont] = $resource;
-                } else {
-                    unset($photos[$cont]);
-                }
-            }
-            $menuItem->setPhotos($photos);
-        }
-
-
         if (!$menu) {
             return $this->get404($response);
         }
-        /** @var HydratorInterface $hydrator */
-        $hydrator =  $this->container->get($this->hydratorService);
 
         return $this->twig->render(
             $response,
             'index.html',
             [
                 'base_url' => $this->jsPath,
-                'menu' => $hydrator->extract($menu)
+                'menu' => $menu
             ]
         );
     }

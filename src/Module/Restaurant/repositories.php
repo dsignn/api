@@ -128,8 +128,6 @@ return function (ContainerBuilder $containerBuilder) {
     ])->addDefinitions([
         'StorageMenuEntityHydrator' => function(ContainerInterface $c) {
 
-
-
             $menuItemHydrator = new ClassMethodsHydrator();
             $menuItemHydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
             $menuItemHydrator->addStrategy('_id', new MongoIdStrategy(true));
