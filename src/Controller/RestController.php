@@ -191,7 +191,6 @@ class RestController implements RestControllerInterface {
         );
 
         $data = $preprocess->getData();
-
         $this->storage->getHydrator()->hydrate($data, $entity);
         $this->storage->update($entity);
 

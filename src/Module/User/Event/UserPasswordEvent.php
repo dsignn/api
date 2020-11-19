@@ -36,7 +36,7 @@ class UserPasswordEvent {
 
         /** @var UserEntity $user */
         $data = $event->getTarget()->getData();
-        if ($data['password']) {
+        if (isset($data['password'])) {
             $data['password'] = $this->crypto->crypto($data['password']);
         }
 
