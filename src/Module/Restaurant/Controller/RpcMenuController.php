@@ -118,7 +118,10 @@ class RpcMenuController implements RpcControllerInterface {
     protected function get404(Response $response) {
         return $this->twig->render(
             $response,
-             '404.html'
+             '404.html',
+            [
+                'base_url' => $this->jsPath
+            ]
         );
     }
 }
