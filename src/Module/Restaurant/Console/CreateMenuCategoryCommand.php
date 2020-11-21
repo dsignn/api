@@ -46,21 +46,49 @@ class CreateMenuCategoryCommand extends SymfonyCommand {
 
         $cateory = [
             '_id' => 'category',
-            'appetizers' => [
-                'it' => 'antipasti',
-                'en' => 'appetizers'
+            'starters' => [
+                'it' => 'Antipasti',
+                'en' => 'Starters'
             ],
-            'first' => [
-                'it' => 'primi',
-                'en' => 'first'
+            'first-courses' => [
+                'it' => 'Primi piatti',
+                'en' => 'First courses'
             ],
-            'second' => [
-                'it' => 'secondi',
-                'en' => 'main coure'
+            'main-courses' => [
+                'it' => 'Secondi piatti',
+                'en' => 'Main courses'
             ],
-            'drinks' => [
-                'it' => 'bevande',
-                'en' => 'drinks'
+            'side-dishes' => [
+                'it' => 'Contorni',
+                'en' => 'Side dishes'
+            ],
+            'beverage' => [
+                'it' => 'Bevande',
+                'en' => 'Beverage'
+            ],
+            'desserts' => [
+                'it' => 'Dolci',
+                'en' => 'Desserts'
+            ],
+            'wine' => [
+                'it' => 'Vini',
+                'en' => 'Wine'
+            ],
+            'pizza' => [
+                'it' => 'Pizza',
+                'en' => 'Pizza'
+            ],
+            'sandwiches' => [
+                'it' => 'Panini',
+                'en' => 'Sandwiches'
+            ],
+            'soups' => [
+                'it' => 'Zuppe',
+                'en' => 'Soups'
+            ],
+            'bitter' => [
+                'it' => 'Amaro',
+                'en' => 'Bitter'
             ],
         ];
 
