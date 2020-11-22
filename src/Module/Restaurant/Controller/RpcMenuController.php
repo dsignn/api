@@ -94,10 +94,6 @@ class RpcMenuController implements RpcControllerInterface {
             return $this->get404($response);
         }
 
-        if (!$menu) {
-            return $this->get404($response);
-        }
-
         return $this->twig->render(
             $response,
             'index.html',

@@ -74,8 +74,6 @@ class MenuStorage extends Storage implements MenuStorageInterface {
             $resourceIds = [];
 
             $arraySearch = $cursor->toArray();
-            var_dump($arraySearch);
-            die();
 
             if (is_array($arraySearch) && count($arraySearch) > 0 && isset($arraySearch[0]['menu'])) {
 
@@ -86,7 +84,7 @@ class MenuStorage extends Storage implements MenuStorageInterface {
             }
         }
 
-        return $this->extractMenu($menu);
+        return $menu ? $this->extractMenu($menu) : $menu;
     }
 
     /**
