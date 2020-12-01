@@ -20,8 +20,6 @@ return function (ContainerBuilder $containerBuilder) {
     $localSetting = include_once __DIR__ . "/menu-local-setting.php";
     $localSetting($setting);
 
-
-
     // Global Settings Object
     $containerBuilder->addDefinitions($setting);
 };

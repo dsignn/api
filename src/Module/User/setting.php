@@ -13,6 +13,12 @@ return function (&$setting) {
         $setting,
         [
             "settings" => [
+                'twig' => [
+                    'paths' => [
+                       // __DIR__ . '/../src/Module/Restaurant/View/restaurant-menu',
+                        realpath(__DIR__ .  '/Mail/Template')
+                    ]
+                ],
                 'storage' => [
                     'user' => [
                         'collection' => 'user'

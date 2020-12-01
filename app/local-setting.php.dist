@@ -48,10 +48,6 @@ return function (&$setting) {
                 'contentNegotiation' => [],
                 'twig' => [
                     'path-js' => 'http://127.0.0.150/js',
-                    'paths' => [
-                        __DIR__ . '/../src/Module/Restaurant/View/restaurant-menu',
-                        __DIR__ . '/../src/Module/User/Mail/Template'
-                    ],
                     'options' => [
                         // Should be set to true in production
                         'cache' => false,

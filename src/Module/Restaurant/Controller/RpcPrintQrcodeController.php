@@ -5,6 +5,7 @@ namespace App\Module\Restaurant\Controller;
 
 use App\Controller\RpcControllerInterface;
 use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
+use App\Module\Organization\Entity\OrganizationEntity;
 use App\Module\Organization\Storage\OrganizationStorage;
 use App\Module\Organization\Storage\OrganizationStorageInterface;
 use App\Module\Resource\Storage\ResourceStorageInterface;
@@ -21,15 +22,15 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Views\Twig;
 
 /**
- * Class RpcMenuController
+ * Class RpcPrintQrcodeController
  * @package App\Module\Restaurant\Controller
  */
-class RpcMenuController implements RpcControllerInterface {
+class RpcPrintQrcodeController implements RpcControllerInterface {
 
     /**
      * @var string
      */
-    protected $hydratorService = 'RestMenuEntityWithResourceHydrator';
+    protected $hydratorService = 'RestOrganizationEntityHydrator';
 
     /**
      * @var Twig
@@ -44,7 +45,7 @@ class RpcMenuController implements RpcControllerInterface {
     /**
      * @var MenuStorage
      */
-    protected $menuStorage;
+    protected $resourceStorage;
 
     /**
      * @var StorageInterface
@@ -58,19 +59,20 @@ class RpcMenuController implements RpcControllerInterface {
 
     /**
      * RpcMenuController constructor.
-     * @param MenuStorageInterface $menuStorage
      * @param OrganizationStorageInterface $organizationStorage
      * @param Twig $twig
      * @param ContainerInterface $container
      */
-    public function __construct(MenuStorageInterface $menuStorage,
-                                OrganizationStorageInterface $organizationStorage,
-                                Twig $twig,
-                                ContainerInterface $container) {
+    public function __construct(
+        ResourceStorageInterface $resourceStorage,
+        OrganizationStorageInterface $organizationStorage,
+        Twig $twig,
+        ContainerInterface $container) {
+
         $this->twig = $twig;
         $this->jsPath = $container->get('settings')['twig']['path-js'];
-        $this->menuStorage = $menuStorage;
         $this->organizationStorage = $organizationStorage;
+        $this->resourceStorage = $resourceStorage;
         $this->container = $container;
     }
 
@@ -79,27 +81,31 @@ class RpcMenuController implements RpcControllerInterface {
      */
     public function rpc(Request $request, Response $response) {
 
-        $slug = $request->getAttribute('__route__')->getArgument('slug');
+        $id = $request->getAttribute('__route__')->getArgument('id');
 
-        $resultSet = $this->organizationStorage->getAll(['normalize_name' => $slug]);
+        /** @var OrganizationEntity $organization */
+        $organization = $this->organizationStorage->get($id);
+
+
         // Restaurant not found
-        if (!$resultSet->current()) {
+        if (!$organization) {
             return $this->get404($response);
         }
 
-        $menu = $this->menuStorage->getMenuByRestaurantSlug($slug);
-
-        // Menu not found
-        if (!$menu) {
+        // Logo not found
+        if (!$organization->getQrCode()->getId() || $organization->getQrCode()->getId() === '') {
+            // TODO personalize
             return $this->get404($response);
         }
+
+        $resource = $this->resourceStorage->get($organization->getQrCode()->getId());
 
         return $this->twig->render(
             $response,
-            'restaurant-men-index.html',
+            'print-qrcode-index.html',
             [
                 'base_url' => $this->jsPath,
-                'menu' => $menu
+                'resource'=> $resource
             ]
         );
     }

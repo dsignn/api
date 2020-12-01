@@ -9,6 +9,7 @@ use Graze\ArrayMerger\RecursiveArrayMerger;
  */
 return function (&$setting) {
 
+
     $merger = new RecursiveArrayMerger();
     $setting = $merger->merge(
         $setting,
@@ -17,6 +18,12 @@ return function (&$setting) {
                 'storage' => [
                     'menu' => [
                         'collection' => 'menu'
+                    ]
+                ],
+                'twig' => [
+                    'paths' => [
+                        realpath(__DIR__ . '/View/restaurant-menu'),
+                        realpath(__DIR__ . '/View/print-qrcode'),
                     ]
                 ],
             ]
