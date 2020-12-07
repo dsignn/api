@@ -249,6 +249,9 @@ return function (ContainerBuilder $containerBuilder) {
             $input = new Input('name');
             $inputFilter->add($input, 'name');
 
+            $input = new Input('layoutType');
+            $inputFilter->add($input, 'layoutType');
+
             $input = new Input('backgroundHeader');
             $inputFilter->add($input, 'backgroundHeader');
 

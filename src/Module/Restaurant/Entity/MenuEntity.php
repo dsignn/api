@@ -44,6 +44,11 @@ class MenuEntity implements EntityInterface
     protected $colorHeader = '';
 
     /**
+     * @var string
+     */
+    protected $layoutType = 'dsign-menu-item-image';
+
+    /**
      * @var bool
      */
     protected $enable = false;
@@ -158,5 +163,19 @@ class MenuEntity implements EntityInterface
     public function setEnable(bool $enable): MenuEntity {
         $this->enable = $enable;
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLayoutType(): string {
+        return $this->layoutType;
+    }
+
+    /**
+     * @param string $layoutType
+     */
+    public function setLayoutType(string $layoutType): void {
+        $this->layoutType = $layoutType;
     }
 }

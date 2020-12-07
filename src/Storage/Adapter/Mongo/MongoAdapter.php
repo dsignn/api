@@ -156,7 +156,7 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
         $resultSet = clone $this->getResultSetPaginate();
         return $resultSet->setPage($page)
             ->setItemPerPage($itemPerPage)
-            ->setCount($this->getCount($search))
+            ->setCount($this->getCount($this->transformSearch($search)))
             ->setDataSource(
                 $this->searchDataSource(
                     $search,
@@ -185,9 +185,17 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
         }
 
         return $this->getCollection()->find(
-            $search,
+            $this->transformSearch($search),
             $options
         );
+    }
+
+    /**
+     * @param $search
+     * @return mixed
+     */
+    protected function transformSearch(array $search) {
+        return $search;
     }
 
     /**
