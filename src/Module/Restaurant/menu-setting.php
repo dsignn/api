@@ -24,6 +24,7 @@ return function (&$setting) {
                     'paths' => [
                         realpath(__DIR__ . '/View/restaurant-menu'),
                         realpath(__DIR__ . '/View/print-qrcode'),
+                        realpath(__DIR__ . '/View'),
                     ]
                 ],
             ]
