@@ -82,16 +82,17 @@ class RpcMenuController implements RpcControllerInterface {
         $slug = $request->getAttribute('__route__')->getArgument('slug');
 
         $resultSet = $this->organizationStorage->getAll(['normalize_name' => $slug]);
+        // TODO localize error message
         // Restaurant not found
         if (!$resultSet->current()) {
-            return $this->get404($response);
+            return $this->get404($response, 'Il ristorante che stai cercando non si è ancora registrato alla piattaforma...');
         }
 
         $menu = $this->menuStorage->getMenuByRestaurantSlug($slug);
 
         // Menu not found
         if (!$menu) {
-            return $this->get404($response);
+            return $this->get404($response, 'Il ristorante non ha ancora caricato il suo menu');
         }
 
         return $this->twig->render(
@@ -106,17 +107,19 @@ class RpcMenuController implements RpcControllerInterface {
 
     /**
      * @param Response $response
+     * @param string errorMessage
      * @return Response
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
-    protected function get404(Response $response) {
+    protected function get404(Response $response, $errorMessage) {
         return $this->twig->render(
             $response,
              'restaurant-404.html',
             [
-                'base_url' => $this->jsPath
+                'base_url' => $this->jsPath,
+                'error_message' => $errorMessage
             ]
         );
     }
