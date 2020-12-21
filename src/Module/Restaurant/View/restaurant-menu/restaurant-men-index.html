@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Menuffff</title>
+    <title>Menu</title>
+
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
     <script>
+        // TODO setting to the php application
         const baseUrlJs = "{{ base_url }}";
-        const menu = JSON.parse('{{ menu |json_encode | raw }}');
-        console.log(menu);
     </script>
     <script>
         /**
@@ -3223,8 +3223,7 @@
                     a._animation._wrapper = a, a._isGroup = !0, b.awaitStartTime(a), a._constructChildAnimations(), a._setExternalAnimation(a);
                 }, b.groupChildDuration = d;
             }(a, c);
-        }(); //# sourceMappingURL=web-animations-next-lite.min.js.map
-    </script>
+        }(); //# sourceMappingURL=web-animations-next-lite.min.js.map</script>
     <script>
         define(["{{ base_url }}/r-menu/shared_bundle_1.js"], function (_shared_bundle_) {
             "use strict";
@@ -3301,22 +3300,550 @@
                     return Container;
                 }();
 
+            var Storage =
+                /*#__PURE__*/
+                function () {
+                    /**
+                     * @param {StorageAdapterInterface} adapter
+                     */
+                    function Storage(adapter) {
+                        babelHelpers.classCallCheck(this, Storage);
+
+                        /**
+                         * @type {EventManagerInterface}
+                         */
+                        this.eventManager = new _shared_bundle_.EventManager();
+                        /**
+                         * @type {StorageAdapterInterface}
+                         */
+
+                        this.adapter = adapter;
+                    }
+
+                    /**
+                     * @param {EventManagerInterface} eventManager
+                     * @return {this}
+                     */
+
+
+                    babelHelpers.createClass(Storage, [{
+                        key: "setEventManager",
+                        value: function setEventManager(eventManager) {
+                            this.eventManager = eventManager;
+                            return this;
+                        }
+                        /**
+                         * @return {EventManagerInterface}
+                         */
+
+                    }, {
+                        key: "getEventManager",
+                        value: function getEventManager() {
+                            return this.eventManager;
+                        }
+                        /**
+                         * @return {HydratorInterface}
+                         */
+
+                    }, {
+                        key: "getHydrator",
+                        value: function getHydrator() {
+                            return this.hydrator;
+                        }
+                        /**
+                         * @param {HydratorInterface} hydrator
+                         */
+
+                    }, {
+                        key: "setHydrator",
+                        value: function setHydrator(hydrator) {
+                            this.hydrator = hydrator;
+                            return this;
+                        }
+                        /**
+                         * @inheritDoc
+                         */
+
+                    }, {
+                        key: "setAdapter",
+                        value: function setAdapter(adapter) {
+                            this.adapter = adapter;
+                            return this;
+                        }
+                        /**
+                         * @inheritDoc
+                         */
+
+                    }, {
+                        key: "getAdapter",
+                        value: function getAdapter() {
+                            return this.adapter;
+                        }
+                        /**
+                         * @inheritDoc
+                         */
+
+                    }, {
+                        key: "get",
+                        value: function get(id) {
+                            var _this = this;
+
+                            return new Promise(function (resolve, reject) {
+                                _this.adapter.get(id).then(function (data) {
+                                    // TODO add event
+                                    resolve(_this.getHydrator() ? _this.getHydrator().hydrate(data) : data);
+                                }).catch(function (error) {
+                                    reject(error);
+                                });
+                            });
+                        }
+                    }, {
+                        key: "getAll",
+                        value: function getAll(filter) {
+                            var _this2 = this;
+
+                            return new Promise(function (resolve, reject) {
+                                _this2.adapter.getAll(filter).then(function (result) {
+                                    if (_this2.getHydrator()) {
+                                        for (var cont = 0; result.length > cont; cont++) {
+                                            result[cont] = _this2.hydrator ? _this2.hydrator.hydrate(result[cont]) : result[cont];
+                                        }
+                                    }
+
+                                    resolve(result);
+                                }).catch(function (error) {
+                                    reject(error);
+                                });
+                            });
+                        }
+                    }, {
+                        key: "getPaged",
+                        value: function getPaged(page, itemCount, filter) {
+                            var _this3 = this;
+
+                            return new Promise(function (resolve, reject) {
+                                _this3.adapter.getPaged(page, itemCount, filter).then(function (result) {
+                                    if (_this3.getHydrator()) {
+                                        for (var cont = 0; result.length > cont; cont++) {
+                                            result[cont] = _this3.hydrator ? _this3.hydrator.hydrate(result[cont]) : result[cont];
+                                        }
+                                    }
+
+                                    console.log(_this3.adapter.getNameCollection(), result);
+                                    resolve(result);
+                                }).catch(function (error) {
+                                    reject(error);
+                                });
+                            });
+                        }
+                        /**
+                         * @inheritDoc
+                         */
+
+                    }, {
+                        key: "delete",
+                        value: function _delete(entity) {
+                            var _this4 = this;
+
+                            return new Promise(function (resolve, reject) {
+                                _this4.getEventManager().emit(Storage.BEFORE_REMOVE, entity);
+
+                                _this4.adapter.remove(entity).then(function (data) {
+                                    _this4.getEventManager().emit(Storage.POST_REMOVE, entity);
+
+                                    resolve(entity);
+                                }).catch(function (error) {
+                                    reject(error);
+                                });
+                            });
+                        }
+                        /**
+                         * @inheritDoc
+                         */
+
+                    }, {
+                        key: "save",
+                        value: function save(entity) {
+                            var _this5 = this;
+
+                            return new Promise(function (resolve, reject) {
+                                _this5.getEventManager().emit(Storage.BEFORE_SAVE, entity);
+
+                                var data = _this5.hydrator ? _this5.hydrator.extract(entity) : entity;
+
+                                _this5.adapter.save(data).then(function (data) {
+                                    entity = _this5.hydrator ? _this5.hydrator.hydrate(data) : entity;
+
+                                    _this5.getEventManager().emit(Storage.POST_SAVE, entity);
+
+                                    resolve(entity);
+                                }).catch(function (err) {
+                                    reject(err);
+                                });
+                            });
+                        }
+                        /**
+                         * @inheritDoc
+                         */
+
+                    }, {
+                        key: "update",
+                        value: function update(entity) {
+                            var _this6 = this;
+
+                            return new Promise(function (resolve, reject) {
+                                _this6.getEventManager().emit(Storage.BEFORE_UPDATE, entity);
+
+                                var data = _this6.hydrator ? _this6.hydrator.extract(entity) : entity;
+
+                                _this6.adapter.update(data).then(function (data) {
+                                    _this6.getEventManager().emit(Storage.POST_UPDATE, entity);
+
+                                    resolve(entity);
+                                }).catch(function (err) {
+                                    reject(err);
+                                });
+                            });
+                        }
+                    }]);
+                    return Storage;
+                }();
+            /**
+             * Constants
+             */
+
+
+            Storage.BEFORE_SAVE = "after-save";
+            Storage.POST_SAVE = "post-save";
+            Storage.BEFORE_UPDATE = "after-update";
+            Storage.POST_UPDATE = "post-update";
+            Storage.BEFORE_REMOVE = "after-remove";
+            Storage.POST_REMOVE = "post-remove";
+            Storage.BEFORE_GET = "after-get";
+            Storage.POST_GET = "post-get";
+            /**
+             *
+             */
+
+            var Pagination =
+                /*#__PURE__*/
+                function (_Array) {
+                    babelHelpers.inherits(Pagination, _Array);
+
+                    /**
+                     * @param {Array<any>} items
+                     * @param {number} page
+                     * @param {number} itemPerPage
+                     * @param {number} totalItems
+                     */
+                    function Pagination(items, page, itemPerPage, totalItems) {
+                        var _this7;
+
+                        babelHelpers.classCallCheck(this, Pagination);
+                        _this7 = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Pagination).call(this));
+                        /**
+                         * @type number
+                         */
+
+                        _this7.itemPerPage = 0;
+                        /**
+                         * @type number
+                         */
+
+                        _this7.page = 1;
+                        /**
+                         * @type number
+                         */
+
+                        _this7.totalItems = 0;
+
+                        if (items.length > 0) {
+                            items.forEach(function (element) {
+                                _this7.push(element);
+                            });
+                        }
+
+                        _this7.page = page;
+                        _this7.itemPerPage = itemPerPage;
+                        _this7.totalItems = totalItems;
+                        return _this7;
+                    }
+
+                    /**
+                     * @inheritDoc
+                     */
+
+
+                    babelHelpers.createClass(Pagination, [{
+                        key: "getItemPerPage",
+                        value: function getItemPerPage() {
+                            return 0;
+                        }
+                        /**
+                         * @inheritDoc
+                         */
+
+                    }, {
+                        key: "getPage",
+                        value: function getPage() {
+                            return 0;
+                        }
+                        /**
+                         * @inheritDoc
+                         */
+
+                    }, {
+                        key: "getTotalItems",
+                        value: function getTotalItems() {
+                            return 0;
+                        }
+                    }]);
+                    return Pagination;
+                }(babelHelpers.wrapNativeSuper(Array));
+
+            var LocalStorageAdapter =
+                /*#__PURE__*/
+                function () {
+                    /**
+                     * @param {string} name
+                     * @param {string} nameCollection
+                     */
+                    function LocalStorageAdapter(name, nameCollection) {
+                        babelHelpers.classCallCheck(this, LocalStorageAdapter);
+
+                        /**
+                         * @type Array
+                         */
+                        this.data = [];
+                        this.name = name;
+                        this.nameCollection = nameCollection;
+                        this.data = localStorage.getItem(this.getNamespace()) ? JSON.parse(localStorage.getItem(this.getNamespace())) : [];
+                        this.data = Array.isArray(this.data) ? this.data : [];
+                    }
+
+                    /**
+                     * @return {string}
+                     */
+
+
+                    babelHelpers.createClass(LocalStorageAdapter, [{
+                        key: "getNameCollection",
+                        value: function getNameCollection() {
+                            return this.nameCollection;
+                        }
+                        /**
+                         * Persist data
+                         */
+
+                    }, {
+                        key: "persist",
+                        value: function persist() {
+                            localStorage.setItem(this.getNamespace(), JSON.stringify(this.data));
+                        }
+                        /**
+                         * @return {string}
+                         */
+
+                    }, {
+                        key: "getNamespace",
+                        value: function getNamespace() {
+                            return "".concat(this.name, "-").concat(this.nameCollection);
+                        }
+                        /**
+                         * @param {string} id
+                         * @return {Promise<any>}
+                         */
+
+                    }, {
+                        key: "get",
+                        value: function get(id) {
+                            var _this8 = this;
+
+                            return new Promise(function (resolve, reject) {
+                                var index = _this8.data.findIndex(function (element) {
+                                    return id === element.id;
+                                });
+
+                                if (index >= 0) {
+                                    resolve(_this8.data[index]);
+                                } else {
+                                    resolve(null);
+                                }
+                            });
+                        }
+                        /**
+                         * @param {object} filter
+                         * @return {Promise<any>}
+                         */
+
+                    }, {
+                        key: "getAll",
+                        value: function getAll(filter) {
+                            var _this9 = this;
+
+                            return new Promise(function (resolve, reject) {
+                                resolve(_this9.filter(filter));
+                            });
+                        }
+                        /**
+                         * @param {number} page
+                         * @param {number} itemCount
+                         * @param {object} filter
+                         * @return {Promise<any>}
+                         */
+
+                    }, {
+                        key: "getPaged",
+                        value: function getPaged(page, itemCount, filter) {
+                            var _this10 = this;
+
+                            return new Promise(function (resolve, reject) {
+                                var filteredData = _this10.filter(filter);
+
+                                var data = [];
+                                var offset = (page - 1) * itemCount;
+
+                                switch (true) {
+                                    case filteredData.length > offset:
+                                        data = filteredData.slice(offset, offset + itemCount);
+                                        break;
+                                }
+
+                                resolve(new Pagination(data, page, itemCount, filteredData.length));
+                            });
+                        }
+                        /**
+                         * @param  data
+                         * @return {Promise<any>}
+                         */
+
+                    }, {
+                        key: "remove",
+                        value: function remove(data) {
+                            var _this11 = this;
+
+                            return new Promise(function (resolve, reject) {
+                                var index = _this11.data.findIndex(function (element) {
+                                    return data.id === element.id;
+                                });
+
+                                if (index >= 0) {
+                                    _this11.data.splice(index, 1);
+
+                                    _this11.persist();
+
+                                    resolve(true);
+                                } else {
+                                    resolve(false);
+                                }
+                            });
+                        }
+                        /**
+                         * @param data
+                         * @return {Promise<any>}
+                         */
+
+                    }, {
+                        key: "save",
+                        value: function save(data) {
+                            var _this12 = this;
+
+                            return new Promise(function (resolve, reject) {
+                                if (data) {
+                                    _this12.data.push(data);
+
+                                    _this12.persist();
+                                }
+
+                                resolve(data);
+                            });
+                        }
+                        /**
+                         * @param data
+                         * @return {Promise<any>}
+                         */
+
+                    }, {
+                        key: "update",
+                        value: function update(data) {
+                            var _this13 = this;
+
+                            return new Promise(function (resolve, reject) {
+                                var index = _this13.data.findIndex(function (element) {
+                                    return data.id === element.id;
+                                });
+
+                                if (index >= 0) {
+                                    _this13.data[index] = data;
+                                } else {
+                                    _this13.data.push(data);
+                                }
+
+                                _this13.persist();
+
+                                resolve(data);
+                            });
+                        }
+                        /**
+                         * @param filter
+                         * @return {Array<any>}
+                         */
+
+                    }, {
+                        key: "filter",
+                        value: function filter(_filter) {
+                            return this.data;
+                        }
+                    }]);
+                    return LocalStorageAdapter;
+                }();
+            /**
+             * Config Application
+             */
+
+
+            var config = {
+                dev: true,
+                apiUrl: 'http://127.0.0.150/',
+                menu: JSON.parse('{{ menu |json_encode | raw }}')
+            };
             var container = new Container();
+            /**
+             * Config
+             */
+
+            container.set('config', config);
+            /**
+             * @type {Localize}
+             */
+
             container.set('Localize', new _shared_bundle_.Localize("it", ["it", "en"]));
+            /**
+             * @type {Storage}
+             */
+
+            var menuStorage = new Storage(new LocalStorageAdapter('dsign', 'favorite'));
+            container.set('MenuStorage', menuStorage);
             window.container = container;
             window.addEventListener('load', function () {
                 var ele = document.createElement('dsign-menu');
                 document.body.appendChild(ele);
             });
-        });
-    </script>
-    <script type="text/javascript" src="{{ base_url }}/r-menu/template.js"></script>
+        });</script>
     <style is="custom-style">
+
+        /** TODO setting to the php application **/
+        :root {
+            --munu-background-color: #ff0000;
+            --munu-color: #FFFFFF;
+        }
+
         * {
             padding: 0;
             margin: 0;
         }
     </style>
+    <script type="text/javascript" src="{{ base_url }}/r-menu/template.js"></script>
 </head>
 <body>
 
