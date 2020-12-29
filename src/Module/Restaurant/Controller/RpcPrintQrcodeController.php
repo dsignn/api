@@ -43,6 +43,11 @@ class RpcPrintQrcodeController implements RpcControllerInterface {
     protected $jsPath;
 
     /**
+     * var string
+     */
+    protected $rootPath;
+
+    /**
      * @var MenuStorage
      */
     protected $resourceStorage;
@@ -71,6 +76,7 @@ class RpcPrintQrcodeController implements RpcControllerInterface {
 
         $this->twig = $twig;
         $this->jsPath = $container->get('settings')['twig']['path-js'];
+        $this->rootPath = $container->get('settings')['twig']['rootPath'];
         $this->organizationStorage = $organizationStorage;
         $this->resourceStorage = $resourceStorage;
         $this->container = $container;
@@ -105,7 +111,8 @@ class RpcPrintQrcodeController implements RpcControllerInterface {
             'print-qrcode-index.html',
             [
                 'base_url' => $this->jsPath,
-                'resource'=> $resource
+                'resource'=> $resource,
+                'restaurant_url' => $this->rootPath . $organization->getNormalizeName(),
             ]
         );
     }

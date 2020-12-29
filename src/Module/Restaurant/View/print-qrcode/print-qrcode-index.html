@@ -70,11 +70,14 @@
     }
 
     .text .desc {
-    font-size: 14px;
-    margin-top: 15px;
-    font-style: italic;
-    width: 98%;
-}
+        font-size: 14px;
+        margin-top: 15px;
+        font-style: italic;
+        width: 98%;
+        color: #45454a;
+        font-weight: bold;
+        text-decoration: none;
+    }
 
     .content {
         display: flex;
@@ -102,7 +105,7 @@
             <div class="text">
                 <div class="title">scansiona il qr code</div>
                 <div class="sub-title">per vedere il nostro menu</div>
-                <div class="desc">oppure vai su dsign.it/ciuccia-mariuccia</div>
+                <a class="desc" href="{{restaurant_url}}" target="_blank">{{restaurant_url}}</a>
             </div>
         </div>
         <div class="content">
