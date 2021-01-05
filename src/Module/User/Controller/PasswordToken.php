@@ -81,13 +81,13 @@ class PasswordToken implements RpcControllerInterface {
 
         $resultSet = $this->storage->getAll(['email' => $data['identifier']]);
         /** @var UserEntity $user */
-        var_dump('fffggg');
-        die();
+
         $user = $resultSet->current();
         if (!$user) {
             return $response->withStatus(404);
         }
-
+        var_dump($user);
+        die();
         $user->getRecoverPassword()->setDate(new \DateTime())
             ->setToken($this->crypto->crypto($user->getRecoverPassword()->getDate()->format('Y-m-d H:i:s')));
 
