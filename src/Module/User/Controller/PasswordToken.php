@@ -74,14 +74,15 @@ class PasswordToken implements RpcControllerInterface {
      * @inheritDoc
      */
     public function rpc(Request $request, Response $response) {
-        var_dump('ffff');
-        die();
+
         $data = $request->getParsedBody();
 
         // TODO validate data
 
         $resultSet = $this->storage->getAll(['email' => $data['identifier']]);
         /** @var UserEntity $user */
+        var_dump('fffggg');
+        die();
         $user = $resultSet->current();
         if (!$user) {
             return $response->withStatus(404);
