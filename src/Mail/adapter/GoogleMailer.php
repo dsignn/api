@@ -73,6 +73,7 @@ class GoogleMailer implements MailerInterface {
         $mail->Subject = $subject;
       //  $mail->msgHTML($content);
 
+
         if (!$mail->send()) {
             // TODO
         }
