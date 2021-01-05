@@ -72,7 +72,7 @@ class GoogleMailer implements MailerInterface {
             $mail->addAddress($destination->getEmail(), $destination->getName());
         }
         $mail->Subject = $subject;
-      //  $mail->msgHTML($content);
+        $mail->msgHTML($content);
 
 
         if (!$mail->send()) {
