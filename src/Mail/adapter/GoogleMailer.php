@@ -72,7 +72,9 @@ class GoogleMailer implements MailerInterface {
         }
         $mail->Subject = $subject;
         $mail->msgHTML($content);
-        var_dump('mmmmmmmmmmmmmmmmmmmmmmmmmmmmmm');
+        var_dump($content);
+        var_dump($subject);
+        var_dump($to);
         die();
         if (!$mail->send()) {
             // TODO
