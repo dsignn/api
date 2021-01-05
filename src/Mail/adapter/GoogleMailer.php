@@ -54,6 +54,8 @@ class GoogleMailer implements MailerInterface {
      */
     public function send(array $to, ContactInterface $from, string $subject, $content) {
 
+        var_dump('fdsfdsfsdfds');
+        die();
         $mail = new PHPMailer(true);
 
         $mail->isSMTP();
