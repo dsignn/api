@@ -7,6 +7,7 @@ namespace App\Mail\adapter;
 use App\Mail\ContactInterface;
 use App\Mail\MailerInterface;
 use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
 
 /**
  * Class GoogleMailer
@@ -57,7 +58,7 @@ class GoogleMailer implements MailerInterface {
         $mail = new PHPMailer(true);
 
         $mail->isSMTP();
-        //$mail->SMTPDebug = SMTP::DEBUG_SERVER;
+        $mail->SMTPDebug = SMTP::DEBUG_SERVER;
         $mail->Host = $this->host;
         $mail->Port = $this->port;
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
