@@ -97,7 +97,8 @@ class PasswordToken implements RpcControllerInterface {
         $toContact->setEmail($user->getEmail());
         $toContact->setName($user->getName());
         $this->mailer->send([$toContact], $this->from ,'Change password', $this->getBodyMessage($user, $url));
-
+var_dump('ffffffffffffffffffffffffffffffffffff');
+die();
         $AcceptService = $this->getAcceptService($request);
         return $AcceptService->transformAccept($response, $user);
     }
