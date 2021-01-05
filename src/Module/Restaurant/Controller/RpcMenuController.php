@@ -87,7 +87,8 @@ class RpcMenuController implements RpcControllerInterface {
         if (!$resultSet->current()) {
             return $this->get404($response, 'Il ristorante che stai cercando non si è ancora registrato alla piattaforma...');
         }
-
+var_dump('ffff');
+        die();
         $menu = $this->menuStorage->getMenuByRestaurantSlug($slug);
 
         // Menu not found
