@@ -86,13 +86,13 @@ class PasswordToken implements RpcControllerInterface {
         if (!$user) {
             return $response->withStatus(404);
         }
-        var_dump($user);
-        die();
+
         $user->getRecoverPassword()->setDate(new \DateTime())
             ->setToken($this->crypto->crypto($user->getRecoverPassword()->getDate()->format('Y-m-d H:i:s')));
 
-        $this->storage->update($user);
-
+        $this->storage->update('ppp');
+        var_dump($user);
+        die();
         $url = $this->url . '?token=' . urlencode($user->getRecoverPassword()->getToken());
         $toContact = new Contact();
         $toContact->setEmail($user->getEmail());
