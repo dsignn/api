@@ -91,14 +91,14 @@ class PasswordToken implements RpcControllerInterface {
             ->setToken($this->crypto->crypto($user->getRecoverPassword()->getDate()->format('Y-m-d H:i:s')));
 
         $this->storage->update($user);
-        var_dump('ffffll');
-        die();
+
         $url = $this->url . '?token=' . urlencode($user->getRecoverPassword()->getToken());
         $toContact = new Contact();
         $toContact->setEmail($user->getEmail());
         $toContact->setName($user->getName());
         $this->mailer->send([$toContact], $this->from ,'Change password' ,$this->getBodyMessage($user, $url));
-
+        var_dump('jjjjjjjjjjjjjjjjjj');
+        die();
         $AcceptService = $this->getAcceptService($request);
         return $AcceptService->transformAccept($response, $user);
     }
