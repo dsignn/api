@@ -106,6 +106,11 @@ class RpcMenuController implements RpcControllerInterface {
     }
 
     /**
+     *   'background_header' => string '#1337b9' (length=7)
+    'color_header' => string '#1e1a1a' (length=7)
+     */
+
+    /**
      * @param Response $response
      * @param string errorMessage
      * @return Response

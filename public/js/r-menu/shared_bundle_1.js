@@ -4,7 +4,7 @@ define(["exports"], function (_exports) {
     Object.defineProperty(_exports, "__esModule", {
         value: true
     });
-    _exports.Localize = _exports.Listener$1 = _exports.Listener = _exports.EventManagerAware = _exports.EventManager = _exports.Event = _exports.$index = _exports.$Localize = _exports.$Listener = _exports.$EventManagerAware = _exports.$EventManager = _exports.$Event = void 0;
+    _exports.Storage = _exports.Localize = _exports.Listener$1 = _exports.Listener = _exports.EventManagerAware = _exports.EventManager = _exports.Event = _exports.$index = _exports.$Storage = _exports.$Localize = _exports.$Listener = _exports.$EventManagerAware = _exports.$EventManager = _exports.$Event = void 0;
 
     /**
      * @class
@@ -324,4 +324,230 @@ define(["exports"], function (_exports) {
         Localize: Localize
     };
     _exports.$Localize = Localize$1;
+
+    var Storage =
+        /*#__PURE__*/
+        function () {
+            /**
+             * @param {StorageAdapterInterface} adapter
+             */
+            function Storage(adapter) {
+                babelHelpers.classCallCheck(this, Storage);
+
+                /**
+                 * @type {EventManagerInterface}
+                 */
+                this.eventManager = new EventManager();
+                /**
+                 * @type {StorageAdapterInterface}
+                 */
+
+                this.adapter = adapter;
+            }
+            /**
+             * @param {EventManagerInterface} eventManager
+             * @return {this}
+             */
+
+
+            babelHelpers.createClass(Storage, [{
+                key: "setEventManager",
+                value: function setEventManager(eventManager) {
+                    this.eventManager = eventManager;
+                    return this;
+                }
+                /**
+                 * @return {EventManagerInterface}
+                 */
+
+            }, {
+                key: "getEventManager",
+                value: function getEventManager() {
+                    return this.eventManager;
+                }
+                /**
+                 * @return {HydratorInterface}
+                 */
+
+            }, {
+                key: "getHydrator",
+                value: function getHydrator() {
+                    return this.hydrator;
+                }
+                /**
+                 * @param {HydratorInterface} hydrator
+                 */
+
+            }, {
+                key: "setHydrator",
+                value: function setHydrator(hydrator) {
+                    this.hydrator = hydrator;
+                    return this;
+                }
+                /**
+                 * @inheritDoc
+                 */
+
+            }, {
+                key: "setAdapter",
+                value: function setAdapter(adapter) {
+                    this.adapter = adapter;
+                    return this;
+                }
+                /**
+                 * @inheritDoc
+                 */
+
+            }, {
+                key: "getAdapter",
+                value: function getAdapter() {
+                    return this.adapter;
+                }
+                /**
+                 * @inheritDoc
+                 */
+
+            }, {
+                key: "get",
+                value: function get(id) {
+                    var _this2 = this;
+
+                    return new Promise(function (resolve, reject) {
+                        _this2.adapter.get(id).then(function (data) {
+                            // TODO add event
+                            resolve(_this2.getHydrator() ? _this2.getHydrator().hydrate(data) : data);
+                        }).catch(function (error) {
+                            reject(error);
+                        });
+                    });
+                }
+            }, {
+                key: "getAll",
+                value: function getAll(filter) {
+                    var _this3 = this;
+
+                    return new Promise(function (resolve, reject) {
+                        _this3.adapter.getAll(filter).then(function (result) {
+                            if (_this3.getHydrator()) {
+                                for (var cont = 0; result.length > cont; cont++) {
+                                    result[cont] = _this3.hydrator ? _this3.hydrator.hydrate(result[cont]) : result[cont];
+                                }
+                            }
+
+                            resolve(result);
+                        }).catch(function (error) {
+                            reject(error);
+                        });
+                    });
+                }
+            }, {
+                key: "getPaged",
+                value: function getPaged(page, itemCount, filter) {
+                    var _this4 = this;
+
+                    return new Promise(function (resolve, reject) {
+                        _this4.adapter.getPaged(page, itemCount, filter).then(function (result) {
+                            if (_this4.getHydrator()) {
+                                for (var cont = 0; result.length > cont; cont++) {
+                                    result[cont] = _this4.hydrator ? _this4.hydrator.hydrate(result[cont]) : result[cont];
+                                }
+                            }
+
+                            console.log(_this4.adapter.getNameCollection(), result);
+                            resolve(result);
+                        }).catch(function (error) {
+                            reject(error);
+                        });
+                    });
+                }
+                /**
+                 * @inheritDoc
+                 */
+
+            }, {
+                key: "delete",
+                value: function _delete(entity) {
+                    var _this5 = this;
+
+                    return new Promise(function (resolve, reject) {
+                        _this5.getEventManager().emit(Storage.BEFORE_REMOVE, entity);
+
+                        _this5.adapter.remove(entity).then(function (data) {
+                            _this5.getEventManager().emit(Storage.POST_REMOVE, entity);
+
+                            resolve(entity);
+                        }).catch(function (error) {
+                            reject(error);
+                        });
+                    });
+                }
+                /**
+                 * @inheritDoc
+                 */
+
+            }, {
+                key: "save",
+                value: function save(entity) {
+                    var _this6 = this;
+
+                    return new Promise(function (resolve, reject) {
+                        _this6.getEventManager().emit(Storage.BEFORE_SAVE, entity);
+
+                        var data = _this6.hydrator ? _this6.hydrator.extract(entity) : entity;
+
+                        _this6.adapter.save(data).then(function (data) {
+                            entity = _this6.hydrator ? _this6.hydrator.hydrate(data) : entity;
+
+                            _this6.getEventManager().emit(Storage.POST_SAVE, entity);
+
+                            resolve(entity);
+                        }).catch(function (err) {
+                            reject(err);
+                        });
+                    });
+                }
+                /**
+                 * @inheritDoc
+                 */
+
+            }, {
+                key: "update",
+                value: function update(entity) {
+                    var _this7 = this;
+
+                    return new Promise(function (resolve, reject) {
+                        _this7.getEventManager().emit(Storage.BEFORE_UPDATE, entity);
+
+                        var data = _this7.hydrator ? _this7.hydrator.extract(entity) : entity;
+
+                        _this7.adapter.update(data).then(function (data) {
+                            _this7.getEventManager().emit(Storage.POST_UPDATE, entity);
+
+                            resolve(entity);
+                        }).catch(function (err) {
+                            reject(err);
+                        });
+                    });
+                }
+            }]);
+            return Storage;
+        }();
+    /**
+     * Constants
+     */
+
+
+    _exports.Storage = Storage;
+    Storage.BEFORE_SAVE = "after-save";
+    Storage.POST_SAVE = "post-save";
+    Storage.BEFORE_UPDATE = "after-update";
+    Storage.POST_UPDATE = "post-update";
+    Storage.BEFORE_REMOVE = "after-remove";
+    Storage.POST_REMOVE = "post-remove";
+    Storage.BEFORE_GET = "after-get";
+    Storage.POST_GET = "post-get";
+    var Storage$1 = {
+        Storage: Storage
+    };
+    _exports.$Storage = Storage$1;
 });
