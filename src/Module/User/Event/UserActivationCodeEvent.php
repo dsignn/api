@@ -6,6 +6,7 @@ namespace App\Module\User\Event;
 use App\Crypto\CryptoInterface;
 use App\Mail\Contact;
 use App\Mail\ContactInterface;
+use App\Mail\MailerInterface;
 use App\Module\User\Entity\UserEntity;
 use App\Module\User\Mail\UserMailerInterface;
 use Laminas\EventManager\EventInterface;
@@ -44,7 +45,7 @@ class UserActivationCodeEvent
      * @param ContactInterface $from
      * @param $url
      */
-    public function __construct(CryptoInterface $crypto, UserMailerInterface $mailer, ContactInterface $from, string $url) {
+    public function __construct(CryptoInterface $crypto, MailerInterface $mailer, ContactInterface $from, string $url) {
         $this->crypto = $crypto;
         $this->mailer = $mailer;
         $this->from = $from;

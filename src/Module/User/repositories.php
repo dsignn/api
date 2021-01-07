@@ -10,7 +10,9 @@ use App\Hydrator\Strategy\Mongo\MongoDateStrategy;
 use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
 use App\Hydrator\Strategy\NamingStrategy\CamelCaseStrategy;
+use App\Mail\adapter\SendinblueMailer;
 use App\Mail\Contact;
+use App\Mail\MailerInterface;
 use App\Module\Oauth\Filter\PasswordFilter;
 use App\Module\Organization\Validator\UniqueNameOrganization;
 use App\Module\User\Controller\UserController;
@@ -46,6 +48,7 @@ use Laminas\Validator\InArray;
 use Laminas\Validator\StringLength;
 use MongoDB\Client as MongoClient;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 
 return function (ContainerBuilder $containerBuilder) {
 
@@ -85,7 +88,7 @@ return function (ContainerBuilder $containerBuilder) {
 
             $storage->getEventManager()->attach(
                 Storage::$BEFORE_SAVE,
-                new UserActivationCodeEvent($c->get('OAuthCrypto'), $c->get(UserMailerInterface::class), $c->get('UserFrom'), $settings['mail']['activationCode'])
+                new UserActivationCodeEvent($c->get('OAuthCrypto'), $c->get(MailerInterface::class), $c->get('UserFrom'), $settings['mail']['activationCode'])
             );
 
             $storage->getEventManager()->attach(RestController::$PREPROCESS_POST, $c->get(AppendOrganizationEvent::class));
@@ -283,11 +286,11 @@ return function (ContainerBuilder $containerBuilder) {
         CryptoInterface::class => function(ContainerInterface $container) {
             return $container->get('OAuthCrypto');
         },
-        UserMailerInterface::class => function(ContainerInterface $container) {
+        MailerInterface::class => function(ContainerInterface $container) {
             $settings = $container->get('settings');
             $serviceSetting = $settings['mail'];
 
-            return new UserGoogleMailer($serviceSetting);
+            return new SendinblueMailer($serviceSetting, $container->get(LoggerInterface::class));
         },
         EmailExistValidator::class => function(ContainerInterface $container) {
             return new EmailExistValidator($container->get(UserStorageInterface::class));
