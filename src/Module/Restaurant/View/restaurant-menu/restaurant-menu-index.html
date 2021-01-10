@@ -3696,7 +3696,7 @@
                                 favorite.restaurantId = this.getRestaurantId();
                                 this.favorites.push(favorite);
                             }
-
+                            console.log('favoriteeeeeeeeeeeeeeeeee', favorite);
                             this.storage.update(favorite);
                             return this;
                         }
@@ -3741,7 +3741,7 @@
                         key: "hasFavorite",
                         value: function hasFavorite(menuItem) {
                             return this.favorites.findIndex(function (element) {
-                                return element.id === menuItem["id"];
+                                return element["_id"] === menuItem["_id"];
                             }) > -1;
                         }
                         /**
@@ -3752,7 +3752,7 @@
                         key: "getFavorite",
                         value: function getFavorite(menuItem) {
                             return this.favorites.find(function (element) {
-                                return element.id === menuItem["id"];
+                                return element["_id"] === menuItem["_id"];
                             });
                         }
                         /**
@@ -3763,7 +3763,7 @@
                         key: "getFavorites",
                         value: function getFavorites() {
                             return this.storage.getAll({
-                                restaurantId: this.menu["organization"]["id"]
+                                restaurantId: this.menu["organization"]["_id"]
                             });
                         }
                         /**

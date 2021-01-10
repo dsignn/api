@@ -97,7 +97,7 @@ class RpcMenuController implements RpcControllerInterface {
 
         return $this->twig->render(
             $response,
-            'restaurant-men-index.html',
+            'restaurant-menu-index.html',
             [
                 'base_url' => $this->jsPath,
                 'menu' => $menu
