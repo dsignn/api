@@ -2,305 +2,305 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
         "use strict";
         meta = babelHelpers.interopRequireWildcard(meta);
 
-        function _templateObject38_75166f504f7311eba11cfd9b4a67c5d1() {
-            var data = babelHelpers.taggedTemplateLiteral(["\n    <style>    \n       app-toolbar {\n         background-color:  #015b63;\n         padding-left: 6px;\n         padding-right: 6px;\n         color: white;\n       }\n       \n       app-toolbar paper-input,\n       app-toolbar paper-dropdown-menu {\n           --primary-text-color: white; \n           --paper-input-container-color: white;\n           --paper-input-container-focus-color: #BFBFBF;\n           --paper-input-container-invalid-color: white;\n       }\n       \n       app-toolbar paper-dropdown-menu paper-item {\n            color: #757575;; ;\n       }\n       \n       dsign-menu-favorites {\n            margin-bottom: 4px;\n       }\n       \n       h2.title {\n          font-family: var(--paper-font-common-base_-_font-family);\n          margin: 0;\n          margin-top: 10px;\n          margin-bottom: 10px;\n          text-align: center;\n          text-transform: uppercase;\n       }\n       \n       .subtitle {\n            display: flex;\n            flex-direction: row;\n            padding-bottom: 6px;\n       }\n       \n       .amount {\n            flex: 1;\n            display: flex;\n            align-items: center;\n            justify-content: flex-end;\n            padding-right: 4px;\n            font-size: 18px;\n            font-family: var(--paper-font-common-base_-_font-family);\n       }\n       \n       [no-padding] {\n            padding: 0;\n       }\n       \n       .item {\n       \n         background-color: #eee;\n         flex-basis: 13.9%;\n         margin: 0 6px 6px 0;\n       }\n       \n       .search {\n         width: 100%;\n         padding: 0 12px;\n       }\n       \n       .flex-row {\n         display: flex;\n         flex-direction: row;\n       }\n       \n       [down] {\n         align-items: flex-end;\n       }\n       \n       .search paper-input {\n         width: 100%;\n       }\n       \n       .padding-l-6 {\n         padding-left: 6px;\n       }\n       \n       paper-listbox {\n         min-width: 150px;\n         width: 100%;\n       }\n       \n       paper-select-language {\n            font-size: 18px;\n            font-family: \"Roboto\", \"Noto\", sans-serif;\n            color:rgb(33, 33, 33);\n       }\n       \n       .logo {\n          height: 64px;\n          width: 64px;\n          border-radius: 50%;\n          background-position: center center;\n          background-size: 60px;\n       }\n       \n       app-drawer {\n        padding: 6px;\n       }\n       \n       #action {\n           display: flex;\n           justify-content: center;\n           width: 40px;\n       }\n       \n       paper-icon-button.menu-drawer {\n           color: #000000 !important;\n           width: 20px;\n           height: 20px;\n           border-radius: 50%;\n           --paper-icon-button : {\n                padding: 0;\n           }       \n       }\n       \n       .drawerContainer {\n        padding: 6px;\n       }\n       \n       paper-select-language {\n         width: 100%;\n       }   \n       \n              \n       #menuContainer {\n        padding: 6px;\n        display: flex;\n        flex-direction: row;\n        flex-wrap: wrap;\n        justify-content: flex-start;\n       }\n       \n       dsign-menu-wrap-item {\n           flex-basis: 10%;\n           --menu-wrap-container : {\n               margin-bottom: 8px;\n               margin-right: 8px;\n           }\n       }\n       \n       #category {\n         padding-bottom: 2px;\n       }\n              \n       app-drawer {           \n           --app-drawer-width: 400px;\n       }\n  \n\n       @media only screen and (max-width: 2600px) and (min-width: 2201px) {\n           dsign-menu-wrap-item {\n                flex-basis: 12.5%;\n           }\n           \n           dsign-menu-wrap-item:nth-child(8n) { \n               --menu-wrap-container : {\n                   margin-right: 0;\n               }\n           }\n       }\n\n       @media only screen and (max-width: 2200px) and (min-width: 1981px) {\n           dsign-menu-wrap-item {\n               flex-basis: 14.2%;\n           }\n           \n           dsign-menu-wrap-item:nth-child(7n) { \n               --menu-wrap-container : {\n                   margin-right: 0;\n               }\n           }\n       }  \n       \n       @media only screen and (max-width: 1980px) and (min-width: 1701px) {\n           dsign-menu-wrap-item {\n               flex-basis: 16.66%;\n             \n           }\n           \n           dsign-menu-wrap-item:nth-child(6n) { \n               --menu-wrap-container : {\n                   margin-right: 0;\n               }\n           }\n       }  \n            \n       @media only screen and (max-width: 1700px) and (min-width: 1201px) {\n           dsign-menu-wrap-item {\n               flex-basis: 20%;\n           }\n           \n           dsign-menu-wrap-item:nth-child(5n) { \n               --menu-wrap-container : {\n                   margin-right: 0;\n               }\n           }\n       }  \n\n       @media only screen and (max-width: 1200px) and (min-width: 971px) {\n           dsign-menu-wrap-item {\n               flex-basis: 25%;\n           }\n           \n           dsign-menu-wrap-item:nth-child(4n) { \n               --menu-wrap-container : {\n                   margin-right: 0;\n               }\n           }\n       }        \n\n       @media only screen and (max-width: 970px) and (min-width: 771px) {\n            dsign-menu-wrap-item {\n                flex-basis: 33.3%;\n            }\n            \n            dsign-menu-wrap-item:nth-child(3n) { \n               --menu-wrap-container : {\n                   margin-right: 0;\n               }\n            }\n       }\n              \n       @media only screen and (max-width: 770px) and (min-width: 501px) {\n       \n            app-drawer {           \n                --app-drawer-width: 250px;\n            }\n       \n            dsign-menu-wrap-item {\n                flex-basis: 50%;\n            }\n            \n            dsign-menu-wrap-item:nth-child(2n) { \n               --menu-wrap-container : {\n                   margin-right: 0;\n               }\n            }\n       }\n       \n       @media only screen and (max-width: 500px)  {\n            app-drawer {           \n                --app-drawer-width: 250px;\n            }\n       \n            dsign-menu-wrap-item {\n                flex-basis: 100%;\n                --menu-wrap-container : {\n                   margin-bottom: 8px;\n                   margin-right: 0;\n                }\n            }\n            \n              #language, #category {\n                width: 96px;\n            }\n            \n             #menuContainer {\n                flex-direction: column;\n             }\n            \n            .item {\n                flex-basis: 100%;\n            }\n       }      \n    </style>\n    <app-header-layout fullbleed>\n      <app-header slot=\"header\" fixed effects=\"waterfall\">\n        <app-toolbar>\n            <dsign-logo organization=\"{{organization}}\"></dsign-logo>\n            <div class=\"search flex-row\">\n                <paper-input id=\"search\" label=\"{{localize('search')}}\" on-input=\"searchByName\"></paper-input>\n            </div>\n            <div class=\"flex-row\" down>\n                <paper-dropdown-menu id=\"category\" label=\"{{localize('category')}}\" on-iron-select=\"searchByCategory\">\n                    <paper-listbox id=\"categories\" slot=\"dropdown-content\">\n                        <dom-repeat id=\"menu\" items=\"{{categories}}\" as=\"category\">\n                          <template>\n                             <paper-item value=\"{{category}}\">{{localize(category)}}</paper-item>\n                          </template>\n                        </dom-repeat>\n                    </paper-listbox>\n                </paper-dropdown-menu>\n                <paper-icon-button icon=\"clear\" on-tap=\"clearCategory\" disable down></paper-icon-button>\n            </div>\n            <div class=\"flex-row\">\n                <paper-icon-button icon=\"v-menu\" on-tap=\"tapMenu\"></paper-icon-button>\n            </div>\n        </app-toolbar>\n      </app-header>\n      <div id=\"menuContainer\">\n          <dom-repeat id=\"list\" items=\"[[items]]\" as=\"menuItem\">\n              <template>\n                    <dsign-menu-wrap-item item=\"[[menuItem]]\" type=\"[[itemLayout]]\"></dsign-menu-wrap-item>\n              </template>\n          </dom-repeat>\n      </div>\n    </app-header-layout>\n    <app-drawer id=\"drawer\" align=\"right\">\n        <div class=\"drawerContainer\">\n            <h2 class=\"title\">Preferiti</h2>\n            <div class=\"subtitle\">\n                <div class=\"amount\">{{amount}}</div>\n                <div id=\"action\">\n                    <paper-menu-button id=\"paperAction\" no-padding ignore-select horizontal-align=\"right\">\n                        <paper-icon-button class=\"menu-drawer\" icon=\"v-menu\" slot=\"dropdown-trigger\" alt=\"multi menu\"></paper-icon-button>\n                        <paper-listbox slot=\"dropdown-content\" multi>\n                            <paper-item on-click=\"_reset\">{{localize('reset-dishes-arrived')}}</paper-item>\n                        </paper-listbox>\n                    </paper-menu-button>\n                </div>\n            </div>\n            <dom-repeat id=\"favorites\" items=\"[[favorites]]\" as=\"favorite\">\n              <template>\n                <dsign-menu-favorites menu-item=\"{{favorite}}\"></dsign-menu-favorites>\n              </template>\n            </dom-repeat>\n        </div>\n    </app-drawer>"]);
-            _templateObject38_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject38_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject38_6baf3a2053f911ebaa3fd34a63097174() {
+            var data = babelHelpers.taggedTemplateLiteral(["\n    <style>    \n       app-toolbar {\n         background-color:  #015b63;\n         padding-left: 6px;\n         padding-right: 6px;\n         color: white;\n       }\n       \n       app-toolbar paper-input,\n       app-toolbar paper-dropdown-menu {\n           --primary-text-color: white; \n           --paper-input-container-color: white;\n           --paper-input-container-focus-color: #BFBFBF;\n           --paper-input-container-invalid-color: white;\n       }\n       \n       app-toolbar paper-dropdown-menu paper-item {\n            color: #757575;; ;\n       }\n       \n       dsign-menu-favorites {\n            margin-bottom: 4px;\n       }\n       \n       h2.title {\n          font-family: var(--paper-font-common-base_-_font-family);\n          margin: 0;\n          margin-top: 10px;\n          margin-bottom: 10px;\n          text-align: center;\n          text-transform: uppercase;\n       }\n       \n       .subtitle {\n            display: flex;\n            flex-direction: row;\n            padding-bottom: 6px;\n       }\n       \n       .amount {\n            flex: 1;\n            display: flex;\n            align-items: center;\n            justify-content: flex-end;\n            padding-right: 4px;\n            font-size: 18px;\n            font-family: var(--paper-font-common-base_-_font-family);\n       }\n       \n       [no-padding] {\n            padding: 0;\n       }\n       \n       .item {\n       \n         background-color: #eee;\n         flex-basis: 13.9%;\n         margin: 0 6px 6px 0;\n       }\n       \n       .search {\n         width: 100%;\n         padding: 0 12px;\n       }\n       \n       .flex-row {\n         display: flex;\n         flex-direction: row;\n       }\n       \n       [down] {\n         align-items: flex-end;\n       }\n       \n       .search paper-input {\n         width: 100%;\n       }\n       \n       .padding-l-6 {\n         padding-left: 6px;\n       }\n       \n       paper-listbox {\n         min-width: 150px;\n         width: 100%;\n       }\n       \n       paper-select-language {\n            font-size: 18px;\n            font-family: \"Roboto\", \"Noto\", sans-serif;\n            color:rgb(33, 33, 33);\n       }\n       \n       .logo {\n          height: 64px;\n          width: 64px;\n          border-radius: 50%;\n          background-position: center center;\n          background-size: 60px;\n       }\n       \n       app-drawer {\n        padding: 6px;\n       }\n       \n       #action {\n           display: flex;\n           justify-content: center;\n           width: 40px;\n       }\n       \n       paper-icon-button.menu-drawer {\n           color: #000000 !important;\n           width: 20px;\n           height: 20px;\n           border-radius: 50%;\n           --paper-icon-button : {\n                padding: 0;\n           }       \n       }\n       \n       .drawerContainer {\n        padding: 6px;\n       }\n       \n       paper-select-language {\n         width: 100%;\n       }   \n       \n              \n       #menuContainer {\n        padding: 6px;\n        display: flex;\n        flex-direction: row;\n        flex-wrap: wrap;\n        justify-content: flex-start;\n       }\n       \n       dsign-menu-wrap-item {\n           flex-basis: 10%;\n           --menu-wrap-container : {\n               margin-bottom: 8px;\n               margin-right: 8px;\n           }\n       }\n       \n       #category {\n         padding-bottom: 2px;\n       }\n              \n       app-drawer {           \n           --app-drawer-width: 400px;\n       }\n  \n\n       @media only screen and (max-width: 2600px) and (min-width: 2201px) {\n           dsign-menu-wrap-item {\n                flex-basis: 12.5%;\n           }\n           \n           dsign-menu-wrap-item:nth-child(8n) { \n               --menu-wrap-container : {\n                   margin-right: 0;\n               }\n           }\n       }\n\n       @media only screen and (max-width: 2200px) and (min-width: 1981px) {\n           dsign-menu-wrap-item {\n               flex-basis: 14.2%;\n           }\n           \n           dsign-menu-wrap-item:nth-child(7n) { \n               --menu-wrap-container : {\n                   margin-right: 0;\n               }\n           }\n       }  \n       \n       @media only screen and (max-width: 1980px) and (min-width: 1701px) {\n           dsign-menu-wrap-item {\n               flex-basis: 16.66%;\n             \n           }\n           \n           dsign-menu-wrap-item:nth-child(6n) { \n               --menu-wrap-container : {\n                   margin-right: 0;\n               }\n           }\n       }  \n            \n       @media only screen and (max-width: 1700px) and (min-width: 1201px) {\n           dsign-menu-wrap-item {\n               flex-basis: 20%;\n           }\n           \n           dsign-menu-wrap-item:nth-child(5n) { \n               --menu-wrap-container : {\n                   margin-right: 0;\n               }\n           }\n       }  \n\n       @media only screen and (max-width: 1200px) and (min-width: 971px) {\n           dsign-menu-wrap-item {\n               flex-basis: 25%;\n           }\n           \n           dsign-menu-wrap-item:nth-child(4n) { \n               --menu-wrap-container : {\n                   margin-right: 0;\n               }\n           }\n       }        \n\n       @media only screen and (max-width: 970px) and (min-width: 771px) {\n            dsign-menu-wrap-item {\n                flex-basis: 33.3%;\n            }\n            \n            dsign-menu-wrap-item:nth-child(3n) { \n               --menu-wrap-container : {\n                   margin-right: 0;\n               }\n            }\n       }\n              \n       @media only screen and (max-width: 770px) and (min-width: 501px) {\n       \n            app-drawer {           \n                --app-drawer-width: 250px;\n            }\n       \n            dsign-menu-wrap-item {\n                flex-basis: 50%;\n            }\n            \n            dsign-menu-wrap-item:nth-child(2n) { \n               --menu-wrap-container : {\n                   margin-right: 0;\n               }\n            }\n       }\n       \n       @media only screen and (max-width: 500px)  {\n            app-drawer {           \n                --app-drawer-width: 250px;\n            }\n       \n            dsign-menu-wrap-item {\n                flex-basis: 100%;\n                --menu-wrap-container : {\n                   margin-bottom: 8px;\n                   margin-right: 0;\n                }\n            }\n            \n              #language, #category {\n                width: 96px;\n            }\n            \n             #menuContainer {\n                flex-direction: column;\n             }\n            \n            .item {\n                flex-basis: 100%;\n            }\n       }      \n    </style>\n    <app-header-layout fullbleed>\n      <app-header slot=\"header\" fixed effects=\"waterfall\">\n        <app-toolbar>\n            <dsign-logo organization=\"{{organization}}\"></dsign-logo>\n            <div class=\"search flex-row\">\n                <paper-input id=\"search\" label=\"{{localize('search')}}\" on-input=\"searchByName\"></paper-input>\n            </div>\n            <div class=\"flex-row\" down>\n                <paper-dropdown-menu id=\"category\" label=\"{{localize('category')}}\" on-iron-select=\"searchByCategory\">\n                    <paper-listbox id=\"categories\" slot=\"dropdown-content\">\n                        <dom-repeat id=\"menu\" items=\"{{categories}}\" as=\"category\">\n                          <template>\n                             <paper-item value=\"{{category}}\">{{localize(category)}}</paper-item>\n                          </template>\n                        </dom-repeat>\n                    </paper-listbox>\n                </paper-dropdown-menu>\n                <paper-icon-button icon=\"clear\" on-tap=\"clearCategory\" disable down></paper-icon-button>\n            </div>\n            <div class=\"flex-row\">\n                <paper-icon-button icon=\"v-menu\" on-tap=\"tapMenu\"></paper-icon-button>\n            </div>\n        </app-toolbar>\n      </app-header>\n      <div id=\"menuContainer\">\n          <dom-repeat id=\"list\" items=\"[[items]]\" as=\"menuItem\">\n              <template>\n                    <dsign-menu-wrap-item item=\"[[menuItem]]\" type=\"[[layoutType]]\"></dsign-menu-wrap-item>\n              </template>\n          </dom-repeat>\n      </div>\n    </app-header-layout>\n    <app-drawer id=\"drawer\" align=\"right\">\n        <div class=\"drawerContainer\">\n            <h2 class=\"title\">Preferiti</h2>\n            <div class=\"subtitle\">\n                <div class=\"amount\">{{amount}}</div>\n                <div id=\"action\">\n                    <paper-menu-button id=\"paperAction\" no-padding ignore-select horizontal-align=\"right\">\n                        <paper-icon-button class=\"menu-drawer\" icon=\"v-menu\" slot=\"dropdown-trigger\" alt=\"multi menu\"></paper-icon-button>\n                        <paper-listbox slot=\"dropdown-content\" multi>\n                            <paper-item on-click=\"_reset\">{{localize('reset-dishes-arrived')}}</paper-item>\n                        </paper-listbox>\n                    </paper-menu-button>\n                </div>\n            </div>\n            <dom-repeat id=\"favorites\" items=\"[[favorites]]\" as=\"favorite\">\n              <template>\n                <dsign-menu-favorites menu-item=\"{{favorite}}\"></dsign-menu-favorites>\n              </template>\n            </dom-repeat>\n        </div>\n    </app-drawer>"]);
+            _templateObject38_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject38_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject37_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject37_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n        <style>\n            :host {\n                display: block;\n            }\n        \n            .container {\n                height: 64px;\n                width: 64px;  \n                display: flex;\n                align-items: center;\n                justify-content: center;\n            }\n            \n            .logo {\n                height: 50px;\n                width: 50px;\n                border-radius: 50%;\n                background-position: center center;\n                background-repeat: no-repeat;\n                background-size: contain;\n            }\n        </style>\n        <div class=\"container\">\n            <div class=\"logo\"></div>\n        </div>"]);
-            _templateObject37_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject37_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject37_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject37_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject36_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject36_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n    <style> \n    \n       :host {\n          display: block;\n       }\n       \n       paper-card {\n          width: 100%;\n          height: 50px;\n          display: flex;\n       }\n       \n       .header {\n           height: 100%;\n           width: 50px;\n           background-image: url(https://via.placeholder.com/150);\n           background-position: center center ;\n           background-repeat: no-repeat;\n           background-size: cover;\n           position: relative;\n       }\n       \n       .content {\n          flex: 1;\n       }\n       \n       .header-card-content {\n          height: 25px;\n          display: flex;\n          flex-direction: column;\n          padding-left: 6px;\n          padding-right: 6px;\n       }\n       \n       .header-card-title {\n          justify-content: center;\n          align-items: flex-start;\n       }\n       \n       .header-card-action {\n           align-items: center;\n           justify-content: flex-end;\n           flex-direction: row;\n       }\n       \n       paper-icon-button {\n           margin-left: 4px;\n           width: 20px;\n           height: 20px;\n           border-radius: 50%;\n           --paper-icon-button : {\n                padding: 0;\n           }       \n           background-color: var(--munu-background-color);\n           color: var(--munu-color);\n       }\n       \n       paper-icon-button[disabled] {\n            background-color:#757575;\n       }\n       \n       .count {\n          display: flex;\n          flex: 1;\n       }\n       \n       #action {\n           display: flex;\n           align-items: center;\n       }\n       \n       #action paper-icon-button {\n           background-color: #FFFFFF;\n           color: #000000;\n       }\n          \n    </style>\n    <paper-card>\n        <div id=\"image\" class=\"header\">\n          \n        </div>\n        <div class=\"content\">\n             <div class=\"header-card-content header-card-title\">{{_capitalize(menuItem.name.it)}}</div>\n             <div class=\"header-card-content header-card-action\">\n                   <div class=\"count\">\n                     {{menuItem.currentCount}} / {{menuItem.totalCount}}\n                   </div>\n                   <paper-icon-button id=\"remove\" icon=\"remove\" on-tap=\"_remove\"></paper-icon-button>\n                   <paper-icon-button id=\"add\" icon=\"add\" on-tap=\"_add\"></paper-icon-button>\n                  \n             </div>\n        </div>\n        <div id=\"action\">\n            <paper-menu-button id=\"paperAction\" ignore-select horizontal-align=\"right\">\n                <paper-icon-button icon=\"v-menu\" slot=\"dropdown-trigger\" alt=\"multi menu\"></paper-icon-button>\n                <paper-listbox slot=\"dropdown-content\" multi>\n                    <paper-item on-click=\"_removeOne\">{{localize('remove-one-item')}}</paper-item>\n                    <paper-item  on-click=\"_delete\">{{localize('delete')}}</paper-item>\n                </paper-listbox>\n            </paper-menu-button>\n        </div>\n    </paper-card>\n     "]);
-            _templateObject36_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject36_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject36_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject36_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject35_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject35_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n          <style>\n            .container {\n                @apply --menu-wrap-container;\n            }\n            \n          </style>\n          <div id=\"container\" class=\"container\"></div>\n        "]);
-            _templateObject35_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject35_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject35_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject35_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject34_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject34_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n    <style> \n    \n       :host {\n          display: block;\n       }\n    \n       paper-card {\n          width: 100%;\n          height: 120px;\n          display: flex;\n       }\n       \n       .header {\n           height: 100%;\n           width: 100px;\n           background-image: url(https://via.placeholder.com/150);\n           background-position: center center ;\n           background-repeat: no-repeat;\n           background-size: cover;\n           position: relative;\n       }\n       \n       .content {\n         flex: 1;\n         display: flex;\n         flex-direction: column;\n       }\n       \n       .action {\n           height: 32px;\n           display: flex;\n           padding: 0 6px;\n           align-items: center;\n           justify-content: flex-end;\n       }\n       \n       .header-card-title {\n           text-rendering: optimizeLegibility;\n           font-size: 18px;\n           font-weight: 400;\n           overflow: hidden;\n           text-overflow: ellipsis;\n           height: 32px;\n           display: inline-flex;\n           align-items: center;\n           padding: 0 6px;\n           word-wrap: break-word; \n           white-space: nowrap;\n       }\n       \n       .paragraph-card {\n            flex: 1;\n            color: #757575; \n            display: flex;\n            align-items: start;\n            padding: 0 6px;\n       }  \n       \n       [padding-4] {\n          padding: 6px;\n       }\n       \n       paper-icon-button {\n           width: 26px;\n           height: 26px;\n           border-radius: 50%;\n           --paper-icon-button : {\n                padding: 1px;\n           }\n           \n           background-color: var(--munu-background-color);\n           color: var(--munu-color);\n       }\n       \n       .price {\n            padding: 2px 8px;\n            font-size: 18px;\n            font-weight: 400;\n            width: max-content;\n            border-radius: 6px;\n            position: absolute;\n            top: 4px;\n            right: 4px;\n            background-color: var(--munu-background-color);\n            color: var(--munu-color);\n       }     \n          \n    </style>\n    <paper-card>\n        <div id=\"image\" class=\"header\">\n            <div class=\"price\">\n                {{_computePrice(menuItem.price)}} \u20AC\n            </div>\n        </div>\n        <div class=\"content\">\n             <div class=\"header-card-title\">{{_capitalize(menuItem.name.it)}}</div>\n             <div class=\"paragraph-card\">{{menuItem.description.it}}</div>\n             <div class=\"action\">\n                 <paper-icon-button icon=\"add\" on-tap=\"addFavorite\"></paper-icon-button>\n             </div>\n        </div>\n    </paper-card>\n    "]);
-            _templateObject34_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject34_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject34_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject34_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject33_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject33_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n    <style> \n        :host {\n            display: block;\n        }\n   \n        paper-card {\n            width: 100%;\n            height: 260px;\n            display: flex;\n            flex-direction: column;\n        }\n       \n        .header {\n            height: 40px;\n            width: 100%;\n            display: flex;\n            align-items: center;\n            padding: 4px;\n        }\n        \n        .image {\n            flex: 1;\n            background-image: url(https://via.placeholder.com/150);\n            background-position: center center;\n            background-size: cover;\n            background-repeat: no-repeat;\n            position: relative;\n        }\n        \n        .content {\n            height: 60px;\n        }\n        \n        .header-card-title {\n           text-rendering: optimizeLegibility;\n           font-size: 18px;\n           font-weight: 400;\n           overflow: hidden;\n           text-overflow: ellipsis;\n           height: 32px;\n           padding: 4px;\n       }\n       \n       .paragraph-card {\n           flex: 1;\n           color: #757575; \n           display: flex;\n           align-items: start;\n           padding: 4px;\n           height: -webkit-fill-available;\n       }  \n       \n       .price {\n            padding: 2px 8px;\n            font-size: 18px;\n            font-weight: 400;\n            width: max-content;\n            border-radius: 6px;\n            position: absolute;\n            top: 4px;\n            right: 4px;\n            background-color: var(--munu-background-color);\n            color: var(--munu-color);\n       }  \n       \n       \n       paper-icon-button {\n           position: absolute;\n           bottom: 4px;\n           right: 4px;\n           width: 26px;\n           height: 26px;\n           border-radius: 50%;\n           --paper-icon-button : {\n                padding: 1px;\n           }       \n           background-color: var(--munu-background-color);\n           color: var(--munu-color);\n       }\n    </style>\n    <paper-card>\n        <div class=\"header\">\n            <div class=\"header-card-title\">{{_capitalize(menuItem.name.it )}}</div>\n        </div>\n        <div id=\"image\" class=\"image\">\n            <div class=\"price\">\n                {{_computePrice(menuItem.price)}} \u20AC\n            </div>\n            <paper-icon-button icon=\"add\" on-tap=\"addFavorite\"></paper-icon-button>\n        </div>\n        <div class=\"content\">\n            <div class=\"paragraph-card\">{{menuItem.description.it}}</div>\n        </div>\n    </paper-card>\n    "]);
-            _templateObject33_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject33_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject33_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject33_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject32_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject32_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n    <style>\n      :host {\n        display: block;\n      }\n    </style>\n\n    <slot></slot>\n  "]);
-            _templateObject32_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject32_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject32_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject32_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject31_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject31_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n    <style>\n      :host {\n        display: block;\n        position: relative;\n      }\n\n      :host > ::slotted(*) {\n        position: absolute;\n        top: 0;\n        left: 0;\n        bottom: 0;\n        right: 0;\n      }\n\n      :host > ::slotted(:not(.iron-selected):not(.neon-animating))\n       {\n        display: none !important;\n      }\n\n      :host > ::slotted(.neon-animating) {\n        pointer-events: none;\n      }\n    </style>\n\n    <slot id=\"content\"></slot>\n  "]);
-            _templateObject31_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject31_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject31_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject31_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject30_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject30_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n    <style include=\"paper-material-styles\">\n      :host {\n        display: inline-block;\n        position: relative;\n        box-sizing: border-box;\n        background-color: var(--paper-card-background-color, var(--primary-background-color));\n        border-radius: 2px;\n\n        @apply --paper-font-common-base;\n        @apply --paper-card;\n      }\n\n      /* IE 10 support for HTML5 hidden attr */\n      :host([hidden]), [hidden] {\n        display: none !important;\n      }\n\n      .header {\n        position: relative;\n        border-top-left-radius: inherit;\n        border-top-right-radius: inherit;\n        overflow: hidden;\n\n        @apply --paper-card-header;\n      }\n\n      .header iron-image {\n        display: block;\n        width: 100%;\n        --iron-image-width: 100%;\n        pointer-events: none;\n\n        @apply --paper-card-header-image;\n      }\n\n      .header .title-text {\n        padding: 16px;\n        font-size: 24px;\n        font-weight: 400;\n        color: var(--paper-card-header-color, #000);\n\n        @apply --paper-card-header-text;\n      }\n\n      .header .title-text.over-image {\n        position: absolute;\n        bottom: 0px;\n\n        @apply --paper-card-header-image-text;\n      }\n\n      :host ::slotted(.card-content) {\n        padding: 16px;\n        position:relative;\n\n        @apply --paper-card-content;\n      }\n\n      :host ::slotted(.card-actions) {\n        border-top: 1px solid #e8e8e8;\n        padding: 5px 16px;\n        position:relative;\n\n        @apply --paper-card-actions;\n      }\n\n      :host([elevation=\"1\"]) {\n        @apply --paper-material-elevation-1;\n      }\n\n      :host([elevation=\"2\"]) {\n        @apply --paper-material-elevation-2;\n      }\n\n      :host([elevation=\"3\"]) {\n        @apply --paper-material-elevation-3;\n      }\n\n      :host([elevation=\"4\"]) {\n        @apply --paper-material-elevation-4;\n      }\n\n      :host([elevation=\"5\"]) {\n        @apply --paper-material-elevation-5;\n      }\n    </style>\n\n    <div class=\"header\">\n      <iron-image hidden$=\"[[!image]]\" aria-hidden$=\"[[_isHidden(image)]]\" src=\"[[image]]\" alt=\"[[alt]]\" placeholder=\"[[placeholderImage]]\" preload=\"[[preloadImage]]\" fade=\"[[fadeImage]]\"></iron-image>\n      <div hidden$=\"[[!heading]]\" class$=\"title-text [[_computeHeadingClass(image)]]\">[[heading]]</div>\n    </div>\n\n    <slot></slot>\n"], ["\n    <style include=\"paper-material-styles\">\n      :host {\n        display: inline-block;\n        position: relative;\n        box-sizing: border-box;\n        background-color: var(--paper-card-background-color, var(--primary-background-color));\n        border-radius: 2px;\n\n        @apply --paper-font-common-base;\n        @apply --paper-card;\n      }\n\n      /* IE 10 support for HTML5 hidden attr */\n      :host([hidden]), [hidden] {\n        display: none !important;\n      }\n\n      .header {\n        position: relative;\n        border-top-left-radius: inherit;\n        border-top-right-radius: inherit;\n        overflow: hidden;\n\n        @apply --paper-card-header;\n      }\n\n      .header iron-image {\n        display: block;\n        width: 100%;\n        --iron-image-width: 100%;\n        pointer-events: none;\n\n        @apply --paper-card-header-image;\n      }\n\n      .header .title-text {\n        padding: 16px;\n        font-size: 24px;\n        font-weight: 400;\n        color: var(--paper-card-header-color, #000);\n\n        @apply --paper-card-header-text;\n      }\n\n      .header .title-text.over-image {\n        position: absolute;\n        bottom: 0px;\n\n        @apply --paper-card-header-image-text;\n      }\n\n      :host ::slotted(.card-content) {\n        padding: 16px;\n        position:relative;\n\n        @apply --paper-card-content;\n      }\n\n      :host ::slotted(.card-actions) {\n        border-top: 1px solid #e8e8e8;\n        padding: 5px 16px;\n        position:relative;\n\n        @apply --paper-card-actions;\n      }\n\n      :host([elevation=\"1\"]) {\n        @apply --paper-material-elevation-1;\n      }\n\n      :host([elevation=\"2\"]) {\n        @apply --paper-material-elevation-2;\n      }\n\n      :host([elevation=\"3\"]) {\n        @apply --paper-material-elevation-3;\n      }\n\n      :host([elevation=\"4\"]) {\n        @apply --paper-material-elevation-4;\n      }\n\n      :host([elevation=\"5\"]) {\n        @apply --paper-material-elevation-5;\n      }\n    </style>\n\n    <div class=\"header\">\n      <iron-image hidden\\$=\"[[!image]]\" aria-hidden\\$=\"[[_isHidden(image)]]\" src=\"[[image]]\" alt=\"[[alt]]\" placeholder=\"[[placeholderImage]]\" preload=\"[[preloadImage]]\" fade=\"[[fadeImage]]\"></iron-image>\n      <div hidden\\$=\"[[!heading]]\" class\\$=\"title-text [[_computeHeadingClass(image)]]\">[[heading]]</div>\n    </div>\n\n    <slot></slot>\n"]);
-            _templateObject30_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject30_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject30_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject30_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject29_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject29_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n    <style>\n      :host {\n        display: inline-block;\n        overflow: hidden;\n        position: relative;\n      }\n\n      #baseURIAnchor {\n        display: none;\n      }\n\n      #sizedImgDiv {\n        position: absolute;\n        top: 0px;\n        right: 0px;\n        bottom: 0px;\n        left: 0px;\n\n        display: none;\n      }\n\n      #img {\n        display: block;\n        width: var(--iron-image-width, auto);\n        height: var(--iron-image-height, auto);\n      }\n\n      :host([sizing]) #sizedImgDiv {\n        display: block;\n      }\n\n      :host([sizing]) #img {\n        display: none;\n      }\n\n      #placeholder {\n        position: absolute;\n        top: 0px;\n        right: 0px;\n        bottom: 0px;\n        left: 0px;\n\n        background-color: inherit;\n        opacity: 1;\n\n        @apply --iron-image-placeholder;\n      }\n\n      #placeholder.faded-out {\n        transition: opacity 0.5s linear;\n        opacity: 0;\n      }\n    </style>\n\n    <a id=\"baseURIAnchor\" href=\"#\"></a>\n    <div id=\"sizedImgDiv\" role=\"img\" hidden$=\"[[_computeImgDivHidden(sizing)]]\" aria-hidden$=\"[[_computeImgDivARIAHidden(alt)]]\" aria-label$=\"[[_computeImgDivARIALabel(alt, src)]]\"></div>\n    <img id=\"img\" alt$=\"[[alt]]\" hidden$=\"[[_computeImgHidden(sizing)]]\" crossorigin$=\"[[crossorigin]]\" on-load=\"_imgOnLoad\" on-error=\"_imgOnError\">\n    <div id=\"placeholder\" hidden$=\"[[_computePlaceholderHidden(preload, fade, loading, loaded)]]\" class$=\"[[_computePlaceholderClassName(preload, fade, loading, loaded)]]\"></div>\n"]);
-            _templateObject29_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject29_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject29_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject29_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject28_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject28_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n            <style>\n               paper-dropdown-menu {\n                width: 100%;\n                }\n            </style>\n            <paper-dropdown-menu id=\"category\" label=\"{{localize('language')}}\" on-iron-select=\"_selectLanguage\">\n                <paper-listbox id=\"listbox\" slot=\"dropdown-content\">\n                   <dom-repeat id=\"menu\" items=\"{{languages}}\" as=\"language\">\n                        <template>\n                             <paper-item value=\"{{language}}\">{{localize(language)}}</paper-item>\n                        </template>\n                    </dom-repeat>\n                </paper-listbox>\n            </paper-dropdown-menu>\n        "]);
-            _templateObject28_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject28_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject28_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject28_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject27_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject27_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n  <style include=\"paper-material-styles\">\n    /* Need to specify the same specificity as the styles imported from paper-material. */\n    :host {\n      @apply --layout-inline;\n      @apply --layout-center-center;\n      position: relative;\n      box-sizing: border-box;\n      min-width: 5.14em;\n      margin: 0 0.29em;\n      background: transparent;\n      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n      -webkit-tap-highlight-color: transparent;\n      font: inherit;\n      text-transform: uppercase;\n      outline-width: 0;\n      border-radius: 3px;\n      -moz-user-select: none;\n      -ms-user-select: none;\n      -webkit-user-select: none;\n      user-select: none;\n      cursor: pointer;\n      z-index: 0;\n      padding: 0.7em 0.57em;\n\n      @apply --paper-font-common-base;\n      @apply --paper-button;\n    }\n\n    :host([elevation=\"1\"]) {\n      @apply --paper-material-elevation-1;\n    }\n\n    :host([elevation=\"2\"]) {\n      @apply --paper-material-elevation-2;\n    }\n\n    :host([elevation=\"3\"]) {\n      @apply --paper-material-elevation-3;\n    }\n\n    :host([elevation=\"4\"]) {\n      @apply --paper-material-elevation-4;\n    }\n\n    :host([elevation=\"5\"]) {\n      @apply --paper-material-elevation-5;\n    }\n\n    :host([hidden]) {\n      display: none !important;\n    }\n\n    :host([raised].keyboard-focus) {\n      font-weight: bold;\n      @apply --paper-button-raised-keyboard-focus;\n    }\n\n    :host(:not([raised]).keyboard-focus) {\n      font-weight: bold;\n      @apply --paper-button-flat-keyboard-focus;\n    }\n\n    :host([disabled]) {\n      background: none;\n      color: #a8a8a8;\n      cursor: auto;\n      pointer-events: none;\n\n      @apply --paper-button-disabled;\n    }\n\n    :host([disabled][raised]) {\n      background: #eaeaea;\n    }\n\n\n    :host([animated]) {\n      @apply --shadow-transition;\n    }\n\n    paper-ripple {\n      color: var(--paper-button-ink-color);\n    }\n  </style>\n\n  <slot></slot>"]);
-            _templateObject27_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject27_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject27_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject27_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject26_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject26_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n<dom-module id=\"paper-material-styles\">\n  <template>\n    <style>\n      html {\n        --paper-material: {\n          display: block;\n          position: relative;\n        };\n        --paper-material-elevation-1: {\n          @apply --shadow-elevation-2dp;\n        };\n        --paper-material-elevation-2: {\n          @apply --shadow-elevation-4dp;\n        };\n        --paper-material-elevation-3: {\n          @apply --shadow-elevation-6dp;\n        };\n        --paper-material-elevation-4: {\n          @apply --shadow-elevation-8dp;\n        };\n        --paper-material-elevation-5: {\n          @apply --shadow-elevation-16dp;\n        };\n      }\n      .paper-material {\n        @apply --paper-material;\n      }\n      .paper-material[elevation=\"1\"] {\n        @apply --paper-material-elevation-1;\n      }\n      .paper-material[elevation=\"2\"] {\n        @apply --paper-material-elevation-2;\n      }\n      .paper-material[elevation=\"3\"] {\n        @apply --paper-material-elevation-3;\n      }\n      .paper-material[elevation=\"4\"] {\n        @apply --paper-material-elevation-4;\n      }\n      .paper-material[elevation=\"5\"] {\n        @apply --paper-material-elevation-5;\n      }\n\n      /* Duplicate the styles because of https://github.com/webcomponents/shadycss/issues/193 */\n      :host {\n        --paper-material: {\n          display: block;\n          position: relative;\n        };\n        --paper-material-elevation-1: {\n          @apply --shadow-elevation-2dp;\n        };\n        --paper-material-elevation-2: {\n          @apply --shadow-elevation-4dp;\n        };\n        --paper-material-elevation-3: {\n          @apply --shadow-elevation-6dp;\n        };\n        --paper-material-elevation-4: {\n          @apply --shadow-elevation-8dp;\n        };\n        --paper-material-elevation-5: {\n          @apply --shadow-elevation-16dp;\n        };\n      }\n      :host(.paper-material) {\n        @apply --paper-material;\n      }\n      :host(.paper-material[elevation=\"1\"]) {\n        @apply --paper-material-elevation-1;\n      }\n      :host(.paper-material[elevation=\"2\"]) {\n        @apply --paper-material-elevation-2;\n      }\n      :host(.paper-material[elevation=\"3\"]) {\n        @apply --paper-material-elevation-3;\n      }\n      :host(.paper-material[elevation=\"4\"]) {\n        @apply --paper-material-elevation-4;\n      }\n      :host(.paper-material[elevation=\"5\"]) {\n        @apply --paper-material-elevation-5;\n      }\n    </style>\n  </template>\n</dom-module>"]);
-            _templateObject26_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject26_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject26_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject26_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject25_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject25_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n    <style>\n      :host {\n        display: block;\n        padding: 8px 0;\n\n        background: var(--paper-listbox-background-color, var(--primary-background-color));\n        color: var(--paper-listbox-color, var(--primary-text-color));\n\n        @apply --paper-listbox;\n      }\n    </style>\n\n    <slot></slot>\n"]);
-            _templateObject25_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject25_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject25_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject25_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject24_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject24_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n    <style>\n      :host {\n        display: inline-block;\n        position: relative;\n        padding: 8px;\n        outline: none;\n        -webkit-user-select: none;\n        -moz-user-select: none;\n        -ms-user-select: none;\n        user-select: none;\n        cursor: pointer;\n        z-index: 0;\n        line-height: 1;\n\n        width: 40px;\n        height: 40px;\n\n        /*\n          NOTE: Both values are needed, since some phones require the value to\n          be `transparent`.\n        */\n        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n        -webkit-tap-highlight-color: transparent;\n\n        /* Because of polymer/2558, this style has lower specificity than * */\n        box-sizing: border-box !important;\n\n        @apply --paper-icon-button;\n      }\n\n      :host #ink {\n        color: var(--paper-icon-button-ink-color, var(--primary-text-color));\n        opacity: 0.6;\n      }\n\n      :host([disabled]) {\n        color: var(--paper-icon-button-disabled-text, var(--disabled-text-color));\n        pointer-events: none;\n        cursor: auto;\n\n        @apply --paper-icon-button-disabled;\n      }\n\n      :host([hidden]) {\n        display: none !important;\n      }\n\n      :host(:hover) {\n        @apply --paper-icon-button-hover;\n      }\n\n      iron-icon {\n        --iron-icon-width: 100%;\n        --iron-icon-height: 100%;\n      }\n    </style>\n\n    <iron-icon id=\"icon\" src=\"[[src]]\" icon=\"[[icon]]\"\n               alt$=\"[[alt]]\"></iron-icon>\n  "], ["\n    <style>\n      :host {\n        display: inline-block;\n        position: relative;\n        padding: 8px;\n        outline: none;\n        -webkit-user-select: none;\n        -moz-user-select: none;\n        -ms-user-select: none;\n        user-select: none;\n        cursor: pointer;\n        z-index: 0;\n        line-height: 1;\n\n        width: 40px;\n        height: 40px;\n\n        /*\n          NOTE: Both values are needed, since some phones require the value to\n          be \\`transparent\\`.\n        */\n        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n        -webkit-tap-highlight-color: transparent;\n\n        /* Because of polymer/2558, this style has lower specificity than * */\n        box-sizing: border-box !important;\n\n        @apply --paper-icon-button;\n      }\n\n      :host #ink {\n        color: var(--paper-icon-button-ink-color, var(--primary-text-color));\n        opacity: 0.6;\n      }\n\n      :host([disabled]) {\n        color: var(--paper-icon-button-disabled-text, var(--disabled-text-color));\n        pointer-events: none;\n        cursor: auto;\n\n        @apply --paper-icon-button-disabled;\n      }\n\n      :host([hidden]) {\n        display: none !important;\n      }\n\n      :host(:hover) {\n        @apply --paper-icon-button-hover;\n      }\n\n      iron-icon {\n        --iron-icon-width: 100%;\n        --iron-icon-height: 100%;\n      }\n    </style>\n\n    <iron-icon id=\"icon\" src=\"[[src]]\" icon=\"[[icon]]\"\n               alt$=\"[[alt]]\"></iron-icon>\n  "]);
-            _templateObject24_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject24_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject24_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject24_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject23_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject23_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n    <style include=\"paper-item-shared-styles\">\n      :host {\n        @apply --layout-horizontal;\n        @apply --layout-center;\n        @apply --paper-font-subhead;\n\n        @apply --paper-item;\n      }\n    </style>\n    <slot></slot>\n"]);
-            _templateObject23_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject23_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject23_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject23_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject22_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject22_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n    <style include=\"paper-dropdown-menu-shared-styles\"></style>\n\n    <paper-menu-button id=\"menuButton\" vertical-align=\"[[verticalAlign]]\" horizontal-align=\"[[horizontalAlign]]\" dynamic-align=\"[[dynamicAlign]]\" vertical-offset=\"[[_computeMenuVerticalOffset(noLabelFloat, verticalOffset)]]\" disabled=\"[[disabled]]\" no-animations=\"[[noAnimations]]\" on-iron-select=\"_onIronSelect\" on-iron-deselect=\"_onIronDeselect\" opened=\"{{opened}}\" close-on-activate allow-outside-scroll=\"[[allowOutsideScroll]]\" restore-focus-on-close=\"[[restoreFocusOnClose]]\">\n      <!-- support hybrid mode: user might be using paper-menu-button 1.x which distributes via <content> -->\n      <div class=\"dropdown-trigger\" slot=\"dropdown-trigger\">\n        <paper-ripple></paper-ripple>\n        <!-- paper-input has type=\"text\" for a11y, do not remove -->\n        <paper-input id=\"input\" type=\"text\" invalid=\"[[invalid]]\" readonly disabled=\"[[disabled]]\" value=\"[[value]]\" placeholder=\"[[placeholder]]\" error-message=\"[[errorMessage]]\" always-float-label=\"[[alwaysFloatLabel]]\" no-label-float=\"[[noLabelFloat]]\" label=\"[[label]]\" input-role=\"button\" input-aria-haspopup=\"listbox\" autocomplete=\"off\">\n          <!-- support hybrid mode: user might be using paper-input 1.x which distributes via <content> -->\n          <iron-icon icon=\"paper-dropdown-menu:arrow-drop-down\" suffix slot=\"suffix\"></iron-icon>\n        </paper-input>\n      </div>\n      <slot id=\"content\" name=\"dropdown-content\" slot=\"dropdown-content\"></slot>\n    </paper-menu-button>\n"], ["\n    <style include=\"paper-dropdown-menu-shared-styles\"></style>\n\n    <paper-menu-button id=\"menuButton\" vertical-align=\"[[verticalAlign]]\" horizontal-align=\"[[horizontalAlign]]\" dynamic-align=\"[[dynamicAlign]]\" vertical-offset=\"[[_computeMenuVerticalOffset(noLabelFloat, verticalOffset)]]\" disabled=\"[[disabled]]\" no-animations=\"[[noAnimations]]\" on-iron-select=\"_onIronSelect\" on-iron-deselect=\"_onIronDeselect\" opened=\"{{opened}}\" close-on-activate allow-outside-scroll=\"[[allowOutsideScroll]]\" restore-focus-on-close=\"[[restoreFocusOnClose]]\">\n      \\x3c!-- support hybrid mode: user might be using paper-menu-button 1.x which distributes via <content> --\\x3e\n      <div class=\"dropdown-trigger\" slot=\"dropdown-trigger\">\n        <paper-ripple></paper-ripple>\n        \\x3c!-- paper-input has type=\"text\" for a11y, do not remove --\\x3e\n        <paper-input id=\"input\" type=\"text\" invalid=\"[[invalid]]\" readonly disabled=\"[[disabled]]\" value=\"[[value]]\" placeholder=\"[[placeholder]]\" error-message=\"[[errorMessage]]\" always-float-label=\"[[alwaysFloatLabel]]\" no-label-float=\"[[noLabelFloat]]\" label=\"[[label]]\" input-role=\"button\" input-aria-haspopup=\"listbox\" autocomplete=\"off\">\n          \\x3c!-- support hybrid mode: user might be using paper-input 1.x which distributes via <content> --\\x3e\n          <iron-icon icon=\"paper-dropdown-menu:arrow-drop-down\" suffix slot=\"suffix\"></iron-icon>\n        </paper-input>\n      </div>\n      <slot id=\"content\" name=\"dropdown-content\" slot=\"dropdown-content\"></slot>\n    </paper-menu-button>\n"]);
-            _templateObject22_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject22_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject22_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject22_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject21_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject21_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n    <style>\n      :host {\n        display: block;\n        position: absolute;\n        border-radius: inherit;\n        overflow: hidden;\n        top: 0;\n        left: 0;\n        right: 0;\n        bottom: 0;\n\n        /* See PolymerElements/paper-behaviors/issues/34. On non-Chrome browsers,\n         * creating a node (with a position:absolute) in the middle of an event\n         * handler \"interrupts\" that event handler (which happens when the\n         * ripple is created on demand) */\n        pointer-events: none;\n      }\n\n      :host([animating]) {\n        /* This resolves a rendering issue in Chrome (as of 40) where the\n           ripple is not properly clipped by its parent (which may have\n           rounded corners). See: http://jsbin.com/temexa/4\n\n           Note: We only apply this style conditionally. Otherwise, the browser\n           will create a new compositing layer for every ripple element on the\n           page, and that would be bad. */\n        -webkit-transform: translate(0, 0);\n        transform: translate3d(0, 0, 0);\n      }\n\n      #background,\n      #waves,\n      .wave-container,\n      .wave {\n        pointer-events: none;\n        position: absolute;\n        top: 0;\n        left: 0;\n        width: 100%;\n        height: 100%;\n      }\n\n      #background,\n      .wave {\n        opacity: 0;\n      }\n\n      #waves,\n      .wave {\n        overflow: hidden;\n      }\n\n      .wave-container,\n      .wave {\n        border-radius: 50%;\n      }\n\n      :host(.circle) #background,\n      :host(.circle) #waves {\n        border-radius: 50%;\n      }\n\n      :host(.circle) .wave-container {\n        overflow: hidden;\n      }\n    </style>\n\n    <div id=\"background\"></div>\n    <div id=\"waves\"></div>\n"]);
-            _templateObject21_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject21_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject21_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject21_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject20_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject20_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n    <style>\n      :host {\n        display: inline-block;\n        position: relative;\n        padding: 8px;\n        outline: none;\n\n        @apply --paper-menu-button;\n      }\n\n      :host([disabled]) {\n        cursor: auto;\n        color: var(--disabled-text-color);\n\n        @apply --paper-menu-button-disabled;\n      }\n\n      iron-dropdown {\n        @apply --paper-menu-button-dropdown;\n      }\n\n      .dropdown-content {\n        @apply --shadow-elevation-2dp;\n\n        position: relative;\n        border-radius: 2px;\n        background-color: var(--paper-menu-button-dropdown-background, var(--primary-background-color));\n\n        @apply --paper-menu-button-content;\n      }\n\n      :host([vertical-align=\"top\"]) .dropdown-content {\n        margin-bottom: 20px;\n        margin-top: -10px;\n        top: 10px;\n      }\n\n      :host([vertical-align=\"bottom\"]) .dropdown-content {\n        bottom: 10px;\n        margin-bottom: -10px;\n        margin-top: 20px;\n      }\n\n      #trigger {\n        cursor: pointer;\n      }\n    </style>\n\n    <div id=\"trigger\" on-tap=\"toggle\">\n      <slot name=\"dropdown-trigger\"></slot>\n    </div>\n\n    <iron-dropdown id=\"dropdown\" opened=\"{{opened}}\" horizontal-align=\"[[horizontalAlign]]\" vertical-align=\"[[verticalAlign]]\" dynamic-align=\"[[dynamicAlign]]\" horizontal-offset=\"[[horizontalOffset]]\" vertical-offset=\"[[verticalOffset]]\" no-overlap=\"[[noOverlap]]\" open-animation-config=\"[[openAnimationConfig]]\" close-animation-config=\"[[closeAnimationConfig]]\" no-animations=\"[[noAnimations]]\" focus-target=\"[[_dropdownContent]]\" allow-outside-scroll=\"[[allowOutsideScroll]]\" restore-focus-on-close=\"[[restoreFocusOnClose]]\" on-iron-overlay-canceled=\"__onIronOverlayCanceled\">\n      <div slot=\"dropdown-content\" class=\"dropdown-content\">\n        <slot id=\"content\" name=\"dropdown-content\"></slot>\n      </div>\n    </iron-dropdown>\n"]);
-            _templateObject20_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject20_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject20_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject20_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject19_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject19_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n<custom-style>\n  <style is=\"custom-style\">\n    html {\n\n      --shadow-transition: {\n        transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);\n      };\n\n      --shadow-none: {\n        box-shadow: none;\n      };\n\n      /* from http://codepen.io/shyndman/pen/c5394ddf2e8b2a5c9185904b57421cdb */\n\n      --shadow-elevation-2dp: {\n        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),\n                    0 1px 5px 0 rgba(0, 0, 0, 0.12),\n                    0 3px 1px -2px rgba(0, 0, 0, 0.2);\n      };\n\n      --shadow-elevation-3dp: {\n        box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14),\n                    0 1px 8px 0 rgba(0, 0, 0, 0.12),\n                    0 3px 3px -2px rgba(0, 0, 0, 0.4);\n      };\n\n      --shadow-elevation-4dp: {\n        box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14),\n                    0 1px 10px 0 rgba(0, 0, 0, 0.12),\n                    0 2px 4px -1px rgba(0, 0, 0, 0.4);\n      };\n\n      --shadow-elevation-6dp: {\n        box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14),\n                    0 1px 18px 0 rgba(0, 0, 0, 0.12),\n                    0 3px 5px -1px rgba(0, 0, 0, 0.4);\n      };\n\n      --shadow-elevation-8dp: {\n        box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14),\n                    0 3px 14px 2px rgba(0, 0, 0, 0.12),\n                    0 5px 5px -3px rgba(0, 0, 0, 0.4);\n      };\n\n      --shadow-elevation-12dp: {\n        box-shadow: 0 12px 16px 1px rgba(0, 0, 0, 0.14),\n                    0 4px 22px 3px rgba(0, 0, 0, 0.12),\n                    0 6px 7px -4px rgba(0, 0, 0, 0.4);\n      };\n\n      --shadow-elevation-16dp: {\n        box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14),\n                    0  6px 30px 5px rgba(0, 0, 0, 0.12),\n                    0  8px 10px -5px rgba(0, 0, 0, 0.4);\n      };\n\n      --shadow-elevation-24dp: {\n        box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14),\n                    0 9px 46px 8px rgba(0, 0, 0, 0.12),\n                    0 11px 15px -7px rgba(0, 0, 0, 0.4);\n      };\n    }\n  </style>\n</custom-style>"]);
-            _templateObject19_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject19_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject19_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject19_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject18_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject18_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n    <style>\n      :host {\n        position: fixed;\n      }\n\n      #contentWrapper ::slotted(*) {\n        overflow: auto;\n      }\n\n      #contentWrapper.animating ::slotted(*) {\n        overflow: hidden;\n        pointer-events: none;\n      }\n    </style>\n\n    <div id=\"contentWrapper\">\n      <slot id=\"content\" name=\"dropdown-content\"></slot>\n    </div>\n"]);
-            _templateObject18_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject18_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject18_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject18_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject17_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject17_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n    <style>\n      :host {\n        position: fixed;\n        top: 0;\n        left: 0;\n        width: 100%;\n        height: 100%;\n        background-color: var(--iron-overlay-backdrop-background-color, #000);\n        opacity: 0;\n        transition: opacity 0.2s;\n        pointer-events: none;\n        @apply --iron-overlay-backdrop;\n      }\n\n      :host(.opened) {\n        opacity: var(--iron-overlay-backdrop-opacity, 0.6);\n        pointer-events: auto;\n        @apply --iron-overlay-backdrop-opened;\n      }\n    </style>\n\n    <slot></slot>\n"]);
-            _templateObject17_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject17_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject17_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject17_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject16_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject16_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n    <style>\n      :host {\n        display: block;\n      }\n\n      :host([focused]) {\n        outline: none;\n      }\n\n      :host([hidden]) {\n        display: none !important;\n      }\n\n      input {\n        /* Firefox sets a min-width on the input, which can cause layout issues */\n        min-width: 0;\n      }\n\n      /* In 1.x, the <input> is distributed to paper-input-container, which styles it.\n      In 2.x the <iron-input> is distributed to paper-input-container, which styles\n      it, but in order for this to work correctly, we need to reset some\n      of the native input's properties to inherit (from the iron-input) */\n      iron-input > input {\n        @apply --paper-input-container-shared-input-style;\n        font-family: inherit;\n        font-weight: inherit;\n        font-size: inherit;\n        letter-spacing: inherit;\n        word-spacing: inherit;\n        line-height: inherit;\n        text-shadow: inherit;\n        color: inherit;\n        cursor: inherit;\n      }\n\n      input:disabled {\n        @apply --paper-input-container-input-disabled;\n      }\n\n      input::-webkit-outer-spin-button,\n      input::-webkit-inner-spin-button {\n        @apply --paper-input-container-input-webkit-spinner;\n      }\n\n      input::-webkit-clear-button {\n        @apply --paper-input-container-input-webkit-clear;\n      }\n\n      input::-webkit-calendar-picker-indicator {\n        @apply --paper-input-container-input-webkit-calendar-picker-indicator;\n      }\n\n      input::-webkit-input-placeholder {\n        color: var(--paper-input-container-color, var(--secondary-text-color));\n      }\n\n      input:-moz-placeholder {\n        color: var(--paper-input-container-color, var(--secondary-text-color));\n      }\n\n      input::-moz-placeholder {\n        color: var(--paper-input-container-color, var(--secondary-text-color));\n      }\n\n      input::-ms-clear {\n        @apply --paper-input-container-ms-clear;\n      }\n\n      input::-ms-reveal {\n        @apply --paper-input-container-ms-reveal;\n      }\n\n      input:-ms-input-placeholder {\n        color: var(--paper-input-container-color, var(--secondary-text-color));\n      }\n\n      label {\n        pointer-events: none;\n      }\n    </style>\n\n    <paper-input-container id=\"container\" no-label-float=\"[[noLabelFloat]]\" always-float-label=\"[[_computeAlwaysFloatLabel(alwaysFloatLabel,placeholder)]]\" auto-validate$=\"[[autoValidate]]\" disabled$=\"[[disabled]]\" invalid=\"[[invalid]]\">\n\n      <slot name=\"prefix\" slot=\"prefix\"></slot>\n\n      <label hidden$=\"[[!label]]\" aria-hidden=\"true\" for$=\"[[_inputId]]\" slot=\"label\">[[label]]</label>\n\n      <!-- Need to bind maxlength so that the paper-input-char-counter works correctly -->\n      <iron-input bind-value=\"{{value}}\" slot=\"input\" class=\"input-element\" id$=\"[[_inputId]]\" maxlength$=\"[[maxlength]]\" allowed-pattern=\"[[allowedPattern]]\" invalid=\"{{invalid}}\" validator=\"[[validator]]\">\n        <input aria-labelledby$=\"[[_ariaLabelledBy]]\" aria-describedby$=\"[[_ariaDescribedBy]]\" disabled$=\"[[disabled]]\" title$=\"[[title]]\" type$=\"[[type]]\" pattern$=\"[[pattern]]\" required$=\"[[required]]\" autocomplete$=\"[[autocomplete]]\" autofocus$=\"[[autofocus]]\" inputmode$=\"[[inputmode]]\" minlength$=\"[[minlength]]\" maxlength$=\"[[maxlength]]\" min$=\"[[min]]\" max$=\"[[max]]\" step$=\"[[step]]\" name$=\"[[name]]\" placeholder$=\"[[placeholder]]\" readonly$=\"[[readonly]]\" list$=\"[[list]]\" size$=\"[[size]]\" autocapitalize$=\"[[autocapitalize]]\" autocorrect$=\"[[autocorrect]]\" on-change=\"_onChange\" tabindex$=\"[[tabIndex]]\" autosave$=\"[[autosave]]\" results$=\"[[results]]\" accept$=\"[[accept]]\" multiple$=\"[[multiple]]\" role$=\"[[inputRole]]\" aria-haspopup$=\"[[inputAriaHaspopup]]\">\n      </iron-input>\n\n      <slot name=\"suffix\" slot=\"suffix\"></slot>\n\n      <template is=\"dom-if\" if=\"[[errorMessage]]\">\n        <paper-input-error aria-live=\"assertive\" slot=\"add-on\">[[errorMessage]]</paper-input-error>\n      </template>\n\n      <template is=\"dom-if\" if=\"[[charCounter]]\">\n        <paper-input-char-counter slot=\"add-on\"></paper-input-char-counter>\n      </template>\n\n    </paper-input-container>\n  "], ["\n    <style>\n      :host {\n        display: block;\n      }\n\n      :host([focused]) {\n        outline: none;\n      }\n\n      :host([hidden]) {\n        display: none !important;\n      }\n\n      input {\n        /* Firefox sets a min-width on the input, which can cause layout issues */\n        min-width: 0;\n      }\n\n      /* In 1.x, the <input> is distributed to paper-input-container, which styles it.\n      In 2.x the <iron-input> is distributed to paper-input-container, which styles\n      it, but in order for this to work correctly, we need to reset some\n      of the native input's properties to inherit (from the iron-input) */\n      iron-input > input {\n        @apply --paper-input-container-shared-input-style;\n        font-family: inherit;\n        font-weight: inherit;\n        font-size: inherit;\n        letter-spacing: inherit;\n        word-spacing: inherit;\n        line-height: inherit;\n        text-shadow: inherit;\n        color: inherit;\n        cursor: inherit;\n      }\n\n      input:disabled {\n        @apply --paper-input-container-input-disabled;\n      }\n\n      input::-webkit-outer-spin-button,\n      input::-webkit-inner-spin-button {\n        @apply --paper-input-container-input-webkit-spinner;\n      }\n\n      input::-webkit-clear-button {\n        @apply --paper-input-container-input-webkit-clear;\n      }\n\n      input::-webkit-calendar-picker-indicator {\n        @apply --paper-input-container-input-webkit-calendar-picker-indicator;\n      }\n\n      input::-webkit-input-placeholder {\n        color: var(--paper-input-container-color, var(--secondary-text-color));\n      }\n\n      input:-moz-placeholder {\n        color: var(--paper-input-container-color, var(--secondary-text-color));\n      }\n\n      input::-moz-placeholder {\n        color: var(--paper-input-container-color, var(--secondary-text-color));\n      }\n\n      input::-ms-clear {\n        @apply --paper-input-container-ms-clear;\n      }\n\n      input::-ms-reveal {\n        @apply --paper-input-container-ms-reveal;\n      }\n\n      input:-ms-input-placeholder {\n        color: var(--paper-input-container-color, var(--secondary-text-color));\n      }\n\n      label {\n        pointer-events: none;\n      }\n    </style>\n\n    <paper-input-container id=\"container\" no-label-float=\"[[noLabelFloat]]\" always-float-label=\"[[_computeAlwaysFloatLabel(alwaysFloatLabel,placeholder)]]\" auto-validate$=\"[[autoValidate]]\" disabled$=\"[[disabled]]\" invalid=\"[[invalid]]\">\n\n      <slot name=\"prefix\" slot=\"prefix\"></slot>\n\n      <label hidden$=\"[[!label]]\" aria-hidden=\"true\" for$=\"[[_inputId]]\" slot=\"label\">[[label]]</label>\n\n      \\x3c!-- Need to bind maxlength so that the paper-input-char-counter works correctly --\\x3e\n      <iron-input bind-value=\"{{value}}\" slot=\"input\" class=\"input-element\" id$=\"[[_inputId]]\" maxlength$=\"[[maxlength]]\" allowed-pattern=\"[[allowedPattern]]\" invalid=\"{{invalid}}\" validator=\"[[validator]]\">\n        <input aria-labelledby$=\"[[_ariaLabelledBy]]\" aria-describedby$=\"[[_ariaDescribedBy]]\" disabled$=\"[[disabled]]\" title$=\"[[title]]\" type$=\"[[type]]\" pattern$=\"[[pattern]]\" required$=\"[[required]]\" autocomplete$=\"[[autocomplete]]\" autofocus$=\"[[autofocus]]\" inputmode$=\"[[inputmode]]\" minlength$=\"[[minlength]]\" maxlength$=\"[[maxlength]]\" min$=\"[[min]]\" max$=\"[[max]]\" step$=\"[[step]]\" name$=\"[[name]]\" placeholder$=\"[[placeholder]]\" readonly$=\"[[readonly]]\" list$=\"[[list]]\" size$=\"[[size]]\" autocapitalize$=\"[[autocapitalize]]\" autocorrect$=\"[[autocorrect]]\" on-change=\"_onChange\" tabindex$=\"[[tabIndex]]\" autosave$=\"[[autosave]]\" results$=\"[[results]]\" accept$=\"[[accept]]\" multiple$=\"[[multiple]]\" role$=\"[[inputRole]]\" aria-haspopup$=\"[[inputAriaHaspopup]]\">\n      </iron-input>\n\n      <slot name=\"suffix\" slot=\"suffix\"></slot>\n\n      <template is=\"dom-if\" if=\"[[errorMessage]]\">\n        <paper-input-error aria-live=\"assertive\" slot=\"add-on\">[[errorMessage]]</paper-input-error>\n      </template>\n\n      <template is=\"dom-if\" if=\"[[charCounter]]\">\n        <paper-input-char-counter slot=\"add-on\"></paper-input-char-counter>\n      </template>\n\n    </paper-input-container>\n  "]);
-            _templateObject16_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject16_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject16_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject16_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject15_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject15_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n    <style>\n      :host {\n        display: inline-block;\n        visibility: hidden;\n\n        color: var(--paper-input-container-invalid-color, var(--error-color));\n\n        @apply --paper-font-caption;\n        @apply --paper-input-error;\n        position: absolute;\n        left:0;\n        right:0;\n      }\n\n      :host([invalid]) {\n        visibility: visible;\n      }\n\n      #a11yWrapper {\n        visibility: hidden;\n      }\n\n      :host([invalid]) #a11yWrapper {\n        visibility: visible;\n      }\n    </style>\n\n    <!--\n    If the paper-input-error element is directly referenced by an\n    `aria-describedby` attribute, such as when used as a paper-input add-on,\n    then applying `visibility: hidden;` to the paper-input-error element itself\n    does not hide the error.\n\n    For more information, see:\n    https://www.w3.org/TR/accname-1.1/#mapping_additional_nd_description\n    -->\n    <div id=\"a11yWrapper\">\n      <slot></slot>\n    </div>\n"], ["\n    <style>\n      :host {\n        display: inline-block;\n        visibility: hidden;\n\n        color: var(--paper-input-container-invalid-color, var(--error-color));\n\n        @apply --paper-font-caption;\n        @apply --paper-input-error;\n        position: absolute;\n        left:0;\n        right:0;\n      }\n\n      :host([invalid]) {\n        visibility: visible;\n      }\n\n      #a11yWrapper {\n        visibility: hidden;\n      }\n\n      :host([invalid]) #a11yWrapper {\n        visibility: visible;\n      }\n    </style>\n\n    \\x3c!--\n    If the paper-input-error element is directly referenced by an\n    \\`aria-describedby\\` attribute, such as when used as a paper-input add-on,\n    then applying \\`visibility: hidden;\\` to the paper-input-error element itself\n    does not hide the error.\n\n    For more information, see:\n    https://www.w3.org/TR/accname-1.1/#mapping_additional_nd_description\n    --\\x3e\n    <div id=\"a11yWrapper\">\n      <slot></slot>\n    </div>\n"]);
-            _templateObject15_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject15_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject15_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject15_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject14_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject14_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n    <style>\n      :host {\n        display: block;\n        padding: 8px 0;\n        @apply --paper-input-container;\n      }\n\n      :host([inline]) {\n        display: inline-block;\n      }\n\n      :host([disabled]) {\n        pointer-events: none;\n        opacity: 0.33;\n\n        @apply --paper-input-container-disabled;\n      }\n\n      :host([hidden]) {\n        display: none !important;\n      }\n\n      [hidden] {\n        display: none !important;\n      }\n\n      .floated-label-placeholder {\n        @apply --paper-font-caption;\n      }\n\n      .underline {\n        height: 2px;\n        position: relative;\n      }\n\n      .focused-line {\n        @apply --layout-fit;\n        border-bottom: 2px solid var(--paper-input-container-focus-color, var(--primary-color));\n\n        -webkit-transform-origin: center center;\n        transform-origin: center center;\n        -webkit-transform: scale3d(0,1,1);\n        transform: scale3d(0,1,1);\n\n        @apply --paper-input-container-underline-focus;\n      }\n\n      .underline.is-highlighted .focused-line {\n        -webkit-transform: none;\n        transform: none;\n        -webkit-transition: -webkit-transform 0.25s;\n        transition: transform 0.25s;\n\n        @apply --paper-transition-easing;\n      }\n\n      .underline.is-invalid .focused-line {\n        border-color: var(--paper-input-container-invalid-color, var(--error-color));\n        -webkit-transform: none;\n        transform: none;\n        -webkit-transition: -webkit-transform 0.25s;\n        transition: transform 0.25s;\n\n        @apply --paper-transition-easing;\n      }\n\n      .unfocused-line {\n        @apply --layout-fit;\n        border-bottom: 1px solid var(--paper-input-container-color, var(--secondary-text-color));\n        @apply --paper-input-container-underline;\n      }\n\n      :host([disabled]) .unfocused-line {\n        border-bottom: 1px dashed;\n        border-color: var(--paper-input-container-color, var(--secondary-text-color));\n        @apply --paper-input-container-underline-disabled;\n      }\n\n      .input-wrapper {\n        @apply --layout-horizontal;\n        @apply --layout-center;\n        position: relative;\n      }\n\n      .input-content {\n        @apply --layout-flex-auto;\n        @apply --layout-relative;\n        max-width: 100%;\n      }\n\n      .input-content ::slotted(label),\n      .input-content ::slotted(.paper-input-label) {\n        position: absolute;\n        top: 0;\n        left: 0;\n        width: 100%;\n        font: inherit;\n        color: var(--paper-input-container-color, var(--secondary-text-color));\n        -webkit-transition: -webkit-transform 0.25s, width 0.25s;\n        transition: transform 0.25s, width 0.25s;\n        -webkit-transform-origin: left top;\n        transform-origin: left top;\n        /* Fix for safari not focusing 0-height date/time inputs with -webkit-apperance: none; */\n        min-height: 1px;\n\n        @apply --paper-font-common-nowrap;\n        @apply --paper-font-subhead;\n        @apply --paper-input-container-label;\n        @apply --paper-transition-easing;\n      }\n\n\n      .input-content ::slotted(label):before,\n      .input-content ::slotted(.paper-input-label):before {\n        @apply --paper-input-container-label-before;\n      }\n\n      .input-content ::slotted(label):after,\n      .input-content ::slotted(.paper-input-label):after {\n        @apply --paper-input-container-label-after;\n      }\n\n      .input-content.label-is-floating ::slotted(label),\n      .input-content.label-is-floating ::slotted(.paper-input-label) {\n        -webkit-transform: translateY(-75%) scale(0.75);\n        transform: translateY(-75%) scale(0.75);\n\n        /* Since we scale to 75/100 of the size, we actually have 100/75 of the\n        original space now available */\n        width: 133%;\n\n        @apply --paper-input-container-label-floating;\n      }\n\n      :host(:dir(rtl)) .input-content.label-is-floating ::slotted(label),\n      :host(:dir(rtl)) .input-content.label-is-floating ::slotted(.paper-input-label) {\n        right: 0;\n        left: auto;\n        -webkit-transform-origin: right top;\n        transform-origin: right top;\n      }\n\n      .input-content.label-is-highlighted ::slotted(label),\n      .input-content.label-is-highlighted ::slotted(.paper-input-label) {\n        color: var(--paper-input-container-focus-color, var(--primary-color));\n\n        @apply --paper-input-container-label-focus;\n      }\n\n      .input-content.is-invalid ::slotted(label),\n      .input-content.is-invalid ::slotted(.paper-input-label) {\n        color: var(--paper-input-container-invalid-color, var(--error-color));\n      }\n\n      .input-content.label-is-hidden ::slotted(label),\n      .input-content.label-is-hidden ::slotted(.paper-input-label) {\n        visibility: hidden;\n      }\n\n      .input-content ::slotted(input),\n      .input-content ::slotted(iron-input),\n      .input-content ::slotted(textarea),\n      .input-content ::slotted(iron-autogrow-textarea),\n      .input-content ::slotted(.paper-input-input) {\n        @apply --paper-input-container-shared-input-style;\n        /* The apply shim doesn't apply the nested color custom property,\n          so we have to re-apply it here. */\n        color: var(--paper-input-container-input-color, var(--primary-text-color));\n        @apply --paper-input-container-input;\n      }\n\n      .input-content ::slotted(input)::-webkit-outer-spin-button,\n      .input-content ::slotted(input)::-webkit-inner-spin-button {\n        @apply --paper-input-container-input-webkit-spinner;\n      }\n\n      .input-content.focused ::slotted(input),\n      .input-content.focused ::slotted(iron-input),\n      .input-content.focused ::slotted(textarea),\n      .input-content.focused ::slotted(iron-autogrow-textarea),\n      .input-content.focused ::slotted(.paper-input-input) {\n        @apply --paper-input-container-input-focus;\n      }\n\n      .input-content.is-invalid ::slotted(input),\n      .input-content.is-invalid ::slotted(iron-input),\n      .input-content.is-invalid ::slotted(textarea),\n      .input-content.is-invalid ::slotted(iron-autogrow-textarea),\n      .input-content.is-invalid ::slotted(.paper-input-input) {\n        @apply --paper-input-container-input-invalid;\n      }\n\n      .prefix ::slotted(*) {\n        display: inline-block;\n        @apply --paper-font-subhead;\n        @apply --layout-flex-none;\n        @apply --paper-input-prefix;\n      }\n\n      .suffix ::slotted(*) {\n        display: inline-block;\n        @apply --paper-font-subhead;\n        @apply --layout-flex-none;\n\n        @apply --paper-input-suffix;\n      }\n\n      /* Firefox sets a min-width on the input, which can cause layout issues */\n      .input-content ::slotted(input) {\n        min-width: 0;\n      }\n\n      .input-content ::slotted(textarea) {\n        resize: none;\n      }\n\n      .add-on-content {\n        position: relative;\n      }\n\n      .add-on-content.is-invalid ::slotted(*) {\n        color: var(--paper-input-container-invalid-color, var(--error-color));\n      }\n\n      .add-on-content.is-highlighted ::slotted(*) {\n        color: var(--paper-input-container-focus-color, var(--primary-color));\n      }\n    </style>\n\n    <div class=\"floated-label-placeholder\" aria-hidden=\"true\" hidden=\"[[noLabelFloat]]\">&nbsp;</div>\n\n    <div class=\"input-wrapper\">\n      <span class=\"prefix\"><slot name=\"prefix\"></slot></span>\n\n      <div class$=\"[[_computeInputContentClass(noLabelFloat,alwaysFloatLabel,focused,invalid,_inputHasContent)]]\" id=\"labelAndInputContainer\">\n        <slot name=\"label\"></slot>\n        <slot name=\"input\"></slot>\n      </div>\n\n      <span class=\"suffix\"><slot name=\"suffix\"></slot></span>\n    </div>\n\n    <div class$=\"[[_computeUnderlineClass(focused,invalid)]]\">\n      <div class=\"unfocused-line\"></div>\n      <div class=\"focused-line\"></div>\n    </div>\n\n    <div class$=\"[[_computeAddOnContentClass(focused,invalid)]]\">\n      <slot name=\"add-on\"></slot>\n    </div>\n"]);
-            _templateObject14_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject14_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject14_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject14_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject13_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject13_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n<custom-style>\n  <style is=\"custom-style\">\n    html {\n      --paper-input-container-shared-input-style: {\n        position: relative; /* to make a stacking context */\n        outline: none;\n        box-shadow: none;\n        padding: 0;\n        margin: 0;\n        width: 100%;\n        max-width: 100%;\n        background: transparent;\n        border: none;\n        color: var(--paper-input-container-input-color, var(--primary-text-color));\n        -webkit-appearance: none;\n        text-align: inherit;\n        vertical-align: var(--paper-input-container-input-align, bottom);\n\n        @apply --paper-font-subhead;\n      };\n    }\n  </style>\n</custom-style>\n"]);
-            _templateObject13_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject13_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject13_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject13_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject12_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject12_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n<custom-style>\n  <style is=\"custom-style\">\n    html {\n      /*\n       * You can use these generic variables in your elements for easy theming.\n       * For example, if all your elements use `--primary-text-color` as its main\n       * color, then switching from a light to a dark theme is just a matter of\n       * changing the value of `--primary-text-color` in your application.\n       */\n      --primary-text-color: var(--light-theme-text-color);\n      --primary-background-color: var(--light-theme-background-color);\n      --secondary-text-color: var(--light-theme-secondary-color);\n      --disabled-text-color: var(--light-theme-disabled-color);\n      --divider-color: var(--light-theme-divider-color);\n      --error-color: var(--paper-deep-orange-a700);\n\n      /*\n       * Primary and accent colors. Also see color.js for more colors.\n       */\n      --primary-color: var(--paper-indigo-500);\n      --light-primary-color: var(--paper-indigo-100);\n      --dark-primary-color: var(--paper-indigo-700);\n\n      --accent-color: var(--paper-pink-a200);\n      --light-accent-color: var(--paper-pink-a100);\n      --dark-accent-color: var(--paper-pink-a400);\n\n\n      /*\n       * Material Design Light background theme\n       */\n      --light-theme-background-color: #ffffff;\n      --light-theme-base-color: #000000;\n      --light-theme-text-color: var(--paper-grey-900);\n      --light-theme-secondary-color: #737373;  /* for secondary text and icons */\n      --light-theme-disabled-color: #9b9b9b;  /* disabled/hint text */\n      --light-theme-divider-color: #dbdbdb;\n\n      /*\n       * Material Design Dark background theme\n       */\n      --dark-theme-background-color: var(--paper-grey-900);\n      --dark-theme-base-color: #ffffff;\n      --dark-theme-text-color: #ffffff;\n      --dark-theme-secondary-color: #bcbcbc;  /* for secondary text and icons */\n      --dark-theme-disabled-color: #646464;  /* disabled/hint text */\n      --dark-theme-divider-color: #3c3c3c;\n\n      /*\n       * Deprecated values because of their confusing names.\n       */\n      --text-primary-color: var(--dark-theme-text-color);\n      --default-primary-color: var(--primary-color);\n    }\n  </style>\n</custom-style>"], ["\n<custom-style>\n  <style is=\"custom-style\">\n    html {\n      /*\n       * You can use these generic variables in your elements for easy theming.\n       * For example, if all your elements use \\`--primary-text-color\\` as its main\n       * color, then switching from a light to a dark theme is just a matter of\n       * changing the value of \\`--primary-text-color\\` in your application.\n       */\n      --primary-text-color: var(--light-theme-text-color);\n      --primary-background-color: var(--light-theme-background-color);\n      --secondary-text-color: var(--light-theme-secondary-color);\n      --disabled-text-color: var(--light-theme-disabled-color);\n      --divider-color: var(--light-theme-divider-color);\n      --error-color: var(--paper-deep-orange-a700);\n\n      /*\n       * Primary and accent colors. Also see color.js for more colors.\n       */\n      --primary-color: var(--paper-indigo-500);\n      --light-primary-color: var(--paper-indigo-100);\n      --dark-primary-color: var(--paper-indigo-700);\n\n      --accent-color: var(--paper-pink-a200);\n      --light-accent-color: var(--paper-pink-a100);\n      --dark-accent-color: var(--paper-pink-a400);\n\n\n      /*\n       * Material Design Light background theme\n       */\n      --light-theme-background-color: #ffffff;\n      --light-theme-base-color: #000000;\n      --light-theme-text-color: var(--paper-grey-900);\n      --light-theme-secondary-color: #737373;  /* for secondary text and icons */\n      --light-theme-disabled-color: #9b9b9b;  /* disabled/hint text */\n      --light-theme-divider-color: #dbdbdb;\n\n      /*\n       * Material Design Dark background theme\n       */\n      --dark-theme-background-color: var(--paper-grey-900);\n      --dark-theme-base-color: #ffffff;\n      --dark-theme-text-color: #ffffff;\n      --dark-theme-secondary-color: #bcbcbc;  /* for secondary text and icons */\n      --dark-theme-disabled-color: #646464;  /* disabled/hint text */\n      --dark-theme-divider-color: #3c3c3c;\n\n      /*\n       * Deprecated values because of their confusing names.\n       */\n      --text-primary-color: var(--dark-theme-text-color);\n      --default-primary-color: var(--primary-color);\n    }\n  </style>\n</custom-style>"]);
-            _templateObject12_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject12_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject12_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject12_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject11_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject11_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n<custom-style>\n  <style is=\"custom-style\">\n    html {\n\n      /* Material Design color palette for Google products */\n\n      --google-red-100: #f4c7c3;\n      --google-red-300: #e67c73;\n      --google-red-500: #db4437;\n      --google-red-700: #c53929;\n\n      --google-blue-100: #c6dafc;\n      --google-blue-300: #7baaf7;\n      --google-blue-500: #4285f4;\n      --google-blue-700: #3367d6;\n\n      --google-green-100: #b7e1cd;\n      --google-green-300: #57bb8a;\n      --google-green-500: #0f9d58;\n      --google-green-700: #0b8043;\n\n      --google-yellow-100: #fce8b2;\n      --google-yellow-300: #f7cb4d;\n      --google-yellow-500: #f4b400;\n      --google-yellow-700: #f09300;\n\n      --google-grey-100: #f5f5f5;\n      --google-grey-300: #e0e0e0;\n      --google-grey-500: #9e9e9e;\n      --google-grey-700: #616161;\n\n      /* Material Design color palette from online spec document */\n\n      --paper-red-50: #ffebee;\n      --paper-red-100: #ffcdd2;\n      --paper-red-200: #ef9a9a;\n      --paper-red-300: #e57373;\n      --paper-red-400: #ef5350;\n      --paper-red-500: #f44336;\n      --paper-red-600: #e53935;\n      --paper-red-700: #d32f2f;\n      --paper-red-800: #c62828;\n      --paper-red-900: #b71c1c;\n      --paper-red-a100: #ff8a80;\n      --paper-red-a200: #ff5252;\n      --paper-red-a400: #ff1744;\n      --paper-red-a700: #d50000;\n\n      --paper-pink-50: #fce4ec;\n      --paper-pink-100: #f8bbd0;\n      --paper-pink-200: #f48fb1;\n      --paper-pink-300: #f06292;\n      --paper-pink-400: #ec407a;\n      --paper-pink-500: #e91e63;\n      --paper-pink-600: #d81b60;\n      --paper-pink-700: #c2185b;\n      --paper-pink-800: #ad1457;\n      --paper-pink-900: #880e4f;\n      --paper-pink-a100: #ff80ab;\n      --paper-pink-a200: #ff4081;\n      --paper-pink-a400: #f50057;\n      --paper-pink-a700: #c51162;\n\n      --paper-purple-50: #f3e5f5;\n      --paper-purple-100: #e1bee7;\n      --paper-purple-200: #ce93d8;\n      --paper-purple-300: #ba68c8;\n      --paper-purple-400: #ab47bc;\n      --paper-purple-500: #9c27b0;\n      --paper-purple-600: #8e24aa;\n      --paper-purple-700: #7b1fa2;\n      --paper-purple-800: #6a1b9a;\n      --paper-purple-900: #4a148c;\n      --paper-purple-a100: #ea80fc;\n      --paper-purple-a200: #e040fb;\n      --paper-purple-a400: #d500f9;\n      --paper-purple-a700: #aa00ff;\n\n      --paper-deep-purple-50: #ede7f6;\n      --paper-deep-purple-100: #d1c4e9;\n      --paper-deep-purple-200: #b39ddb;\n      --paper-deep-purple-300: #9575cd;\n      --paper-deep-purple-400: #7e57c2;\n      --paper-deep-purple-500: #673ab7;\n      --paper-deep-purple-600: #5e35b1;\n      --paper-deep-purple-700: #512da8;\n      --paper-deep-purple-800: #4527a0;\n      --paper-deep-purple-900: #311b92;\n      --paper-deep-purple-a100: #b388ff;\n      --paper-deep-purple-a200: #7c4dff;\n      --paper-deep-purple-a400: #651fff;\n      --paper-deep-purple-a700: #6200ea;\n\n      --paper-indigo-50: #e8eaf6;\n      --paper-indigo-100: #c5cae9;\n      --paper-indigo-200: #9fa8da;\n      --paper-indigo-300: #7986cb;\n      --paper-indigo-400: #5c6bc0;\n      --paper-indigo-500: #3f51b5;\n      --paper-indigo-600: #3949ab;\n      --paper-indigo-700: #303f9f;\n      --paper-indigo-800: #283593;\n      --paper-indigo-900: #1a237e;\n      --paper-indigo-a100: #8c9eff;\n      --paper-indigo-a200: #536dfe;\n      --paper-indigo-a400: #3d5afe;\n      --paper-indigo-a700: #304ffe;\n\n      --paper-blue-50: #e3f2fd;\n      --paper-blue-100: #bbdefb;\n      --paper-blue-200: #90caf9;\n      --paper-blue-300: #64b5f6;\n      --paper-blue-400: #42a5f5;\n      --paper-blue-500: #2196f3;\n      --paper-blue-600: #1e88e5;\n      --paper-blue-700: #1976d2;\n      --paper-blue-800: #1565c0;\n      --paper-blue-900: #0d47a1;\n      --paper-blue-a100: #82b1ff;\n      --paper-blue-a200: #448aff;\n      --paper-blue-a400: #2979ff;\n      --paper-blue-a700: #2962ff;\n\n      --paper-light-blue-50: #e1f5fe;\n      --paper-light-blue-100: #b3e5fc;\n      --paper-light-blue-200: #81d4fa;\n      --paper-light-blue-300: #4fc3f7;\n      --paper-light-blue-400: #29b6f6;\n      --paper-light-blue-500: #03a9f4;\n      --paper-light-blue-600: #039be5;\n      --paper-light-blue-700: #0288d1;\n      --paper-light-blue-800: #0277bd;\n      --paper-light-blue-900: #01579b;\n      --paper-light-blue-a100: #80d8ff;\n      --paper-light-blue-a200: #40c4ff;\n      --paper-light-blue-a400: #00b0ff;\n      --paper-light-blue-a700: #0091ea;\n\n      --paper-cyan-50: #e0f7fa;\n      --paper-cyan-100: #b2ebf2;\n      --paper-cyan-200: #80deea;\n      --paper-cyan-300: #4dd0e1;\n      --paper-cyan-400: #26c6da;\n      --paper-cyan-500: #00bcd4;\n      --paper-cyan-600: #00acc1;\n      --paper-cyan-700: #0097a7;\n      --paper-cyan-800: #00838f;\n      --paper-cyan-900: #006064;\n      --paper-cyan-a100: #84ffff;\n      --paper-cyan-a200: #18ffff;\n      --paper-cyan-a400: #00e5ff;\n      --paper-cyan-a700: #00b8d4;\n\n      --paper-teal-50: #e0f2f1;\n      --paper-teal-100: #b2dfdb;\n      --paper-teal-200: #80cbc4;\n      --paper-teal-300: #4db6ac;\n      --paper-teal-400: #26a69a;\n      --paper-teal-500: #009688;\n      --paper-teal-600: #00897b;\n      --paper-teal-700: #00796b;\n      --paper-teal-800: #00695c;\n      --paper-teal-900: #004d40;\n      --paper-teal-a100: #a7ffeb;\n      --paper-teal-a200: #64ffda;\n      --paper-teal-a400: #1de9b6;\n      --paper-teal-a700: #00bfa5;\n\n      --paper-green-50: #e8f5e9;\n      --paper-green-100: #c8e6c9;\n      --paper-green-200: #a5d6a7;\n      --paper-green-300: #81c784;\n      --paper-green-400: #66bb6a;\n      --paper-green-500: #4caf50;\n      --paper-green-600: #43a047;\n      --paper-green-700: #388e3c;\n      --paper-green-800: #2e7d32;\n      --paper-green-900: #1b5e20;\n      --paper-green-a100: #b9f6ca;\n      --paper-green-a200: #69f0ae;\n      --paper-green-a400: #00e676;\n      --paper-green-a700: #00c853;\n\n      --paper-light-green-50: #f1f8e9;\n      --paper-light-green-100: #dcedc8;\n      --paper-light-green-200: #c5e1a5;\n      --paper-light-green-300: #aed581;\n      --paper-light-green-400: #9ccc65;\n      --paper-light-green-500: #8bc34a;\n      --paper-light-green-600: #7cb342;\n      --paper-light-green-700: #689f38;\n      --paper-light-green-800: #558b2f;\n      --paper-light-green-900: #33691e;\n      --paper-light-green-a100: #ccff90;\n      --paper-light-green-a200: #b2ff59;\n      --paper-light-green-a400: #76ff03;\n      --paper-light-green-a700: #64dd17;\n\n      --paper-lime-50: #f9fbe7;\n      --paper-lime-100: #f0f4c3;\n      --paper-lime-200: #e6ee9c;\n      --paper-lime-300: #dce775;\n      --paper-lime-400: #d4e157;\n      --paper-lime-500: #cddc39;\n      --paper-lime-600: #c0ca33;\n      --paper-lime-700: #afb42b;\n      --paper-lime-800: #9e9d24;\n      --paper-lime-900: #827717;\n      --paper-lime-a100: #f4ff81;\n      --paper-lime-a200: #eeff41;\n      --paper-lime-a400: #c6ff00;\n      --paper-lime-a700: #aeea00;\n\n      --paper-yellow-50: #fffde7;\n      --paper-yellow-100: #fff9c4;\n      --paper-yellow-200: #fff59d;\n      --paper-yellow-300: #fff176;\n      --paper-yellow-400: #ffee58;\n      --paper-yellow-500: #ffeb3b;\n      --paper-yellow-600: #fdd835;\n      --paper-yellow-700: #fbc02d;\n      --paper-yellow-800: #f9a825;\n      --paper-yellow-900: #f57f17;\n      --paper-yellow-a100: #ffff8d;\n      --paper-yellow-a200: #ffff00;\n      --paper-yellow-a400: #ffea00;\n      --paper-yellow-a700: #ffd600;\n\n      --paper-amber-50: #fff8e1;\n      --paper-amber-100: #ffecb3;\n      --paper-amber-200: #ffe082;\n      --paper-amber-300: #ffd54f;\n      --paper-amber-400: #ffca28;\n      --paper-amber-500: #ffc107;\n      --paper-amber-600: #ffb300;\n      --paper-amber-700: #ffa000;\n      --paper-amber-800: #ff8f00;\n      --paper-amber-900: #ff6f00;\n      --paper-amber-a100: #ffe57f;\n      --paper-amber-a200: #ffd740;\n      --paper-amber-a400: #ffc400;\n      --paper-amber-a700: #ffab00;\n\n      --paper-orange-50: #fff3e0;\n      --paper-orange-100: #ffe0b2;\n      --paper-orange-200: #ffcc80;\n      --paper-orange-300: #ffb74d;\n      --paper-orange-400: #ffa726;\n      --paper-orange-500: #ff9800;\n      --paper-orange-600: #fb8c00;\n      --paper-orange-700: #f57c00;\n      --paper-orange-800: #ef6c00;\n      --paper-orange-900: #e65100;\n      --paper-orange-a100: #ffd180;\n      --paper-orange-a200: #ffab40;\n      --paper-orange-a400: #ff9100;\n      --paper-orange-a700: #ff6500;\n\n      --paper-deep-orange-50: #fbe9e7;\n      --paper-deep-orange-100: #ffccbc;\n      --paper-deep-orange-200: #ffab91;\n      --paper-deep-orange-300: #ff8a65;\n      --paper-deep-orange-400: #ff7043;\n      --paper-deep-orange-500: #ff5722;\n      --paper-deep-orange-600: #f4511e;\n      --paper-deep-orange-700: #e64a19;\n      --paper-deep-orange-800: #d84315;\n      --paper-deep-orange-900: #bf360c;\n      --paper-deep-orange-a100: #ff9e80;\n      --paper-deep-orange-a200: #ff6e40;\n      --paper-deep-orange-a400: #ff3d00;\n      --paper-deep-orange-a700: #dd2c00;\n\n      --paper-brown-50: #efebe9;\n      --paper-brown-100: #d7ccc8;\n      --paper-brown-200: #bcaaa4;\n      --paper-brown-300: #a1887f;\n      --paper-brown-400: #8d6e63;\n      --paper-brown-500: #795548;\n      --paper-brown-600: #6d4c41;\n      --paper-brown-700: #5d4037;\n      --paper-brown-800: #4e342e;\n      --paper-brown-900: #3e2723;\n\n      --paper-grey-50: #fafafa;\n      --paper-grey-100: #f5f5f5;\n      --paper-grey-200: #eeeeee;\n      --paper-grey-300: #e0e0e0;\n      --paper-grey-400: #bdbdbd;\n      --paper-grey-500: #9e9e9e;\n      --paper-grey-600: #757575;\n      --paper-grey-700: #616161;\n      --paper-grey-800: #424242;\n      --paper-grey-900: #212121;\n\n      --paper-blue-grey-50: #eceff1;\n      --paper-blue-grey-100: #cfd8dc;\n      --paper-blue-grey-200: #b0bec5;\n      --paper-blue-grey-300: #90a4ae;\n      --paper-blue-grey-400: #78909c;\n      --paper-blue-grey-500: #607d8b;\n      --paper-blue-grey-600: #546e7a;\n      --paper-blue-grey-700: #455a64;\n      --paper-blue-grey-800: #37474f;\n      --paper-blue-grey-900: #263238;\n\n      /* opacity for dark text on a light background */\n      --dark-divider-opacity: 0.12;\n      --dark-disabled-opacity: 0.38; /* or hint text or icon */\n      --dark-secondary-opacity: 0.54;\n      --dark-primary-opacity: 0.87;\n\n      /* opacity for light text on a dark background */\n      --light-divider-opacity: 0.12;\n      --light-disabled-opacity: 0.3; /* or hint text or icon */\n      --light-secondary-opacity: 0.7;\n      --light-primary-opacity: 1.0;\n\n    }\n\n  </style>\n</custom-style>\n"]);
-            _templateObject11_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject11_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject11_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject11_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject10_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject10_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n    <style>\n      :host {\n        display: inline-block;\n        float: right;\n\n        @apply --paper-font-caption;\n        @apply --paper-input-char-counter;\n      }\n\n      :host([hidden]) {\n        display: none !important;\n      }\n\n      :host(:dir(rtl)) {\n        float: left;\n      }\n    </style>\n\n    <span>[[_charCounterStr]]</span>\n"]);
-            _templateObject10_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject10_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject10_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject10_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject9_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject9_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["<custom-style>\n  <style is=\"custom-style\">\n    html {\n\n      /* Shared Styles */\n      --paper-font-common-base: {\n        font-family: 'Roboto', 'Noto', sans-serif;\n        -webkit-font-smoothing: antialiased;\n      };\n\n      --paper-font-common-code: {\n        font-family: 'Roboto Mono', 'Consolas', 'Menlo', monospace;\n        -webkit-font-smoothing: antialiased;\n      };\n\n      --paper-font-common-expensive-kerning: {\n        text-rendering: optimizeLegibility;\n      };\n\n      --paper-font-common-nowrap: {\n        white-space: nowrap;\n        overflow: hidden;\n        text-overflow: ellipsis;\n      };\n\n      /* Material Font Styles */\n\n      --paper-font-display4: {\n        @apply --paper-font-common-base;\n        @apply --paper-font-common-nowrap;\n\n        font-size: 112px;\n        font-weight: 300;\n        letter-spacing: -.044em;\n        line-height: 120px;\n      };\n\n      --paper-font-display3: {\n        @apply --paper-font-common-base;\n        @apply --paper-font-common-nowrap;\n\n        font-size: 56px;\n        font-weight: 400;\n        letter-spacing: -.026em;\n        line-height: 60px;\n      };\n\n      --paper-font-display2: {\n        @apply --paper-font-common-base;\n\n        font-size: 45px;\n        font-weight: 400;\n        letter-spacing: -.018em;\n        line-height: 48px;\n      };\n\n      --paper-font-display1: {\n        @apply --paper-font-common-base;\n\n        font-size: 34px;\n        font-weight: 400;\n        letter-spacing: -.01em;\n        line-height: 40px;\n      };\n\n      --paper-font-headline: {\n        @apply --paper-font-common-base;\n\n        font-size: 24px;\n        font-weight: 400;\n        letter-spacing: -.012em;\n        line-height: 32px;\n      };\n\n      --paper-font-title: {\n        @apply --paper-font-common-base;\n        @apply --paper-font-common-nowrap;\n\n        font-size: 20px;\n        font-weight: 500;\n        line-height: 28px;\n      };\n\n      --paper-font-subhead: {\n        @apply --paper-font-common-base;\n\n        font-size: 16px;\n        font-weight: 400;\n        line-height: 24px;\n      };\n\n      --paper-font-body2: {\n        @apply --paper-font-common-base;\n\n        font-size: 14px;\n        font-weight: 500;\n        line-height: 24px;\n      };\n\n      --paper-font-body1: {\n        @apply --paper-font-common-base;\n\n        font-size: 14px;\n        font-weight: 400;\n        line-height: 20px;\n      };\n\n      --paper-font-caption: {\n        @apply --paper-font-common-base;\n        @apply --paper-font-common-nowrap;\n\n        font-size: 12px;\n        font-weight: 400;\n        letter-spacing: 0.011em;\n        line-height: 20px;\n      };\n\n      --paper-font-menu: {\n        @apply --paper-font-common-base;\n        @apply --paper-font-common-nowrap;\n\n        font-size: 13px;\n        font-weight: 500;\n        line-height: 24px;\n      };\n\n      --paper-font-button: {\n        @apply --paper-font-common-base;\n        @apply --paper-font-common-nowrap;\n\n        font-size: 14px;\n        font-weight: 500;\n        letter-spacing: 0.018em;\n        line-height: 24px;\n        text-transform: uppercase;\n      };\n\n      --paper-font-code2: {\n        @apply --paper-font-common-code;\n\n        font-size: 14px;\n        font-weight: 700;\n        line-height: 20px;\n      };\n\n      --paper-font-code1: {\n        @apply --paper-font-common-code;\n\n        font-size: 14px;\n        font-weight: 500;\n        line-height: 20px;\n      };\n\n    }\n\n  </style>\n</custom-style>"]);
-            _templateObject9_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject9_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject9_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject9_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject8_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject8_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n    <style>\n      :host {\n        display: inline-block;\n      }\n    </style>\n    <slot id=\"content\"></slot>\n"]);
-            _templateObject8_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject8_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject8_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject8_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject7_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject7_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n    <style>\n      :host {\n        display: inline-block;\n        position: fixed;\n        clip: rect(0px,0px,0px,0px);\n      }\n    </style>\n    <div aria-live$=\"[[mode]]\">[[_text]]</div>\n"]);
-            _templateObject7_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject7_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject7_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject7_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject6_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject6_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n    <style>\n      :host {\n        @apply --layout-inline;\n        @apply --layout-center-center;\n        position: relative;\n\n        vertical-align: middle;\n\n        fill: var(--iron-icon-fill-color, currentcolor);\n        stroke: var(--iron-icon-stroke-color, none);\n\n        width: var(--iron-icon-width, 24px);\n        height: var(--iron-icon-height, 24px);\n        @apply --iron-icon;\n      }\n\n      :host([hidden]) {\n        display: none;\n      }\n    </style>\n"]);
-            _templateObject6_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject6_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject6_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject6_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject5_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject5_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n    <style>\n      :host {\n        display: block;\n        /**\n         * Force app-header-layout to have its own stacking context so that its parent can\n         * control the stacking of it relative to other elements (e.g. app-drawer-layout).\n         * This could be done using `isolation: isolate`, but that's not well supported\n         * across browsers.\n         */\n        position: relative;\n        z-index: 0;\n      }\n\n      #wrapper ::slotted([slot=header]) {\n        @apply --layout-fixed-top;\n        z-index: 1;\n      }\n\n      #wrapper.initializing ::slotted([slot=header]) {\n        position: relative;\n      }\n\n      :host([has-scrolling-region]) {\n        height: 100%;\n      }\n\n      :host([has-scrolling-region]) #wrapper ::slotted([slot=header]) {\n        position: absolute;\n      }\n\n      :host([has-scrolling-region]) #wrapper.initializing ::slotted([slot=header]) {\n        position: relative;\n      }\n\n      :host([has-scrolling-region]) #wrapper #contentContainer {\n        @apply --layout-fit;\n        overflow-y: auto;\n        -webkit-overflow-scrolling: touch;\n      }\n\n      :host([has-scrolling-region]) #wrapper.initializing #contentContainer {\n        position: relative;\n      }\n\n      :host([fullbleed]) {\n        @apply --layout-vertical;\n        @apply --layout-fit;\n      }\n\n      :host([fullbleed]) #wrapper,\n      :host([fullbleed]) #wrapper #contentContainer {\n        @apply --layout-vertical;\n        @apply --layout-flex;\n      }\n\n      #contentContainer {\n        /* Create a stacking context here so that all children appear below the header. */\n        position: relative;\n        z-index: 0;\n      }\n\n      @media print {\n        :host([has-scrolling-region]) #wrapper #contentContainer {\n          overflow-y: visible;\n        }\n      }\n\n    </style>\n\n    <div id=\"wrapper\" class=\"initializing\">\n      <slot id=\"headerSlot\" name=\"header\"></slot>\n\n      <div id=\"contentContainer\">\n        <slot></slot>\n      </div>\n    </div>\n"], ["\n    <style>\n      :host {\n        display: block;\n        /**\n         * Force app-header-layout to have its own stacking context so that its parent can\n         * control the stacking of it relative to other elements (e.g. app-drawer-layout).\n         * This could be done using \\`isolation: isolate\\`, but that's not well supported\n         * across browsers.\n         */\n        position: relative;\n        z-index: 0;\n      }\n\n      #wrapper ::slotted([slot=header]) {\n        @apply --layout-fixed-top;\n        z-index: 1;\n      }\n\n      #wrapper.initializing ::slotted([slot=header]) {\n        position: relative;\n      }\n\n      :host([has-scrolling-region]) {\n        height: 100%;\n      }\n\n      :host([has-scrolling-region]) #wrapper ::slotted([slot=header]) {\n        position: absolute;\n      }\n\n      :host([has-scrolling-region]) #wrapper.initializing ::slotted([slot=header]) {\n        position: relative;\n      }\n\n      :host([has-scrolling-region]) #wrapper #contentContainer {\n        @apply --layout-fit;\n        overflow-y: auto;\n        -webkit-overflow-scrolling: touch;\n      }\n\n      :host([has-scrolling-region]) #wrapper.initializing #contentContainer {\n        position: relative;\n      }\n\n      :host([fullbleed]) {\n        @apply --layout-vertical;\n        @apply --layout-fit;\n      }\n\n      :host([fullbleed]) #wrapper,\n      :host([fullbleed]) #wrapper #contentContainer {\n        @apply --layout-vertical;\n        @apply --layout-flex;\n      }\n\n      #contentContainer {\n        /* Create a stacking context here so that all children appear below the header. */\n        position: relative;\n        z-index: 0;\n      }\n\n      @media print {\n        :host([has-scrolling-region]) #wrapper #contentContainer {\n          overflow-y: visible;\n        }\n      }\n\n    </style>\n\n    <div id=\"wrapper\" class=\"initializing\">\n      <slot id=\"headerSlot\" name=\"header\"></slot>\n\n      <div id=\"contentContainer\">\n        <slot></slot>\n      </div>\n    </div>\n"]);
-            _templateObject5_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject5_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject5_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject5_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject4_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject4_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n    <style>\n      :host {\n        position: relative;\n        display: block;\n        transition-timing-function: linear;\n        transition-property: -webkit-transform;\n        transition-property: transform;\n      }\n\n      :host::before {\n        position: absolute;\n        right: 0px;\n        bottom: -5px;\n        left: 0px;\n        width: 100%;\n        height: 5px;\n        content: \"\";\n        transition: opacity 0.4s;\n        pointer-events: none;\n        opacity: 0;\n        box-shadow: inset 0px 5px 6px -3px rgba(0, 0, 0, 0.4);\n        will-change: opacity;\n        @apply --app-header-shadow;\n      }\n\n      :host([shadow])::before {\n        opacity: 1;\n      }\n\n      #background {\n        @apply --layout-fit;\n        overflow: hidden;\n      }\n\n      #backgroundFrontLayer,\n      #backgroundRearLayer {\n        @apply --layout-fit;\n        height: 100%;\n        pointer-events: none;\n        background-size: cover;\n      }\n\n      #backgroundFrontLayer {\n        @apply --app-header-background-front-layer;\n      }\n\n      #backgroundRearLayer {\n        opacity: 0;\n        @apply --app-header-background-rear-layer;\n      }\n\n      #contentContainer {\n        position: relative;\n        width: 100%;\n        height: 100%;\n      }\n\n      :host([disabled]),\n      :host([disabled])::after,\n      :host([disabled]) #backgroundFrontLayer,\n      :host([disabled]) #backgroundRearLayer,\n      /* Silent scrolling should not run CSS transitions */\n      :host([silent-scroll]),\n      :host([silent-scroll])::after,\n      :host([silent-scroll]) #backgroundFrontLayer,\n      :host([silent-scroll]) #backgroundRearLayer {\n        transition: none !important;\n      }\n\n      :host([disabled]) ::slotted(app-toolbar:first-of-type),\n      :host([disabled]) ::slotted([sticky]),\n      /* Silent scrolling should not run CSS transitions */\n      :host([silent-scroll]) ::slotted(app-toolbar:first-of-type),\n      :host([silent-scroll]) ::slotted([sticky]) {\n        transition: none !important;\n      }\n\n    </style>\n    <div id=\"contentContainer\">\n      <slot id=\"slot\"></slot>\n    </div>\n"]);
-            _templateObject4_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject4_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject4_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject4_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject3_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject3_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n    <style>\n      :host {\n        position: fixed;\n        top: -120px;\n        right: 0;\n        bottom: -120px;\n        left: 0;\n\n        visibility: hidden;\n\n        transition-property: visibility;\n      }\n\n      :host([opened]) {\n        visibility: visible;\n      }\n\n      :host([persistent]) {\n        width: var(--app-drawer-width, 256px);\n      }\n\n      :host([persistent][position=left]) {\n        right: auto;\n      }\n\n      :host([persistent][position=right]) {\n        left: auto;\n      }\n\n      #contentContainer {\n        position: absolute;\n        top: 0;\n        bottom: 0;\n        left: 0;\n\n        width: var(--app-drawer-width, 256px);\n        padding: var(--app-drawer-content-padding, 120px 0);\n\n        transition-property: -webkit-transform;\n        transition-property: transform;\n        -webkit-transform: translate3d(-100%, 0, 0);\n        transform: translate3d(-100%, 0, 0);\n\n        background-color: #FFF;\n\n        @apply --app-drawer-content-container;\n      }\n\n      #contentContainer[persistent] {\n        width: 100%;\n      }\n\n      #contentContainer[position=right] {\n        right: 0;\n        left: auto;\n\n        -webkit-transform: translate3d(100%, 0, 0);\n        transform: translate3d(100%, 0, 0);\n      }\n\n      #contentContainer[swipe-open]::after {\n        position: fixed;\n        top: 0;\n        bottom: 0;\n        left: 100%;\n\n        visibility: visible;\n\n        width: 20px;\n\n        content: '';\n      }\n\n      #contentContainer[swipe-open][position=right]::after {\n        right: 100%;\n        left: auto;\n      }\n\n      #contentContainer[opened] {\n        -webkit-transform: translate3d(0, 0, 0);\n        transform: translate3d(0, 0, 0);\n      }\n\n      #scrim {\n        position: absolute;\n        top: 0;\n        right: 0;\n        bottom: 0;\n        left: 0;\n\n        transition-property: opacity;\n        -webkit-transform: translateZ(0);\n        transform:  translateZ(0);\n\n        opacity: 0;\n        background: var(--app-drawer-scrim-background, rgba(0, 0, 0, 0.5));\n      }\n\n      #scrim.visible {\n        opacity: 1;\n      }\n\n      :host([no-transition]) #contentContainer {\n        transition-property: none;\n      }\n    </style>\n\n    <div id=\"scrim\" on-click=\"close\"></div>\n\n    <!-- HACK(keanulee): Bind attributes here (in addition to :host) for styling to workaround Safari\n    bug. https://bugs.webkit.org/show_bug.cgi?id=170762 -->\n    <div id=\"contentContainer\" opened$=\"[[opened]]\" persistent$=\"[[persistent]]\" position$=\"[[position]]\" swipe-open$=\"[[swipeOpen]]\">\n      <slot></slot>\n    </div>\n"], ["\n    <style>\n      :host {\n        position: fixed;\n        top: -120px;\n        right: 0;\n        bottom: -120px;\n        left: 0;\n\n        visibility: hidden;\n\n        transition-property: visibility;\n      }\n\n      :host([opened]) {\n        visibility: visible;\n      }\n\n      :host([persistent]) {\n        width: var(--app-drawer-width, 256px);\n      }\n\n      :host([persistent][position=left]) {\n        right: auto;\n      }\n\n      :host([persistent][position=right]) {\n        left: auto;\n      }\n\n      #contentContainer {\n        position: absolute;\n        top: 0;\n        bottom: 0;\n        left: 0;\n\n        width: var(--app-drawer-width, 256px);\n        padding: var(--app-drawer-content-padding, 120px 0);\n\n        transition-property: -webkit-transform;\n        transition-property: transform;\n        -webkit-transform: translate3d(-100%, 0, 0);\n        transform: translate3d(-100%, 0, 0);\n\n        background-color: #FFF;\n\n        @apply --app-drawer-content-container;\n      }\n\n      #contentContainer[persistent] {\n        width: 100%;\n      }\n\n      #contentContainer[position=right] {\n        right: 0;\n        left: auto;\n\n        -webkit-transform: translate3d(100%, 0, 0);\n        transform: translate3d(100%, 0, 0);\n      }\n\n      #contentContainer[swipe-open]::after {\n        position: fixed;\n        top: 0;\n        bottom: 0;\n        left: 100%;\n\n        visibility: visible;\n\n        width: 20px;\n\n        content: '';\n      }\n\n      #contentContainer[swipe-open][position=right]::after {\n        right: 100%;\n        left: auto;\n      }\n\n      #contentContainer[opened] {\n        -webkit-transform: translate3d(0, 0, 0);\n        transform: translate3d(0, 0, 0);\n      }\n\n      #scrim {\n        position: absolute;\n        top: 0;\n        right: 0;\n        bottom: 0;\n        left: 0;\n\n        transition-property: opacity;\n        -webkit-transform: translateZ(0);\n        transform:  translateZ(0);\n\n        opacity: 0;\n        background: var(--app-drawer-scrim-background, rgba(0, 0, 0, 0.5));\n      }\n\n      #scrim.visible {\n        opacity: 1;\n      }\n\n      :host([no-transition]) #contentContainer {\n        transition-property: none;\n      }\n    </style>\n\n    <div id=\"scrim\" on-click=\"close\"></div>\n\n    \\x3c!-- HACK(keanulee): Bind attributes here (in addition to :host) for styling to workaround Safari\n    bug. https://bugs.webkit.org/show_bug.cgi?id=170762 --\\x3e\n    <div id=\"contentContainer\" opened\\$=\"[[opened]]\" persistent\\$=\"[[persistent]]\" position\\$=\"[[position]]\" swipe-open\\$=\"[[swipeOpen]]\">\n      <slot></slot>\n    </div>\n"]);
-            _templateObject3_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject3_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject3_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject3_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject2_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject2_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n    <style>\n\n      :host {\n        @apply --layout-horizontal;\n        @apply --layout-center;\n        position: relative;\n        height: 64px;\n        padding: 0 16px;\n        pointer-events: none;\n        font-size: var(--app-toolbar-font-size, 20px);\n      }\n\n      :host ::slotted(*) {\n        pointer-events: auto;\n      }\n\n      :host ::slotted(paper-icon-button) {\n        /* paper-icon-button/issues/33 */\n        font-size: 0;\n      }\n\n      :host ::slotted([main-title]),\n      :host ::slotted([condensed-title]) {\n        pointer-events: none;\n        @apply --layout-flex;\n      }\n\n      :host ::slotted([bottom-item]) {\n        position: absolute;\n        right: 0;\n        bottom: 0;\n        left: 0;\n      }\n\n      :host ::slotted([top-item]) {\n        position: absolute;\n        top: 0;\n        right: 0;\n        left: 0;\n      }\n\n      :host ::slotted([spacer]) {\n        margin-left: 64px;\n      }\n    </style>\n\n    <slot></slot>\n"]);
-            _templateObject2_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject2_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject2_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject2_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
         }
 
-        function _templateObject_75166f504f7311eba11cfd9b4a67c5d1() {
+        function _templateObject_6baf3a2053f911ebaa3fd34a63097174() {
             var data = babelHelpers.taggedTemplateLiteral(["\n<custom-style>\n  <style is=\"custom-style\">\n    [hidden] {\n      display: none !important;\n    }\n  </style>\n</custom-style>\n<custom-style>\n  <style is=\"custom-style\">\n    html {\n\n      --layout: {\n        display: -ms-flexbox;\n        display: -webkit-flex;\n        display: flex;\n      };\n\n      --layout-inline: {\n        display: -ms-inline-flexbox;\n        display: -webkit-inline-flex;\n        display: inline-flex;\n      };\n\n      --layout-horizontal: {\n        @apply --layout;\n\n        -ms-flex-direction: row;\n        -webkit-flex-direction: row;\n        flex-direction: row;\n      };\n\n      --layout-horizontal-reverse: {\n        @apply --layout;\n\n        -ms-flex-direction: row-reverse;\n        -webkit-flex-direction: row-reverse;\n        flex-direction: row-reverse;\n      };\n\n      --layout-vertical: {\n        @apply --layout;\n\n        -ms-flex-direction: column;\n        -webkit-flex-direction: column;\n        flex-direction: column;\n      };\n\n      --layout-vertical-reverse: {\n        @apply --layout;\n\n        -ms-flex-direction: column-reverse;\n        -webkit-flex-direction: column-reverse;\n        flex-direction: column-reverse;\n      };\n\n      --layout-wrap: {\n        -ms-flex-wrap: wrap;\n        -webkit-flex-wrap: wrap;\n        flex-wrap: wrap;\n      };\n\n      --layout-wrap-reverse: {\n        -ms-flex-wrap: wrap-reverse;\n        -webkit-flex-wrap: wrap-reverse;\n        flex-wrap: wrap-reverse;\n      };\n\n      --layout-flex-auto: {\n        -ms-flex: 1 1 auto;\n        -webkit-flex: 1 1 auto;\n        flex: 1 1 auto;\n      };\n\n      --layout-flex-none: {\n        -ms-flex: none;\n        -webkit-flex: none;\n        flex: none;\n      };\n\n      --layout-flex: {\n        -ms-flex: 1 1 0.000000001px;\n        -webkit-flex: 1;\n        flex: 1;\n        -webkit-flex-basis: 0.000000001px;\n        flex-basis: 0.000000001px;\n      };\n\n      --layout-flex-2: {\n        -ms-flex: 2;\n        -webkit-flex: 2;\n        flex: 2;\n      };\n\n      --layout-flex-3: {\n        -ms-flex: 3;\n        -webkit-flex: 3;\n        flex: 3;\n      };\n\n      --layout-flex-4: {\n        -ms-flex: 4;\n        -webkit-flex: 4;\n        flex: 4;\n      };\n\n      --layout-flex-5: {\n        -ms-flex: 5;\n        -webkit-flex: 5;\n        flex: 5;\n      };\n\n      --layout-flex-6: {\n        -ms-flex: 6;\n        -webkit-flex: 6;\n        flex: 6;\n      };\n\n      --layout-flex-7: {\n        -ms-flex: 7;\n        -webkit-flex: 7;\n        flex: 7;\n      };\n\n      --layout-flex-8: {\n        -ms-flex: 8;\n        -webkit-flex: 8;\n        flex: 8;\n      };\n\n      --layout-flex-9: {\n        -ms-flex: 9;\n        -webkit-flex: 9;\n        flex: 9;\n      };\n\n      --layout-flex-10: {\n        -ms-flex: 10;\n        -webkit-flex: 10;\n        flex: 10;\n      };\n\n      --layout-flex-11: {\n        -ms-flex: 11;\n        -webkit-flex: 11;\n        flex: 11;\n      };\n\n      --layout-flex-12: {\n        -ms-flex: 12;\n        -webkit-flex: 12;\n        flex: 12;\n      };\n\n      /* alignment in cross axis */\n\n      --layout-start: {\n        -ms-flex-align: start;\n        -webkit-align-items: flex-start;\n        align-items: flex-start;\n      };\n\n      --layout-center: {\n        -ms-flex-align: center;\n        -webkit-align-items: center;\n        align-items: center;\n      };\n\n      --layout-end: {\n        -ms-flex-align: end;\n        -webkit-align-items: flex-end;\n        align-items: flex-end;\n      };\n\n      --layout-baseline: {\n        -ms-flex-align: baseline;\n        -webkit-align-items: baseline;\n        align-items: baseline;\n      };\n\n      /* alignment in main axis */\n\n      --layout-start-justified: {\n        -ms-flex-pack: start;\n        -webkit-justify-content: flex-start;\n        justify-content: flex-start;\n      };\n\n      --layout-center-justified: {\n        -ms-flex-pack: center;\n        -webkit-justify-content: center;\n        justify-content: center;\n      };\n\n      --layout-end-justified: {\n        -ms-flex-pack: end;\n        -webkit-justify-content: flex-end;\n        justify-content: flex-end;\n      };\n\n      --layout-around-justified: {\n        -ms-flex-pack: distribute;\n        -webkit-justify-content: space-around;\n        justify-content: space-around;\n      };\n\n      --layout-justified: {\n        -ms-flex-pack: justify;\n        -webkit-justify-content: space-between;\n        justify-content: space-between;\n      };\n\n      --layout-center-center: {\n        @apply --layout-center;\n        @apply --layout-center-justified;\n      };\n\n      /* self alignment */\n\n      --layout-self-start: {\n        -ms-align-self: flex-start;\n        -webkit-align-self: flex-start;\n        align-self: flex-start;\n      };\n\n      --layout-self-center: {\n        -ms-align-self: center;\n        -webkit-align-self: center;\n        align-self: center;\n      };\n\n      --layout-self-end: {\n        -ms-align-self: flex-end;\n        -webkit-align-self: flex-end;\n        align-self: flex-end;\n      };\n\n      --layout-self-stretch: {\n        -ms-align-self: stretch;\n        -webkit-align-self: stretch;\n        align-self: stretch;\n      };\n\n      --layout-self-baseline: {\n        -ms-align-self: baseline;\n        -webkit-align-self: baseline;\n        align-self: baseline;\n      };\n\n      /* multi-line alignment in main axis */\n\n      --layout-start-aligned: {\n        -ms-flex-line-pack: start;  /* IE10 */\n        -ms-align-content: flex-start;\n        -webkit-align-content: flex-start;\n        align-content: flex-start;\n      };\n\n      --layout-end-aligned: {\n        -ms-flex-line-pack: end;  /* IE10 */\n        -ms-align-content: flex-end;\n        -webkit-align-content: flex-end;\n        align-content: flex-end;\n      };\n\n      --layout-center-aligned: {\n        -ms-flex-line-pack: center;  /* IE10 */\n        -ms-align-content: center;\n        -webkit-align-content: center;\n        align-content: center;\n      };\n\n      --layout-between-aligned: {\n        -ms-flex-line-pack: justify;  /* IE10 */\n        -ms-align-content: space-between;\n        -webkit-align-content: space-between;\n        align-content: space-between;\n      };\n\n      --layout-around-aligned: {\n        -ms-flex-line-pack: distribute;  /* IE10 */\n        -ms-align-content: space-around;\n        -webkit-align-content: space-around;\n        align-content: space-around;\n      };\n\n      /*******************************\n                Other Layout\n      *******************************/\n\n      --layout-block: {\n        display: block;\n      };\n\n      --layout-invisible: {\n        visibility: hidden !important;\n      };\n\n      --layout-relative: {\n        position: relative;\n      };\n\n      --layout-fit: {\n        position: absolute;\n        top: 0;\n        right: 0;\n        bottom: 0;\n        left: 0;\n      };\n\n      --layout-scroll: {\n        -webkit-overflow-scrolling: touch;\n        overflow: auto;\n      };\n\n      --layout-fullbleed: {\n        margin: 0;\n        height: 100vh;\n      };\n\n      /* fixed position */\n\n      --layout-fixed-top: {\n        position: fixed;\n        top: 0;\n        left: 0;\n        right: 0;\n      };\n\n      --layout-fixed-right: {\n        position: fixed;\n        top: 0;\n        right: 0;\n        bottom: 0;\n      };\n\n      --layout-fixed-bottom: {\n        position: fixed;\n        right: 0;\n        bottom: 0;\n        left: 0;\n      };\n\n      --layout-fixed-left: {\n        position: fixed;\n        top: 0;\n        bottom: 0;\n        left: 0;\n      };\n\n    }\n  </style>\n</custom-style>"]);
-            _templateObject_75166f504f7311eba11cfd9b4a67c5d1 = function _templateObject_75166f504f7311eba11cfd9b4a67c5d1() {
+            _templateObject_6baf3a2053f911ebaa3fd34a63097174 = function _templateObject_6baf3a2053f911ebaa3fd34a63097174() {
                 return data;
             };
             return data;
@@ -18294,18 +18294,18 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
                 return _class3;
             }(superClass));
         };
-        var template = html(_templateObject_75166f504f7311eba11cfd9b4a67c5d1());
+        var template = html(_templateObject_6baf3a2053f911ebaa3fd34a63097174());
         template.setAttribute('style', 'display: none;');
         document.head.appendChild(template.content);
         var style = document.createElement('style');
         style.textContent = '[hidden] { display: none !important; }';
         document.head.appendChild(style);
         Polymer({
-            /** @override */_template: html(_templateObject2_75166f504f7311eba11cfd9b4a67c5d1()),
+            /** @override */_template: html(_templateObject2_6baf3a2053f911ebaa3fd34a63097174()),
             is: 'app-toolbar'
         });
         Polymer({
-            /** @override */_template: html(_templateObject3_75166f504f7311eba11cfd9b4a67c5d1()),
+            /** @override */_template: html(_templateObject3_6baf3a2053f911ebaa3fd34a63097174()),
             is: 'app-drawer',
             properties: {
                 /**
@@ -19431,7 +19431,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
             }
         }];
         Polymer({
-            /** @override */_template: html(_templateObject4_75166f504f7311eba11cfd9b4a67c5d1()),
+            /** @override */_template: html(_templateObject4_6baf3a2053f911ebaa3fd34a63097174()),
             is: 'app-header',
             behaviors: [AppScrollEffectsBehavior, AppLayoutBehavior],
             properties: {
@@ -19718,7 +19718,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
             }
         });
         Polymer({
-            /** @override */_template: html(_templateObject5_75166f504f7311eba11cfd9b4a67c5d1()),
+            /** @override */_template: html(_templateObject5_6baf3a2053f911ebaa3fd34a63097174()),
             is: 'app-header-layout',
             behaviors: [AppLayoutBehavior],
             properties: {
@@ -19929,7 +19929,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
             }
         });
         Polymer({
-            _template: html(_templateObject6_75166f504f7311eba11cfd9b4a67c5d1()),
+            _template: html(_templateObject6_6baf3a2053f911ebaa3fd34a63097174()),
             is: 'iron-icon',
             properties: {
                 /**
@@ -20354,7 +20354,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
             }
         };
         var IronA11yAnnouncer = Polymer({
-            /** @override */_template: html(_templateObject7_75166f504f7311eba11cfd9b4a67c5d1()),
+            /** @override */_template: html(_templateObject7_6baf3a2053f911ebaa3fd34a63097174()),
             is: 'iron-a11y-announcer',
             properties: {
                 /**
@@ -20486,7 +20486,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
             }
         };
         Polymer({
-            _template: html(_templateObject8_75166f504f7311eba11cfd9b4a67c5d1()),
+            _template: html(_templateObject8_6baf3a2053f911ebaa3fd34a63097174()),
             is: 'iron-input',
             behaviors: [IronValidatableBehavior],
             /**
@@ -20691,7 +20691,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
             link.href = 'https://fonts.googleapis.com/css?family=Roboto+Mono:400,700|Roboto:400,300,300italic,400italic,500,500italic,700,700italic';
             document.head.appendChild(link);
         }
-        var template$1 = html(_templateObject9_75166f504f7311eba11cfd9b4a67c5d1());
+        var template$1 = html(_templateObject9_6baf3a2053f911ebaa3fd34a63097174());
         template$1.setAttribute('style', 'display: none;');
         document.head.appendChild(template$1.content);
         var PaperInputAddonBehavior = {
@@ -20712,7 +20712,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
             }
         };
         Polymer({
-            /** @override */_template: html(_templateObject10_75166f504f7311eba11cfd9b4a67c5d1()),
+            /** @override */_template: html(_templateObject10_6baf3a2053f911ebaa3fd34a63097174()),
             is: 'paper-input-char-counter',
             behaviors: [PaperInputAddonBehavior],
             properties: {_charCounterStr: {type: String, value: '0'}},
@@ -20738,13 +20738,13 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
                 this._charCounterStr = counter;
             }
         });
-        var template$2 = html(_templateObject11_75166f504f7311eba11cfd9b4a67c5d1());
+        var template$2 = html(_templateObject11_6baf3a2053f911ebaa3fd34a63097174());
         template$2.setAttribute('style', 'display: none;');
         document.head.appendChild(template$2.content);
-        var template$3 = html(_templateObject12_75166f504f7311eba11cfd9b4a67c5d1());
+        var template$3 = html(_templateObject12_6baf3a2053f911ebaa3fd34a63097174());
         template$3.setAttribute('style', 'display: none;');
         document.head.appendChild(template$3.content);
-        var template$4 = html(_templateObject13_75166f504f7311eba11cfd9b4a67c5d1());
+        var template$4 = html(_templateObject13_6baf3a2053f911ebaa3fd34a63097174());
         template$4.setAttribute('style', 'display: none;');
         document.head.appendChild(template$4.content);/*
                                                `<paper-input-container>` is a container for a `<label>`, an `<iron-input>` or
@@ -20840,7 +20840,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
                                                attribute to make it `display:inline-block`.
                                                */
         Polymer({
-            /** @override */_template: html(_templateObject14_75166f504f7311eba11cfd9b4a67c5d1()),
+            /** @override */_template: html(_templateObject14_6baf3a2053f911ebaa3fd34a63097174()),
             is: 'paper-input-container',
             properties: {
                 /**
@@ -21056,7 +21056,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
             }
         });
         Polymer({
-            /** @override */_template: html(_templateObject15_75166f504f7311eba11cfd9b4a67c5d1()),
+            /** @override */_template: html(_templateObject15_6baf3a2053f911ebaa3fd34a63097174()),
             is: 'paper-input-error',
             behaviors: [PaperInputAddonBehavior],
             properties: {
@@ -21499,7 +21499,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
         /** @polymerBehavior */var PaperInputBehavior = [IronControlState, IronA11yKeysBehavior, PaperInputBehaviorImpl];
         Polymer({
             is: 'paper-input',
-            /** @override */_template: html(_templateObject16_75166f504f7311eba11cfd9b4a67c5d1()),
+            /** @override */_template: html(_templateObject16_6baf3a2053f911ebaa3fd34a63097174()),
             behaviors: [PaperInputBehavior, IronFormElementBehavior],
             properties: {
                 value: {// Required for the correct TypeScript type-generation
@@ -22161,7 +22161,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
         }();
         var IronFocusablesHelper = new IronFocusablesHelperClass();
         Polymer({
-            /** @override */_template: html(_templateObject17_75166f504f7311eba11cfd9b4a67c5d1()),
+            /** @override */_template: html(_templateObject17_6baf3a2053f911ebaa3fd34a63097174()),
             is: 'iron-overlay-backdrop',
             properties: {
                 /**
@@ -23601,7 +23601,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
         };
         /** @polymerBehavior */var NeonAnimationRunnerBehavior = [NeonAnimatableBehavior, NeonAnimationRunnerBehaviorImpl];
         Polymer({
-            _template: html(_templateObject18_75166f504f7311eba11cfd9b4a67c5d1()),
+            _template: html(_templateObject18_6baf3a2053f911ebaa3fd34a63097174()),
             is: 'iron-dropdown',
             behaviors: [IronControlState, IronA11yKeysBehavior, IronOverlayBehavior, NeonAnimationRunnerBehavior],
             properties: {
@@ -23814,7 +23814,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
                 return this._effect;
             }
         });
-        var template$5 = html(_templateObject19_75166f504f7311eba11cfd9b4a67c5d1());
+        var template$5 = html(_templateObject19_6baf3a2053f911ebaa3fd34a63097174());
         template$5.setAttribute('style', 'display: none;');
         document.head.appendChild(template$5.content);
         Polymer({
@@ -23908,7 +23908,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
          @hero hero.svg
          @demo demo/index.html
          */var PaperMenuButton = Polymer({
-            _template: html(_templateObject20_75166f504f7311eba11cfd9b4a67c5d1()),
+            _template: html(_templateObject20_6baf3a2053f911ebaa3fd34a63097174()),
             is: 'paper-menu-button',/**
              * Fired when the dropdown opens.
              *
@@ -24320,7 +24320,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
          @element paper-ripple
          @demo demo/index.html
          */Polymer({
-            /** @override */_template: html(_templateObject21_75166f504f7311eba11cfd9b4a67c5d1()),
+            /** @override */_template: html(_templateObject21_6baf3a2053f911ebaa3fd34a63097174()),
             is: 'paper-ripple',
             behaviors: [IronA11yKeysBehavior],
             properties: {
@@ -24891,7 +24891,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
          @element paper-dropdown-menu
          @demo demo/index.html
          */Polymer({
-            /** @override */_template: html(_templateObject22_75166f504f7311eba11cfd9b4a67c5d1()),
+            /** @override */_template: html(_templateObject22_6baf3a2053f911ebaa3fd34a63097174()),
             is: 'paper-dropdown-menu',
             behaviors: [IronButtonState, IronControlState, IronFormElementBehavior, IronValidatableBehavior],
             properties: {
@@ -25081,7 +25081,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
         var PaperItemBehaviorImpl = {hostAttributes: {role: 'option', tabindex: '0'}};
         /** @polymerBehavior */var PaperItemBehavior = [IronButtonState, IronControlState, PaperItemBehaviorImpl];
         Polymer({
-            _template: html(_templateObject23_75166f504f7311eba11cfd9b4a67c5d1()),
+            _template: html(_templateObject23_6baf3a2053f911ebaa3fd34a63097174()),
             is: 'paper-item',
             behaviors: [PaperItemBehavior]
         });
@@ -25178,7 +25178,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
         /** @polymerBehavior */var PaperInkyFocusBehavior = [IronButtonState, IronControlState, PaperRippleBehavior, PaperInkyFocusBehaviorImpl];
         Polymer({
             is: 'paper-icon-button',
-            _template: html(_templateObject24_75166f504f7311eba11cfd9b4a67c5d1()),
+            _template: html(_templateObject24_6baf3a2053f911ebaa3fd34a63097174()),
             hostAttributes: {role: 'button', tabindex: '0'},
             behaviors: [PaperInkyFocusBehavior],
             registered: function registered() {
@@ -25949,12 +25949,12 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
         IronMenuBehaviorImpl._shiftTabPressed = false;
         /** @polymerBehavior */var IronMenuBehavior = [IronMultiSelectableBehavior, IronA11yKeysBehavior, IronMenuBehaviorImpl];
         Polymer({
-            _template: html(_templateObject25_75166f504f7311eba11cfd9b4a67c5d1()),
+            _template: html(_templateObject25_6baf3a2053f911ebaa3fd34a63097174()),
             is: 'paper-listbox',
             behaviors: [IronMenuBehavior],
             /** @private */hostAttributes: {role: 'listbox'}
         });
-        var template$6 = html(_templateObject26_75166f504f7311eba11cfd9b4a67c5d1());
+        var template$6 = html(_templateObject26_6baf3a2053f911ebaa3fd34a63097174());
         template$6.setAttribute('style', 'display: none;');
         document.head.appendChild(template$6.content);
         var PaperButtonBehaviorImpl = {
@@ -26009,7 +26009,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
             }
         };
         /** @polymerBehavior */var PaperButtonBehavior = [IronButtonState, IronControlState, PaperRippleBehavior, PaperButtonBehaviorImpl];
-        var template$7 = html(_templateObject27_75166f504f7311eba11cfd9b4a67c5d1());
+        var template$7 = html(_templateObject27_6baf3a2053f911ebaa3fd34a63097174());
         template$7.setAttribute('strip-whitespace', '');
         /**
          Material design:
@@ -26088,7 +26088,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
             babelHelpers.inherits(PaperSelectLanguage, _LocalizeMixin);
             babelHelpers.createClass(PaperSelectLanguage, null, [{
                 key: "template", get: function get() {
-                    return html(_templateObject28_75166f504f7311eba11cfd9b4a67c5d1());
+                    return html(_templateObject28_6baf3a2053f911ebaa3fd34a63097174());
                 }
             }, {
                 key: "properties", get: function get() {
@@ -26133,7 +26133,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
         }(LocalizeMixin(ServiceInjectorMixin(PolymerElement)));
         window.customElements.define('paper-select-language', PaperSelectLanguage);
         Polymer({
-            _template: html(_templateObject29_75166f504f7311eba11cfd9b4a67c5d1()),
+            _template: html(_templateObject29_6baf3a2053f911ebaa3fd34a63097174()),
             is: 'iron-image',
             properties: {
                 /**
@@ -26283,7 +26283,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
             }
         });
         Polymer({
-            _template: html(_templateObject30_75166f504f7311eba11cfd9b4a67c5d1()), is: 'paper-card', properties: {
+            _template: html(_templateObject30_6baf3a2053f911ebaa3fd34a63097174()), is: 'paper-card', properties: {
                 /**
                  * The title of the card.
                  */heading: {type: String, value: '', observer: '_headingChanged'}, /**
@@ -26331,7 +26331,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
             }
         });
         Polymer({
-            _template: html(_templateObject31_75166f504f7311eba11cfd9b4a67c5d1()),
+            _template: html(_templateObject31_6baf3a2053f911ebaa3fd34a63097174()),
             is: 'neon-animated-pages',
             behaviors: [IronResizableBehavior, IronSelectableBehavior, NeonAnimationRunnerBehavior],
             properties: {
@@ -26423,7 +26423,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
             }
         });
         Polymer({
-            _template: html(_templateObject32_75166f504f7311eba11cfd9b4a67c5d1()),
+            _template: html(_templateObject32_6baf3a2053f911ebaa3fd34a63097174()),
             is: 'neon-animatable',
             behaviors: [NeonAnimatableBehavior, IronResizableBehavior]
         });
@@ -26825,7 +26825,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
             babelHelpers.inherits(DsignMenuItemImage, _ItemFavorite);
             babelHelpers.createClass(DsignMenuItemImage, null, [{
                 key: "template", get: function get() {
-                    return html(_templateObject33_75166f504f7311eba11cfd9b4a67c5d1());
+                    return html(_templateObject33_6baf3a2053f911ebaa3fd34a63097174());
                 }
             }]);
 
@@ -26893,7 +26893,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
             babelHelpers.inherits(DsignMenuItemCompress, _ItemFavorite2);
             babelHelpers.createClass(DsignMenuItemCompress, null, [{
                 key: "template", get: function get() {
-                    return html(_templateObject34_75166f504f7311eba11cfd9b4a67c5d1());
+                    return html(_templateObject34_6baf3a2053f911ebaa3fd34a63097174());
                 }
             }]);
 
@@ -26982,7 +26982,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
                 }
             }], [{
                 key: "template", get: function get() {
-                    return html(_templateObject35_75166f504f7311eba11cfd9b4a67c5d1());
+                    return html(_templateObject35_6baf3a2053f911ebaa3fd34a63097174());
                 }
             }, {
                 key: "properties", get: function get() {
@@ -27004,7 +27004,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
             babelHelpers.inherits(DsignMenuFavorites, _LocalizeMixin3);
             babelHelpers.createClass(DsignMenuFavorites, null, [{
                 key: "template", get: function get() {
-                    return html(_templateObject36_75166f504f7311eba11cfd9b4a67c5d1());
+                    return html(_templateObject36_6baf3a2053f911ebaa3fd34a63097174());
                 }
             }]);
 
@@ -27032,8 +27032,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
                         return;
                     }
                     this.updateListener = new _shared_bundle_.Listener(function (evt) {
-                        console.log('EVENTO', evt.data, this.menuItem.id);
-                        if (evt.data.id === this.menuItem.id) {
+                        if (evt.data['_id'] === this.menuItem['_id']) {
                             this.menuItem = evt.data;
                             this._updateView();
                             this._checkAction();
@@ -27056,9 +27055,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
             }, {
                 key: "_remove", value: function _remove(evt) {
                     this.menuItem.currentCount--;
-                    this._updateView();
                     this._favoriteService.upsertFavorite(this.menuItem);
-                    this._checkAction();
                 }/**
                  * @param evt
                  * @private
@@ -27071,9 +27068,8 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
                             _this44.remove();
                         });
                     } else {
-                        this.menuItem.totalCount--;
                         this._updateView();
-                        this._favoriteService.upsertFavorite(this.menuItem);
+                        this._favoriteService.removeFavorite(this.menuItem);
                         this._checkAction();
                         this.$.paperAction.close();
                     }
@@ -27152,7 +27148,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
                 }
             }], [{
                 key: "template", get: function get() {
-                    return html(_templateObject37_75166f504f7311eba11cfd9b4a67c5d1());
+                    return html(_templateObject37_6baf3a2053f911ebaa3fd34a63097174());
                 }
             }, {
                 key: "properties", get: function get() {
@@ -27188,7 +27184,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
             babelHelpers.inherits(DsignMenu, _LocalizeMixin4);
             babelHelpers.createClass(DsignMenu, null, [{
                 key: "template", get: function get() {
-                    return html(_templateObject38_75166f504f7311eba11cfd9b4a67c5d1());
+                    return html(_templateObject38_6baf3a2053f911ebaa3fd34a63097174());
                 }
             }, {
                 key: "properties", get: function get() {
@@ -27204,7 +27200,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
                             }
                         },
                         amount: {notify: true},
-                        itemLayout: {value: 'dsign-menu-item-image', readOnly: true},
+                        layoutType: {value: 'dsign-menu-item-image', readOnly: true},
                         apiUrl: {},
                         favorites: {value: []},
                         _favoriteService: {readOnly: true, observer: 'changeFavoriteService'},
@@ -27227,7 +27223,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
                 _this46.resources = lang$4;
                 var param = _this46.parseUrlParam();
                 if (param && param['menu'] && param['menu'] === 'compress') {
-                    _this46._setItemLayout('dsign-menu-item-compress');
+                    _this46._setLayoutType('dsign-menu-item-compress');
                 }
                 return _this46;
             }
@@ -27269,8 +27265,10 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
                     if (!service) {
                         return;
                     }
-                    service.getEventManager().on(_shared_bundle_.Storage.POST_UPDATE, new _shared_bundle_.Listener(this.updateFavoriteEvt.bind(this)));
                     service.getEventManager().on(_shared_bundle_.Storage.POST_REMOVE, new _shared_bundle_.Listener(this.deleteFavoriteEvt.bind(this)));
+                    service.getEventManager().on(_shared_bundle_.FavoriteService.RESET_FAVORITES, new _shared_bundle_.Listener(this.updateFavoriteEvt.bind(this)));
+                    service.getEventManager().on(_shared_bundle_.FavoriteService.NEW_FAVORITES, new _shared_bundle_.Listener(this.updateFavoriteEvt.bind(this)));
+                    service.getEventManager().on(_shared_bundle_.Storage.POST_UPDATE, new _shared_bundle_.Listener(this.updateAmountEvt.bind(this)));
                     this.updateFavoriteEvt();
                     this._updateAmount();
                 }/**
@@ -27282,6 +27280,15 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
                         style: 'currency',
                         currency: 'EUR'
                     }).format(this._favoriteService.getAmount());
+                }/**
+                 * @param evt
+                 */
+            }, {
+                key: "updateAmountEvt", value: function updateAmount(evt) {
+                    var _this48 = this;
+                    setTimeout(function () {
+                        _this48._updateAmount();
+                    }, 500);
                 }/**
                  * @param evt
                  */
@@ -27350,6 +27357,10 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
                     if (menu.color_header) {
                         this._changeColorHeader(menu.color_header);
                     }
+                    if (menu.layout_type) {
+                        console.log('CAMBIO', menu.layout_type);
+                        this._setLayoutType(menu.layout_type);
+                    }
                 }/**
                  * @param evt
                  */
@@ -27362,13 +27373,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
                  */
             }, {
                 key: "_reset", value: function _reset(evt) {
-                    var elements = this.shadowRoot.querySelectorAll('dsign-menu-favorites');
-                    for (var index = 0; elements.length > index; index++) {//_favoriteService
-                        console.log('sss', elements[index].menuItem);
-                        elements[index].menuItem.currentCount = 0;
-                        this._favoriteService.upsertFavorite(elements[index].menuItem);
-                    }
-                    this.$.paperAction.close();
+                    this._favoriteService.resetFavorites();
                 }/**
                  * @param color
                  * @private
