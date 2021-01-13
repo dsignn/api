@@ -58,22 +58,6 @@ class CreateMenuCategoryCommand extends SymfonyCommand {
                 'it' => 'Secondi piatti',
                 'en' => 'Main courses'
             ],
-            'side-dishes' => [
-                'it' => 'Contorni',
-                'en' => 'Side dishes'
-            ],
-            'beverage' => [
-                'it' => 'Bevande',
-                'en' => 'Beverage'
-            ],
-            'desserts' => [
-                'it' => 'Dolci',
-                'en' => 'Desserts'
-            ],
-            'wine' => [
-                'it' => 'Vini',
-                'en' => 'Wine'
-            ],
             'pizza' => [
                 'it' => 'Pizza',
                 'en' => 'Pizza'
@@ -85,6 +69,30 @@ class CreateMenuCategoryCommand extends SymfonyCommand {
             'soups' => [
                 'it' => 'Zuppe',
                 'en' => 'Soups'
+            ],
+            'side-dishes' => [
+                'it' => 'Contorni',
+                'en' => 'Side dishes'
+            ],
+            'desserts' => [
+                'it' => 'Dolci',
+                'en' => 'Desserts'
+            ],
+            'beverage' => [
+                'it' => 'Bevande',
+                'en' => 'Beverage'
+            ],
+            'beer' => [
+                'it' => 'Birra',
+                'en' => 'Beer'
+            ],
+            'wine' => [
+                'it' => 'Vini',
+                'en' => 'Wine'
+            ],
+            'cocktail' => [
+                'it' => 'Cocktail',
+                'en' => 'Cocktail'
             ],
             'bitter' => [
                 'it' => 'Amaro',

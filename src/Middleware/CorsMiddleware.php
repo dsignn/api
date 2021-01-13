@@ -34,6 +34,7 @@ class CorsMiddleware implements Middleware
     public function process(Request $request, RequestHandler $handler): Response
     {
         $header = $request->getHeaderLine(CorsMiddleware::$ORIGIN_HEADER);
+
         if (CorsMiddleware::isXhr($request)) {
             switch (true) {
                 case $this->isWildCard === true:

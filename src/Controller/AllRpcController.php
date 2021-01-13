@@ -44,6 +44,7 @@ class AllRpcController implements RpcControllerInterface {
 
         $search = $this->storage->getAll($query);
         $acceptService = $this->getAcceptService($request);
+
         return $acceptService->transformAccept($response, $search);
     }
 }

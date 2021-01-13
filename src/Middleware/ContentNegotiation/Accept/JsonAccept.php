@@ -49,6 +49,7 @@ class JsonAccept implements AcceptTransformInterface {
                     $data->setHydrator($this->getHydrator());
                 }
                 $computeData = $data->toArray();
+
                 break;
             case $data instanceof EntityInterface === true:
                 $computeData = $this->getHydrator()->extract($data);
@@ -65,7 +66,8 @@ class JsonAccept implements AcceptTransformInterface {
             return $response->withStatus(415);
         }
 
-        return $response->withHeader('Content-Type', 'application/json')
+        return $response->withStatus(200)
+            ->withHeader('Content-Type', 'application/json')
             ->withBody($body);
     }
 }

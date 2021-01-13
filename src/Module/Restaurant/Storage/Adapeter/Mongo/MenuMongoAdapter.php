@@ -18,6 +18,7 @@ class MenuMongoAdapter extends MongoAdapter {
      * @return array
      */
     protected function transformSearch(array $search){
+
         foreach ($search as $key => &$value) {
 
             switch ($key) {
@@ -28,6 +29,9 @@ class MenuMongoAdapter extends MongoAdapter {
                     }
                     $search['organization._id'] = ['$in' => $ids];
                     unset($search[$key]);
+                    break;
+                case 'enable':
+                    $search['enable'] =  $value === 'true' ? true : false;
                     break;
             }
         }

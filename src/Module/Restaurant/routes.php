@@ -5,6 +5,8 @@ use App\Controller\OptionController;
 use App\Middleware\Authentication\AuthenticationMiddleware;
 use App\Middleware\Authorization\AuthorizationMiddleware;
 use App\Middleware\Validation\ValidationMiddleware;
+use App\Module\Resource\Controller\AllRpcResourceController;
+use App\Module\Restaurant\Controller\AllRpcMenuController;
 use App\Module\Restaurant\Controller\MenuController;
 use App\Module\Restaurant\Controller\RpcDeleteResourceMenuItem;
 use App\Module\Restaurant\Controller\RpcMenuCategoryController;
@@ -39,6 +41,10 @@ return function (App $app) {
         $group->options('/delete-resource', [OptionController::class, 'options']);
 
         $group->post('/delete-resource',  [RpcDeleteResourceMenuItem::class, 'rpc']);
+
+        $group->get('/all',  [AllRpcMenuController::class, 'rpc']);
+
+        $group->options('/all', [OptionController::class, 'options']);
     })
         ->add($app->getContainer()->get(ValidationMiddleware::class))
         ->add($app->getContainer()->get(AuthorizationMiddleware::class))
