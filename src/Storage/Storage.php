@@ -136,7 +136,6 @@ class Storage implements StorageInterface {
             $entity
         );
 
-        // TODO event pre delete
         return $this->storage->delete($id);
         // TODO event post delete
     }
@@ -144,18 +143,18 @@ class Storage implements StorageInterface {
     /**
      * @inheritDoc
      */
-    public function getAll(array $search = null): ResultSetInterface {
+    public function getAll(array $search = null, array $order = []): ResultSetInterface {
         // TODO event pre getAll
-        return $this->storage->getAll($search);
+        return $this->storage->getAll($search, $order);
         // TODO event post getAll
     }
 
     /**
      * @inheritDoc
      */
-    public function getPage($page = 1, $itemPerPage = 10, $search = []): ResultSetPaginateInterface {
+    public function getPage($page = 1, $itemPerPage = 10, $search = [], $order = []): ResultSetPaginateInterface {
         // TODO event pre getPage
-        return $this->storage->getPage($page, $itemPerPage, $search);
+        return $this->storage->getPage($page, $itemPerPage, $search, $order);
         // TODO event post getPage
     }
 

@@ -77,8 +77,9 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
      * @inheritDoc
      */
     public function get($id) {
+
         return $this->getCollection()->findOne(
-            ['_id' => new ObjectId($id)],
+            ['_id' => $this->generateId($id)],
             $this->arrayOptions
         );
     }
@@ -105,6 +106,7 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
 
         if (!isset($data['_id'])) {
             // TODO
+            var_dump($data);
             throw new \Exception('Id not set', 500);
         }
 
@@ -116,7 +118,7 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
         );
 
         if (!$result->isAcknowledged()) {
-            throw new \Exception('TODOOOOOOOOOOOOOOOOOOOO UPDATE');
+            throw new \Exception('TODO  LOG');
         }
 
         return $data;
@@ -127,10 +129,10 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
      */
     public function delete($id): bool {
         /** @var DeleteResult $result */
-        $result = $this->getCollection()->deleteOne(['_id' => new ObjectId($id)]);
+        $result = $this->getCollection()->deleteOne(['_id' => $this->generateId($id)]);
 
         if (!$result->isAcknowledged()) {
-            throw new \Exception('TODOOOOOOOOOOOOOOOOOOOO DELETE');
+            throw new \Exception('TODO ADD LOG');
         }
 
         return !!$result->getDeletedCount();
@@ -139,11 +141,12 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
     /**
      * @inheritDoc
      */
-    public function getAll(array $search = []): ResultSetInterface {
+    public function getAll(array $search = [], array $order = []): ResultSetInterface {
         $resultSet = clone $this->getResultSet();
         return $resultSet->setDataSource(
             $this->searchDataSource(
-                $search
+                $search,
+                $order
             )
         );
     }
@@ -151,7 +154,7 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
     /**
      * @inheritDoc
      */
-    public function getPage($page = 1, $itemPerPage = 10, array $search = []): ResultSetPaginateInterface {
+    public function getPage($page = 1, $itemPerPage = 10, array $search = [], array $order = []): ResultSetPaginateInterface {
 
         $resultSet = clone $this->getResultSetPaginate();
         return $resultSet->setPage($page)
@@ -160,6 +163,7 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
             ->setDataSource(
                 $this->searchDataSource(
                     $search,
+                    $order,
                     $itemPerPage,
                     ($page-1)*$itemPerPage
                 )
@@ -168,11 +172,12 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
 
     /**
      * @param array $search
+     * @param array $sort
      * @param null $limit
      * @param null $skip
      * @return Cursor
      */
-    protected function searchDataSource(array $search, $limit = null, $skip = null) {
+    protected function searchDataSource(array $search, array $order = [], $limit = null, $skip = null) {
 
         $options = array_merge($this->arrayOptions, []);
 
@@ -182,6 +187,10 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
 
         if ($skip !== null) {
             $options['skip'] = $skip;
+        }
+
+        if (count($order)) {
+            $options['sort'] = $order;
         }
 
         return $this->getCollection()->find(
@@ -204,5 +213,19 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
      */
     protected function getCount(array  $search) {
         return $this->getCollection()->count($search);
+    }
+
+    /**
+     * @param $id
+     * @return ObjectId
+     */
+    private function generateId($id) {
+        try {
+            $id = new ObjectId($id);
+        } catch(\Exception $e) {
+            // log
+        }
+
+        return $id;
     }
 }

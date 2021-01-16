@@ -56,8 +56,7 @@ return function (ContainerBuilder $containerBuilder) {
             $settings = $c->get('settings');
             $serviceSetting = $settings['storage']['menu-category'];
 
-            $hydrator = $c->get('StorageMenuCategoryEntityHydrator')
-            ;
+            $hydrator = $c->get('StorageMenuCategoryEntityHydrator');
             $resultSet = new MongoHydrateResultSet();
             $resultSet->setHydrator($hydrator);
             $resultSet->setEntityPrototype($c->get('MenuCategoryEntityPrototype'));

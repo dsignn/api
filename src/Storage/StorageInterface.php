@@ -42,16 +42,18 @@ interface StorageInterface extends HydratorAwareInterface, EntityPrototypeAwareI
     public function delete(string $id): bool;
 
     /**
-     * @param array $search
+     * @param array|null $search
+     * @param array|null $order
      * @return ResultSetInterface
      */
-    public function getAll(array $search = null): ResultSetInterface;
+    public function getAll(array $search = null, array $order = []): ResultSetInterface;
 
     /**
      * @param int $page
      * @param int $itemPerPage
      * @param array $search
+     * @param array $order
      * @return ResultSetPaginateInterface
      */
-    public function getPage($page = 1, $itemPerPage = 10, $search = []): ResultSetPaginateInterface;
+    public function getPage($page = 1, $itemPerPage = 10, $search = [], $order = []): ResultSetPaginateInterface;
 }
