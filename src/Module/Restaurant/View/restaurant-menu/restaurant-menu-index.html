@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="theme-color" content="{{ menu.background_header }}">
     <title>Menu</title>
     <script>
         /**
@@ -3388,6 +3389,8 @@
                      * @param {string} nameCollection
                      */
                     function LocalStorageAdapter(name, nameCollection) {
+                        var _this2 = this;
+
                         babelHelpers.classCallCheck(this, LocalStorageAdapter);
 
                         /**
@@ -3404,7 +3407,7 @@
                          */
 
                         this.filterCallback = function (filter) {
-                            return filter;
+                            return _this2.data;
                         };
 
                         this.name = name;
@@ -3449,15 +3452,15 @@
                     }, {
                         key: "get",
                         value: function get(id) {
-                            var _this2 = this;
+                            var _this3 = this;
 
                             return new Promise(function (resolve, reject) {
-                                var index = _this2.data.findIndex(function (element) {
-                                    return id === element[_this2.identifier];
+                                var index = _this3.data.findIndex(function (element) {
+                                    return id === element[_this3.identifier];
                                 });
 
                                 if (index >= 0) {
-                                    resolve(Object.assign({}, _this2.data[index]));
+                                    resolve(Object.assign({}, _this3.data[index]));
                                 } else {
                                     resolve(null);
                                 }
@@ -3471,10 +3474,10 @@
                     }, {
                         key: "getAll",
                         value: function getAll(filter) {
-                            var _this3 = this;
+                            var _this4 = this;
 
                             return new Promise(function (resolve, reject) {
-                                resolve(_this3.filter(filter));
+                                resolve(_this4.filter(filter));
                             });
                         }
                         /**
@@ -3487,10 +3490,10 @@
                     }, {
                         key: "getPaged",
                         value: function getPaged(page, itemCount, filter) {
-                            var _this4 = this;
+                            var _this5 = this;
 
                             return new Promise(function (resolve, reject) {
-                                var filteredData = _this4.filter(filter);
+                                var filteredData = _this5.filter(filter);
 
                                 var data = [];
                                 var offset = (page - 1) * itemCount;
@@ -3512,17 +3515,17 @@
                     }, {
                         key: "remove",
                         value: function remove(data) {
-                            var _this5 = this;
+                            var _this6 = this;
 
                             return new Promise(function (resolve, reject) {
-                                var index = _this5.data.findIndex(function (element) {
-                                    return data[_this5.identifier] === element[_this5.identifier];
+                                var index = _this6.data.findIndex(function (element) {
+                                    return data[_this6.identifier] === element[_this6.identifier];
                                 });
 
                                 if (index >= 0) {
-                                    _this5.data.splice(index, 1);
+                                    _this6.data.splice(index, 1);
 
-                                    _this5.persist();
+                                    _this6.persist();
 
                                     resolve(true);
                                 } else {
@@ -3538,13 +3541,13 @@
                     }, {
                         key: "save",
                         value: function save(data) {
-                            var _this6 = this;
+                            var _this7 = this;
 
                             return new Promise(function (resolve, reject) {
                                 if (data) {
-                                    _this6.data.push(data);
+                                    _this7.data.push(data);
 
-                                    _this6.persist();
+                                    _this7.persist();
                                 }
 
                                 resolve(data);
@@ -3568,20 +3571,20 @@
                     }, {
                         key: "update",
                         value: function update(data) {
-                            var _this7 = this;
+                            var _this8 = this;
 
                             return new Promise(function (resolve, reject) {
-                                var index = _this7.data.findIndex(function (element) {
-                                    return data[_this7.identifier] === element[_this7.identifier];
+                                var index = _this8.data.findIndex(function (element) {
+                                    return data[_this8.identifier] === element[_this8.identifier];
                                 });
 
                                 if (index >= 0) {
-                                    _this7.data[index] = data;
+                                    _this8.data[index] = data;
                                 } else {
-                                    _this7.data.push(data);
+                                    _this8.data.push(data);
                                 }
 
-                                _this7.persist();
+                                _this8.persist();
 
                                 resolve(data);
                             });
@@ -3594,7 +3597,7 @@
                     }, {
                         key: "filter",
                         value: function filter(_filter) {
-                            return JSON.parse(JSON.stringify(this.filterCallback(this.data)));
+                            return JSON.parse(JSON.stringify(this.filterCallback(_filter)));
                         }
                         /**
                          *
@@ -3621,11 +3624,22 @@
              */
 
             container.set('Localize', new _shared_bundle_.Localize("it", ["it", "en"]));
+            var adapter = new LocalStorageAdapter('dsign', 'favorite');
+            adapter.setFilterCallback(function (filter) {
+                if (filter.restaurantId) {
+                    return this.data.filter(function (element) {
+                        return element.restaurantId === filter.restaurantId;
+                    });
+                }
+
+                return this.data;
+                ;
+            }.bind(adapter));
             /**
              * @type {Storage}
              */
 
-            var menuStorage = new _shared_bundle_.Storage(new LocalStorageAdapter('dsign', 'favorite'));
+            var menuStorage = new _shared_bundle_.Storage(adapter);
             container.set('MenuStorage', menuStorage);
             /**
              * @type FavoriteService
@@ -3656,7 +3670,7 @@
 
         :root {
             --munu-background-color: {{ menu.background_header }};
-        --munu-color: {{ menu.color_header }};
+            --munu-color: {{ menu.color_header }};
         }
 
         body {
