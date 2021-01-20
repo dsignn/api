@@ -129,7 +129,14 @@ return function (ContainerBuilder $containerBuilder) {
             $inputFilter->add($name);
 
             $qrCode = new Input('qrCode');
+            $qrCode->setRequired(false);
             $inputFilter->add($qrCode);
+
+
+            $whatsappPhone = new Input('whatsappPhone');
+            $whatsappPhone->setRequired(false);
+
+            $inputFilter->add($whatsappPhone);
 
             return $inputFilter;
         }

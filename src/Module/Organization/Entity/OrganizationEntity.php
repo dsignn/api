@@ -41,6 +41,11 @@ class OrganizationEntity implements EntityInterface {
      */
     protected $logo;
 
+    /**
+     * @var string
+     */
+    protected $whatsappPhone = '';
+
 
     /**
      * @return string
@@ -103,6 +108,22 @@ class OrganizationEntity implements EntityInterface {
      */
     public function setLogo(ReferenceInterface $logo): OrganizationEntity {
         $this->logo = $logo;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWhatsappPhone() {
+        return $this->whatsappPhone;
+    }
+
+    /**
+     * @param string $whatsappPhone
+     * @return OrganizationEntity
+     */
+    public function setWhatsappPhone(string $whatsappPhone): OrganizationEntity {
+        $this->whatsappPhone = $whatsappPhone;
         return $this;
     }
 }
