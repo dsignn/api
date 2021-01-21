@@ -70,8 +70,24 @@ class CreateMenuCategoryCommand extends SymfonyCommand {
                     ]
                 ],
                 [
-                    "name" => "pizza",
+                    "name" => "plateau",
                     'order' => 3,
+                    "translation" => [
+                        'it' => 'Plateau',
+                        'en' => 'Plateau'
+                    ]
+                ],
+                [
+                    "name" => "raw-fish",
+                    'order' => 4,
+                    "translation" => [
+                        'it' => 'Crudo di pesce',
+                        'en' => 'Raw fish'
+                    ]
+                ],
+                [
+                    "name" => "pizza",
+                    'order' => 5,
                     "translation" => [
                         'it' => 'Pizza',
                         'en' => 'Pizza'
@@ -79,7 +95,7 @@ class CreateMenuCategoryCommand extends SymfonyCommand {
                 ],
                 [
                     "name" => "sandwiches",
-                    'order' => 4,
+                    'order' => 6,
                     "translation" => [
                         'it' => 'Panini',
                         'en' => 'Sandwiches'
@@ -87,7 +103,7 @@ class CreateMenuCategoryCommand extends SymfonyCommand {
                 ],
                 [
                     "name" => "soups",
-                    'order' => 5,
+                    'order' => 7,
                     "translation" => [
                         'it' => 'Zuppe',
                         'en' => 'Soups'
@@ -95,7 +111,7 @@ class CreateMenuCategoryCommand extends SymfonyCommand {
                 ],
                 [
                     "name" => "side-dishes",
-                    'order' => 6,
+                    'order' => 8,
                     "translation" => [
                         'it' => 'Contorni',
                         'en' => 'Side dishes'
@@ -103,7 +119,7 @@ class CreateMenuCategoryCommand extends SymfonyCommand {
                 ],
                 [
                     "name" => "uramaki",
-                    'order' => 7,
+                    'order' => 9,
                     "translation" => [
                         'it' => 'Uramaki',
                         'en' => 'Uramaki'
@@ -111,7 +127,7 @@ class CreateMenuCategoryCommand extends SymfonyCommand {
                 ],
                 [
                     "name" => "hosomaki",
-                    'order' => 8,
+                    'order' => 10,
                     "translation" => [
                         'it' => 'Hosomaki',
                         'en' => 'Hosomaki'
@@ -119,7 +135,7 @@ class CreateMenuCategoryCommand extends SymfonyCommand {
                 ],
                 [
                     "name" => "futomaki",
-                    'order' => 9,
+                    'order' => 11,
                     "translation" => [
                         'it' => 'Futomaki',
                         'en' => 'Futomaki'
@@ -127,7 +143,7 @@ class CreateMenuCategoryCommand extends SymfonyCommand {
                 ],
                 [
                     "name" => "temaki",
-                    'order' => 10,
+                    'order' => 12,
                     "translation" => [
                         'it' => 'Temaki',
                         'en' => 'Temaki'
@@ -135,7 +151,7 @@ class CreateMenuCategoryCommand extends SymfonyCommand {
                 ],
                 [
                     "name" => "sashimi",
-                    'order' => 11,
+                    'order' => 13,
                     "translation" => [
                         'it' => 'Sashimi',
                         'en' => 'Sashimi'
@@ -143,7 +159,7 @@ class CreateMenuCategoryCommand extends SymfonyCommand {
                 ],
                 [
                     "name" => "nigiri",
-                    'order' => 12,
+                    'order' => 14,
                     "translation" => [
                         'it' => 'Nigiri',
                         'en' => 'Nigiri'
@@ -151,7 +167,7 @@ class CreateMenuCategoryCommand extends SymfonyCommand {
                 ],
                 [
                     "name" => "gunkan",
-                    'order' => 13,
+                    'order' => 15,
                     "translation" => [
                         'it' => 'Gunkan',
                         'en' => 'Gunkan'
@@ -159,7 +175,7 @@ class CreateMenuCategoryCommand extends SymfonyCommand {
                 ],
                 [
                     "name" => "onigiri",
-                    'order' => 14,
+                    'order' => 16,
                     "translation" => [
                         'it' => 'Onigiri',
                         'en' => 'Onigiri'
@@ -167,7 +183,7 @@ class CreateMenuCategoryCommand extends SymfonyCommand {
                 ],
                 [
                     "name" => "tempura",
-                    'order' => 15,
+                    'order' => 17,
                     "translation" => [
                         'it' => 'Tempura',
                         'en' => 'Tempura'
@@ -175,7 +191,7 @@ class CreateMenuCategoryCommand extends SymfonyCommand {
                 ],
                 [
                     "name" => "desserts",
-                    'order' => 16,
+                    'order' => 18,
                     "translation" => [
                         'it' => 'Dolci',
                         'en' => 'Desserts'
@@ -183,7 +199,7 @@ class CreateMenuCategoryCommand extends SymfonyCommand {
                 ],
                 [
                     "name" => "beverage",
-                    'order' => 17,
+                    'order' => 19,
                     "translation" => [
                         'it' => 'Bevande',
                         'en' => 'Beverage'
@@ -191,7 +207,7 @@ class CreateMenuCategoryCommand extends SymfonyCommand {
                 ],
                 [
                     "name" => "beer",
-                    'order' => 18,
+                    'order' => 20,
                     "translation" => [
                         'it' => 'Birra',
                         'en' => 'Beer'
@@ -199,7 +215,7 @@ class CreateMenuCategoryCommand extends SymfonyCommand {
                 ],
                 [
                     "name" => "wine",
-                    'order' => 19,
+                    'order' => 21,
                     "translation" => [
                         'it' => 'Vini',
                         'en' => 'Wine'
@@ -208,7 +224,7 @@ class CreateMenuCategoryCommand extends SymfonyCommand {
 
                 [
                     "name" => "cocktail",
-                    'order' => 20,
+                    'order' => 22,
                     "translation" => [
                         'it' => 'Cocktail',
                         'en' => 'Cocktail'
@@ -216,130 +232,13 @@ class CreateMenuCategoryCommand extends SymfonyCommand {
                 ],
                 [
                     "name" => "bitter",
-                    'order' => 21,
+                    'order' => 23,
                     "translation" => [
                         'it' => 'Amaro',
                         'en' => 'Bitter'
                     ]
                 ]
             ]
-
-        /*
-            'starters' => [
-                'order' => 0,
-                'it' => 'Antipasti',
-                'en' => 'Starters'
-            ],
-            'first-courses' => [
-                'order' => 1,
-                'it' => 'Primi piatti',
-                'en' => 'First courses'
-            ],
-            'main-courses' => [
-                'order' => 2,
-                'it' => 'Secondi piatti',
-                'en' => 'Main courses'
-            ],
-
-            'pizza' => [
-                'order' => 3,
-                'it' => 'Pizza',
-                'en' => 'Pizza'
-            ],
-            'sandwiches' => [
-                'order' => 4,
-                'it' => 'Panini',
-                'en' => 'Sandwiches'
-            ],
-
-
-            'soups' => [
-                'order' => 5,
-                'it' => 'Zuppe',
-                'en' => 'Soups'
-            ],
-            'side-dishes' => [
-                'order' => 6,
-                'it' => 'Contorni',
-                'en' => 'Side dishes'
-            ],
-            'uramaki' => [
-                'order' => 7,
-                'it' => 'Uramaki',
-                'en' => 'Uramaki'
-            ],
-            'hosomaki' => [
-                'order' => 8,
-                'it' => 'Hosomaki',
-                'en' => 'Hosomaki'
-            ],
-            'futomaki' => [
-                'order' => 9,
-                'it' => 'Futomaki',
-                'en' => 'Futomaki'
-            ],
-            'temaki' => [
-                'order' => 10,
-                'it' => 'Temaki',
-                'en' => 'Temaki'
-            ],
-            'sashimi' => [
-                'order' => 11,
-                'it' => 'Sashimi',
-                'en' => 'Sashimi'
-            ],
-            'nigiri' => [
-                'order' => 12,
-                'it' => 'Nigiri',
-                'en' => 'Nigiri'
-            ],
-            'gunkan' => [
-                'order' => 13,
-                'it' => 'Gunkan',
-                'en' => 'Gunkan'
-            ],
-            'onigiri' => [
-                'order' => 14,
-                'it' => 'Onigiri',
-                'en' => 'Onigiri'
-            ],
-            'tempura' => [
-                'order' => 15,
-                'it' => 'Tempura',
-                'en' => 'Tempura'
-            ],
-            'desserts' => [
-                'order' => 16,
-                'it' => 'Dolci',
-                'en' => 'Desserts'
-            ],
-            'beverage' => [
-                'order' => 17,
-                'it' => 'Bevande',
-                'en' => 'Beverage'
-            ],
-            'beer' => [
-                'order' => 18,
-                'it' => 'Birra',
-                'en' => 'Beer'
-            ],
-            'wine' => [
-                'order' => 19,
-                'it' => 'Vini',
-                'en' => 'Wine'
-            ],
-            'cocktail' => [
-                'order' => 20,
-                'it' => 'Cocktail',
-                'en' => 'Cocktail'
-            ],
-            'bitter' => [
-                'order' => 21,
-                'it' => 'Amaro',
-                'en' => 'Bitter'
-            ]
-
-        */
         ];
 
         return $cateory;
