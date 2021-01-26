@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Menu</title>
+    <title>Menu {{menu.organization.name}}</title>
+    <meta name="theme-color" content="{{ menu.background_header }}">
     <script>
         /**
          * Copyright (c) 2014-present, Facebook, Inc.
@@ -882,7 +883,7 @@
         var baseUrlJs = "{{ base_url }}";
         window.configApp.menu = JSON.parse('{{ menu |json_encode | raw }}');
     </script>
-    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=no">
 
     <script>if (!window.customElements) {
         document.write('<!--');
@@ -3667,6 +3668,7 @@
         });</script>
     <style is="custom-style">
 
+        /** TODO setting to the php application **/
         :root {
             --munu-background-color: {{ menu.background_header }};
         --munu-color: {{ menu.color_header }};
