@@ -46,6 +46,11 @@ class OrganizationEntity implements EntityInterface {
      */
     protected $whatsappPhone = '';
 
+    /**
+     * @var bool
+     */
+    protected $open = false;
+
 
     /**
      * @return string
@@ -126,4 +131,22 @@ class OrganizationEntity implements EntityInterface {
         $this->whatsappPhone = $whatsappPhone;
         return $this;
     }
+
+    /**
+     * @return bool
+     */
+    public function getOpen(): bool {
+        return $this->open;
+    }
+
+    /**
+     * @param bool $open
+     * @return OrganizationEntity
+     */
+    public function setOpen(bool $open): OrganizationEntity {
+        $this->open = $open;
+        return  $this;
+    }
+
+
 }

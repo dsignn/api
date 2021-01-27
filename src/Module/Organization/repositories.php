@@ -24,6 +24,7 @@ use App\Storage\Entity\Reference;
 use App\Storage\Entity\SingleEntityPrototype;
 use App\Storage\Storage;
 use DI\ContainerBuilder;
+use Laminas\Filter\Boolean;
 use Laminas\Filter\StringToLower;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Hydrator\Strategy\ClosureStrategy;
@@ -132,6 +133,11 @@ return function (ContainerBuilder $containerBuilder) {
             $qrCode->setRequired(false);
             $inputFilter->add($qrCode);
 
+            $open = new Input('open');
+            $open->setRequired(false);
+            $open->setAllowEmpty(true);
+            $open->getFilterChain()->attach(new Boolean());
+            $inputFilter->add($open);
 
             $whatsappPhone = new Input('whatsappPhone');
             $whatsappPhone->setRequired(false);
