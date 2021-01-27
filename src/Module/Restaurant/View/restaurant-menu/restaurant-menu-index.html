@@ -1072,6 +1072,10 @@
             }
         })();</script>
     <script type="text/javascript" src="{{ base_url }}/config.js"></script>
+    <script>
+        var baseUrlJs = "{{ base_url }}";
+        window.configApp.menu = JSON.parse('{{ menu |json_encode | raw }}');
+    </script>
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=no">
 
     <script>if (!window.customElements) {
