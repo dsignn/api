@@ -881,7 +881,7 @@
     <script type="text/javascript" src="{{ base_url }}/config.js"></script>
     <script>
         var baseUrlJs = "{{ base_url }}";
-        window.configApp.menu = JSON.parse('{{ menu |json_encode | raw }}');
+        window.configApp.menu = {{ menu | e('js') | json_encode | raw }}
     </script>
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=no">
 
@@ -1067,7 +1067,6 @@
                 if (polyfills.length) {
                     var url;
                     var polyfillFile =  '{{ base_url }}' + '/r-menu/bundles/webcomponents-' + polyfills.join('-') + '.js'; // Load it from the right place.
-
                     if (window.WebComponents.root) {
                         url = window.WebComponents.root + polyfillFile;
                     } else {
@@ -3668,7 +3667,6 @@
         });</script>
     <style is="custom-style">
 
-        /** TODO setting to the php application **/
         :root {
             --munu-background-color: {{ menu.background_header }};
         --munu-color: {{ menu.color_header }};
