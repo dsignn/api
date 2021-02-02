@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use App\Middleware\ContentNegotiation\ContentType\MultipartFormDataContentType;
+use App\Module\Restaurant\Middleware\Accept\MenuAccept;
 use Graze\ArrayMerger\RecursiveArrayMerger;
 
 /**
@@ -25,6 +26,15 @@ return function (&$setting) {
                         realpath(__DIR__ . '/View/restaurant-menu'),
                         realpath(__DIR__ . '/View/print-qrcode'),
                         realpath(__DIR__ . '/View'),
+                    ]
+                ],
+                'contentNegotiation' => [
+                    '/{slug}' => [
+                        'default' => [
+                            'acceptFilter' => ['/application\/json/', '/text\/html/'],
+                            'contentTypeFilter' => ['/application\/json/'],
+                            'acceptService' => MenuAccept::class
+                        ]
                     ]
                 ],
             ]

@@ -26,6 +26,8 @@ use Slim\Views\Twig;
  */
 class RpcMenuController implements RpcControllerInterface {
 
+    use AcceptServiceAwareTrait;
+
     /**
      * @var string
      */
@@ -65,10 +67,7 @@ class RpcMenuController implements RpcControllerInterface {
      */
     public function __construct(MenuStorageInterface $menuStorage,
                                 OrganizationStorageInterface $organizationStorage,
-                                Twig $twig,
                                 ContainerInterface $container) {
-        $this->twig = $twig;
-        $this->jsPath = $container->get('settings')['twig']['path-js'];
         $this->menuStorage = $menuStorage;
         $this->organizationStorage = $organizationStorage;
         $this->container = $container;
@@ -85,24 +84,23 @@ class RpcMenuController implements RpcControllerInterface {
         // TODO localize error message
         // Restaurant not found
         if (!$resultSet->current()) {
-            return $this->get404($response, 'Il ristorante che stai cercando non si è ancora registrato alla piattaforma...');
+            $request = $request->withHeader('error-message', 'Il ristorante che stai cercando non si è ancora registrato alla piattaforma...');
+            $acceptService = $this->getAcceptService($request);
+            return $acceptService->transformAccept($response, $resultSet);
         }
 
         $menu = $this->menuStorage->getMenuByRestaurantSlug($slug);
 
         // Menu not found
         if (!$menu) {
-            return $this->get404($response, 'Il ristorante non ha ancora caricato il suo menu');
+            $request = $request->withHeader('error-message', 'Il ristorante non ha ancora caricato il suo menu');
+            $acceptService = $this->getAcceptService($request);
+            return $acceptService->transformAccept($response, $menu);
         }
 
-        return $this->twig->render(
-            $response,
-            'restaurant-menu-index.html',
-            [
-                'base_url' => $this->jsPath,
-                'menu' => $menu
-            ]
-        );
+
+        $acceptService = $this->getAcceptService($request);
+        return $acceptService->transformAccept($response, $menu);
     }
 
     /**
