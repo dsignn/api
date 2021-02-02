@@ -5,16 +5,10 @@ namespace App\Module\Restaurant\Controller;
 
 use App\Controller\RpcControllerInterface;
 use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
-use App\Module\Organization\Storage\OrganizationStorage;
 use App\Module\Organization\Storage\OrganizationStorageInterface;
-use App\Module\Resource\Storage\ResourceStorageInterface;
-use App\Module\Restaurant\Entity\Embedded\MenuItem;
 use App\Module\Restaurant\Storage\MenuStorage;
 use App\Module\Restaurant\Storage\MenuStorageInterface;
-use App\Storage\Entity\Reference;
 use App\Storage\StorageInterface;
-use Laminas\Hydrator\HydrationInterface;
-use Laminas\Hydrator\HydratorInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;

@@ -12,7 +12,6 @@ use App\Storage\ResultSet\ResultSetPaginateInterface;
 use Laminas\EventManager\EventManager;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\Hydrator\HydratorAwareTrait;
-use function DI\value;
 
 /**
  * Class Storage

@@ -5,10 +5,7 @@ namespace App\Module\User\Event;
 
 use App\Crypto\CryptoInterface;
 use App\Module\User\Entity\UserEntity;
-use Laminas\Crypt\BlockCipher;
-use Laminas\Crypt\Symmetric\Openssl;
 use Laminas\EventManager\EventInterface;
-use League\OAuth2\Server\Entities\UserEntityInterface;
 
 /**
  * Class UserPasswordEvent

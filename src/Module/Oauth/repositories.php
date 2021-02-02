@@ -2,12 +2,10 @@
 declare(strict_types=1);
 
 use App\Crypto\CryptoOpenSsl;
-use App\Crypto\DefuseCrypto;
 use App\Crypto\LaminasCrypto;
 use App\Hydrator\Strategy\HydratorArrayStrategy;
 use App\Hydrator\Strategy\HydratorStrategy;
 use App\Hydrator\Strategy\Mongo\MongoDateStrategy;
-use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\UnderscoreNamingStrategy;
 use App\Module\Oauth\Entity\AccessTokenEntity;
@@ -25,7 +23,6 @@ use App\Storage\Adapter\Mongo\MongoAdapter;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
 use App\Storage\Entity\SingleEntityPrototype;
 use App\Storage\Storage;
-use Defuse\Crypto\Key;
 use DI\ContainerBuilder;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use League\OAuth2\Server\AuthorizationServer;

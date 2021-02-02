@@ -11,8 +11,6 @@ use App\Module\User\Entity\UserEntity;
 use App\Storage\StorageInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\UserRepositoryInterface;
-use Slim\Exception\HttpException;
-use Slim\Psr7\Request;
 
 /**
  * Class UserRepository

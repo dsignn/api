@@ -13,7 +13,6 @@ use App\Module\User\Entity\UserEntity;
 use App\Module\User\Mail\UserMailerInterface;
 use App\Module\User\Storage\UserStorageInterface;
 use App\Storage\StorageInterface;
-use DI\Container;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;

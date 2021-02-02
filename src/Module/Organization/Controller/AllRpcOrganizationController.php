@@ -6,7 +6,6 @@ namespace App\Module\Organization\Controller;
 use App\Controller\AllRpcController;
 use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
 use App\Module\Organization\Storage\OrganizationStorageInterface;
-use App\Module\Resource\Storage\ResourceStorageInterface;
 use Psr\Container\ContainerInterface;
 
 /**

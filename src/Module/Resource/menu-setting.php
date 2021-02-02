@@ -2,7 +2,6 @@
 declare(strict_types=1);
 
 use Graze\ArrayMerger\RecursiveArrayMerger;
-use App\Middleware\ContentNegotiation\ContentType\MultipartFormDataContentType;
 
 /**
  * Resource settings

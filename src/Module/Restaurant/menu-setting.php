@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use App\Middleware\ContentNegotiation\ContentType\MultipartFormDataContentType;
 use App\Module\Restaurant\Middleware\Accept\MenuAccept;
 use Graze\ArrayMerger\RecursiveArrayMerger;
 

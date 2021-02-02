@@ -6,8 +6,6 @@ namespace App\Module\User\Validator;
 use App\Module\User\Entity\UserEntity;
 use App\Storage\StorageInterface;
 use Laminas\Validator\AbstractValidator;
-use Laminas\Validator\ValidatorInterface;
-use MongoDB\BSON\ObjectId;
 
 /**
  * Class EmailExistValidator

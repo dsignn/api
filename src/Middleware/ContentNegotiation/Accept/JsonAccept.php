@@ -10,7 +10,6 @@ use Laminas\Hydrator\HydratorAwareInterface;
 use Laminas\Hydrator\HydratorAwareTrait;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Psr7\Stream;
-use function DI\value;
 
 /**
  * Class JsonAccept

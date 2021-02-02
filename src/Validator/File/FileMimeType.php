@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Validator\File;
 
 use Laminas\Validator\AbstractValidator;
-use Laminas\Validator\Exception;
 
 /**
  * Class FileMimeType

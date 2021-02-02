@@ -9,9 +9,6 @@ use App\Module\Organization\Controller\AllRpcOrganizationController;
 use App\Module\Organization\Controller\GenerateQrCodeRpc;
 use App\Module\Organization\Controller\OrganizationController;
 use App\Module\Organization\Controller\RpcUploadResourceOrganization;
-use App\Module\Resource\Controller\AllRpcResourceController;
-use App\Module\Restaurant\Controller\RpcUploadResourceMenuItem;
-use App\Module\User\Controller\PasswordToken;
 use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 

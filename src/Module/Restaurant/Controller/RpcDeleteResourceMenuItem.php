@@ -5,22 +5,18 @@ namespace App\Module\Restaurant\Controller;
 
 use App\Controller\RpcControllerInterface;
 use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
-use App\Module\Organization\Entity\OrganizationEntity;
 use App\Module\Resource\Storage\ResourceStorageInterface;
 use App\Module\Restaurant\Entity\Embedded\MenuItem;
 use App\Module\Restaurant\Entity\MenuEntity;
 use App\Module\Restaurant\Storage\MenuStorageInterface;
-use App\Storage\Entity\Reference;
 use App\Storage\StorageInterface;
-use Aws\Exception\AwsException;use GuzzleHttp\Client;
+use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ServerException;
 use Laminas\InputFilter\InputFilterInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Psr7\Factory\StreamFactory;
-use Slim\Psr7\UploadedFile;
 
 /**
  * Class RpcDeleteResourceMenuItem

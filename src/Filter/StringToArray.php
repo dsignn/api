@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Filter;
 
-use Laminas\Filter\Exception;
 use Laminas\Filter\FilterInterface;
 
 /**

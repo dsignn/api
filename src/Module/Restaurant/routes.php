@@ -5,14 +5,11 @@ use App\Controller\OptionController;
 use App\Middleware\Authentication\AuthenticationMiddleware;
 use App\Middleware\Authorization\AuthorizationMiddleware;
 use App\Middleware\Validation\ValidationMiddleware;
-use App\Module\Resource\Controller\AllRpcResourceController;
 use App\Module\Restaurant\Controller\AllRpcMenuController;
 use App\Module\Restaurant\Controller\MenuController;
 use App\Module\Restaurant\Controller\RpcDeleteResourceMenuItem;
 use App\Module\Restaurant\Controller\RpcMenuCategoryController;
-use App\Module\Restaurant\Controller\RpcMenuController;
 use App\Module\Restaurant\Controller\RpcUploadResourceMenuItem;
-use App\Module\Timeslot\Controller\TimeslotController;
 use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 

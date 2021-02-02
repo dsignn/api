@@ -6,7 +6,6 @@ namespace App\Module\Oauth\Console;
 use App\Crypto\CryptoInterface;
 use App\Module\Oauth\Entity\ClientEntity;
 use App\Storage\StorageInterface;
-use Laminas\Hydrator\HydratorInterface;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

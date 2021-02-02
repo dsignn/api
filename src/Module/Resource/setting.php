@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 
-use Graze\ArrayMerger\RecursiveArrayMerger;
 use App\Middleware\ContentNegotiation\ContentType\MultipartFormDataContentType;
+use Graze\ArrayMerger\RecursiveArrayMerger;
 
 /**
  * Resource settings

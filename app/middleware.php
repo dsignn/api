@@ -8,7 +8,6 @@ use App\Middleware\ContentNegotiation\ContentNegotiationMiddleware;
 use App\Middleware\ContentNegotiation\ContentType\ContentTypeContainer;
 use App\Middleware\ContentNegotiation\ContentType\JsonContentType;
 use App\Middleware\CorsMiddleware;
-use App\Middleware\Language\LanguageMiddleware;
 use App\Middleware\SessionMiddleware;
 use Slim\App;
 use Slim\Views\Twig;

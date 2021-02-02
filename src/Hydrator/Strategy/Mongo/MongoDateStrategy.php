@@ -5,7 +5,6 @@ namespace App\Hydrator\Strategy\Mongo;
 
 use DateTimeInterface;
 use Laminas\Hydrator\Strategy\StrategyInterface;
-use MongoDate;
 use MongoDB\BSON\UTCDateTime;
 
 /**

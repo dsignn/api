@@ -6,9 +6,6 @@ namespace App\Module\Resource\Controller;
 use App\Controller\RestControllerInterface;
 use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
 use App\Module\Resource\Entity\AbstractResourceEntity;
-use App\Module\Resource\Entity\Embedded\Dimension;
-use App\Module\Resource\Entity\ImageResourceEntity;
-use App\Module\Resource\Entity\VideoResourceEntity;
 use App\Module\Resource\Storage\ResourceStorageInterface;
 use App\Storage\StorageInterface;
 use Laminas\InputFilter\InputFilterInterface;
@@ -16,7 +13,6 @@ use Notihnio\RequestParser\RequestParser;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use function DI\value;
 
 /**
  * Class ResourceController

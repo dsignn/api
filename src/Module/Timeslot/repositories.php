@@ -4,7 +4,6 @@ declare(strict_types=1);
 use App\Crypto\CryptoOpenSsl;
 use App\Hydrator\Strategy\HydratorArrayStrategy;
 use App\Hydrator\Strategy\HydratorStrategy;
-use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
 use App\Hydrator\Strategy\NamingStrategy\CamelCaseStrategy;
 use App\Module\Monitor\Entity\MonitorReference;
@@ -18,7 +17,6 @@ use App\Storage\Entity\Reference;
 use App\Storage\Entity\SingleEntityPrototype;
 use DI\ContainerBuilder;
 use Laminas\Hydrator\ClassMethodsHydrator;
-use Laminas\Hydrator\Strategy\ClosureStrategy;
 use MongoDB\Client;
 use Psr\Container\ContainerInterface;
 

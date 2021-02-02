@@ -7,15 +7,14 @@ use App\Crypto\CryptoOpenSsl;
 use App\Hydrator\Strategy\HydratorArrayStrategy;
 use App\Hydrator\Strategy\HydratorStrategy;
 use App\Hydrator\Strategy\Mongo\MongoDateStrategy;
-use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
 use App\Hydrator\Strategy\NamingStrategy\CamelCaseStrategy;
+use App\InputFilter\InputFilter as AppInputFilter;
 use App\Mail\adapter\SendinblueMailer;
 use App\Mail\Contact;
 use App\Mail\MailerInterface;
 use App\Module\Oauth\Filter\PasswordFilter;
 use App\Module\Organization\Validator\UniqueNameOrganization;
-use App\Module\User\Controller\UserController;
 use App\Module\User\Entity\Embedded\ActivationCode;
 use App\Module\User\Entity\Embedded\RecoverPassword;
 use App\Module\User\Entity\UserEntity;
@@ -38,17 +37,17 @@ use GuzzleHttp\Client;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Hydrator\Filter\FilterComposite;
 use Laminas\Hydrator\Filter\MethodMatchFilter;
-use Laminas\Hydrator\Strategy\ClosureStrategy;
 use Laminas\InputFilter\CollectionInputFilter;
 use Laminas\InputFilter\Input;
 use Laminas\InputFilter\InputFilter;
-use App\InputFilter\InputFilter as AppInputFilter;;
 use Laminas\Validator\EmailAddress;
 use Laminas\Validator\InArray;
 use Laminas\Validator\StringLength;
 use MongoDB\Client as MongoClient;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+
+;
 
 return function (ContainerBuilder $containerBuilder) {
 

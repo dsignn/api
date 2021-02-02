@@ -3,10 +3,7 @@ declare(strict_types=1);
 
 namespace App\Module\Restaurant\Console;
 
-use App\Crypto\CryptoInterface;
-use App\Storage\Entity\EntityInterface;
 use App\Storage\StorageInterface;
-use Laminas\Hydrator\HydratorInterface;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

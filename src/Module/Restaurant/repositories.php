@@ -18,36 +18,26 @@ use App\Module\Restaurant\Storage\MenuCategoryStorage;
 use App\Module\Restaurant\Storage\MenuCategoryStorageInterface;
 use App\Module\Restaurant\Storage\MenuStorage;
 use App\Module\Restaurant\Storage\MenuStorageInterface;
-use App\Module\Timeslot\Entity\TimeslotEntity;
-use App\Module\Timeslot\Storage\TimeslotStorage;
-use App\Module\Timeslot\Storage\TimeslotStorageInterface;
-use App\Module\User\Event\UserActivationCodeEvent;
 use App\Module\User\Mail\UserMailerInterface;
 use App\Storage\Adapter\Mongo\MongoAdapter;
-use App\Storage\Entity\MultiEntityPrototype;
-use App\Storage\Storage;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydratePaginateResultSet;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
 use App\Storage\Entity\Reference;
 use App\Storage\Entity\SingleEntityPrototype;
+use App\Storage\Storage;
 use App\Validator\Mongo\ObjectIdValidator;
 use DI\ContainerBuilder;
 use Laminas\Filter\Callback;
 use Laminas\Filter\ToInt;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Hydrator\Filter\FilterComposite;
-
 use Laminas\Hydrator\ObjectPropertyHydrator;
-use Laminas\Hydrator\Strategy\ClosureStrategy;
 use Laminas\InputFilter\CollectionInputFilter;
-use Laminas\InputFilter\InputFilter;
 use Laminas\InputFilter\Input;
+use Laminas\InputFilter\InputFilter;
 use Laminas\Validator\NotEmpty;
 use MongoDB\Client;
 use Psr\Container\ContainerInterface;
-use Slim\App;
-use Slim\Views\Twig;
-use Slim\Views\TwigMiddleware;
 
 return function (ContainerBuilder $containerBuilder) {
 

@@ -16,12 +16,12 @@ use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Hydrator\Strategy\ClosureStrategy;
 use League\OAuth2\Server\ResourceServer;
 use MongoDB\BSON\ObjectId;
+use MongoDB\Client as MongoClient;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
-use MongoDB\Client as MongoClient;
 use Slim\Views\Twig;
 
 return function (ContainerBuilder $containerBuilder) {

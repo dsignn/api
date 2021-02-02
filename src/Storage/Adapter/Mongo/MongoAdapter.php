@@ -16,7 +16,6 @@ use MongoDB\Client;
 use MongoDB\Collection;
 use MongoDB\DeleteResult;
 use MongoDB\Driver\Cursor;
-use MongoDB\Driver\Query;
 use MongoDB\InsertOneResult;
 use MongoDB\UpdateResult;
 

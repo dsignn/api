@@ -5,9 +5,7 @@ namespace App\Controller;
 
 use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
 use App\Storage\Event\PreProcess;
-use App\Storage\Storage;
 use App\Storage\StorageInterface;
-use Laminas\EventManager\EventManagerAwareTrait;
 use Laminas\InputFilter\InputFilterInterface;
 use Notihnio\RequestParser\RequestParser;
 use Psr\Container\ContainerInterface;

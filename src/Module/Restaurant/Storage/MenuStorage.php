@@ -3,13 +3,10 @@ declare(strict_types=1);
 
 namespace App\Module\Restaurant\Storage;
 
-use App\Module\Restaurant\Entity\Embedded\MenuItem;
-use App\Module\Restaurant\Entity\MenuEntity;
 use App\Storage\Adapter\Mongo\MongoAdapter;
 use App\Storage\Storage;
 use MongoDB\BSON\ObjectId;
 use MongoDB\Driver\Cursor;
-use function DI\value;
 
 /**
  * Class MenuStorage

@@ -5,7 +5,6 @@ namespace App\Module\Restaurant\Storage\Adapeter\Mongo;
 
 use App\Storage\Adapter\Mongo\MongoAdapter;
 use MongoDB\BSON\ObjectId;
-use MongoDB\Driver\Cursor;
 
 /**
  * Class MenuMongoAdapter

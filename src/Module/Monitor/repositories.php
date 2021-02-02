@@ -2,7 +2,6 @@
 declare(strict_types=1);
 
 use App\Hydrator\Strategy\HydratorArrayStrategy;
-use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
 use App\Hydrator\Strategy\NamingStrategy\CamelCaseStrategy;
 use App\Module\Monitor\Entity\MonitorContainerEntity;
@@ -15,7 +14,6 @@ use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
 use App\Storage\Entity\SingleEntityPrototype;
 use DI\ContainerBuilder;
 use Laminas\Hydrator\ClassMethodsHydrator;
-use Laminas\Hydrator\Strategy\ClosureStrategy;
 use MongoDB\Client;
 use Psr\Container\ContainerInterface;
 
