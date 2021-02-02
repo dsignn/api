@@ -51,6 +51,11 @@ class OrganizationEntity implements EntityInterface {
      */
     protected $open = false;
 
+    /**
+     * @var string
+     */
+    protected $siteUrl = '';
+
 
     /**
      * @return string
@@ -148,5 +153,19 @@ class OrganizationEntity implements EntityInterface {
         return  $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getSiteUrl(): string {
+        return $this->siteUrl;
+    }
 
+    /**
+     * @param string $siteUrl
+     * @return OrganizationEntity
+     */
+    public function setSiteUrl(string $siteUrl): OrganizationEntity {
+        $this->siteUrl = $siteUrl;
+        return $this;
+    }
 }

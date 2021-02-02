@@ -1067,6 +1067,7 @@
                 if (polyfills.length) {
                     var url;
                     var polyfillFile =  '{{ base_url }}' + '/r-menu/bundles/webcomponents-' + polyfills.join('-') + '.js'; // Load it from the right place.
+
                     if (window.WebComponents.root) {
                         url = window.WebComponents.root + polyfillFile;
                     } else {
@@ -3667,6 +3668,7 @@
         });</script>
     <style is="custom-style">
 
+        /** TODO setting to the php application **/
         :root {
             --munu-background-color: {{ menu.background_header }};
         --munu-color: {{ menu.color_header }};
@@ -3691,5 +3693,4 @@
 <body>
 <paper-toast id="notification"></paper-toast>
 
-</body>
-</html>
+</body></html>

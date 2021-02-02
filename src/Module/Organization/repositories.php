@@ -113,30 +113,33 @@ return function (ContainerBuilder $containerBuilder) {
             $inputFilter = new InputFilter();
 
             // Name field
-            $name = new Input('name');
+            $input = new Input('name');
 
-            $name->getFilterChain()
+            $input->getFilterChain()
                 ->attach(new StringToLower());
 
-            $name->getValidatorChain()
+            $input->getValidatorChain()
                 ->attach($c->get(UniqueNameOrganization::class)->setFindIdInRequest(true));
 
-            $inputFilter->add($name);
+            $inputFilter->add($input);
 
-            $qrCode = new Input('qrCode');
-            $qrCode->setRequired(false);
-            $inputFilter->add($qrCode);
+            $input = new Input('qrCode');
+            $input->setRequired(false);
+            $inputFilter->add($input);
 
-            $open = new Input('open');
-            $open->setRequired(false);
-            $open->setAllowEmpty(true);
-            $open->getFilterChain()->attach(new Boolean());
-            $inputFilter->add($open);
+            $input = new Input('open');
+            $input->setRequired(false);
+            $input->setAllowEmpty(true);
+            $input->getFilterChain()->attach(new Boolean());
+            $inputFilter->add($input);
 
-            $whatsappPhone = new Input('whatsappPhone');
-            $whatsappPhone->setRequired(false);
+            $input = new Input('siteUrl');
+            $input->setRequired(false);
+            $inputFilter->add($input);
 
-            $inputFilter->add($whatsappPhone);
+            $input = new Input('whatsappPhone');
+            $input->setRequired(false);
+            $inputFilter->add($input);
 
             return $inputFilter;
         }
