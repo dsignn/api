@@ -2,7 +2,6 @@
 declare(strict_types=1);
 
 use Graze\ArrayMerger\RecursiveArrayMerger;
-use Monolog\Logger;
 
 /**
  * Local settings
@@ -29,10 +28,7 @@ return function (&$setting) {
                 'contentNegotiation' => [],
                 'twig' => [
                     'path-js' => 'http://127.0.0.200/js',
-                    'paths' => [
-                        __DIR__ . '/../src/Module/Restaurant/View/restaurant-menu',
-                        __DIR__ . '/../src/Module/User/Mail/Template'
-                    ],
+                    'rootPath' => 'http://127.0.0.200/',
                     'options' => [
                         // Should be set to true in production
                         'cache' => false,
