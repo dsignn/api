@@ -3641,11 +3641,6 @@
 
             var menuStorage = new _shared_bundle_.Storage(adapter);
             container.set('MenuStorage', menuStorage);
-            /**
-             * @type FavoriteService
-             */
-
-            container.set('FavoriteService', new _shared_bundle_.FavoriteService(menuStorage, configApp.menu));
             window.container = container;
             window.addEventListener('load', function () {
                 var ele = document.createElement('dsign-menu');
@@ -3666,7 +3661,7 @@
                 }
             });
         });</script>
-    <style is="custom-style">
+    <style is="custom-style" id="colorCustomStyle">
 
         /** TODO setting to the php application **/
         :root {
