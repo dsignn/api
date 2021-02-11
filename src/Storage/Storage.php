@@ -12,7 +12,6 @@ use App\Storage\ResultSet\ResultSetPaginateInterface;
 use Laminas\EventManager\EventManager;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\Hydrator\HydratorAwareTrait;
-use function DI\value;
 
 /**
  * Class Storage
@@ -24,11 +23,6 @@ class Storage implements StorageInterface {
      * Traits
      */
     use EntityPrototypeAwareTrait, HydratorAwareTrait, StorageAdapterAwareTrait;
-
-    /**
-     * @var string
-     */
-    static public $PREPROCESS_SAVE = 'preprocess_save';
 
     /**
      * @var string
@@ -141,7 +135,6 @@ class Storage implements StorageInterface {
             $entity
         );
 
-        // TODO event pre delete
         return $this->storage->delete($id);
         // TODO event post delete
     }
@@ -149,18 +142,18 @@ class Storage implements StorageInterface {
     /**
      * @inheritDoc
      */
-    public function getAll(array $search = null): ResultSetInterface {
+    public function getAll(array $search = null, array $order = []): ResultSetInterface {
         // TODO event pre getAll
-        return $this->storage->getAll($search);
+        return $this->storage->getAll($search, $order);
         // TODO event post getAll
     }
 
     /**
      * @inheritDoc
      */
-    public function getPage($page = 1, $itemPerPage = 10, $search = []): ResultSetPaginateInterface {
+    public function getPage($page = 1, $itemPerPage = 10, $search = [], $order = []): ResultSetPaginateInterface {
         // TODO event pre getPage
-        return $this->storage->getPage($page, $itemPerPage, $search);
+        return $this->storage->getPage($page, $itemPerPage, $search, $order);
         // TODO event post getPage
     }
 

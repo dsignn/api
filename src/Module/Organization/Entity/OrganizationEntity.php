@@ -41,6 +41,21 @@ class OrganizationEntity implements EntityInterface {
      */
     protected $logo;
 
+    /**
+     * @var string
+     */
+    protected $whatsappPhone = '';
+
+    /**
+     * @var bool
+     */
+    protected $open = false;
+
+    /**
+     * @var string
+     */
+    protected $siteUrl = '';
+
 
     /**
      * @return string
@@ -103,6 +118,54 @@ class OrganizationEntity implements EntityInterface {
      */
     public function setLogo(ReferenceInterface $logo): OrganizationEntity {
         $this->logo = $logo;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWhatsappPhone() {
+        return $this->whatsappPhone;
+    }
+
+    /**
+     * @param string $whatsappPhone
+     * @return OrganizationEntity
+     */
+    public function setWhatsappPhone(string $whatsappPhone): OrganizationEntity {
+        $this->whatsappPhone = $whatsappPhone;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getOpen(): bool {
+        return $this->open;
+    }
+
+    /**
+     * @param bool $open
+     * @return OrganizationEntity
+     */
+    public function setOpen(bool $open): OrganizationEntity {
+        $this->open = $open;
+        return  $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSiteUrl(): string {
+        return $this->siteUrl;
+    }
+
+    /**
+     * @param string $siteUrl
+     * @return OrganizationEntity
+     */
+    public function setSiteUrl(string $siteUrl): OrganizationEntity {
+        $this->siteUrl = $siteUrl;
         return $this;
     }
 }

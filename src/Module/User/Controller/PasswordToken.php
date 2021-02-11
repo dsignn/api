@@ -13,7 +13,6 @@ use App\Module\User\Entity\UserEntity;
 use App\Module\User\Mail\UserMailerInterface;
 use App\Module\User\Storage\UserStorageInterface;
 use App\Storage\StorageInterface;
-use DI\Container;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -59,7 +58,7 @@ class PasswordToken implements RpcControllerInterface {
     /**
      * @inheritDoc
      */
-    public function __construct(UserStorageInterface $storage, CryptoInterface $crypto, UserMailerInterface $mailer, ContainerInterface $container) {
+    public function __construct(UserStorageInterface $storage, CryptoInterface $crypto, MailerInterface $mailer, ContainerInterface $container) {
 
         $this->storage = $storage;
         $this->crypto = $crypto;
@@ -81,6 +80,7 @@ class PasswordToken implements RpcControllerInterface {
 
         $resultSet = $this->storage->getAll(['email' => $data['identifier']]);
         /** @var UserEntity $user */
+
         $user = $resultSet->current();
         if (!$user) {
             return $response->withStatus(404);
@@ -91,11 +91,11 @@ class PasswordToken implements RpcControllerInterface {
 
         $this->storage->update($user);
 
-        $url = $this->url . '?token=' . $user->getRecoverPassword()->getToken();
+        $url = $this->url . '?token=' . urlencode($user->getRecoverPassword()->getToken());
         $toContact = new Contact();
         $toContact->setEmail($user->getEmail());
         $toContact->setName($user->getName());
-        $this->mailer->send([$toContact], $this->from ,'Change password' ,$this->getBodyMessage($user, $url));
+        $this->mailer->send([$toContact], $this->from ,'Change password', $this->getBodyMessage($user, $url));
 
         $AcceptService = $this->getAcceptService($request);
         return $AcceptService->transformAccept($response, $user);

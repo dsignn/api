@@ -18,6 +18,7 @@ return function (&$setting) {
                 'determineRouteBeforeAppMiddleware' => true,
                 'debug' => true,
                 'displayErrorDetails' => true, // Should be set to false in production
+                'urlMenu' => 'http://127.0.0.200',
                 'logger' => [
                     'name' => 'slim-app',
                     'path' => __DIR__ . '/../logs/app.log',
@@ -27,17 +28,20 @@ return function (&$setting) {
                     "host" => "mongo"
                 ],
                 'storage' => [
-                    'name' => 'dsign-staging'
+                    'name' => 'dsign'
                 ],
                 'mail' => [
+                    "sendinblueApiKey" => "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",
                     "port" => 587,
                     "host" => 'smtp.gmail.com',
                     "username" => 'antonino.visalli@gmail.com',
                     "password" => 'wiqgqflrpscqoblj',
                     "from" => [
                         "name" => "Dsign",
-                        "email" => "dsign-noreply@gmail.com"
-                    ]
+                        "email" => "noreply@ds-ign.it"
+                    ],
+                    "resetPassword" => "http://127.0.0.1:8081/reset-password",
+                    "activationCode" => "http://127.0.0.1:8081/activation-code",
                 ],
                 'httpClient' => [
                     'url' => 'nginx'
@@ -45,43 +49,30 @@ return function (&$setting) {
                 'contentNegotiation' => [],
                 'twig' => [
                     'path-js' => 'http://127.0.0.150/js',
-                    'paths' => [
-                        __DIR__ . '/../src/Module/Restaurant/View/restaurant-menu',
-                        __DIR__ . '/../src/Module/User/Mail/Template'
-                    ],
                     'options' => [
                         // Should be set to true in production
                         'cache' => false,
                         'cache_path' => __DIR__ . '/../tmp/twig',
                     ],
                 ],
-                'oauth' => [
+                'client' => [
+                    'grant_type' => 'client_credentials',
+                    'client_id' => 'dsign-client',
+                    'client_secret' => 'dsign4!',
+                    'scope' => 'basic email'
+                ],
+                's3Resource' => [
                     'client' => [
-                        'storage' => [
-                            'name' => 'dsign-oauth-staging',
+                        'version' => 'latest',
+                        'region'  => 'eu-central-1',
+                        //      'debug'   => true,
+                        'credentials' => [
+                            'key' => 'AKIAJUETFABXHRWGNGGQ',
+                            'secret' => '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'
                         ]
                     ],
-                    'access-token' => [
-                        'storage' => [
-                            'name' => 'dsign-oauth-staging'
-                        ]
-                    ],
-                    'user' => [
-                        'storage' => [
-                            'name1' => 'dsign-staging',
-                        ]
-                    ],
-                    'auth-code' => [
-                        'storage' => [
-                            'name' => 'dsign-oauth-staging',
-                        ]
-                    ],
-                    'refresh-token' => [
-                        'storage' => [
-                            'name' => 'dsign-oauth-staging',
-                        ]
-                    ],
-                ]
+                    'bucket' => 'dsign-cdn-test'
+                ],
             ],
         ]
     );

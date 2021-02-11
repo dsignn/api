@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Storage\Adapter\Mongo\ResultSet;
 
-use MongoDB\ChangeStream;
 use MongoDB\Driver\Cursor;
 
 /**

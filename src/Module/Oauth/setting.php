@@ -32,7 +32,7 @@ return function (&$setting) {
                     'access-token' => [
                         'storage' => [
                             'type' => 'mongo',
-                         //   'name' => 'dsign-oauth',
+                            'name' => 'dsign-oauth',
                             'collection' => 'access-token'
                         ]
                     ],

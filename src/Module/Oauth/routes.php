@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use App\Controller\OptionController;
 use App\Middleware\Authentication\AuthenticationMiddleware;
 use App\Module\Oauth\Controller\MeController;
 use App\Module\Oauth\Controller\OauthController;
@@ -9,6 +10,8 @@ use Slim\App;
 return function (App $app) {
 
     $app->post('/access-token', [OauthController::class, 'accessToken']);
+
+    $app->options('/access-token', [OptionController::class, 'options']);
 
     $app->get('/authorize', [OauthController::class, 'authorize']);
 

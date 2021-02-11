@@ -3,29 +3,25 @@ declare(strict_types=1);
 
 use App\Crypto\CryptoOpenSsl;
 use App\Hydrator\Strategy\HydratorStrategy;
-use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
 use App\Hydrator\Strategy\NamingStrategy\CamelCaseStrategy;
-use App\Module\Monitor\Entity\MonitorReference;
 use App\Module\Organization\Entity\OrganizationEntity;
 use App\Module\Organization\Event\SluggerNameEvent;
+use App\Module\Organization\Storage\adapter\Mongo\OrganizationMongoAdapter;
 use App\Module\Organization\Storage\OrganizationStorage;
 use App\Module\Organization\Storage\OrganizationStorageInterface;
 use App\Module\Organization\Url\GenericSlugify;
 use App\Module\Organization\Url\SlugifyInterface;
 use App\Module\Organization\Validator\UniqueNameOrganization;
-use App\Module\User\Event\UserPasswordEvent;
-use App\Module\User\Validator\EmailExistValidator;
-use App\Storage\Adapter\Mongo\MongoAdapter;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydratePaginateResultSet;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
 use App\Storage\Entity\Reference;
 use App\Storage\Entity\SingleEntityPrototype;
 use App\Storage\Storage;
 use DI\ContainerBuilder;
+use Laminas\Filter\Boolean;
 use Laminas\Filter\StringToLower;
 use Laminas\Hydrator\ClassMethodsHydrator;
-use Laminas\Hydrator\Strategy\ClosureStrategy;
 use Laminas\InputFilter\Input;
 use Laminas\InputFilter\InputFilter;
 use MongoDB\Client;
@@ -50,7 +46,7 @@ return function (ContainerBuilder $containerBuilder) {
             $resultSetPaginator->setHydrator($hydrator);
             $resultSetPaginator->setEntityPrototype($c->get('OrganizationEntityPrototype'));
 
-            $mongoAdapter = new MongoAdapter($c->get(Client::class), $settings['storage']['name'], $serviceSetting['collection']);
+            $mongoAdapter = new OrganizationMongoAdapter($c->get(Client::class), $settings['storage']['name'], $serviceSetting['collection']);
             $mongoAdapter->setResultSet($resultSet);
             $mongoAdapter->setResultSetPaginate($resultSetPaginator);
 
@@ -117,18 +113,33 @@ return function (ContainerBuilder $containerBuilder) {
             $inputFilter = new InputFilter();
 
             // Name field
-            $name = new Input('name');
+            $input = new Input('name');
 
-            $name->getFilterChain()
+            $input->getFilterChain()
                 ->attach(new StringToLower());
 
-            $name->getValidatorChain()
+            $input->getValidatorChain()
                 ->attach($c->get(UniqueNameOrganization::class)->setFindIdInRequest(true));
 
-            $inputFilter->add($name);
+            $inputFilter->add($input);
 
-            $qrCode = new Input('qrCode');
-            $inputFilter->add($qrCode);
+            $input = new Input('qrCode');
+            $input->setRequired(false);
+            $inputFilter->add($input);
+
+            $input = new Input('open');
+            $input->setRequired(false);
+            $input->setAllowEmpty(true);
+            $input->getFilterChain()->attach(new Boolean());
+            $inputFilter->add($input);
+
+            $input = new Input('siteUrl');
+            $input->setRequired(false);
+            $inputFilter->add($input);
+
+            $input = new Input('whatsappPhone');
+            $input->setRequired(false);
+            $inputFilter->add($input);
 
             return $inputFilter;
         }

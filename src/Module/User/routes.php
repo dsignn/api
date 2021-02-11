@@ -2,8 +2,6 @@
 declare(strict_types=1);
 
 use App\Controller\OptionController;
-use App\Middleware\Authentication\AuthenticationMiddleware;
-use App\Middleware\Authorization\AuthorizationMiddleware;
 use App\Middleware\Validation\ValidationMiddleware;
 use App\Module\User\Controller\ActivationToken;
 use App\Module\User\Controller\PasswordToken;
@@ -26,6 +24,8 @@ return function (App $app) {
 
         $group->put('/{id:[0-9a-fA-F]{24}}',  [UserController::class, 'put']);
 
+        $group->patch('/{id:[0-9a-fA-F]{24}}',  [UserController::class, 'patch']);
+
         $group->options('/{id:[0-9a-fA-F]{24}}', [UserController::class, 'options']);
 
         $group->delete('/{id:[0-9a-fA-F]{24}}',  [UserController::class, 'delete']);
@@ -43,7 +43,7 @@ return function (App $app) {
 
     $app->options('/reset-password', [OptionController::class, 'options']);
 
-    $app->post('/activation-code', [ActivationToken::class, 'rpc']);
+    $app->get('/activation-code', [ActivationToken::class, 'rpc']);
 
     $app->options('/activation-code', [OptionController::class, 'options']);
 };

@@ -6,6 +6,8 @@
 /key
 composer.lock
 app/local-setting.php
+app/menu-local-setting.php
+public/js/config.js
 
 # Mac
 .DS_Store

@@ -5,8 +5,6 @@ namespace App\Hydrator\Strategy\Mongo;
 
 use Laminas\Hydrator\Strategy\StrategyInterface;
 use MongoDB\BSON\ObjectId;
-use MongoId;
-use phpDocumentor\Reflection\Types\This;
 
 /**
  * Class MongoIdStrategy

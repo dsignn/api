@@ -45,7 +45,6 @@ class ClientRepository implements ClientRepositoryInterface
      */
     public function getClientEntity($clientIdentifier) {
         if (!$this->client->getIdentifier()) {
-
             $resultSet = $this->storage->getAll(['identifier' => $clientIdentifier]);
             if ($resultSet->count() === 1) {
                 $this->client = $resultSet->current();

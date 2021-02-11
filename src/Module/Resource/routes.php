@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use App\Controller\OptionController;
 use App\Middleware\Validation\ValidationMiddleware;
 use App\Module\Resource\Controller\AllRpcResourceController;
 use App\Module\Resource\Controller\ResourceController;
@@ -11,7 +12,7 @@ return function (App $app) {
 
     $app->group('/resource', function (Group $group) {
 
-        $group->options('', [ResourceController::class, 'options']);
+        $group->options('', [OptionController::class, 'options']);
 
         $group->get('', [ResourceController::class, 'paginate']);
 
@@ -26,6 +27,8 @@ return function (App $app) {
         $group->delete('/{id:[0-9a-fA-F]{24}}',  [ResourceController::class, 'delete']);
 
         $group->get('/all',  [AllRpcResourceController::class, 'rpc']);
+
+        $group->options('/all', [OptionController::class, 'options']);
 
     })
         ->add($app->getContainer()->get(ValidationMiddleware::class))

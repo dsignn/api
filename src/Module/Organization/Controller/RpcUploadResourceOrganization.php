@@ -8,8 +8,6 @@ use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
 use App\Module\Organization\Entity\OrganizationEntity;
 use App\Module\Organization\Storage\OrganizationStorageInterface;
 use App\Module\Resource\Storage\ResourceStorageInterface;
-use App\Module\Restaurant\Entity\Embedded\MenuItem;
-use App\Module\Restaurant\Entity\MenuEntity;
 use App\Storage\Entity\Reference;
 use App\Storage\StorageInterface;
 use GuzzleHttp\Client;
@@ -19,7 +17,6 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Psr7\Factory\StreamFactory;
-use Slim\Psr7\UploadedFile;
 
 /**
  * Class RpcUploadResourceOrganization

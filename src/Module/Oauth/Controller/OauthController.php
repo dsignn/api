@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace App\Module\Oauth\Controller;
 
 use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
+use App\Module\Oauth\Exception\UsernameConflictException;
+use App\Module\Oauth\Exception\UsernameNotFoundException;
 use App\Module\Oauth\Exception\UserNotEnableException;
 use App\Module\User\Entity\UserEntity;
 use League\OAuth2\Server\AuthorizationServer;
@@ -52,7 +54,6 @@ class OauthController {
             return $this->oauthServer->respondToAccessTokenRequest($request, $response);
 
         } catch (OAuthServerException $exception) {
-
             // All instances of OAuthServerException can be formatted into a HTTP response
             return $exception->generateHttpResponse($response);
 
@@ -60,8 +61,18 @@ class OauthController {
 
             $streamFactory = new StreamFactory();
             switch (true) {
+                case $exception instanceof UsernameConflictException === true:
+                    $response =  $response->withStatus(409)->withBody($streamFactory->createStream(
+                        $exception->getMessage()
+                    ));
+                    break;
                 case $exception instanceof UserNotEnableException === true:
                     $response =  $response->withStatus(401)->withBody($streamFactory->createStream(
+                        $exception->getMessage()
+                    ));
+                    break;
+                case $exception instanceof UsernameNotFoundException === true:
+                    $response =  $response->withStatus(404)->withBody($streamFactory->createStream(
                         $exception->getMessage()
                     ));
                     break;

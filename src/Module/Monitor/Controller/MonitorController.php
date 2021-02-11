@@ -7,8 +7,6 @@ use App\Controller\RestController;
 use App\Controller\RestControllerInterface;
 use App\Module\Monitor\Storage\MonitorStorageInterface;
 use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
 
 /**
  * Class MonitorController

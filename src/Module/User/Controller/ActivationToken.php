@@ -45,7 +45,7 @@ class ActivationToken implements RpcControllerInterface {
      */
     public function rpc(Request $request, Response $response) {
 
-        $data = $request->getParsedBody();
+        $data = $request->getQueryParams();
 
         // TODO validation
 

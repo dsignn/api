@@ -1,15 +1,18 @@
 <?php
 declare(strict_types=1);
 
+use App\Controller\RestController;
 use App\Crypto\CryptoInterface;
 use App\Crypto\CryptoOpenSsl;
 use App\Hydrator\Strategy\HydratorArrayStrategy;
 use App\Hydrator\Strategy\HydratorStrategy;
 use App\Hydrator\Strategy\Mongo\MongoDateStrategy;
-use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
 use App\Hydrator\Strategy\NamingStrategy\CamelCaseStrategy;
+use App\InputFilter\InputFilter as AppInputFilter;
+use App\Mail\adapter\SendinblueMailer;
 use App\Mail\Contact;
+use App\Mail\MailerInterface;
 use App\Module\Oauth\Filter\PasswordFilter;
 use App\Module\Organization\Validator\UniqueNameOrganization;
 use App\Module\User\Entity\Embedded\ActivationCode;
@@ -34,7 +37,6 @@ use GuzzleHttp\Client;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Hydrator\Filter\FilterComposite;
 use Laminas\Hydrator\Filter\MethodMatchFilter;
-use Laminas\Hydrator\Strategy\ClosureStrategy;
 use Laminas\InputFilter\CollectionInputFilter;
 use Laminas\InputFilter\Input;
 use Laminas\InputFilter\InputFilter;
@@ -43,10 +45,23 @@ use Laminas\Validator\InArray;
 use Laminas\Validator\StringLength;
 use MongoDB\Client as MongoClient;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
+
+;
 
 return function (ContainerBuilder $containerBuilder) {
 
     $containerBuilder->addDefinitions([
+
+        AppendOrganizationEvent::class => function(ContainerInterface $c) {
+
+            return new AppendOrganizationEvent(
+                $c->get(Client::class),
+                $c->get('settings')['httpClient']["url"],
+                $c->get('RestOrganizationEntityHydrator'),
+                $c->get('settings')['client']
+            );
+        },
 
         UserStorageInterface::class => function(ContainerInterface $c) {
             $settings = $c->get('settings');
@@ -70,17 +85,14 @@ return function (ContainerBuilder $containerBuilder) {
             $storage->setHydrator($hydrator);
             $storage->setEntityPrototype($c->get('UserEntityPrototype'));
 
-            $storage->getEventManager()->attach(Storage::$BEFORE_SAVE, new UserPasswordEvent($c->get('OAuthCrypto')));
             $storage->getEventManager()->attach(
                 Storage::$BEFORE_SAVE,
-                new UserActivationCodeEvent($c->get('OAuthCrypto'), $c->get(UserMailerInterface::class), $c->get('UserFrom'), $settings['mail']['activationCode'])
+                new UserActivationCodeEvent($c->get('OAuthCrypto'), $c->get(MailerInterface::class), $c->get('UserFrom'), $settings['mail']['activationCode'])
             );
 
-            $storage->getEventManager()->attach(Storage::$PREPROCESS_SAVE, new AppendOrganizationEvent(
-                $c->get(Client::class),
-                $c->get('settings')['httpClient']["url"],
-                $c->get('RestOrganizationEntityHydrator')
-            ));
+            $storage->getEventManager()->attach(RestController::$PREPROCESS_POST, $c->get(AppendOrganizationEvent::class));
+            $storage->getEventManager()->attach(RestController::$PREPROCESS_POST, new UserPasswordEvent($c->get('OAuthCrypto')));
+            $storage->getEventManager()->attach(RestController::$PREPROCESS_PATCH, new UserPasswordEvent($c->get('OAuthCrypto')));
 
             return $storage;
         },
@@ -161,7 +173,19 @@ return function (ContainerBuilder $containerBuilder) {
         },
         'UserPostValidation' => function(ContainerInterface $container) {
 
-            $inputFilter = new InputFilter();
+            $inputFilter = new AppInputFilter();
+
+            $inputFilter->addPropertiesIfEmpty([
+                'id',
+                'name',
+                'lastName',
+                'email',
+                'password',
+                'roleId',
+                'nameOrganization',
+                'organizations'
+            ]);
+
 
             // Name field
             $name = new Input('name');
@@ -214,17 +238,58 @@ return function (ContainerBuilder $containerBuilder) {
 
             return $inputFilter;
         },
+
+        'UserPatchValidation' => function(ContainerInterface $container) {
+
+            $inputFilter = new AppInputFilter();
+
+            $inputFilter->addPropertiesIfEmpty([
+                'name',
+                'lastName',
+                'email',
+                'password'
+            ]);
+
+            // Name field
+            $name = new Input('name');
+            $name->setRequired(false);
+            // Last name field
+            $lastName = new Input('lastName');
+            $lastName->setRequired(false);
+            // Email field
+            $email= new Input('email');
+            $email->setRequired(false);
+            $email->getValidatorChain()
+                ->attach(new EmailAddress())
+                ->attach($container->get(EmailExistValidator::class));
+
+            // Password field
+            $password = $password = new Input('password');
+            $password->getValidatorChain()->attach(new StringLength([
+                'min' => 4,
+                'max' => 12
+            ]));
+            $password->setRequired(false);
+
+            $inputFilter
+                ->add($email)
+                ->add($name)
+                ->add($lastName)
+                ->add($password);
+
+            return $inputFilter;
+        },
         'PasswordFilter' => function(ContainerInterface $container) {
             return new PasswordFilter($container->get('OAuthCrypto'));
         },
         CryptoInterface::class => function(ContainerInterface $container) {
             return $container->get('OAuthCrypto');
         },
-        UserMailerInterface::class => function(ContainerInterface $container) {
+        MailerInterface::class => function(ContainerInterface $container) {
             $settings = $container->get('settings');
             $serviceSetting = $settings['mail'];
 
-            return new UserGoogleMailer($serviceSetting);
+            return new SendinblueMailer($serviceSetting, $container->get(LoggerInterface::class));
         },
         EmailExistValidator::class => function(ContainerInterface $container) {
             return new EmailExistValidator($container->get(UserStorageInterface::class));

@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Storage\Adapter\Mongo\ResultSet;
 
 use App\Storage\ResultSet\ResultSetInterface;
-use MongoCursor;
 use MongoDB\Driver\Cursor;
 
 /**

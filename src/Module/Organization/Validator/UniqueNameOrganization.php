@@ -11,7 +11,6 @@ use Laminas\Validator\AbstractValidator;
 use Laminas\Validator\ValidatorInterface;
 use Psr\Container\ContainerInterface;
 use Slim\Psr7\Request;
-use function DI\get;
 
 /**
  * Class UniqueNameOrganization
@@ -95,7 +94,7 @@ class UniqueNameOrganization extends AbstractValidator implements ValidatorInter
      * @return bool
      */
     protected function excludeCurrentNameEntity() {
-        return $this->entity && $this->entity->getName() !== $this->getValue();
+        return !$this->entity || $this->entity->getName() !== $this->getValue();
     }
 
     /**

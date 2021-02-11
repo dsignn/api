@@ -5,16 +5,10 @@ namespace App\Module\Restaurant\Controller;
 
 use App\Controller\RpcControllerInterface;
 use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
-use App\Module\Organization\Storage\OrganizationStorage;
 use App\Module\Organization\Storage\OrganizationStorageInterface;
-use App\Module\Resource\Storage\ResourceStorageInterface;
-use App\Module\Restaurant\Entity\Embedded\MenuItem;
 use App\Module\Restaurant\Storage\MenuStorage;
 use App\Module\Restaurant\Storage\MenuStorageInterface;
-use App\Storage\Entity\Reference;
 use App\Storage\StorageInterface;
-use Laminas\Hydrator\HydrationInterface;
-use Laminas\Hydrator\HydratorInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -25,6 +19,8 @@ use Slim\Views\Twig;
  * @package App\Module\Restaurant\Controller
  */
 class RpcMenuController implements RpcControllerInterface {
+
+    use AcceptServiceAwareTrait;
 
     /**
      * @var string
@@ -52,11 +48,6 @@ class RpcMenuController implements RpcControllerInterface {
     protected $organizationStorage;
 
     /**
-     * @var StorageInterface
-     */
-    protected $resourceStorage;
-
-    /**
      * @var ContainerInterface
      */
     protected $container;
@@ -65,20 +56,14 @@ class RpcMenuController implements RpcControllerInterface {
      * RpcMenuController constructor.
      * @param MenuStorageInterface $menuStorage
      * @param OrganizationStorageInterface $organizationStorage
-     * @param ResourceStorageInterface $resourceStorage
      * @param Twig $twig
      * @param ContainerInterface $container
      */
     public function __construct(MenuStorageInterface $menuStorage,
                                 OrganizationStorageInterface $organizationStorage,
-                                ResourceStorageInterface $resourceStorage,
-                                Twig $twig,
                                 ContainerInterface $container) {
-        $this->twig = $twig;
-        $this->jsPath = $container->get('settings')['twig']['path-js'];
         $this->menuStorage = $menuStorage;
         $this->organizationStorage = $organizationStorage;
-        $this->resourceStorage = $resourceStorage;
         $this->container = $container;
     }
 
@@ -89,58 +74,50 @@ class RpcMenuController implements RpcControllerInterface {
 
         $slug = $request->getAttribute('__route__')->getArgument('slug');
 
-
         $resultSet = $this->organizationStorage->getAll(['normalize_name' => $slug]);
+        // TODO localize error message
+        // Restaurant not found
         if (!$resultSet->current()) {
-            return $this->get404($response);
+            $request = $request->withHeader('error-message', 'Il ristorante che stai cercando non si è ancora registrato alla piattaforma...');
+            $acceptService = $this->getAcceptService($request);
+            return $acceptService->transformAccept($response, $resultSet);
         }
 
         $menu = $this->menuStorage->getMenuByRestaurantSlug($slug);
-        // inject Resource
-        // TODO transport this logic in the query
-        /** @var MenuItem $menuItem */
-        foreach($menu->getItems() as $menuItem) {
-            $photos = $menuItem->getPhotos();
-            /** @var Reference $photo */
-            for ($cont = 0; $cont < count($photos); $cont++) {
-                $resource = $this->resourceStorage->get($photos[$cont]->getId());
-                if ($resource) {
-                    $photos[$cont] = $resource;
-                } else {
-                    unset($photos[$cont]);
-                }
-            }
-            $menuItem->setPhotos($photos);
-        }
 
-
+        // Menu not found
         if (!$menu) {
-            return $this->get404($response);
+            $request = $request->withHeader('error-message', 'Il ristorante non ha ancora caricato il suo menu');
+            $acceptService = $this->getAcceptService($request);
+            return $acceptService->transformAccept($response, $menu);
         }
-        /** @var HydratorInterface $hydrator */
-        $hydrator =  $this->container->get($this->hydratorService);
 
-        return $this->twig->render(
-            $response,
-            'index.html',
-            [
-                'base_url' => $this->jsPath,
-                'menu' => $hydrator->extract($menu)
-            ]
-        );
+
+        $acceptService = $this->getAcceptService($request);
+        return $acceptService->transformAccept($response, $menu);
     }
 
     /**
+     *   'background_header' => string '#1337b9' (length=7)
+    'color_header' => string '#1e1a1a' (length=7)
+     */
+
+    /**
      * @param Response $response
+     * @param string errorMessage
      * @return Response
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
-    protected function get404(Response $response) {
+    protected function get404(Response $response, $errorMessage) {
         return $this->twig->render(
             $response,
-             '404.html'
+             'restaurant-404.html',
+            [
+                'base_url' => $this->jsPath,
+                'error_message' => $errorMessage
+            ]
         );
     }
 }

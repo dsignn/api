@@ -37,15 +37,17 @@ interface StorageAdapterInterface {
 
     /**
      * @param array $search
-     * @return
+     * @param array $order
+     * @return ResultSetInterface
      */
-    public function getAll(array $search = []): ResultSetInterface;
+    public function getAll(array $search = [], array $order = []): ResultSetInterface;
 
     /**
      * @param int $page
      * @param int $itemPerPage
-     * @param null $search
+     * @param array $search
+     * @param array $order
      * @return ResultSetPaginateInterface
      */
-    public function getPage($page = 1, $itemPerPage = 10, array $search = []): ResultSetPaginateInterface;
+    public function getPage($page = 1, $itemPerPage = 10, array $search = [], array $order = []): ResultSetPaginateInterface;
 }

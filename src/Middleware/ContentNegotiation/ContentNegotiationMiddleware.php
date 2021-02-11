@@ -147,10 +147,10 @@ class ContentNegotiationMiddleware implements Middleware
             return false;
         }
 
-        $check = true;
+        $check = false;
         for ($cont = 0; $cont < count($this->acceptFilter); $cont++) {
             $check = preg_match($this->acceptFilter[$cont], $header);
-            if (!$check) {
+            if ($check) {
                 break;
             }
         }

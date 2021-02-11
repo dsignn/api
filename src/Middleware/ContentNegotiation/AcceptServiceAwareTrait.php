@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Middleware\ContentNegotiation;
 
+use App\Application\Request\RequestAwareInterface;
 use App\Middleware\ContentNegotiation\Accept\AcceptTransformInterface;
 use App\Middleware\ContentNegotiation\Exception\ServiceNotFound;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -37,6 +38,10 @@ trait AcceptServiceAwareTrait {
 
         if (property_exists($this, 'hydratorService') && $this->container->has($this->hydratorService)) {
             $acceptService->setHydrator($this->container->get($this->hydratorService));
+        }
+
+        if ($acceptService && $acceptService instanceof RequestAwareInterface) {
+            $acceptService->setRequest($request);
         }
 
         return $acceptService;

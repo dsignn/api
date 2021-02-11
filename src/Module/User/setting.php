@@ -13,9 +13,11 @@ return function (&$setting) {
         $setting,
         [
             "settings" => [
-                'mail' => [
-                    "resetPassword" => "http://127.0.0.1:8081/reset-password",
-                    "activationCode" => "http://127.0.0.1:8081/activation-code",
+                'twig' => [
+                    'paths' => [
+                       // __DIR__ . '/../src/Module/Restaurant/View/restaurant-menu',
+                        realpath(__DIR__ .  '/Mail/Template')
+                    ]
                 ],
                 'storage' => [
                     'user' => [
@@ -45,6 +47,9 @@ return function (&$setting) {
                 'validation' => [
                     '/user' => [
                         'POST' => 'UserPostValidation'
+                    ],
+                    '/user/{id:[0-9a-fA-F]{24}}' => [
+                        'PATCH' => 'UserPatchValidation'
                     ]
                 ],
                 'authentication' => [

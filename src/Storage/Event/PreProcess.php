@@ -26,7 +26,7 @@ class PreProcess {
      * @param EntityInterface $entity
      * @param array $data
      */
-    public function __construct(EntityInterface $entity, array $data) {
+    public function __construct(EntityInterface &$entity, array &$data) {
         $this->entity = $entity;
         $this->data = $data;
     }
@@ -43,5 +43,12 @@ class PreProcess {
      */
     public function getData(): array {
         return $this->data;
+    }
+
+    /**
+     * @param $data
+     */
+    public function setData(array $data) {
+        $this->data = $data;
     }
 }

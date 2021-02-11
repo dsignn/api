@@ -6,6 +6,7 @@ namespace App\Module\User\Event;
 use App\Crypto\CryptoInterface;
 use App\Mail\Contact;
 use App\Mail\ContactInterface;
+use App\Mail\MailerInterface;
 use App\Module\User\Entity\UserEntity;
 use App\Module\User\Mail\UserMailerInterface;
 use Laminas\EventManager\EventInterface;
@@ -44,7 +45,7 @@ class UserActivationCodeEvent
      * @param ContactInterface $from
      * @param $url
      */
-    public function __construct(CryptoInterface $crypto, UserMailerInterface $mailer, ContactInterface $from, string $url) {
+    public function __construct(CryptoInterface $crypto, MailerInterface $mailer, ContactInterface $from, string $url) {
         $this->crypto = $crypto;
         $this->mailer = $mailer;
         $this->from = $from;
@@ -56,7 +57,6 @@ class UserActivationCodeEvent
      * @throws \Exception
      */
     public function __invoke(EventInterface $event) {
-
         $event->getTarget()->getActivationCode()->setDate(new \DateTime())
             ->setToken($this->crypto->crypto($event->getTarget()->getActivationCode()->getDate()->format('Y-m-d H:i:s')));
 
@@ -74,12 +74,10 @@ class UserActivationCodeEvent
         $toContact = new Contact();
         $toContact->setEmail($user->getEmail());
         $toContact->setName($user->getName());
-        $url = $this->url . '?token=' . $user->getActivationCode()->getToken();
+        $url = $this->url . '?token=' . urlencode($user->getActivationCode()->getToken());
         try {
             $this->mailer->send([$toContact], $this->from, 'Activation code', $this->getBodyMessage($user, $url));
         } catch (\Exception $exception) {
-            var_dump($exception->getMessage());
-            die();
             $user->setStatus(UserEntity::$STATUS_ACTIVATION_MAIL_ERROR);
         }
     }

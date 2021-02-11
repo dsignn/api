@@ -22,9 +22,9 @@ class AppendOrganizationEvent {
     protected $url;
 
     /**
-     * @var Client
+     * @var HydrationInterface
      */
-    protected $client;
+    protected $clientCredentials = [];
 
     /**
      * @var HydrationInterface
@@ -32,15 +32,22 @@ class AppendOrganizationEvent {
     protected $hydrator;
 
     /**
+     * @var Client
+     */
+    protected $client;
+
+    /**
      * AppendOrganizationEvent constructor.
      * @param Client $client
      * @param string $url
      * @param HydrationInterface $hydrator
+     * @param array $clientCredentials
      */
-    public function __construct(Client $client, string $url, HydrationInterface $hydrator) {
+    public function __construct(Client $client, string $url, HydrationInterface $hydrator, array $clientCredentials = []) {
         $this->client = $client;
         $this->url = $url;
         $this->hydrator = $hydrator;
+        $this->clientCredentials = $clientCredentials;
     }
 
     /**
@@ -74,11 +81,15 @@ class AppendOrganizationEvent {
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     protected function getRequest(PreProcess $preProcess) {
+
+        $tokenResponse = json_decode($this->getToken()->getBody()->getContents(), true);
+
         $data = [
-           // 'debug' => true,
+            // 'debug' => true,
             'headers' => [
+                'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
-                'Content-Type' => 'application/json'
+                'Authorization' => $tokenResponse['access_token']
             ],
             'json' => [
                 'name' => $preProcess->getData()['nameOrganization'],
@@ -88,6 +99,22 @@ class AppendOrganizationEvent {
 
         return $this->client->post(
             $this->url . '/organization',
+            $data
+        );
+    }
+
+    protected function getToken() {
+
+        $data = [
+            // 'debug' => true,
+            'headers' => [
+                'Accept' => 'application/json'
+            ],
+            'form_params' => $this->clientCredentials
+        ];
+
+        return $this->client->post(
+            $this->url . '/access-token',
             $data
         );
     }

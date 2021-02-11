@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Validator\Mongo;
 
 use Laminas\Validator\AbstractValidator;
-use Laminas\Validator\Exception;
 use Laminas\Validator\ValidatorInterface;
 use MongoDB\BSON\ObjectId;
 

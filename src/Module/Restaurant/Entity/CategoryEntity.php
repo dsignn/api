@@ -14,4 +14,6 @@ use App\Storage\Entity\EntityTrait;
 class CategoryEntity implements EntityInterface {
 
     use EntityTrait;
+
+
 }
