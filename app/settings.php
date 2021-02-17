@@ -31,9 +31,6 @@ return function (ContainerBuilder $containerBuilder) {
     $localSetting = include_once __DIR__ . "/local-setting.php";
     $localSetting($setting);
 
-    var_dump($setting['settings']['s3Resource']);
-    die();
-
     // Global Settings Object
     $containerBuilder->addDefinitions($setting);
 };
