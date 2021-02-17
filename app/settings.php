@@ -31,6 +31,9 @@ return function (ContainerBuilder $containerBuilder) {
     $restaurantSetting = include_once __DIR__ . "/../src/Module/Restaurant/setting.php";
     $restaurantSetting($setting);
 
+    var_dump($setting['settings']['s3Resource']);
+    die();
+
     // Global Settings Object
     $containerBuilder->addDefinitions($setting);
 };
