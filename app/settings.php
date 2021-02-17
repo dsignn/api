@@ -16,9 +16,6 @@ return function (ContainerBuilder $containerBuilder) {
     $organizationSetting = include_once __DIR__ . "/../src/Module/Organization/setting.php";
     $organizationSetting($setting);
 
-    $localSetting = include_once __DIR__ . "/local-setting.php";
-    $localSetting($setting);
-
     $monitorSetting = include_once __DIR__ . "/../src/Module/Monitor/setting.php";
     $monitorSetting($setting);
 
@@ -30,6 +27,9 @@ return function (ContainerBuilder $containerBuilder) {
 
     $restaurantSetting = include_once __DIR__ . "/../src/Module/Restaurant/setting.php";
     $restaurantSetting($setting);
+
+    $localSetting = include_once __DIR__ . "/local-setting.php";
+    $localSetting($setting);
 
     var_dump($setting['settings']['s3Resource']);
     die();
