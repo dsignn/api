@@ -127,6 +127,10 @@ return function (ContainerBuilder $containerBuilder) {
             $input->setRequired(false);
             $inputFilter->add($input);
 
+            $input = new Input('logo');
+            $input->setRequired(false);
+            $inputFilter->add($input);
+
             $input = new Input('open');
             $input->setRequired(false);
             $input->setAllowEmpty(true);
