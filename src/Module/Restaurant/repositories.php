@@ -202,6 +202,7 @@ return function (ContainerBuilder $containerBuilder) {
 
             $price = new InputFilter();
             $input = new Input('value');
+            $input->setRequired(false);
             $input->getFilterChain()->attach(new ToInt());
             $price->add($input, 'value');
 
@@ -263,6 +264,10 @@ return function (ContainerBuilder $containerBuilder) {
             ]);
 
             $input->getValidatorChain()->attach($validator);
+
+            $input = new Input('note');
+            $input->setRequired(false);
+            $inputFilter->add($input, 'note');
 
             return $inputFilter;
         }
