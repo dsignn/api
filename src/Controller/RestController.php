@@ -85,6 +85,7 @@ class RestController implements RestControllerInterface {
             /** @var InputFilterInterface $validator */
             $validator = $request->getAttribute('app-validation');
             $validator->setData($data);
+
             if (!$validator->isValid()) {
                 $acceptService = $this->getAcceptService($request);
                 $response = $acceptService->transformAccept(

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use App\Crypto\CryptoOpenSsl;
+use App\Filter\ToStringFilter;
 use App\Hydrator\Filter\PropertyFilter;
 use App\Hydrator\Strategy\HydratorArrayStrategy;
 use App\Hydrator\Strategy\HydratorStrategy;
@@ -267,6 +268,7 @@ return function (ContainerBuilder $containerBuilder) {
 
             $input = new Input('note');
             $input->setRequired(false);
+            $input->getFilterChain()->attach(new ToStringFilter());
             $inputFilter->add($input, 'note');
 
             return $inputFilter;
