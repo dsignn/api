@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use App\Crypto\CryptoOpenSsl;
+use App\Filter\ToFloatFilter;
 use App\Filter\ToStringFilter;
 use App\Hydrator\Filter\PropertyFilter;
 use App\Hydrator\Strategy\HydratorArrayStrategy;
@@ -204,7 +205,7 @@ return function (ContainerBuilder $containerBuilder) {
             $price = new InputFilter();
             $input = new Input('value');
             $input->setRequired(false);
-            $input->getFilterChain()->attach(new ToInt());
+            $input->getFilterChain()->attach(new ToFloatFilter());
             $price->add($input, 'value');
 
             $menuItem = new InputFilter();

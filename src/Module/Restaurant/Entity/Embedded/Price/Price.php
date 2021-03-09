@@ -7,7 +7,7 @@ namespace App\Module\Restaurant\Entity\Embedded\Price;
 class Price {
 
     /**
-     * @var int
+     * @var float
      */
     protected $value = 0;
 
@@ -19,15 +19,15 @@ class Price {
     /**
      * @return int
      */
-    public function getValue(): int {
+    public function getValue(): float {
         return $this->value;
     }
 
     /**
-     * @param int $value
+     * @param float $value
      * @return Price
      */
-    public function setValue(int $value): Price {
+    public function setValue(float $value): Price {
         $this->value = $value;
         return $this;
     }
