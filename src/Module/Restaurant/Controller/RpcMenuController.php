@@ -73,7 +73,13 @@ class RpcMenuController implements RpcControllerInterface {
     public function rpc(Request $request, Response $response) {
 
         $slug = $request->getAttribute('__route__')->getArgument('slug');
+/*
+        die();
 
+        if ($slug === '__previu') {
+
+        }
+*/
         $resultSet = $this->organizationStorage->getAll(['normalize_name' => $slug]);
         // TODO localize error message
         // Restaurant not found

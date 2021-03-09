@@ -218,6 +218,7 @@ return function (ContainerBuilder $containerBuilder) {
             $menuItem->add($input, 'name');
 
             $input = new Input('description');
+            $input->setRequired(false);
             $menuItem->add($input, 'description');
 
             $input = new Input('category');
