@@ -18,6 +18,7 @@ class ToFloatFilter implements FilterInterface {
     public function filter($value) {
 
         switch (true) {
+            case $value == "":
             case $value  === null:
                 $value = 0;
                 break;

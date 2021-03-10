@@ -6,9 +6,11 @@ namespace App\Module\Restaurant\Controller;
 use App\Controller\RpcControllerInterface;
 use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
 use App\Module\Organization\Storage\OrganizationStorageInterface;
+use App\Module\Restaurant\Entity\MenuEntity;
 use App\Module\Restaurant\Storage\MenuStorage;
 use App\Module\Restaurant\Storage\MenuStorageInterface;
 use App\Storage\StorageInterface;
+use MongoDB\BSON\ObjectId;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -73,34 +75,75 @@ class RpcMenuController implements RpcControllerInterface {
     public function rpc(Request $request, Response $response) {
 
         $slug = $request->getAttribute('__route__')->getArgument('slug');
-/*
-        die();
+        $query = $request->getQueryParams();
+        $searchOrganization = null;
+        $searchMenu = null;
+        $menu = null;
+        $organization = null;
 
-        if ($slug === '__previu') {
-
-        }
-*/
-        $resultSet = $this->organizationStorage->getAll(['normalize_name' => $slug]);
-        // TODO localize error message
-        // Restaurant not found
-        if (!$resultSet->current()) {
-            $request = $request->withHeader('error-message', 'Il ristorante che stai cercando non si è ancora registrato alla piattaforma...');
-            $acceptService = $this->getAcceptService($request);
-            return $acceptService->transformAccept($response, $resultSet);
-        }
-
-        $menu = $this->menuStorage->getMenuByRestaurantSlug($slug);
-
-        // Menu not found
-        if (!$menu) {
-            $request = $request->withHeader('error-message', 'Il ristorante non ha ancora caricato il suo menu');
-            $acceptService = $this->getAcceptService($request);
-            return $acceptService->transformAccept($response, $menu);
+        switch (true) {
+            case $slug === '__previews':
+                try {
+                    $id = new ObjectId(isset($query['id']) ? $query['id'] : null);
+                    $searchMenu = ['_id' => $id];
+                } catch (\Exception $e) {
+                    $searchOrganization = ['normalize_name' => $slug];
+                }
+                break;
+            default:
+                $searchOrganization = ['normalize_name' => $slug];
+                break;
         }
 
+        if ($searchMenu) {
+            /** @var MenuEntity $menuEntity */
+            $menuEntity = $this->menuStorage->getAll($searchMenu)->current();
+            // Menu not found
+            if (!$menuEntity) {
+                return $this->menuNotFound($response, $request);
+            }
+
+            $menu = $this->menuStorage->getMenuByMenuId($menuEntity);
+
+        } else {
+
+            $organization = $this->organizationStorage->getAll($searchOrganization)->current();
+            if (!$organization) {
+                return $this->organizationNotFound($response, $request);
+            }
+            $menu = $this->menuStorage->getMenuByRestaurantSlug($slug);
+
+            if (!$menu) {
+                return $this->menuNotFound($response, $request);
+            }
+        }
 
         $acceptService = $this->getAcceptService($request);
         return $acceptService->transformAccept($response, $menu);
+    }
+
+    /**
+     * @param Response $response
+     * @param Request $request
+     * @return Response
+     * @throws \App\Middleware\ContentNegotiation\Exception\ServiceNotFound
+     */
+    protected function menuNotFound(Response $response, Request $request) {
+        $request = $request->withHeader('error-message', 'Il ristorante non ha ancora caricato il suo menu');
+        $acceptService = $this->getAcceptService($request);
+        return $acceptService->transformAccept($response, []);
+    }
+
+    /**
+     * @param Response $response
+     * @param Request $request
+     * @return Response
+     * @throws \App\Middleware\ContentNegotiation\Exception\ServiceNotFound
+     */
+    protected function organizationNotFound(Response $response, Request $request) {
+        $request = $request->withHeader('error-message', 'Il ristorante che stai cercando non si è ancora registrato alla piattaforma...');
+        $acceptService = $this->getAcceptService($request);
+        return $acceptService->transformAccept($response, []);
     }
 
     /**
