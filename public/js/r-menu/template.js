@@ -28226,7 +28226,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
                             }
                             _this55.menu = JSON.parse(request.response);
                         };
-                        request.open("GET", "".concat(_this55.menuUrl).concat(_this55.organization.normalize_name));
+                        request.open("GET",  window.location.href);
                         request.setRequestHeader('accept', 'application/json');
                         request.send();
                     }, this.interval);
