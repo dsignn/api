@@ -43,12 +43,12 @@ class JsonAccept implements AcceptTransformInterface {
                 break;
             case $data instanceof ResultSetInterface:
 
+
                 if ($data instanceof HydratorAwareInterface && $this->getHydrator()) {
 
                     $data->setHydrator($this->getHydrator());
                 }
                 $computeData = $data->toArray();
-
                 break;
             case $data instanceof EntityInterface === true:
                 $computeData = $this->getHydrator()->extract($data);

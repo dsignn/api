@@ -7,6 +7,8 @@ use App\Storage\Entity\EntityInterface;
 use App\Storage\Entity\EntityTrait;
 use App\Storage\Entity\Reference;
 use App\Storage\Entity\ReferenceInterface;
+use App\Module\Organization\Entity\Embedded\Phone\Phone;
+
 
 /**
  * Class OrganizationEntity
@@ -16,9 +18,15 @@ class OrganizationEntity implements EntityInterface {
 
     use EntityTrait;
 
+    /**
+     * OrganizationEntity constructor.
+     */
     public function __construct() {
+
         $this->qrCode = new Reference();
+        $this->qrCodeDelivery = new Reference();
         $this->logo = new Reference();
+        $this->whatsappPhone = new Phone();
     }
 
     /**
@@ -39,17 +47,17 @@ class OrganizationEntity implements EntityInterface {
     /**
      * @var ReferenceInterface
      */
+    protected $qrCodeDelivery;
+
+    /**
+     * @var ReferenceInterface
+     */
     protected $logo;
 
     /**
      * @var string
      */
-    protected $whatsappPhone = '';
-
-    /**
-     * @var bool
-     */
-    protected $open = false;
+    protected $whatsappPhone;
 
     /**
      * @var string
@@ -108,6 +116,22 @@ class OrganizationEntity implements EntityInterface {
     /**
      * @return ReferenceInterface
      */
+    public function getQrCodeDelivery(): ReferenceInterface {
+        return $this->qrCodeDelivery;
+    }
+
+    /**
+     * @param ReferenceInterface $qrCodeDelivery
+     * @return OrganizationEntity
+     */
+    public function setQrCodeDelivery(ReferenceInterface $qrCodeDelivery): OrganizationEntity {
+        $this->qrCodeDelivery = $qrCodeDelivery;
+        return $this;
+    }
+
+    /**
+     * @return ReferenceInterface
+     */
     public function getLogo(): ReferenceInterface {
         return $this->logo;
     }
@@ -122,9 +146,9 @@ class OrganizationEntity implements EntityInterface {
     }
 
     /**
-     * @return string
+     * @return Phone
      */
-    public function getWhatsappPhone() {
+    public function getWhatsappPhone(): Phone {
         return $this->whatsappPhone;
     }
 
@@ -132,31 +156,15 @@ class OrganizationEntity implements EntityInterface {
      * @param string $whatsappPhone
      * @return OrganizationEntity
      */
-    public function setWhatsappPhone(string $whatsappPhone): OrganizationEntity {
+    public function setWhatsappPhone(Phone $whatsappPhone): OrganizationEntity {
         $this->whatsappPhone = $whatsappPhone;
         return $this;
     }
 
     /**
-     * @return bool
-     */
-    public function getOpen(): bool {
-        return $this->open;
-    }
-
-    /**
-     * @param bool $open
-     * @return OrganizationEntity
-     */
-    public function setOpen(bool $open): OrganizationEntity {
-        $this->open = $open;
-        return  $this;
-    }
-
-    /**
      * @return string
      */
-    public function getSiteUrl(): string {
+    public function getSiteUrl() {
         return $this->siteUrl;
     }
 
@@ -164,7 +172,7 @@ class OrganizationEntity implements EntityInterface {
      * @param string $siteUrl
      * @return OrganizationEntity
      */
-    public function setSiteUrl(string $siteUrl): OrganizationEntity {
+    public function setSiteUrl(string $siteUrl = null): OrganizationEntity {
         $this->siteUrl = $siteUrl;
         return $this;
     }

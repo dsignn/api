@@ -17,12 +17,14 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpException;
+use function Symfony\Component\String\s;
 
 /**
  * Class GenerateQrCodeRpc
  * @package App\Module\Organization\Controller
  */
-class GenerateQrCodeRpc implements RpcControllerInterface {
+class GenerateQrCodeRpc implements RpcControllerInterface
+{
 
     use AcceptServiceAwareTrait;
 
@@ -59,7 +61,8 @@ class GenerateQrCodeRpc implements RpcControllerInterface {
     /**
      * @inheritDoc
      */
-    public function __construct(OrganizationStorageInterface $storage, Client $client, ContainerInterface $container) {
+    public function __construct(OrganizationStorageInterface $storage, Client $client, ContainerInterface $container)
+    {
 
         $this->storage = $storage;
         $this->client = $client;
@@ -72,28 +75,43 @@ class GenerateQrCodeRpc implements RpcControllerInterface {
     /**
      * @inheritDoc
      */
-    public function rpc(Request $request, Response $response) {
+    public function rpc(Request $request, Response $response)
+    {
 
         $id = $request->getAttribute('__route__')->getArgument('id');
+
         /** @var OrganizationEntity $entity */
         $entity = $this->storage->get($id);
         if (!$entity) {
             return $response->withStatus(404);
         }
 
-        $tmpFile = $this->generateQrCode($entity);
-        $method = $entity->getQrCode()->getId() ? 'patch' : 'post';
+        $queryParam = '';
+        switch (true) {
+            case isset($request->getQueryParams()['delivery']) === true:
+                $queryParam = '?delivery';
+                break;
+        }
+
+        $tmpFile = $this->generateQrCode($entity, $queryParam);
+
 
         try {
-           /** @var \GuzzleHttp\Psr7\Response $responseResource */
-           $responseResource = $this->getRequest($entity, $method, $tmpFile);
+            /** @var \GuzzleHttp\Psr7\Response $responseResource */
+            $responseResource = $this->getRequest($entity, $queryParam, $tmpFile);
 
-       } catch (\Exception $e){
-            throw new HttpException($request, 'Qr code generator error',500, $e);
-       }
+        } catch (\Exception $e) {
+            throw new HttpException($request, 'Qr code generator error', 500, $e);
+        }
 
-        $entity->getQrCode()->setId($responseResource->id);
-        $entity->getQrCode()->setCollection('resource');
+        if (!$queryParam) {
+            $entity->getQrCode()->setId($responseResource->id);
+            $entity->getQrCode()->setCollection('resource');
+        } else {
+            $entity->getQrCodeDelivery()->setId($responseResource->id);
+            $entity->getQrCodeDelivery()->setCollection('resource');
+        }
+
         $this->storage->update($entity);
 
         $acceptService = $this->getAcceptService($request);
@@ -102,12 +120,12 @@ class GenerateQrCodeRpc implements RpcControllerInterface {
 
     /**
      * @param OrganizationEntity $entity
-     * @param string $method
+     * @param string $queryParam
      * @param string $tmpFile
      * @return mixed
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    protected function getRequest(OrganizationEntity $entity, string $method, string $tmpFile) {
+    protected function getRequest(OrganizationEntity $entity, string $queryParam, string $tmpFile)
+    {
         $data = [
             //'debug' => true,
             'headers' => [
@@ -120,30 +138,39 @@ class GenerateQrCodeRpc implements RpcControllerInterface {
                     'contents' => 'qrcode'
                 ],
                 [
-                    'name'     => 'file',
+                    'name' => 'file',
                     'contents' => fopen($tmpFile, 'r')
                 ]
             ]
 
         ];
 
+        switch (true) {
+            case !$queryParam === true:
+                $method = $entity->getQrCode()->getId() ? 'patch' : 'post';
+                $url = $this->url . ($entity->getQrCode()->getId() ? '/resource/' . $entity->getQrCode()->getId() : '/resource');
+                break;
+            case !$queryParam === false:
+                $method = $entity->getQrCodeDelivery()->getId() ? 'patch' : 'post';
+                $url = $this->url . ($entity->getQrCodeDelivery()->getId() ? '/resource/' . $entity->getQrCodeDelivery()->getId() : '/resource');
+                break;
+        }
 
-        $url = $this->url . ($entity->getQrCode()->getId() ? '/resource/' .$entity->getQrCode()->getId() : '/resource');
         $response = $this->client->{$method}($url, $data);
-
         return json_decode($response->getBody()->getContents());
     }
 
 
     /**
      * @param OrganizationEntity $entity
+     * @param string $urlParam
      * @return string
-     * @throws \Exception
      */
-    protected function generateQrCode(OrganizationEntity $entity) {
+    protected function generateQrCode(OrganizationEntity $entity, string $queryParam = '')
+    {
         $pathLogo = __DIR__ . '/../../../../asset/logo_bordo.png';
 
-        $qrCode = new \Endroid\QrCode\QrCode($this->urlMenu . '/' . $entity->getNormalizeName());
+        $qrCode = new \Endroid\QrCode\QrCode($this->urlMenu . '/' . $entity->getNormalizeName() . $queryParam);
         $qrCode->setSize(300);
         $qrCode->setMargin(10);
         $qrCode->setWriterByName('png');

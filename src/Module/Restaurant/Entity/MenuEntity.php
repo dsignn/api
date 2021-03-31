@@ -21,6 +21,26 @@ class MenuEntity implements EntityInterface
     /**
      * @var string
      */
+    static public $STATUS_ENABLE = 'indoor';
+
+    /**
+     * @var string
+     */
+    static public $STATUS_DELIVERY = 'delivery';
+
+    /**
+     * @var string
+     */
+    static public $STATUS_DATE = 'date';
+
+    /**
+     * @var string
+     */
+    static public $STATUS_DISABLE = 'disable';
+
+    /**
+     * @var string
+     */
     protected $name = '';
 
     /**
@@ -53,16 +73,28 @@ class MenuEntity implements EntityInterface
      */
     protected $layoutType = 'dsign-menu-item-image';
 
+
     /**
      * @var bool
      */
-    protected $enable = false;
+    protected $enableOrder = false;
+
+    /**
+     * @var string
+     */
+    protected $status = '';
+
+    /**
+     * @var \DateTime
+     */
+    protected $statusDate = null;
 
     /**
      * MenuEntity constructor.
      */
     public function __construct() {
         $this->organization = new Reference();
+        $this->status = MenuEntity::$STATUS_DISABLE;
     }
 
     /**
@@ -155,22 +187,6 @@ class MenuEntity implements EntityInterface
     }
 
     /**
-     * @return bool
-     */
-    public function getEnable(): bool {
-        return $this->enable;
-    }
-
-    /**
-     * @param bool $enable
-     * @return MenuEntity
-     */
-    public function setEnable(bool $enable): MenuEntity {
-        $this->enable = $enable;
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getLayoutType(): string {
@@ -199,4 +215,54 @@ class MenuEntity implements EntityInterface
         $this->note = $note;
         return $this;
     }
+
+    /**
+     * @return bool
+     */
+    public function getEnableOrder(): bool {
+        return $this->enableOrder;
+    }
+
+    /**
+     * @param bool $enableOrder
+     * @return MenuEntity
+     */
+    public function setEnableOrder(bool $enableOrder): MenuEntity {
+        $this->enableOrder = $enableOrder;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus(): string {
+        return $this->status;
+    }
+
+    /**
+     * @param string $status
+     * @return MenuEntity
+     */
+    public function setStatus(string $status): MenuEntity {
+        $this->status = $status;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getStatusDate() {
+        return $this->statusDate;
+    }
+
+    /**
+     * @param \DateTime $statusDate
+     * @return MenuEntity
+     */
+    public function setStatusDate(\DateTime $statusDate = null): MenuEntity {
+        $this->statusDate = $statusDate;
+        return $this;
+    }
+
+
 }

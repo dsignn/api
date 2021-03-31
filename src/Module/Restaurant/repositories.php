@@ -2,11 +2,14 @@
 declare(strict_types=1);
 
 use App\Crypto\CryptoOpenSsl;
+use App\Filter\DefaultFilter;
+use App\Filter\ToDateFilter;
 use App\Filter\ToFloatFilter;
 use App\Filter\ToStringFilter;
 use App\Hydrator\Filter\PropertyFilter;
 use App\Hydrator\Strategy\HydratorArrayStrategy;
 use App\Hydrator\Strategy\HydratorStrategy;
+use App\Hydrator\Strategy\Mongo\MongoDateStrategy;
 use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
 use App\Hydrator\Strategy\NamingStrategy\CamelCaseStrategy;
@@ -20,6 +23,7 @@ use App\Module\Restaurant\Storage\MenuCategoryStorage;
 use App\Module\Restaurant\Storage\MenuCategoryStorageInterface;
 use App\Module\Restaurant\Storage\MenuStorage;
 use App\Module\Restaurant\Storage\MenuStorageInterface;
+use App\Module\Restaurant\Validator\StatusDateValidator;
 use App\Module\User\Mail\UserMailerInterface;
 use App\Storage\Adapter\Mongo\MongoAdapter;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydratePaginateResultSet;
@@ -29,14 +33,18 @@ use App\Storage\Entity\SingleEntityPrototype;
 use App\Storage\Storage;
 use App\Validator\Mongo\ObjectIdValidator;
 use DI\ContainerBuilder;
+use Laminas\Filter\Boolean;
 use Laminas\Filter\Callback;
-use Laminas\Filter\ToInt;
+
+use Laminas\Filter\DateTimeFormatter;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Hydrator\Filter\FilterComposite;
 use Laminas\Hydrator\ObjectPropertyHydrator;
 use Laminas\InputFilter\CollectionInputFilter;
 use Laminas\InputFilter\Input;
+use App\InputFilter\Input as AppInput;
 use Laminas\InputFilter\InputFilter;
+use Laminas\Validator\InArray;
 use Laminas\Validator\NotEmpty;
 use MongoDB\Client;
 use Psr\Container\ContainerInterface;
@@ -132,6 +140,7 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
             $hydrator->addStrategy('organization', new HydratorStrategy($menuItemHydrator, new SingleEntityPrototype(new Reference())));
             $hydrator->addStrategy('items', new HydratorArrayStrategy($menuItemHydrator, new SingleEntityPrototype(new MenuItem())));
+            $hydrator->addStrategy('statusDate', new MongoDateStrategy());
 
             return $hydrator;
         }
@@ -151,6 +160,7 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
             $hydrator->addStrategy('organization', new HydratorStrategy($c->get('ReferenceRestHydrator'), new SingleEntityPrototype(new Reference())));
             $hydrator->addStrategy('items', new HydratorArrayStrategy($menuItemHydrator, new SingleEntityPrototype(new MenuItem())));
+            $hydrator->addStrategy('statusDate', $c->get('EntityDateRestStrategy'));
 
             return $hydrator;
         }
@@ -225,9 +235,6 @@ return function (ContainerBuilder $containerBuilder) {
             $input = new Input('category');
             $menuItem->add($input, 'category');
 
-            $input = new Input('status');
-            $menuItem->add($input, 'status');
-
             $input = new Input('photos');
             $input->setRequired(false);
             $menuItem->add($input, 'photos');
@@ -251,22 +258,30 @@ return function (ContainerBuilder $containerBuilder) {
             $input = new Input('colorHeader');
             $inputFilter->add($input, 'colorHeader');
 
-            $input = new Input('enable');
-            $inputFilter->add($input, 'enable');
+            // Role field
+            $input = new Input('status');
+            $input->setRequired(false);
+            $input->getValidatorChain()->attach(new InArray([
+                'haystack' => [
+                    MenuEntity::$STATUS_DISABLE,
+                    MenuEntity::$STATUS_ENABLE,
+                    MenuEntity::$STATUS_DATE,
+                    MenuEntity::$STATUS_DELIVERY,
+                ]
+            ]));
+            $input->getFilterChain()->attach(new DefaultFilter(MenuEntity::$STATUS_DISABLE));
+            $inputFilter->add($input, 'status');
 
-            $validator = new NotEmpty([
-                NotEmpty::INTEGER,
-                NotEmpty::FLOAT,
-                NotEmpty::STRING,
-                NotEmpty::ZERO,
-                NotEmpty::EMPTY_ARRAY,
-                NotEmpty::SPACE,
-                NotEmpty::OBJECT,
-                NotEmpty::OBJECT_STRING,
-                NotEmpty::OBJECT_COUNT
-            ]);
+            $input = new AppInput('statusDate');
+            $input->getValidatorChain()->attach(new StatusDateValidator());
+            $input->getFilterChain()->attach(new ToDateFilter(['format' => 'd-m-Y']));
+            $inputFilter->add($input, 'statusDate');
 
-            $input->getValidatorChain()->attach($validator);
+            $input = new Input('enableOrder');
+            $input->setRequired(false);
+            $input->setAllowEmpty(true);
+            $input->getFilterChain()->attach(new Boolean());
+            $inputFilter->add($input, 'enableOrder');
 
             $input = new Input('note');
             $input->setRequired(false);

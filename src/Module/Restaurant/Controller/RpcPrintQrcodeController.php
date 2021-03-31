@@ -81,9 +81,11 @@ class RpcPrintQrcodeController implements RpcControllerInterface {
     public function rpc(Request $request, Response $response) {
 
         $id = $request->getAttribute('__route__')->getArgument('id');
+        $isDelivery = isset($request->getQueryParams()['delivery']);
 
         /** @var OrganizationEntity $organization */
         $organization = $this->organizationStorage->get($id);
+
 
 
         // Restaurant not found
@@ -91,13 +93,15 @@ class RpcPrintQrcodeController implements RpcControllerInterface {
             return $this->get404($response);
         }
 
-        // Logo not found
-        if (!$organization->getQrCode()->getId() || $organization->getQrCode()->getId() === '') {
-            // TODO personalize
-            return $this->get404($response);
+        switch (true) {
+            case $isDelivery === false && (!$organization->getQrCode()->getId() === true || $organization->getQrCode()->getId() === ''):
+            case $isDelivery === true && (!$organization->getQrCodeDelivery()->getId() === true || $organization->getQrCodeDelivery()->getId() === ''):
+                return $this->get404($response);
         }
 
-        $resource = $this->resourceStorage->get($organization->getQrCode()->getId());
+        $idResource = $isDelivery ? $organization->getQrCodeDelivery()->getId() : $organization->getQrCode()->getId();
+
+        $resource = $this->resourceStorage->get($idResource);
 
         return $this->twig->render(
             $response,
@@ -105,7 +109,7 @@ class RpcPrintQrcodeController implements RpcControllerInterface {
             [
                 'base_url' => $this->jsPath,
                 'resource'=> $resource,
-                'restaurant_url' => $this->rootPath . $organization->getNormalizeName(),
+                'restaurant_url' => $this->rootPath . $organization->getNormalizeName() . ($isDelivery ? '?delivery' : '') ,
             ]
         );
     }

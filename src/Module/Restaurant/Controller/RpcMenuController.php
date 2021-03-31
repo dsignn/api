@@ -82,6 +82,14 @@ class RpcMenuController implements RpcControllerInterface {
         $organization = null;
 
         switch (true) {
+            case isset($query['delivery']) === true:
+                $status = MenuEntity::$STATUS_DELIVERY;
+                break;
+            default:
+                $status = MenuEntity::$STATUS_ENABLE;
+        }
+
+        switch (true) {
             case $slug === '__previews':
                 try {
                     $id = new ObjectId(isset($query['id']) ? $query['id'] : null);
@@ -111,7 +119,7 @@ class RpcMenuController implements RpcControllerInterface {
             if (!$organization) {
                 return $this->organizationNotFound($response, $request);
             }
-            $menu = $this->menuStorage->getMenuByRestaurantSlug($slug);
+            $menu = $this->menuStorage->getMenuByRestaurantSlug($slug, $status);
 
             if (!$menu) {
                 return $this->menuNotFound($response, $request);

@@ -16,6 +16,7 @@ use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Hydrator\Strategy\ClosureStrategy;
 use League\OAuth2\Server\ResourceServer;
 use MongoDB\BSON\ObjectId;
+use MongoDB\BSON\UTCDateTime;
 use MongoDB\Client as MongoClient;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -139,6 +140,7 @@ return function (ContainerBuilder $containerBuilder) {
                     return $value;
                 },
                 function ($value) {
+
                     if ($value instanceof ObjectId) {
                         $value = $value->__toString();
                     }
@@ -161,6 +163,9 @@ return function (ContainerBuilder $containerBuilder) {
                     if (is_string($value)) {
                         // TODO controll
                         $value = DateTime::createFromFormat(DateTimeInterface::ATOM, $value);
+                    }
+                    if ($value instanceof UTCDateTime) {
+                        $value = $value->toDateTime();
                     }
                     return $value;
                 }

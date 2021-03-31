@@ -35,18 +35,19 @@ class DisableMenu {
         /** @var MenuEntity $entity */
         $entity = $event->getTarget();
 
-        if ($adapter instanceof MongoAdapter && $entity->getEnable()) {
+        if ($adapter instanceof MongoAdapter && $entity->getStatus() !== MenuEntity::$STATUS_DATE || $entity->getStatus() !== MenuEntity::$STATUS_DISABLE ) {
             /** @var \MongoCollection $collection */
             $collection = $adapter->getCollection();
 
             $cond = [
+                "status" => $entity->getStatus(),
                 "organization._id" => new ObjectId($entity->getOrganization()->getId()),
                 "_id" => ['$ne' => new ObjectId($entity->getId())]
             ];
 
             $collection->updateMany(
                 $cond,
-                ['$set' => ["enable" => false]]
+                ['$set' => ["status" => MenuEntity::$STATUS_DISABLE]]
             );
         }
     }
