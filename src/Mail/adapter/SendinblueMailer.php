@@ -78,6 +78,8 @@ class SendinblueMailer  implements MailerInterface {
             throw new \Exception('test');
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
+            var_dump('err');
+            die();
         }
     }
 }
