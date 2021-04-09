@@ -86,8 +86,13 @@ return function (ContainerBuilder $containerBuilder) {
             $storage->setEntityPrototype($c->get('UserEntityPrototype'));
 
             $storage->getEventManager()->attach(
-                Storage::$BEFORE_SAVE,
-                new UserActivationCodeEvent($c->get('OAuthCrypto'), $c->get(MailerInterface::class), $c->get('UserFrom'), $settings['mail']['activationCode'])
+                Storage::$AFTER_SAVE,
+                new UserActivationCodeEvent(
+                    $c->get('OAuthCrypto'),
+                    $c->get(MailerInterface::class),
+                    $c->get('UserFrom'),
+                    $settings['mail']['activationCode']
+                )
             );
 
             $storage->getEventManager()->attach(RestController::$PREPROCESS_POST, $c->get(AppendOrganizationEvent::class));
@@ -291,6 +296,7 @@ return function (ContainerBuilder $containerBuilder) {
 
             return new SendinblueMailer($serviceSetting, $container->get(LoggerInterface::class));
         },
+
         EmailExistValidator::class => function(ContainerInterface $container) {
             return new EmailExistValidator($container->get(UserStorageInterface::class));
         },
