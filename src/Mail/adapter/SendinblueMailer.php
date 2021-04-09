@@ -75,11 +75,9 @@ class SendinblueMailer  implements MailerInterface {
         $sendSmtpEmail->setHtmlContent($content);
         try {
             $result = $apiInstance->sendTransacEmail($sendSmtpEmail);
-            throw new \Exception('test');
+            $this->logger->info('Send email: ' . implode($sendSmtpEmailToArray) . ' ' . implode($result));
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
-            var_dump('err');
-            die();
         }
     }
 }

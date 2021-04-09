@@ -55,11 +55,9 @@ class SendGridMailer  implements MailerInterface {
 
         try {
             $response = $sendgrid->send($email);
-            var_dump($response->body());
-            die();
+
         } catch (Exception $e) {
-            echo 'Caught exception: '. $e->getMessage() ."\n";
-            die();
+            $this->logger->error($e->getMessage());
         }
     }
 }
