@@ -86,7 +86,7 @@ return function (ContainerBuilder $containerBuilder) {
             $storage->setEntityPrototype($c->get('UserEntityPrototype'));
 
             $storage->getEventManager()->attach(
-                Storage::$AFTER_SAVE,
+                Storage::$BEFORE_SAVE,
                 new UserActivationCodeEvent(
                     $c->get('OAuthCrypto'),
                     $c->get(MailerInterface::class),
