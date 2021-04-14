@@ -74,6 +74,10 @@ class ResetPassword implements RpcControllerInterface {
         $user->getRecoverPassword()->setToken('')
             ->setDate(null);
 
+        if ($user->getStatus() === UserEntity::$STATUS_NOT_VERIFY) {
+            $user->setStatus(UserEntity::$STATUS_ENABLE);
+        }
+
         $this->storage->update($user);
 
         $AcceptService = $this->getAcceptService($request);
