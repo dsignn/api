@@ -37,6 +37,7 @@ use Laminas\Filter\Boolean;
 use Laminas\Filter\Callback;
 
 use Laminas\Filter\DateTimeFormatter;
+use Laminas\Filter\ToInt;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Hydrator\Filter\FilterComposite;
 use Laminas\Hydrator\ObjectPropertyHydrator;
@@ -218,6 +219,9 @@ return function (ContainerBuilder $containerBuilder) {
             $input->getFilterChain()->attach(new ToFloatFilter());
             $price->add($input, 'value');
 
+            /**
+             *  START InputFilter menu item embedded
+             */
             $menuItem = new InputFilter();
             $menuItem->add($price, 'price');
 
@@ -239,8 +243,31 @@ return function (ContainerBuilder $containerBuilder) {
             $input->setRequired(false);
             $menuItem->add($input, 'photos');
 
+            $input = new Input('new');
+            $input->setRequired(false);
+            $input->getFilterChain()->attach(new ToInt());
+            $menuItem->add($input, 'new');
+
+            // Status menu field
+            $input = new Input('status');
+            $input->setRequired(false);
+            $input->getValidatorChain()->attach(new InArray([
+                'haystack' => [
+                    MenuItem::STATUS_AVAILABLE,
+                    MenuItem::STATUS_NOT_AVAILABLE,
+                    MenuItem::STATUS_OVER
+                ]
+            ]));
+            $input->getFilterChain()->attach(new DefaultFilter(MenuEntity::$STATUS_DISABLE));
+            $menuItem->add($input, 'status');
+
+            /**
+             * END
+             */
             $collectionItem = new CollectionInputFilter();
             $collectionItem->setInputFilter($menuItem);
+
+
 
             $inputFilter = new InputFilter();
             $inputFilter->add($organization, 'organization');
@@ -258,7 +285,7 @@ return function (ContainerBuilder $containerBuilder) {
             $input = new Input('colorHeader');
             $inputFilter->add($input, 'colorHeader');
 
-            // Role field
+            // Status menu field
             $input = new Input('status');
             $input->setRequired(false);
             $input->getValidatorChain()->attach(new InArray([
