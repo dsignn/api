@@ -1,5 +1,4 @@
 define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shared_bundle_) {
-
         "use strict";
         meta = babelHelpers.interopRequireWildcard(meta);
 
