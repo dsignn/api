@@ -4,7 +4,7 @@ define(["exports"], function (_exports) {
     Object.defineProperty(_exports, "__esModule", {
         value: true
     });
-    _exports.Storage = _exports.Localize = _exports.Listener$1 = _exports.Listener = _exports.EventManagerAware = _exports.EventManager = _exports.Event = _exports.$index = _exports.$Storage = _exports.$Localize = _exports.$Listener = _exports.$EventManagerAware = _exports.$EventManager = _exports.$Event = void 0;
+    _exports.Storage = _exports.Localize = _exports.Listener$1 = _exports.Listener = _exports.EventManagerAware$1 = _exports.EventManagerAware = _exports.EventManager$1 = _exports.EventManager = _exports.Event$1 = _exports.Event = _exports.$index = _exports.$Storage = _exports.$Localize = _exports.$Listener = _exports.$EventManagerAware = _exports.$EventManager = _exports.$Event = void 0;
 
     /**
      * @class
@@ -56,7 +56,7 @@ define(["exports"], function (_exports) {
             return Event;
         }();
 
-    _exports.Event = Event;
+    _exports.Event$1 = _exports.Event = Event;
     var Event$1 = {
         Event: Event
     };
@@ -149,7 +149,7 @@ define(["exports"], function (_exports) {
             return EventManager;
         }();
 
-    _exports.EventManager = EventManager;
+    _exports.EventManager$1 = _exports.EventManager = EventManager;
     var EventManager$1 = {
         EventManager: EventManager
     };
@@ -191,7 +191,7 @@ define(["exports"], function (_exports) {
             return EventManagerAware;
         }();
 
-    _exports.EventManagerAware = EventManagerAware;
+    _exports.EventManagerAware$1 = _exports.EventManagerAware = EventManagerAware;
     var EventManagerAware$1 = {
         EventManagerAware: EventManagerAware
     };
