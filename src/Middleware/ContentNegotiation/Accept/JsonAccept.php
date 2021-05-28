@@ -51,6 +51,7 @@ class JsonAccept implements AcceptTransformInterface {
                 $computeData = $data->toArray();
                 break;
             case $data instanceof EntityInterface === true:
+
                 $computeData = $this->getHydrator()->extract($data);
                 break;
             case is_array($data) === true:
@@ -59,7 +60,7 @@ class JsonAccept implements AcceptTransformInterface {
         }
 
         $body = new Stream(fopen('php://temp', 'r+'));
-        $body->write($json = json_encode($computeData));
+        $body->write($json = json_encode($computeData, JSON_NUMERIC_CHECK));
 
         if ($json === false) {
             return $response->withStatus(415);
