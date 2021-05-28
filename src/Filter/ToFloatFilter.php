@@ -23,8 +23,15 @@ class ToFloatFilter implements FilterInterface {
                 $value = 0;
                 break;
             case is_numeric($value) === true:
-                $value = floatval($value);
+                $value = round(floatval($value), 2);
                 break;
+            case is_string($value) === true:
+                $value = str_replace(",", ".", $value);
+                $value = round(floatval($value), 2);
+                break;
+            default:
+                // TODO DA CAPIRE SE E' IL CASO
+                $value = round(floatval($value), 2);
         }
 
         return $value;

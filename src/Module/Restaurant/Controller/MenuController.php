@@ -6,9 +6,11 @@ namespace App\Module\Restaurant\Controller;
 use App\Controller\RestController;
 use App\Controller\RestControllerInterface;
 use App\Module\Restaurant\Storage\MenuStorageInterface;
+use Laminas\InputFilter\InputFilterInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use function DI\value;
 
 /**
  * Class MenuController
@@ -44,6 +46,4 @@ class MenuController extends RestController implements RestControllerInterface {
         $acceptService = $this->getAcceptService($request);
         return $acceptService->transformAccept($response, $pagination);
     }
-
-
 }
