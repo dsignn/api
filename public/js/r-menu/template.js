@@ -27480,7 +27480,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
                     setTimeout(function() {
                             element.categories = this.categories;
                         }.bind(this),
-                        1000
+                        500
                     );
                     this.$.container.appendChild(element);
                 }
