@@ -27479,7 +27479,7 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
                     element.showOrder = showOrder;
                     setTimeout(function() {
                             element.categories = this.categories;
-                        },
+                        }.bind(this),
                         1000
                     );
                     this.$.container.appendChild(element);
