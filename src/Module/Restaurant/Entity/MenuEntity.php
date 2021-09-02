@@ -38,6 +38,22 @@ class MenuEntity implements EntityInterface
      */
     static public $STATUS_DISABLE = 'disable';
 
+
+    /**
+     * @var string
+     */
+    static public $NORMAL_DISH = 0;
+
+    /**
+     * @var string
+     */
+    static public $VEGETARIAN_DISH = 1;
+
+    /**
+     * @var string
+     */
+    static public $VEGAN_DISH = 2;
+
     /**
      * @var string
      */
@@ -69,10 +85,20 @@ class MenuEntity implements EntityInterface
     protected $note = '';
 
     /**
+     * [$NORMAL_DISH, $VEGETARIAN_DISH, $VEGAN_DISH]
+     * @var int
+     */
+    protected $typeDish = 0;
+
+    /**
      * @var string
      */
     protected $layoutType = 'dsign-menu-item-image';
 
+    /**
+     * @var array
+     */
+    protected $allergens = [];
 
     /**
      * @var bool
@@ -264,5 +290,35 @@ class MenuEntity implements EntityInterface
         return $this;
     }
 
+    /**
+     * @return int
+     */
+    public function getTypeDish(): int {
+        return $this->typeDish;
+    }
 
+    /**
+     * @param int $typeDish
+     * @return MenuEntity
+     */
+    public function setTypeDish(int $typeDish = 0): MenuEntity {
+        $this->typeDish = $typeDish;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllergens(): array {
+        return $this->allergens;
+    }
+
+    /**
+     * @param array $allergens
+     * @return MenuEntity
+     */
+    public function setAllergens(array $allergens =  []): MenuEntity {
+        $this->allergens = $allergens;
+        return $this;
+    }
 }

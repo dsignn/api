@@ -113,7 +113,7 @@ WORKDIR /tmp
 # Composer
 # Composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-RUN php -r "if (hash_file('SHA384', 'composer-setup.php') === 'e5325b19b381bfd88ce90a5ddb7823406b2a38cff6bb704b0acc289a09c8128d4a8ce2bbafcd1fcbdc38666422fe2806') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+RUN php -r "if (hash_file('SHA384', 'composer-setup.php') === '756890a4488ce9024fc62c56153228907f1545c228516cbf63f885e036d37e9a59d27d63f46af1d4d07ee0f76181c7d3') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
 RUN php composer-setup.php
 RUN php -r "unlink('composer-setup.php');"
 RUN mv composer.phar /usr/local/bin/composer
@@ -156,12 +156,12 @@ WORKDIR /tmp/ffmpeg_sources
 # libx265
 
 RUN yum install -y hg
-RUN hg clone https://bitbucket.org/multicoreware/x265
-WORKDIR x265/build/linux
+RUN git clone https://bitbucket.org/multicoreware/x265_git.git
+WORKDIR x265_git/build/linux/
 RUN cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$HOME/ffmpeg_build" -DENABLE_SHARED:bool=off ../../source
 RUN make
 RUN make install
-RUN ln -s /tmp/ffmpeg_sources/x265/build/linux/x265 /usr/bin/x265
+RUN ln -s /tmp/ffmpeg_sources/x265_git/build/linux/x265 /usr/bin/x265
 
 WORKDIR /tmp/ffmpeg_sources
 # libfdk_aac

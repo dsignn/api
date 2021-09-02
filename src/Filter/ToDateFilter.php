@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Filter;
 
 use DateTime;
-use Laminas\Filter\Exception;
 use Laminas\Filter\FilterInterface;
 
 class ToDateFilter implements FilterInterface {

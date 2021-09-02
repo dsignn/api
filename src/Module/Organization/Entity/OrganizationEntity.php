@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace App\Module\Organization\Entity;
 
+use App\Module\Organization\Entity\Embedded\Phone\Phone;
 use App\Storage\Entity\EntityInterface;
 use App\Storage\Entity\EntityTrait;
 use App\Storage\Entity\Reference;
 use App\Storage\Entity\ReferenceInterface;
-use App\Module\Organization\Entity\Embedded\Phone\Phone;
 
 
 /**
@@ -64,6 +64,10 @@ class OrganizationEntity implements EntityInterface {
      */
     protected $siteUrl = '';
 
+    /**
+     * @var int
+     */
+    protected $tableNumber = 0;
 
     /**
      * @return string
@@ -174,6 +178,22 @@ class OrganizationEntity implements EntityInterface {
      */
     public function setSiteUrl(string $siteUrl = null): OrganizationEntity {
         $this->siteUrl = $siteUrl;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTableNumber(): int {
+        return $this->tableNumber;
+    }
+
+    /**
+     * @param int $tableNumber
+     * @return OrganizationEntity
+     */
+    public function setTableNumber(int $tableNumber = 0): OrganizationEntity {
+        $this->tableNumber = $tableNumber;
         return $this;
     }
 }

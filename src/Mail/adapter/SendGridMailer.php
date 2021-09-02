@@ -7,7 +7,6 @@ use App\Mail\ContactInterface;
 use App\Mail\MailerInterface;
 use Psr\Log\LoggerInterface;
 use SendGrid\Mail\Mail;
-use SendinBlue\Client\Model\SendSmtpEmailTo;
 
 class SendGridMailer  implements MailerInterface {
 

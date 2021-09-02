@@ -3,9 +3,7 @@ declare(strict_types=1);
 
 namespace App\InputFilter;
 
-use http\Env\Response;
 use Laminas\InputFilter\Input as AppInput;
-use Laminas\Validator\ValidatorChain;
 
 /**
  * Class Input

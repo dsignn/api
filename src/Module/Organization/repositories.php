@@ -2,7 +2,6 @@
 declare(strict_types=1);
 
 use App\Crypto\CryptoOpenSsl;
-use App\Filter\ToFloatFilter;
 use App\Hydrator\Strategy\HydratorStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
 use App\Hydrator\Strategy\NamingStrategy\CamelCaseStrategy;
@@ -15,20 +14,18 @@ use App\Module\Organization\Storage\OrganizationStorageInterface;
 use App\Module\Organization\Url\GenericSlugify;
 use App\Module\Organization\Url\SlugifyInterface;
 use App\Module\Organization\Validator\UniqueNameOrganization;
-use App\Module\Restaurant\Entity\Embedded\Price\Price;
-use App\Module\Restaurant\Entity\MenuEntity;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydratePaginateResultSet;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
 use App\Storage\Entity\Reference;
 use App\Storage\Entity\SingleEntityPrototype;
 use App\Storage\Storage;
 use DI\ContainerBuilder;
-use Laminas\Filter\Boolean;
 use Laminas\Filter\StringToLower;
 use Laminas\Filter\ToInt;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\InputFilter\Input;
 use Laminas\InputFilter\InputFilter;
+use Laminas\Validator\Digits;
 use Laminas\Validator\InArray;
 use MongoDB\Client;
 use Psr\Container\ContainerInterface;
@@ -179,6 +176,11 @@ return function (ContainerBuilder $containerBuilder) {
 
             $inputFilter->add($price, 'whatsappPhone');
 
+            $input = new Input('tableNumber');
+            $input->setRequired(false);
+            $input->getValidatorChain()->attach(new Digits());
+            $inputFilter->add($input);
+
             return $inputFilter;
         }
     ])->addDefinitions([
@@ -197,6 +199,8 @@ return function (ContainerBuilder $containerBuilder) {
 };
 
 /**
+ * TODO Add in validator
+ *
  * @return array
  */
 function getPrefix() {

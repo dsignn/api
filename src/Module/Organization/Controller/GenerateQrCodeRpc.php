@@ -17,7 +17,6 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpException;
-use function Symfony\Component\String\s;
 
 /**
  * Class GenerateQrCodeRpc
