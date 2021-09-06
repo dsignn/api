@@ -1,17 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Module\Restaurant\Entity;
-
+namespace App\Storage\Entity;
 
 use App\Storage\Entity\EntityInterface;
 use App\Storage\Entity\EntityTrait;
 
 /**
- * Class CategoryEntity
+ * Class GenericEntity
  * @package App\Module\Restaurant\Entity
  */
-class CategoryEntity implements EntityInterface {
+class GenericEntity implements EntityInterface {
 
     use EntityTrait;
 }

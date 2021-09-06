@@ -20,6 +20,8 @@ use App\Module\Restaurant\Entity\Embedded\Price\Price;
 use App\Module\Restaurant\Entity\MenuEntity;
 use App\Module\Restaurant\Event\DisableMenu;
 use App\Module\Restaurant\Storage\Adapeter\Mongo\MenuMongoAdapter;
+use App\Module\Restaurant\Storage\MenuAllergensStorage;
+use App\Module\Restaurant\Storage\MenuAllergensStorageInterface;
 use App\Module\Restaurant\Storage\MenuCategoryStorage;
 use App\Module\Restaurant\Storage\MenuCategoryStorageInterface;
 use App\Module\Restaurant\Storage\MenuStorage;
@@ -29,6 +31,7 @@ use App\Module\User\Mail\UserMailerInterface;
 use App\Storage\Adapter\Mongo\MongoAdapter;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydratePaginateResultSet;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
+use App\Storage\Entity\GenericEntity;
 use App\Storage\Entity\Reference;
 use App\Storage\Entity\SingleEntityPrototype;
 use App\Storage\Storage;
@@ -70,6 +73,32 @@ return function (ContainerBuilder $containerBuilder) {
             $storage = new MenuCategoryStorage($mongoAdapter);
             $storage->setHydrator($hydrator);
             $storage->setEntityPrototype($c->get('MenuCategoryEntityPrototype'));
+
+            return $storage;
+
+        }
+    ])
+    ->addDefinitions([
+        MenuAllergensStorageInterface::class => function(ContainerInterface $c) {
+            $settings = $c->get('settings');
+            $serviceSetting = $settings['storage']['menu-allergens'];
+
+            $hydrator = $c->get('StorageMenuAllergensEntityHydrator');
+            $resultSet = new MongoHydrateResultSet();
+            $resultSet->setHydrator($hydrator);
+            $resultSet->setEntityPrototype($c->get('MenuAllergensEntityPrototype'));
+
+            $resultSetPaginator = new MongoHydratePaginateResultSet();
+            $resultSetPaginator->setHydrator($hydrator);
+            $resultSetPaginator->setEntityPrototype($c->get('MenuAllergensEntityPrototype'));
+
+            $mongoAdapter = new MongoAdapter($c->get(Client::class), $settings['storage']['name'], $serviceSetting['collection']);
+            $mongoAdapter->setResultSet($resultSet);
+            $mongoAdapter->setResultSetPaginate($resultSetPaginator);
+
+            $storage = new MenuAllergensStorage($mongoAdapter);
+            $storage->setHydrator($hydrator);
+            $storage->setEntityPrototype($c->get('MenuAllergensEntityPrototype'));
 
             return $storage;
 
@@ -118,6 +147,12 @@ return function (ContainerBuilder $containerBuilder) {
         }
     ])->addDefinitions([
         'StorageMenuCategoryEntityHydrator' => function(ContainerInterface $c) {
+
+            $hydrator = new ObjectPropertyHydrator();
+            return $hydrator;
+        }
+    ])->addDefinitions([
+        'StorageMenuAllergensEntityHydrator' => function(ContainerInterface $c) {
 
             $hydrator = new ObjectPropertyHydrator();
             return $hydrator;
@@ -188,6 +223,10 @@ return function (ContainerBuilder $containerBuilder) {
     ])->addDefinitions([
         'MenuCategoryEntityPrototype' => function(ContainerInterface $c) {
             return new SingleEntityPrototype(new CategoryEntity());
+        }
+    ])->addDefinitions([
+        'MenuAllergensEntityPrototype' => function(ContainerInterface $c) {
+            return new SingleEntityPrototype(new GenericEntity());
         }
     ])->addDefinitions([
         'MenuValidation' => function(ContainerInterface $container) {

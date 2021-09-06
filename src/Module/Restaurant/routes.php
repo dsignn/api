@@ -8,6 +8,7 @@ use App\Middleware\Validation\ValidationMiddleware;
 use App\Module\Restaurant\Controller\AllRpcMenuController;
 use App\Module\Restaurant\Controller\MenuController;
 use App\Module\Restaurant\Controller\RpcDeleteResourceMenuItem;
+use App\Module\Restaurant\Controller\RpcMenuAllergensController;
 use App\Module\Restaurant\Controller\RpcMenuCategoryController;
 use App\Module\Restaurant\Controller\RpcUploadResourceMenuItem;
 use Slim\App;
@@ -51,4 +52,6 @@ return function (App $app) {
     $app->options('/menu-category', [OptionController::class, 'options']);
 
     $app->get('/menu-category', [RpcMenuCategoryController::class, 'rpc']);
+
+    $app->get('/menu-allergen', [RpcMenuAllergensController::class, 'rpc']);
 };

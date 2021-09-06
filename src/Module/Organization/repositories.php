@@ -178,6 +178,7 @@ return function (ContainerBuilder $containerBuilder) {
 
             $input = new Input('tableNumber');
             $input->setRequired(false);
+            $input->getFilterChain()->attach(new ToInt());
             $input->getValidatorChain()->attach(new Digits());
             $inputFilter->add($input);
 

@@ -20,7 +20,10 @@ return function (&$setting) {
                     ],
                     'menu-category' => [
                         'collection' => 'menu-category'
-                    ]
+                    ],
+                    'menu-allergens' => [
+                        'collection' => 'menu-allergens'
+                    ],
                 ],
                 'contentNegotiation' => [
                     '/menu' => [

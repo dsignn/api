@@ -22,6 +22,7 @@ class CreateMenuCategoryCommand extends SymfonyCommand {
 
         $this->storage = $storage;
         parent::__construct();
+        $this->setDescription('Create/Update the list of menu category');
     }
 
     /**
@@ -29,9 +30,15 @@ class CreateMenuCategoryCommand extends SymfonyCommand {
      */
     protected function execute(InputInterface $input, OutputInterface $output) {
 
-        $this->storage->delete('category');
-        $this->storage->getStorageAdapter()->update($this->getCategory());
-        return 0;
+        try {
+            $this->storage->delete('category');
+            $this->storage->getStorageAdapter()->update($this->getCategory());
+            $output->writeln('Menu category updated');
+            return 0;
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return 1;
+        }
     }
 
     /**
