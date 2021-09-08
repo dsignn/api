@@ -297,13 +297,24 @@ return function (ContainerBuilder $containerBuilder) {
             $input->getFilterChain()->attach(new DefaultFilter(MenuEntity::$STATUS_DISABLE));
             $menuItem->add($input, 'status');
 
+            // Status menu field
+            $input = new Input('typeDish');
+            $input->setRequired(false);
+            $input->getValidatorChain()->attach(new InArray([
+                'haystack' => [
+                    MenuItem::GENERIC_DISH,
+                    MenuItem::VEGETARIAN_DISH,
+                    MenuItem::VEGAN_DISH,
+                ]
+            ]));
+            $input->getFilterChain()->attach(new DefaultFilter(MenuItem::GENERIC_DISH));
+            $menuItem->add($input, 'typeDish');
+
             /**
              * END
              */
             $collectionItem = new CollectionInputFilter();
             $collectionItem->setInputFilter($menuItem);
-
-
 
             $inputFilter = new InputFilter();
             $inputFilter->add($organization, 'organization');

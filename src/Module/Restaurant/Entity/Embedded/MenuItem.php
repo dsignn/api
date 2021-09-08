@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Module\Restaurant\Entity\Embedded;
 
 use App\Module\Restaurant\Entity\Embedded\Price\Price;
+use App\Module\Restaurant\Entity\MenuEntity;
 use App\Storage\Entity\EntityInterface;
 use App\Storage\Entity\EntityTrait;
 use App\Storage\Entity\ReferenceInterface;
@@ -16,9 +17,35 @@ class MenuItem implements EntityInterface {
 
     use EntityTrait;
 
+    /**
+     * @var string
+     */
     const STATUS_AVAILABLE = 'available';
+   
+    /**
+     * @var string
+     */
     const STATUS_OVER = 'over';
+   
+    /**
+     * @var string
+     */
     const STATUS_NOT_AVAILABLE = 'not-available';
+
+    /**
+     * @var string
+     */
+    const GENERIC_DISH = 'generic';
+
+    /**
+     * @var string
+     */
+    const VEGETARIAN_DISH = 'vegetarian';
+
+    /**
+     * @var string
+     */
+    const VEGAN_DISH = 'vegan';
 
     /**
      * @var array
@@ -44,6 +71,18 @@ class MenuItem implements EntityInterface {
      * @var int
      */
     protected $new = 0;
+
+        /**
+     * @var array
+     */
+    protected $allergens = [];
+
+
+    /**
+     * [$NORMAL_DISH, $VEGETARIAN_DISH, $VEGAN_DISH]
+     * @var string
+     */
+    protected $typeDish = MenuItem::GENERIC_DISH;
 
     /**
      * @var
@@ -173,5 +212,37 @@ class MenuItem implements EntityInterface {
     public function setStatus($status): MenuItem {
         $this->status = $status;
         return  $this;
+    }
+
+        /**
+     * @return string
+     */
+    public function getTypeDish(): string {
+        return $this->typeDish;
+    }
+
+    /**
+     * @param string $typeDish
+     * @return MenuItem
+     */
+    public function setTypeDish(string $typeDish): MenuItem {
+        $this->typeDish = $typeDish;
+        return $this;
+    }
+
+        /**
+     * @return array
+     */
+    public function getAllergens(): array {
+        return $this->allergens;
+    }
+
+    /**
+     * @param array $allergens
+     * @return MenuEntity
+     */
+    public function setAllergens(array $allergens =  []): MenuItem {
+        $this->allergens = $allergens;
+        return $this;
     }
 }

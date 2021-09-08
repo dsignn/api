@@ -43,15 +43,18 @@ return function (App $app) {
         $group->get('/all',  [AllRpcMenuController::class, 'rpc']);
 
         $group->options('/all', [OptionController::class, 'options']);
-    })
-        ->add($app->getContainer()->get(ValidationMiddleware::class))
-        ->add($app->getContainer()->get(AuthorizationMiddleware::class))
-        ->add($app->getContainer()->get(AuthenticationMiddleware::class))
+    })->add($app->getContainer()->get(ValidationMiddleware::class))
+      ->add($app->getContainer()->get(AuthorizationMiddleware::class))
+      ->add($app->getContainer()->get(AuthenticationMiddleware::class))
     ;
 
+    // For cors
     $app->options('/menu-category', [OptionController::class, 'options']);
 
     $app->get('/menu-category', [RpcMenuCategoryController::class, 'rpc']);
+
+    // For cors
+    $app->options('/menu-allergen', [OptionController::class, 'options']);
 
     $app->get('/menu-allergen', [RpcMenuAllergensController::class, 'rpc']);
 };
