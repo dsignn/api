@@ -13364,7 +13364,15 @@ define(["meta", baseUrlJs + "/r-menu/shared_bundle_1.js"], function (meta, _shar
        * @param {Storage} menuStorage
        * @private
        */}, {
-            key: "_observeMenu", value: function _observeMenu(menu, config, menuStorage) { if (!menu || !config || !menuStorage) { return; } if (menu.photos && Array.isArray(menu.photos) && menu.photos.length > 0) { this.$.image.style.backgroundImage = "url(".concat(menu.photos[0].src, ")"); } else { this.$.image.style.backgroundSize = "cover"; } menuStorage.getEventManager().on(_shared_bundle_.Storage.POST_REMOVE, this.updateDishCount.bind(this)); menuStorage.getEventManager().on(_shared_bundle_.Storage.POST_UPDATE, this.updateDishCount.bind(this)); menuStorage.getEventManager().on(_shared_bundle_.Storage.POST_SAVE, this.updateDishCount.bind(this)); if (menu) { this.initDishCount(menu); this._changeStatus(menu.status); } }/**
+            key: "_observeMenu", value: function _observeMenu(menu, config, menuStorage) {
+               if (!menu || !config || !menuStorage) { return; }
+             
+               this.$.image.style.backgroundImage = `url(${config.bucket}/${menu.category}.png)`;
+               this.$.image.style.backgroundSize = `contain`;
+               this.$.image.style.backgroundColor = `#eeeeee`;
+               
+               menuStorage.getEventManager().on(_shared_bundle_.Storage.POST_REMOVE, this.updateDishCount.bind(this)); menuStorage.getEventManager().on(_shared_bundle_.Storage.POST_UPDATE, this.updateDishCount.bind(this)); menuStorage.getEventManager().on(_shared_bundle_.Storage.POST_SAVE, this.updateDishCount.bind(this)); if (menu) { this.initDishCount(menu); this._changeStatus(menu.status); } 
+              }/**
        * @param value
        * @returns {string}
        * @private
