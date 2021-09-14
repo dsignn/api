@@ -310,6 +310,9 @@ return function (ContainerBuilder $containerBuilder) {
             $input->getFilterChain()->attach(new DefaultFilter(MenuItem::GENERIC_DISH));
             $menuItem->add($input, 'typeDish');
 
+            $input = new Input('allergens');
+            $input->setRequired(false);
+            $menuItem->add($input, 'allergens');
             /**
              * END
              */
