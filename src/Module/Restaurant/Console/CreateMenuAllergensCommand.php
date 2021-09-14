@@ -59,7 +59,7 @@ class CreateMenuAllergensCommand extends SymfonyCommand {
                 ],
                 [
                     "name" => "crustaceans",
-                    'order' => 0,
+                    'order' => 1,
                     "translation" => [
                         'it' => 'Crostacei',
                         'en' => 'Crustaceans'
