@@ -26,7 +26,7 @@ class UniqueNameOrganization extends AbstractValidator implements ValidatorInter
      * @var array
      */
     protected $messageTemplates = [
-        self::ALREADY_EXIST => "Name organization already exist'"
+        self::ALREADY_EXIST => "Name organization already exist"
     ];
 
     /**

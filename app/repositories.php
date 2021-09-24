@@ -27,4 +27,7 @@ return function (ContainerBuilder $containerBuilder) {
 
     $restaurantRepositories = include_once __DIR__ . "/../src/Module/Restaurant/repositories.php";
     $restaurantRepositories($containerBuilder);
+
+    $orderRepositories = include_once __DIR__ . "/../src/Module/Order/repositories.php";
+    $orderRepositories($containerBuilder);
 };

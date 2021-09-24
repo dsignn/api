@@ -244,7 +244,7 @@ class RestController implements RestControllerInterface {
      */
     protected function getData(Request $request) {
 
-        $data = array_merge($request->getParsedBody(), $request->getUploadedFiles());
+        $data = array_merge($request->getParsedBody() !== null ? $request->getParsedBody() : [], $request->getUploadedFiles());
 
         if (count($data) === 0) {
             $requestParams = RequestParser::parse();

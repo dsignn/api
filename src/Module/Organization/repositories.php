@@ -13,6 +13,7 @@ use App\Module\Organization\Storage\OrganizationStorage;
 use App\Module\Organization\Storage\OrganizationStorageInterface;
 use App\Module\Organization\Url\GenericSlugify;
 use App\Module\Organization\Url\SlugifyInterface;
+use App\Module\Organization\Validator\HasOrganization;
 use App\Module\Organization\Validator\UniqueNameOrganization;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydratePaginateResultSet;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
@@ -191,6 +192,10 @@ return function (ContainerBuilder $containerBuilder) {
     ])->addDefinitions([
         UniqueNameOrganization::class => function(ContainerInterface $c) {
             return new UniqueNameOrganization($c->get(OrganizationStorageInterface::class), $c);
+        }
+    ])->addDefinitions([
+        HasOrganization::class => function(ContainerInterface $c) {
+            return new HasOrganization($c->get(OrganizationStorageInterface::class), $c);
         }
     ])->addDefinitions([
         SlugifyInterface::class => function(ContainerInterface $c) {

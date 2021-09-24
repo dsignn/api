@@ -51,7 +51,14 @@ class JsonAccept implements AcceptTransformInterface {
                 $computeData = $data->toArray();
                 break;
             case $data instanceof EntityInterface === true:
-
+ 
+                echo '<pre>';
+                var_dump($data, true);
+                echo '</pre>';
+                echo '<pre>';
+                var_dump($this->getHydrator()->extract($data), true);
+                echo '</pre>';
+                die();
                 $computeData = $this->getHydrator()->extract($data);
                 break;
             case is_array($data) === true:
