@@ -36,6 +36,9 @@ return function (&$setting) {
                     '/order' => [
                         'POST' => 'OrderValidation'
                     ],
+                    '/order/{id:[0-9a-fA-F]{24}}' => [
+                        'PUT' => 'OrderValidation'
+                    ]
                 ]
             ]
         ]

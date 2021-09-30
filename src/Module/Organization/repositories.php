@@ -122,9 +122,8 @@ return function (ContainerBuilder $containerBuilder) {
 
             $input = new Input('prefix');
             $input->setRequired(false);
-            $price->add($input, 'prefix');
             $input->getValidatorChain()->attach(new InArray( ['haystack' => getPrefix()]));
-
+            $price->add($input, 'prefix');
 
             $menuItem = new InputFilter();
             $menuItem->add($price, 'whatsappPhone');
@@ -172,8 +171,8 @@ return function (ContainerBuilder $containerBuilder) {
 
             $input = new Input('prefix');
             $input->setRequired(false);
-            $price->add($input, 'prefix');
             $input->getValidatorChain()->attach(new InArray( ['haystack' => getPrefix()]));
+            $price->add($input, 'prefix');
 
             $inputFilter->add($price, 'whatsappPhone');
 

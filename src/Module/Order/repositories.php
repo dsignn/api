@@ -101,7 +101,7 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
             $hydrator->addStrategy('createdAt', new MongoDateStrategy());
             $hydrator->addStrategy('lastpdateAt', new MongoDateStrategy());
-            $hydrator->addStrategy('organization', new HydratorStrategy($c->get('ReferenceRestHydrator'), new SingleEntityPrototype(new Reference())));
+            $hydrator->addStrategy('organization', new HydratorStrategy($c->get('ReferenceMongoHydrator'), new SingleEntityPrototype(new Reference())));
 
             return $hydrator;
         }

@@ -126,7 +126,6 @@ class RestController implements RestControllerInterface {
 
         $data = $this->getData($request);
 
-
         if ($request->getAttribute('app-validation')) {
             /** @var InputFilterInterface $validator */
             $validator = $request->getAttribute('app-validation');
@@ -143,14 +142,14 @@ class RestController implements RestControllerInterface {
             $data = $validator->getValues();
         }
 
-        $putEntity = clone $this->storage->getEntityPrototype()->getPrototype($request->getParsedBody());
-        $this->storage->getHydrator()->hydrate($data, $putEntity);
-        $putEntity->setId($id);
+        //$putEntity = clone $this->storage->getEntityPrototype()->getPrototype($request->getParsedBody());
+        $this->storage->getHydrator()->hydrate($data, $entity);
+        //$putEntity->setId($id);
 
-        $this->storage->update($putEntity);
+        $this->storage->update($entity);
 
         $acceptService = $this->getAcceptService($request);
-        return $acceptService->transformAccept($response, $putEntity);
+        return $acceptService->transformAccept($response, $entity);
     }
 
     /**

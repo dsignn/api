@@ -17,7 +17,7 @@ class OrderController extends RestController implements RestControllerInterface 
     /**
      * @var string
      */
-    protected $hydratorService = 'RestOrganizationEntityHydrator';
+    protected $hydratorService = 'RestOrderEntityHydrator';
 
     /**
      * @inheritDoc

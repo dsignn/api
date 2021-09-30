@@ -26,7 +26,7 @@ class MenuMongoAdapter extends MongoAdapter {
                     foreach ($value as $id) {
                         array_push($ids, new ObjectId($id));
                     }
-                    $search['organization._id'] = ['$in' => $ids];
+                    $search['organization.id'] = ['$in' => $ids];
                     unset($search[$key]);
                     break;
                 case 'enable':

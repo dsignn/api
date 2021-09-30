@@ -188,7 +188,6 @@ class MenuStorage extends Storage implements MenuStorageInterface
         }
 
         for ($index = 0; $index < count($menu['items']); $index++) {
-            //var_dump($menu['items'][$index]);
             if (isset($menu['items'][$index]['_id']) && $menu['items'][$index]['_id'] instanceof ObjectId) {
                 $menu['items'][$index]['_id'] = $menu['items'][$index]['_id']->__toString();
             }

@@ -34,8 +34,5 @@ class AttachDateTimeCallback {
     public function __invoke(EventInterface $event) {
         
         $event->getTarget()->{'set'. ucfirst($this->nameProperty)}(new DateTime());
-
- //       var_dump($event->getTarget());
- //       die();
     }
 }

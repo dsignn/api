@@ -42,8 +42,6 @@ class JsonAccept implements AcceptTransformInterface {
                 $computeData['data'] = $data->toArray();
                 break;
             case $data instanceof ResultSetInterface:
-
-
                 if ($data instanceof HydratorAwareInterface && $this->getHydrator()) {
 
                     $data->setHydrator($this->getHydrator());
@@ -51,14 +49,6 @@ class JsonAccept implements AcceptTransformInterface {
                 $computeData = $data->toArray();
                 break;
             case $data instanceof EntityInterface === true:
- 
-                echo '<pre>';
-                var_dump($data, true);
-                echo '</pre>';
-                echo '<pre>';
-                var_dump($this->getHydrator()->extract($data), true);
-                echo '</pre>';
-                die();
                 $computeData = $this->getHydrator()->extract($data);
                 break;
             case is_array($data) === true:
@@ -67,7 +57,7 @@ class JsonAccept implements AcceptTransformInterface {
         }
 
         $body = new Stream(fopen('php://temp', 'r+'));
-        $body->write($json = json_encode($computeData, JSON_NUMERIC_CHECK));
+        $body->write($json = json_encode($computeData, JSON_PRESERVE_ZERO_FRACTION));
 
         if ($json === false) {
             return $response->withStatus(415);
