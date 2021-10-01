@@ -16,7 +16,7 @@ return function (&$setting) {
                 'tmp' => '../tmp',
                 'determineRouteBeforeAppMiddleware' => true,
                 'debug' => true,
-                'urlMenu' => 'http://127.0.0.200',
+                'urlMenu' => 'http://menu.dsign.local',
                 'urlFrontend' => 'http://127.0.0.1:8081/',
                 'displayErrorDetails' => true, // Should be set to false in production
                 "mongodb" => [
@@ -27,8 +27,8 @@ return function (&$setting) {
                 ],
                 'contentNegotiation' => [],
                 'twig' => [
-                    'path-js' => 'http://127.0.0.200/js',
-                    'rootPath' => 'http://127.0.0.200/',
+                    'path-js' => 'http://menu.dsign.local/js',
+                    'rootPath' => 'http://menu.dsign.local/',
                     'options' => [
                         // Should be set to true in production
                         'cache' => false,

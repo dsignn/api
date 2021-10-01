@@ -41,7 +41,7 @@ class DisableMenu {
 
             $cond = [
                 "status" => $entity->getStatus(),
-                "organization._id" => new ObjectId($entity->getOrganization()->getId()),
+                "organization.id" => new ObjectId($entity->getOrganization()->getId()),
                 "_id" => ['$ne' => new ObjectId($entity->getId())]
             ];
 
