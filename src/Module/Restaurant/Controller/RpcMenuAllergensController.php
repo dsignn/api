@@ -46,10 +46,11 @@ class RpcMenuAllergensController implements RpcControllerInterface {
     public function rpc(Request $request, Response $response) {
 
         $params = $request->getQueryParams();
-        $allergens = $this->storage->getAll($params, ["allergens.order" => 1])->current();
+        $allergens = $this->storage->getAll($params)->current();
 
         foreach ($allergens->allergens as $value) {
             $allergens->{$value["name"]} = $value['translation'];
+            //$allergens->{$value["name"]}['order'] = $value['order'];
         }
 
         unset($allergens->{'allergens'});

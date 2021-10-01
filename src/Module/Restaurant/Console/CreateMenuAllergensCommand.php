@@ -90,8 +90,16 @@ class CreateMenuAllergensCommand extends SymfonyCommand {
                     ]
                 ],
                 [
-                    "name" => "soy",
+                    "name" => "sulfur-dioxide",
                     'order' => 5,
+                    "translation" => [
+                        'it' => 'Anidride solforosa e solfiti',
+                        'en' => 'Sulfur dioxide and sulphites'
+                    ]
+                ],
+                [
+                    "name" => "soy",
+                    'order' => 6,
                     "translation" => [
                         'it' => 'Soia',
                         'en' => 'Soy'
@@ -99,7 +107,7 @@ class CreateMenuAllergensCommand extends SymfonyCommand {
                 ],
                 [
                     "name" => "nuts",
-                    'order' => 6,
+                    'order' => 7,
                     "translation" => [
                         'it' => 'Frutta a guscio',
                         'en' => 'Nuts'
@@ -107,7 +115,7 @@ class CreateMenuAllergensCommand extends SymfonyCommand {
                 ],
                 [
                     "name" => "milk",
-                    'order' => 7,
+                    'order' => 8,
                     "translation" => [
                         'it' => 'Latte',
                         'en' => 'Milk'
@@ -115,7 +123,7 @@ class CreateMenuAllergensCommand extends SymfonyCommand {
                 ],
                 [
                     "name" => "celery",
-                    'order' => 8,
+                    'order' => 9,
                     "translation" => [
                         'it' => 'Sedano',
                         'en' => 'Celery'
@@ -123,7 +131,7 @@ class CreateMenuAllergensCommand extends SymfonyCommand {
                 ],
                 [
                     "name" => "mustard",
-                    'order' => 9,
+                    'order' => 10,
                     "translation" => [
                         'it' => 'Senape',
                         'en' => 'Mustard'
@@ -131,18 +139,10 @@ class CreateMenuAllergensCommand extends SymfonyCommand {
                 ],
                 [
                     "name" => "sesame",
-                    'order' => 10,
+                    'order' => 11,
                     "translation" => [
                         'it' => 'Sesamo',
                         'en' => 'Sesame'
-                    ]
-                ],
-                [
-                    "name" => "sulfur-dioxide",
-                    'order' => 11,
-                    "translation" => [
-                        'it' => 'Anidride solforosa e solfiti',
-                        'en' => 'Sulfur dioxide and sulphites'
                     ]
                 ],
                 [

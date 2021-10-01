@@ -44,6 +44,12 @@ return function (&$setting) {
                             'contentTypeFilter' => ['/application\/json/']
                         ],
                     ],
+                    '/menu-allergen' => [
+                        'default' => [
+                            'acceptFilter' => ['/application\/json/'],
+                            'contentTypeFilter' => ['/application\/json/']
+                        ],
+                    ],
                     '/menu/upload-resource' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
