@@ -36,7 +36,7 @@ class MenuStorage extends Storage implements MenuStorageInterface
                     '$lookup' => [
                         'from' => 'menu',
                         'localField' => '_id',
-                        'foreignField' => 'organization._id',
+                        'foreignField' => 'organization.id',
                         'as' => 'menu'
                     ]
                 ],
@@ -106,7 +106,7 @@ class MenuStorage extends Storage implements MenuStorageInterface
                         '$lookup' => [
                             'from' => 'menu',
                             'localField' => '_id',
-                            'foreignField' => 'organization._id',
+                            'foreignField' => 'organization.id',
                             'as' => 'menu'
                         ]
                     ],
