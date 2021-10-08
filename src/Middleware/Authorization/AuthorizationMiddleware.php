@@ -131,8 +131,8 @@ class AuthorizationMiddleware implements Middleware {
                     foreach ($user->getOrganizations() as &$organization) {
                         array_push($organizations, $organization->getId());
                     }
-
-                    if (count($organizations) > 0) {
+             
+                    if (count($organizations) > 0) {               
                         $request = $request->withAttribute(
                             'app-data-filter',
                             ['organizations' => $organizations]

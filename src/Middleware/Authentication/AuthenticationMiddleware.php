@@ -103,7 +103,7 @@ class AuthenticationMiddleware implements Middleware {
 
             $user = $resultSet->current();
         }
-
+       
         return $user;
     }
 

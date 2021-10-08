@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ organization.name | e }}</title>
+</head>
+<style>
+    html {
+        margin: 0 auto;
+        height: 100%;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-family: "Roboto", "Noto", sans-serif;
+        -webkit-print-color-adjust: exact;
+        color: {{ menu.colorHeader }} ;
+    }
+
+    .menu {
+        width: 794px;
+        display: block;
+        background-color: {{ menu.backgroundHeader }} ;
+    }
+
+    .category {
+        font-size: 30px;
+        padding: 20px 0;
+        padding-left: 20px;
+    }
+
+    .category .header {
+        padding-right: 30px;
+        padding-left: 30px;
+        width: fit-content;
+        border-bottom: 2px solid {{ menu.colorHeader }};
+    }
+
+    .dish-container {
+        padding-left: 20px;
+        padding-top: 16px;
+    }
+
+    .main-content {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .dish-container .title { 
+        font-size: 22px;
+        font-style: italic;
+    }
+
+    .dish-container .price { 
+        font-size: 22px;
+        font-style: italic;
+        padding-right: 30px;
+    }
+
+    .dish-container .description {
+        max-width: 650px;
+        text-align: justify;
+    }
+    
+    @page {
+        size: 21cm 29.7cm;
+    }
+    @media print {
+        div.category,
+        div.dish-container {
+            break-inside: avoid;
+        }
+    }
+</style>
+<body>
+    {% set category = null %}
+    <div class="menu">
+        {% for dish in menu.items %}
+            {% if category != dish.category %}
+                <div class="category">
+                    <div class="header">
+                        {{ dish.category | category('it') }} 
+                        {% if hasEnglish %} 
+                            / {{ dish.category | category('en') }}
+                        {% endif %}
+                    </div>
+                </div>
+                {% set category = dish.category %}
+            {% endif %}
+            <div class="dish-container">
+                <div class="main-content">
+                    <div class="title">
+                        {{ dish.name | lang('it') }} 
+                        {% if hasEnglish %} 
+                            / {{ dish.name | lang('en') }}
+                        {% endif %}
+                    </div>
+                    <div class="price">{{ dish.price.currency | currency }} {{ dish.price.value | number('it') }}</div>
+                </div>
+                <div class="description">{{ dish.description | lang('it') }}</div>
+                {% if hasEnglish %} 
+                    <div class="description">{{ dish.description | lang('en') }}</div>
+                {% endif %}   
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html> 

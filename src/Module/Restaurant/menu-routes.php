@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+use App\Middleware\Authentication\AuthenticationMiddleware;
+use App\Middleware\Authorization\AuthorizationMiddleware;
 use App\Middleware\ContentNegotiation\Accept\AcceptContainer;
 use App\Middleware\ContentNegotiation\Accept\JsonAccept;
 use App\Middleware\ContentNegotiation\ContentNegotiationMiddleware;
@@ -8,6 +10,7 @@ use App\Middleware\ContentNegotiation\ContentType\ContentTypeContainer;
 use App\Middleware\ContentNegotiation\ContentType\JsonContentType;
 use App\Module\Restaurant\Controller\RpcFrontendRedirectController;
 use App\Module\Restaurant\Controller\RpcMenuController;
+use App\Module\Restaurant\Controller\RpcPrintMenuController;
 use App\Module\Restaurant\Controller\RpcPrintQrcodeController;
 use App\Module\Restaurant\Middleware\Accept\MenuAccept;
 use Slim\App;
@@ -24,6 +27,11 @@ return function (App $app) {
     );
 
     $app->get('/print-qrcode/{id:[0-9a-fA-F]{24}}',  [RpcPrintQrcodeController::class, 'rpc']);
+
+    $app->get('/print-menu/{id:[0-9a-fA-F]{24}}',  [RpcPrintMenuController::class, 'rpc'])
+        ->add($app->getContainer()->get(AuthorizationMiddleware::class))
+        ->add($app->getContainer()->get(AuthenticationMiddleware::class))
+       ;
 };
 
 /**

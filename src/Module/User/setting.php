@@ -63,7 +63,6 @@ return function (&$setting) {
                     '/user' => [
                         'admin' => [
                             'allow' => true,
-                        //    'assertion' => 'Test',
                             'privileges' => [
                                 [
                                     "method" => "GET",

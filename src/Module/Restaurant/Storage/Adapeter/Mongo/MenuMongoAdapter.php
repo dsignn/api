@@ -21,6 +21,10 @@ class MenuMongoAdapter extends MongoAdapter {
         foreach ($search as $key => &$value) {
 
             switch ($key) {
+                case 'id':
+                    unset($search[$key]);
+                    $search['_id'] = new ObjectId($value);
+                    break;
                 case 'organizations':
                     $ids = [];
                     foreach ($value as $id) {

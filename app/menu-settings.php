@@ -7,6 +7,12 @@ return function (ContainerBuilder $containerBuilder) {
 
     $setting = [];
 
+    $oauthSetting = include_once __DIR__ . "/../src/Module/Oauth/setting.php";
+    $oauthSetting($setting);
+
+    $userSetting = include_once __DIR__ . "/../src/Module/User/setting.php";
+    $userSetting($setting);
+
     $resourceSetting = include_once __DIR__ . "/../src/Module/Resource/menu-setting.php";
     $resourceSetting($setting);
 
