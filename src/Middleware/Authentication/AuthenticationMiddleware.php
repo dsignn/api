@@ -74,7 +74,7 @@ class AuthenticationMiddleware implements Middleware {
             return $handler->handle($request);
         }
 
-        // TODO refactor
+        // TODO refactor add in othe middleware
         if (isset($request->getQueryParams()['auth'])) {
             $request = $request->withAddedHeader('authorization', 'Bearer ' . $request->getQueryParams()['auth']);        
         }
