@@ -31,6 +31,7 @@ class MongoResultSet implements MongoResultSetInterface {
      */
     public function getDataSource(): Cursor {
         return $this->dataSource;
+  
     }
 
     /**

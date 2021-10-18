@@ -11,4 +11,9 @@ use App\Storage\StorageInterface;
  */
 interface OrganizationStorageInterface extends StorageInterface {
 
+    /**
+     *
+     * @return array
+     */
+    public function getRandomRestaurantMenu(): array;
 }

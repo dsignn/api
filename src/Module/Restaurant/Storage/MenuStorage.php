@@ -22,8 +22,7 @@ class MenuStorage extends Storage implements MenuStorageInterface
      * @param null $date
      * @return array|null
      */
-    public function getMenuByRestaurantSlug(string $slug,string $status, \DateTime $date = null)
-    {
+    public function getMenuByRestaurantSlug(string $slug,string $status, \DateTime $date = null) {
         $menu = null;
         if ($this->storage instanceof MongoAdapter) {
 
@@ -66,6 +65,7 @@ class MenuStorage extends Storage implements MenuStorageInterface
                 ]
             ];
 
+          
             /** @var Cursor $cursor */
             $cursor = $this->storage->getCollection('organization')->aggregate(
                 $pipeline,

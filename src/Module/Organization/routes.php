@@ -8,6 +8,7 @@ use App\Middleware\Validation\ValidationMiddleware;
 use App\Module\Organization\Controller\AllRpcOrganizationController;
 use App\Module\Organization\Controller\GenerateQrCodeRpc;
 use App\Module\Organization\Controller\OrganizationController;
+use App\Module\Organization\Controller\OrganizationWithActiveMenuRpc;
 use App\Module\Organization\Controller\RpcUploadResourceOrganization;
 use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
@@ -43,6 +44,8 @@ return function (App $app) {
         ->add($app->getContainer()->get(AuthorizationMiddleware::class))
         ->add($app->getContainer()->get(AuthenticationMiddleware::class))
     ;
+
+    $app->get('/organization/enable-menu',  [OrganizationWithActiveMenuRpc::class, 'rpc']);
 
     $app->options('/generate-qrcode/{id:[0-9a-fA-F]{24}}',  [OptionController::class, 'options']);
 
