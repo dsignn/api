@@ -5,6 +5,7 @@ use App\Crypto\CryptoOpenSsl;
 use App\Hydrator\Strategy\HydratorStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
 use App\Hydrator\Strategy\NamingStrategy\CamelCaseStrategy;
+use App\Module\Organization\Entity\Embedded\Address\Address;
 use App\Module\Organization\Entity\Embedded\Phone\Phone;
 use App\Module\Organization\Entity\OrganizationEntity;
 use App\Module\Organization\Event\SluggerNameEvent;
@@ -25,7 +26,7 @@ use Laminas\Filter\StringToLower;
 use Laminas\Filter\ToInt;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\InputFilter\Input;
-use Laminas\InputFilter\InputFilter;
+use App\InputFilter\InputFilter;
 use Laminas\Validator\Digits;
 use Laminas\Validator\InArray;
 use MongoDB\Client;
@@ -78,6 +79,7 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addStrategy('qrCodeDelivery', new HydratorStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
             $hydrator->addStrategy('logo', new HydratorStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
             $hydrator->addStrategy('whatsappPhone', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Phone())));
+            $hydrator->addStrategy('address', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Address())));
             return $hydrator;
         }
     ])->addDefinitions([
@@ -95,6 +97,7 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addStrategy('qrCodeDelivery', new HydratorStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
             $hydrator->addStrategy('logo', new HydratorStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
             $hydrator->addStrategy('whatsappPhone', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Phone())));
+            $hydrator->addStrategy('address', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Address())));
             return $hydrator;
         }
     ])->addDefinitions([
@@ -181,6 +184,11 @@ return function (ContainerBuilder $containerBuilder) {
             $input->getFilterChain()->attach(new ToInt());
             $input->getValidatorChain()->attach(new Digits());
             $inputFilter->add($input);
+
+            // TODO add in other service
+            $inputFilterAddress = new Input('address');
+            $inputFilterAddress->setRequired(false);
+            $inputFilter->add($inputFilterAddress);
 
             return $inputFilter;
         }

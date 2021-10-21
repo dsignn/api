@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace App\InputFilter;
 
-use Laminas\InputFilter\InputFilter as LaminaInputFilter;
+use Laminas\InputFilter\BaseInputFilter;
 use Laminas\InputFilter\InputFilterInterface;
+use Slim\App;
 
-class InputFilter extends LaminaInputFilter {
+class InputFilter extends BaseInputFilter {
 
     /**
      * @var array
@@ -48,27 +49,50 @@ class InputFilter extends LaminaInputFilter {
      * @return array
      */
     public function getValues(): array {
-        $inputs = $this->validationGroup ?: array_keys($this->inputs);
-        $values = [];
-        foreach ($inputs as $name) {
-            $input = $this->inputs[$name];
+        return $this->getValuesWrapper($this->getData(), $this);
+    }
 
-            if ($input instanceof InputFilterInterface) {
-                $data = $input->getValues();
-                if (in_array($name, $this->propertyToRemove) && empty($data)) {
+    /**
+     *
+     * @param array $data
+     * @param BaseInputFilter $inputFilter
+     * @return array
+     */
+    public function getValuesWrapper(array $data, InputFilter $inputFilter): array {
+        $values = [];
+        $data = $this->getData();
+        foreach($data as $key => $value) {
+
+            if (!$inputFilter->has($key)) {
+                continue;
+            }
+            
+            if ($key === 'activationCode') {
+                die();
+            }
+            $input = $inputFilter->get($key);
+            
+            if ($input instanceof InputFilter && is_array($value)) {
+                $values[$key] = $this->getValuesWrapper($value, $input);
+            } else {
+
+                $value = $input->getValue();
+                if (in_array($key, $this->propertyToRemove) && !$value) {
+                    var_dump($key);
+                    die();
                     continue;
                 }
-                $values[$name] = $data;
-                continue;
+                $values[$key] = $value;
             }
-
-            $value = $input->getValue();
-            if (in_array($name, $this->propertyToRemove) && !$value) {
-                continue;
-            }
-
-            $values[$name] = $value;
         }
+
         return $values;
+    }
+
+    /**
+     * @return array
+     */
+    public function getData(): array {
+        return $this->data;
     }
 }

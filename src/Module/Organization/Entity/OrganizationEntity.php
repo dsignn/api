@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Module\Organization\Entity;
 
+use App\Module\Organization\Entity\Embedded\Address\Address;
 use App\Module\Organization\Entity\Embedded\Phone\Phone;
 use App\Storage\Entity\EntityInterface;
 use App\Storage\Entity\EntityTrait;
@@ -27,6 +28,7 @@ class OrganizationEntity implements EntityInterface {
         $this->qrCodeDelivery = new Reference();
         $this->logo = new Reference();
         $this->whatsappPhone = new Phone();
+        $this->address = new Address();
     }
 
     /**
@@ -58,6 +60,11 @@ class OrganizationEntity implements EntityInterface {
      * @var string
      */
     protected $whatsappPhone;
+
+    /**
+     * @var Address
+     */
+    protected $address;
 
     /**
      * @var string
@@ -194,6 +201,26 @@ class OrganizationEntity implements EntityInterface {
      */
     public function setTableNumber(int $tableNumber = 0): OrganizationEntity {
         $this->tableNumber = $tableNumber;
+        return $this;
+    }
+
+    /**
+     * Get the value of address
+     *
+     * @return  Address
+     */ 
+    public function getAddress() {
+        return $this->address;
+    }
+
+    /**
+     * Set the value of address
+     *
+     * @param  Address  $address
+     * @return  self
+     */ 
+    public function setAddress(Address $address) {
+        $this->address = $address;
         return $this;
     }
 }

@@ -214,7 +214,7 @@ class MenuStorage extends Storage implements MenuStorageInterface
         for ($index = 0; $index < count($menu['items']); $index++) {
             if (isset($menu['items'][$index]['photos']) && is_array($menu['items'][$index]['photos'])) {
                 for ($index2 = 0; $index2 < count($menu['items'][$index]['photos']); $index2++) {
-                    if ($menu['items'][$index]['photos'][$index2]['id']) {
+                    if (isset($menu['items'][$index]['photos'][$index2]['id'])) {
                         foreach ($resources as $resource) {
                             if ($menu['items'][$index]['photos'][$index2]['id'] == $resource['_id']) {
                                 $menu['items'][$index]['photos'][$index2] = $resource;
@@ -270,7 +270,7 @@ class MenuStorage extends Storage implements MenuStorageInterface
 
             if (isset($menu['items'][$index]['photos']) && is_array($menu['items'][$index]['photos'])) {
                 foreach ($menu['items'][$index]['photos'] as $photo) {
-                    if ($photo['id']) {
+                    if (isset($photo['id'])) {
                         array_push($ids, $photo['id']);
                     }
                 }

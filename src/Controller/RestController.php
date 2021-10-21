@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\InputFilter\Input;
+use App\InputFilter\InputFilter;
 use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
 use App\Storage\Event\PreProcess;
 use App\Storage\StorageInterface;
@@ -125,7 +127,7 @@ class RestController implements RestControllerInterface {
         }
 
         $data = $this->getData($request);
-
+       
         if ($request->getAttribute('app-validation')) {
             /** @var InputFilterInterface $validator */
             $validator = $request->getAttribute('app-validation');

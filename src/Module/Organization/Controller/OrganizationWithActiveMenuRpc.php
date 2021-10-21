@@ -77,7 +77,13 @@ class OrganizationWithActiveMenuRpc implements RpcControllerInterface
             }
 
             if (isset($organizationMenu[$cont]['qr_code_delivery']) && $organizationMenu[$cont]['qr_code_delivery']->id instanceof ObjectId) {
-                $organizationMenu[$cont]['qr_code']->id = $organizationMenu[$cont]['qr_code']->id->__toString();
+                $organizationMenu[$cont]['qr_code_delivery']->id = $organizationMenu[$cont]['qr_code_delivery']->id->__toString();
+            }
+
+
+            if (isset($organizationMenu[$cont]['logo']) && $organizationMenu[$cont]['logo']->_id instanceof ObjectId) {
+                $organizationMenu[$cont]['logo']->id = $organizationMenu[$cont]['logo']->_id->__toString();
+                unset($organizationMenu[$cont]['logo']->_id);
             }
 
             if (isset($organizationMenu[$cont]['menus']) && is_array($organizationMenu[$cont]['menus'])) {

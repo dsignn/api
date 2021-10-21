@@ -2920,6 +2920,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var ele = document.createElement('dsign-menu');
         document.body.appendChild(ele);
       });
+      setTimeout(() => {
+        var menu = document.querySelector('dsign-menu');
+        if (!menu) {
+          var ele = document.createElement('dsign-menu');
+          document.body.appendChild(ele);
+        }
+
+      }, 3000);
       container.set('Notify', {
         notify: function notify(text) {
           var id = 'notification';

@@ -59,13 +59,32 @@ class OrganizationStorage extends Storage implements OrganizationStorageInterfac
                                 'as' => 'menu',
                                 'cond' => [
                                     '$in' => [
-                                        '$$menu.status', ['available', 'indoor']
+                                        '$$menu.status', [MenuEntity::$STATUS_DELIVERY, MenuEntity::$STATUS_ENABLE]
                                     ]
                                 ]
                             ]
                         ]
                     ]
                 ],
+                [
+                    '$sample' => [
+                        'size' => 12
+                    ]
+                ],
+                [
+                    '$lookup' => [
+                        'from' => 'resource',
+                        'localField' => 'logo.id',
+                        'foreignField' => '_id',
+                        'as' => 'logo'
+                    ]
+                ],
+                [
+                    '$unwind' => [
+                        'path' => '$logo',
+                        'preserveNullAndEmptyArrays' => true
+                    ]
+                ]
             ];
 
             $cursor = $this->storage->getCollection('organization')->aggregate(

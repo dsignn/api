@@ -126,7 +126,7 @@ class RpcMenuController implements RpcControllerInterface {
             }
         }
 
-       $ $acceptService = $this->getAcceptService($request);
+        $acceptService = $this->getAcceptService($request);
         return $acceptService->transformAccept($response, $menu);
     }
 
