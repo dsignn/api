@@ -35,11 +35,6 @@ class RpcMenuController implements RpcControllerInterface {
     protected $twig;
 
     /**
-     * var string
-     */
-    protected $jsPath;
-
-    /**
      * @var MenuStorage
      */
     protected $menuStorage;
@@ -104,24 +99,27 @@ class RpcMenuController implements RpcControllerInterface {
         }
 
         if ($searchMenu) {
+
             /** @var MenuEntity $menuEntity */
             $menuEntity = $this->menuStorage->getAll($searchMenu)->current();
             // Menu not found
             if (!$menuEntity) {
                 return $this->menuNotFound($response, $request);
             }
-
+       
             $menu = $this->menuStorage->getMenuByMenuId($menuEntity);
 
         } else {
-
+       
             $organization = $this->organizationStorage->getAll($searchOrganization)->current();
             if (!$organization) {
+
                 return $this->organizationNotFound($response, $request);
             }
             $menu = $this->menuStorage->getMenuByRestaurantSlug($slug, $status);
-
+         
             if (!$menu) {
+         
                 return $this->menuNotFound($response, $request);
             }
         }
@@ -152,29 +150,5 @@ class RpcMenuController implements RpcControllerInterface {
         $request = $request->withHeader('error-message', 'Il ristorante che stai cercando non si è ancora registrato alla piattaforma...');
         $acceptService = $this->getAcceptService($request);
         return $acceptService->transformAccept($response, []);
-    }
-
-    /**
-     *   'background_header' => string '#1337b9' (length=7)
-    'color_header' => string '#1e1a1a' (length=7)
-     */
-
-    /**
-     * @param Response $response
-     * @param string errorMessage
-     * @return Response
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
-     */
-    protected function get404(Response $response, $errorMessage) {
-        return $this->twig->render(
-            $response,
-             'restaurant-404.html',
-            [
-                'base_url' => $this->jsPath,
-                'error_message' => $errorMessage
-            ]
-        );
     }
 }

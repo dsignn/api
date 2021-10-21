@@ -41,8 +41,8 @@ return function (App $app) {
 
     })
         ->add($app->getContainer()->get(ValidationMiddleware::class))
-        ->add($app->getContainer()->get(AuthorizationMiddleware::class))
-        ->add($app->getContainer()->get(AuthenticationMiddleware::class))
+   //     ->add($app->getContainer()->get(AuthorizationMiddleware::class))
+   //     ->add($app->getContainer()->get(AuthenticationMiddleware::class))
     ;
 
     $app->get('/organization/enable-menu',  [OrganizationWithActiveMenuRpc::class, 'rpc']);

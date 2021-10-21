@@ -14,6 +14,11 @@ class Address {
      */
     protected $address;
 
+        /**
+     * @var string
+     */
+    protected $route;
+
     /**
      * @var string
      */
@@ -33,6 +38,11 @@ class Address {
      * @var string
      */
     protected $state;
+
+    /**
+     * @var string
+     */
+    protected $country;
 
     /**
      * @var float
@@ -182,6 +192,46 @@ class Address {
      */ 
     public function setLng(float $lng = null) {
         $this->lng = $lng;
+        return $this;
+    }
+
+    /**
+     * Get the value of route
+     *
+     * @return  string
+     */ 
+    public function getRoute() {
+        return $this->route;
+    }
+
+    /**
+     * Set the value of route
+     *
+     * @param  string  $route
+     * @return  self
+     */ 
+    public function setRoute(string $route = null) {
+        $this->route = $route;
+        return $this;
+    }
+
+    /**
+     * Get the value of county
+     *
+     * @return  string
+     */ 
+    public function getCountry() {
+        return $this->country;
+    }
+
+    /**
+     * Set the value of county
+     *
+     * @param  string  $county
+     * @return  self
+     */ 
+    public function setCountry(string $country = null) {
+        $this->country = $country;
         return $this;
     }
 }

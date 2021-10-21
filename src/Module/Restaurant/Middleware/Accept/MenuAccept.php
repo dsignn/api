@@ -31,6 +31,11 @@ class MenuAccept implements AcceptTransformInterface, RequestAwareInterface {
      */
     protected $jsPath;
 
+   /**
+     * @var string
+     */
+    protected $rootPath;
+
     /**
      * @var ServerRequestInterface
      */
@@ -44,6 +49,7 @@ class MenuAccept implements AcceptTransformInterface, RequestAwareInterface {
     public function __construct(Twig $twig, ContainerInterface $container) {
         $this->twig = $twig;
         $this->jsPath = $container->get('settings')['twig']['path-js'];
+        $this->rootPath = $container->get('settings')['twig']['rootPath'];
     }
 
 
@@ -91,6 +97,7 @@ class MenuAccept implements AcceptTransformInterface, RequestAwareInterface {
             'restaurant-menu-index.html',
             [
                 'base_url' => $this->jsPath,
+
                 'menu' => $data
             ]
         );
@@ -109,7 +116,7 @@ class MenuAccept implements AcceptTransformInterface, RequestAwareInterface {
             $response,
             'restaurant-404.html',
             [
-                'base_url' => $this->jsPath,
+                'base_url' => $this->rootPath,
                 'error_message' => $this->request->getHeaderLine('error-message')
             ]
         );
