@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use Graze\ArrayMerger\RecursiveArrayMerger;
+use Monolog\Logger;
 
 /**
  * Local settings
@@ -35,6 +36,47 @@ return function (&$setting) {
                         'cache_path' => __DIR__ . '/../tmp/twig',
                     ],
                 ],
+                's3Resource' => [
+                    'client' => [
+                        'version' => 'latest',
+                        'region'  => 'eu-central-1',
+                        //      'debug'   => true,
+                        'credentials' => [
+                            'key' => 'AKIAJUETFABXHRWGNGGQ',
+                            'secret' => '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'
+                        ]
+                    ],
+                    'bucket' => 'dsign-cdn-test'
+                ],
+                'authorization' => [],
+                'mail' => [
+                    "sendinblueApiKey" => "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",
+                    "sendGrid" => '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',
+                    "port" => 587,
+                    "host" => 'smtp.gmail.com',
+                    "username" => 'antonino.visalli@gmail.com',
+                    "password" => 'wiqgqflrpscqoblj',
+                    "from" => [
+                        "name" => "Dsign",
+                        "email" => "noreply@ds-ign.it"
+                    ],
+                    "resetPassword" => "http://dsign.local:8081/reset-password",
+                    "activationCode" => "http://dsign.local:8081/activation-code",
+                ],
+                'logger' => [
+                    'name' => 'slim-app',
+                    'path' => __DIR__ . '/../logs/app.log',
+                    'level' => Logger::DEBUG,
+                ],
+                'httpClient' => [
+                    'url' => 'nginx'
+                ],
+                'client' => [
+                    'grant_type' => 'client_credentials',
+                    'client_id' => 'dsign-client',
+                    'client_secret' => 'dsign4!',
+                    'scope' => 'basic email'
+                ]
             ],
         ]
     );
