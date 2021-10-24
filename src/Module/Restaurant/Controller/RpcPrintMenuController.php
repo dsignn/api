@@ -118,8 +118,9 @@ class RpcPrintMenuController implements RpcControllerInterface {
         $this->twig->getEnvironment()->addFilter($this->getTwigNumerFilter());
 
         $hasEnglish = false;
-        if ($menu->getItems() > 0) {
+        if (count($menu->getItems()) > 0) {
             try {
+ 
                 $hasEnglish = isset($menu->getItems()[0]->getName()['en']);
             } catch(\Exception $e) {
                 // TODO write to log

@@ -5,6 +5,7 @@ namespace App\InputFilter;
 
 use Laminas\InputFilter\BaseInputFilter;
 use Laminas\InputFilter\InputFilterInterface;
+use Laminas\InputFilter\InputInterface;
 use Slim\App;
 
 class InputFilter extends BaseInputFilter {
@@ -67,19 +68,17 @@ class InputFilter extends BaseInputFilter {
                 continue;
             }
             
-            if ($key === 'activationCode') {
-                die();
-            }
             $input = $inputFilter->get($key);
             
             if ($input instanceof InputFilter && is_array($value)) {
                 $values[$key] = $this->getValuesWrapper($value, $input);
-            } else {
+            } elseif ($input instanceof InputFilterInterface && is_array($value)) {
+
+                $values[$key] = $input->getValues();
+            } elseif ($input instanceof InputInterface) {
 
                 $value = $input->getValue();
                 if (in_array($key, $this->propertyToRemove) && !$value) {
-                    var_dump($key);
-                    die();
                     continue;
                 }
                 $values[$key] = $value;
