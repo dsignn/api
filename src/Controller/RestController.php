@@ -127,7 +127,7 @@ class RestController implements RestControllerInterface {
         }
 
         $data = $this->getData($request);
-       
+
         if ($request->getAttribute('app-validation')) {
             /** @var InputFilterInterface $validator */
             $validator = $request->getAttribute('app-validation');
@@ -140,7 +140,6 @@ class RestController implements RestControllerInterface {
                 );
                 return $response->withStatus(422);
             }
-
             $data = $validator->getValues();
         }
 
