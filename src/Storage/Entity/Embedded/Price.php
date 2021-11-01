@@ -1,10 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Module\Restaurant\Entity\Embedded\Price;
+namespace App\Storage\Entity\Embedded;
 
-
-class Price {
+/**
+ * class Price
+ * @package namespace App\Storage\Entity\Embedded
+ */
+class Price implements PriceInterface {
 
     /**
      * @var float
@@ -27,7 +30,7 @@ class Price {
      * @param float $value
      * @return Price
      */
-    public function setValue(float $value): Price {
+    public function setValue(float $value): PriceInterface {
         $this->value = $value;
         return $this;
     }
@@ -43,7 +46,7 @@ class Price {
      * @param string $currency
      * @return Price
      */
-    public function setCurrency(string $currency): Price {
+    public function setCurrency(string $currency): PriceInterface {
         $this->currency = $currency;
         return $this;
     }

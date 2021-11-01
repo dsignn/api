@@ -60,7 +60,7 @@ class OrderEntity implements EntityInterface {
     /**
      * @var array
      */
-    protected $orders = [];
+    protected $items = [];
 
     /**
      * @var DateTime
@@ -70,7 +70,7 @@ class OrderEntity implements EntityInterface {
     /**
      * @var DateTime
      */
-    protected $lastpdateAt= null;
+    protected $lastUpdateAt = null;
 
     /**
      * @var string
@@ -121,21 +121,21 @@ class OrderEntity implements EntityInterface {
     }
 
     /**
-     * Get the value of lastpdateAt
+     * Get the value of lastUpdateAt
      * @return  DateTime
      */ 
-    public function getLastpdateAt() {
-        return $this->lastpdateAt;
+    public function getLastUpdateAt() {
+        return $this->lastUpdateAt;
     }
 
     /**
-     * Set the value of lastpdateAt
+     * Set the value of lastUpdateAt
      *
-     * @param  DateTime  $lastpdateAt
+     * @param  DateTime  $lastUpdateAt
      * @return  self
      */ 
-    public function setLastpdateAt(DateTime $lastpdateAt = null): OrderEntity{
-        $this->lastpdateAt = $lastpdateAt;
+    public function setLastUpdateAt(DateTime $lastUpdateAt = null): OrderEntity{
+        $this->lastUpdateAt = $lastUpdateAt;
         return $this;
     }
 
@@ -164,18 +164,18 @@ class OrderEntity implements EntityInterface {
      *
      * @return  array
      */ 
-    public function getOrders() {
-        return $this->orders;
+    public function getItems() {
+        return $this->items;
     }
 
     /**
-     * Set the value of orders
+     * Set the value of items
      *
-     * @param  array  $orders
+     * @param  array  $items
      * @return  self
      */ 
-    public function setOrders(array $orders): OrderEntity {
-        $this->orders = $orders;
+    public function setItems(array $items): OrderEntity {
+        $this->items = $items;
         return $this;
     }
 }

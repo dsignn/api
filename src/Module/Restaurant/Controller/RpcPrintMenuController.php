@@ -4,12 +4,20 @@ declare(strict_types=1);
 namespace App\Module\Restaurant\Controller;
 
 use App\Controller\RpcControllerInterface;
+use App\Module\Organization\Entity\Embedded\Address\Address;
+use App\Module\Organization\Entity\Embedded\Phone\Phone;
 use App\Module\Organization\Entity\OrganizationEntity;
 use App\Module\Organization\Storage\OrganizationStorageInterface;
 use App\Module\Resource\Storage\ResourceStorageInterface;
+use App\Module\Restaurant\Entity\MenuEntity;
 use App\Module\Restaurant\Storage\MenuCategoryStorageInterface;
 use App\Module\Restaurant\Storage\MenuStorage;
 use App\Module\Restaurant\Storage\MenuStorageInterface;
+use App\Module\Restaurant\Twig\Filter\AddressFilter;
+use App\Module\Restaurant\Twig\Filter\CurrencyFilter;
+use App\Module\Restaurant\Twig\Filter\LanguageFilter;
+use App\Module\Restaurant\Twig\Filter\NumberFilter;
+use App\Module\Restaurant\Twig\Filter\PhoneFilter;
 use App\Storage\StorageInterface;
 use NumberFormatter;
 use Psr\Container\ContainerInterface;
@@ -60,6 +68,11 @@ class RpcPrintMenuController implements RpcControllerInterface {
     protected $menuCategoryStorage;
 
     /**
+     * @var StorageInterface
+     */
+    protected $resourceStorage;
+
+    /**
      * @var ContainerInterface
      */
     protected $container;
@@ -73,6 +86,7 @@ class RpcPrintMenuController implements RpcControllerInterface {
      * RpcMenuController constructor.
      * @param MenuStorageInterface $organizationStorage
      * @param OrganizationStorageInterface $organizationStorage
+     * @param ResourceStorageInterface $resourceStorage
      * @param MenuCategoryStorageInterface $menuCategoryStorage
      * @param Twig $twig
      * @param ContainerInterface $container
@@ -80,6 +94,7 @@ class RpcPrintMenuController implements RpcControllerInterface {
     public function __construct(
         MenuStorageInterface $menuStorage,
         OrganizationStorageInterface $organizationStorage,
+        ResourceStorageInterface $resourceStorage,
         MenuCategoryStorageInterface $menuCategoryStorage,
         Twig $twig,
         ContainerInterface $container) {
@@ -89,6 +104,7 @@ class RpcPrintMenuController implements RpcControllerInterface {
         $this->rootPath = $container->get('settings')['twig']['rootPath'];
         $this->menuStorage = $menuStorage;
         $this->organizationStorage = $organizationStorage;
+        $this->resourceStorage = $resourceStorage;
         $this->menuCategoryStorage = $menuCategoryStorage;
         $this->container = $container;
     }
@@ -103,6 +119,7 @@ class RpcPrintMenuController implements RpcControllerInterface {
         /** @var App\Module\Restaurant\Entity\MenuEntity $menu */
 
         $arraySearch = array_merge(['id'  => $id], $request->getAttribute('app-data-filter'));
+        /** @var MenuEntity  $menu */
         $menu = $this->menuStorage->getAll($arraySearch)->current();
 
         // Restaurant not found
@@ -110,12 +127,15 @@ class RpcPrintMenuController implements RpcControllerInterface {
             return $this->get404($response);
         }
 
+        /** @var OrganizationEntity  $organization */
         $organization = $this->organizationStorage->get($menu->getOrganization()->getId());   
      
         $this->twig->getEnvironment()->addFilter($this->getTwigCategoryFilter());
-        $this->twig->getEnvironment()->addFilter($this->getTwigCurrencyFilter());
-        $this->twig->getEnvironment()->addFilter($this->getTwigLanguageFilter());
-        $this->twig->getEnvironment()->addFilter($this->getTwigNumerFilter());
+        $this->twig->getEnvironment()->addFilter(CurrencyFilter::getFilter());
+        $this->twig->getEnvironment()->addFilter(LanguageFilter::getFilter());
+        $this->twig->getEnvironment()->addFilter(NumberFilter::getFilter());
+        $this->twig->getEnvironment()->addFilter(AddressFilter::getFilter());
+        $this->twig->getEnvironment()->addFilter(PhoneFilter::getFilter());
 
         $hasEnglish = false;
         if (count($menu->getItems()) > 0) {
@@ -127,6 +147,25 @@ class RpcPrintMenuController implements RpcControllerInterface {
             }
         }
 
+        $qrcode = null;
+        switch($menu->getStatus()) {
+            case MenuEntity::$STATUS_ENABLE:
+                $qrcode = $this->resourceStorage->get($organization->getQrCode()->getId());
+                break;
+            case MenuEntity::$STATUS_DELIVERY:
+                $qrcode = $this->resourceStorage->get($organization->getQrCodeDelivery()->getId());
+                break;
+        }
+
+/*
+        echo '<pre>';
+var_dump($qrcode);
+echo '</pre>';
+die();
+*/
+//$menu->setColorHeader('#c0ff00');
+//$menu->setBackgroundHeader('#990000');
+
         return $this->twig->render(
             $response,
             'print-menu-default.html',
@@ -134,7 +173,8 @@ class RpcPrintMenuController implements RpcControllerInterface {
                 'base_url' => $this->jsPath,
                 'organization'=> $organization,
                 'menu' => $menu,
-                'hasEnglish' => $hasEnglish
+                'hasEnglish' => $hasEnglish,
+                'qrcode' => $qrcode
             ]
         );
     }
@@ -154,18 +194,16 @@ class RpcPrintMenuController implements RpcControllerInterface {
                 'base_url' => $this->jsPath
             ]
         );
-    }
+    }    /**
+    * @return void
+    */
+   protected function getCategories() {
+       if (!$this->categories) {
+           $this->categories = $this->menuCategoryStorage->getAll([])->current();
+       }
 
-    /**
-     * @return void
-     */
-    protected function getCategories() {
-        if (!$this->categories) {
-            $this->categories = $this->menuCategoryStorage->getAll([])->current();
-        }
-
-        return $this->categories;
-    }
+       return $this->categories;
+   }
 
 
     /**
@@ -184,60 +222,6 @@ class RpcPrintMenuController implements RpcControllerInterface {
                         return  $categoryMenuEntity->plates[$cont]['translation'][$lang];
                     }
                     $cont++;
-                }
-
-                return $value;
-            }
-        );
-    }
-
-    /**
-     * @return TwigFilter
-     */
-    protected function getTwigCurrencyFilter() {
-        return new TwigFilter(
-            'currency',
-            function($value) {
-
-                switch($value) {
-                    case 'EUR':
-                        return '€';
-                }
-
-                return $value;
-            }
-        );
-    }
-
-    /**
-     * @return TwigFilter
-     */
-    protected function getTwigLanguageFilter() {
-        return new TwigFilter(
-            'lang',
-            function($value, $lang) {
-
-                if (isset($value[$lang])) {
-                    return $value[$lang];
-                }
-            }
-        );
-    }
-
-
-    /**
-     * @return TwigFilter
-     */
-    protected function getTwigNumerFilter() {
-        return new TwigFilter(
-            'number',
-            function($value, $lang) {
-
-               
-                switch($lang) {
-                    case 'en':
-                    case 'it':
-                        return number_format($value, 2, '.', '');
                 }
 
                 return $value;

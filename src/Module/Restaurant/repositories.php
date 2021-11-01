@@ -17,7 +17,7 @@ use App\InputFilter\Input as AppInput;
 use App\InputFilter\InputFilter;
 use App\Module\Restaurant\Entity\CategoryEntity;
 use App\Module\Restaurant\Entity\Embedded\MenuItem;
-use App\Module\Restaurant\Entity\Embedded\Price\Price;
+use App\Storage\Entity\Embedded\Price;
 use App\Module\Restaurant\Entity\MenuEntity;
 use App\Module\Restaurant\Event\DisableMenu;
 use App\Module\Restaurant\Storage\Adapeter\Mongo\MenuMongoAdapter;

@@ -19,69 +19,158 @@
         justify-content: center;
         font-family: "Roboto", "Noto", sans-serif;
         -webkit-print-color-adjust: exact;
-        color: {{ menu.colorHeader }} ;
+        color: #ffffff;
     }
 
     .menu {
         width: 794px;
         display: block;
-        background-color: {{ menu.backgroundHeader }} ;
+        background-color: white;
+        color: black;
+    }
+
+    .header-top {
+        margin-bottom: 50px;
+        display: flex;
+        justify-content: space-between;;
+        position: relative;
+    }
+
+    .restaurant-info {
+        text-align: center;
+        line-height: 1.45;
+    }
+
+    .restaurant-logo {
+        width: 150px;
+        height: 150px;
+        background-image: url(https://dsign-cdn-prod.s3.eu-central-1.amazonaws.com/78bf9056-712a-4fc4-ab94-88b1e8f8365e);
+        background-color: #833c0a;
+        background-size: 90px;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    .restaurant-name {
+        font-size: 36px;
+        font-style: italic;
+    }
+
+    .restaurant-qrcode {
+        width: 150px;
+        height: 150px;
+       
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    .restaurant-address {
+        color: #666;
+    }
+
+    .category-section {
+        margin-bottom: 40px;
     }
 
     .category {
         font-size: 30px;
-        padding: 20px 0;
-        padding-left: 20px;
+        padding: 20px 0px;
+        background:  {{menu.backgroundHeader}};
+        color: {{menu.colorHeader}};
+        position: relative;
+        text-align: center;
+        margin-bottom: 25px;
     }
 
     .category .header {
-        padding-right: 30px;
-        padding-left: 30px;
+        padding-right: 50px;
+        padding-left: 0;
+        margin-left: 20px;
         width: fit-content;
-        border-bottom: 2px solid {{ menu.colorHeader }};
+        border-bottom: 3px solid  {{menu.colorHeader}};
+        text-transform: uppercase;
+        font-size: 28px;
+    }
+
+    .category:after {
+        content: "";
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        background: {{menu.backgroundHeader}};
+        transform: rotate( 45deg);
+        margin: 0px auto 0;
+        position: absolute;
     }
 
     .dish-container {
         padding-left: 20px;
         padding-top: 16px;
+        padding-right: 20px;
     }
 
     .main-content {
         display: flex;
         justify-content: space-between;
+        border-bottom: 2px solid #666;
+        margin-bottom: 3px;
     }
 
-    .dish-container .title { 
+    .dish-container .title {
         font-size: 22px;
-        font-style: italic;
+        font-weight: 500;
     }
 
-    .dish-container .price { 
-        font-size: 22px;
-        font-style: italic;
-        padding-right: 30px;
+    .dish-container .price {
+        font-size: 20px;
     }
 
     .dish-container .description {
-        max-width: 650px;
+        max-width: 600px;
         text-align: justify;
+        color: #888;
+        font-size: 13px;
     }
     
     @page {
+        height: 100%;
         size: 21cm 29.7cm;
     }
     @media print {
+
         div.category,
         div.dish-container {
             break-inside: avoid;
+        }
+
+        .category-section {
+            clear: both;
+            page-break-after: always;
         }
     }
 </style>
 <body>
     {% set category = null %}
     <div class="menu">
+        <div class="header-top">
+            <div class="restaurant-logo"></div>
+            <div class="restaurant-info">
+                <div class="restaurant-name">{{ organization.name }}</div>
+                <div class="restaurant-address">{{ organization.address | address }}</div>
+                <div class="restaurant-phone">{{ organization.whatsappPhone | phone }}</div>
+            </div>
+            <div class="restaurant-qrcode"></div>
+         
+        </div>
         {% for dish in menu.items %}
+          
             {% if category != dish.category %}
+  
+            {% if category != null %}
+            </div>
+            {% endif %}
+
+            <div class="category-section" category="{{dish.category}}">
                 <div class="category">
                     <div class="header">
                         {{ dish.category | category('it') }} 
@@ -92,21 +181,25 @@
                 </div>
                 {% set category = dish.category %}
             {% endif %}
-            <div class="dish-container">
-                <div class="main-content">
-                    <div class="title">
-                        {{ dish.name | lang('it') }} 
-                        {% if hasEnglish %} 
-                            / {{ dish.name | lang('en') }}
-                        {% endif %}
+                <div class="dish-container">
+                    <div class="main-content">
+                        <div class="title">
+                            {{ dish.name | lang('it') }} 
+                            {% if hasEnglish %} 
+                                / {{ dish.name | lang('en') }}
+                            {% endif %}
+                        </div>
+                        <div class="price">{{ dish.price.currency | currency }} {{ dish.price.value | number('it') }}</div>
                     </div>
-                    <div class="price">{{ dish.price.currency | currency }} {{ dish.price.value | number('it') }}</div>
+                    <div class="description">{{ dish.description | lang('it') }}</div>
+                    {% if hasEnglish %} 
+                        <div class="description">{{ dish.description | lang('en') }}</div>
+                    {% endif %}   
                 </div>
-                <div class="description">{{ dish.description | lang('it') }}</div>
-                {% if hasEnglish %} 
-                    <div class="description">{{ dish.description | lang('en') }}</div>
-                {% endif %}   
+            
+            {% if loop.index == loop.length %}
             </div>
+            {% endif %}   
         {% endfor %}
     </div>
 </body>

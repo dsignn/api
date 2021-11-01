@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 use App\Crypto\CryptoOpenSsl;
 use App\Filter\DefaultFilter;
+use App\Hydrator\Strategy\HydratorArrayStrategy;
 use App\Hydrator\Strategy\HydratorStrategy;
 use App\Hydrator\Strategy\Mongo\MongoDateStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
@@ -33,6 +34,7 @@ use Laminas\Filter\Callback;
 use Laminas\Filter\StringToLower;
 use Laminas\Filter\ToInt;
 use Laminas\Hydrator\ClassMethodsHydrator;
+use Laminas\Hydrator\ObjectPropertyHydrator;
 use Laminas\InputFilter\Input;
 use Laminas\InputFilter\InputFilter;
 use Laminas\Validator\Digits;
@@ -74,7 +76,7 @@ return function (ContainerBuilder $containerBuilder) {
 
             $storage->getEventManager()->attach(
                 Storage::$BEFORE_UPDATE,
-                new AttachDateTimeCallback('lastpdateAt')
+                new AttachDateTimeCallback('lastUpdateAt')
             );
 
             return $storage;
@@ -87,8 +89,9 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->setNamingStrategy(new CamelCaseStrategy());
             $hydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
             $hydrator->addStrategy('createdAt', $c->get('EntityDateRestStrategy'));
-            $hydrator->addStrategy('lastpdateAt', $c->get('EntityDateRestStrategy'));
+            $hydrator->addStrategy('lastUpdateAt', $c->get('EntityDateRestStrategy'));
             $hydrator->addStrategy('organization', new HydratorStrategy($c->get('ReferenceRestHydrator'), new SingleEntityPrototype(new Reference())));
+            $hydrator->addStrategy('items', new HydratorArrayStrategy(new ObjectPropertyHydrator, new SingleEntityPrototype(new stdClass())));
 
             return $hydrator;
         }
@@ -100,9 +103,10 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
             $hydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
             $hydrator->addStrategy('createdAt', new MongoDateStrategy());
-            $hydrator->addStrategy('lastpdateAt', new MongoDateStrategy());
+            $hydrator->addStrategy('lastUpdateAt', new MongoDateStrategy());
             $hydrator->addStrategy('organization', new HydratorStrategy($c->get('ReferenceMongoHydrator'), new SingleEntityPrototype(new Reference())));
-
+            $hydrator->addStrategy('items', new HydratorArrayStrategy(new ObjectPropertyHydrator, new SingleEntityPrototype(new stdClass())));
+            
             return $hydrator;
         }
     ])->addDefinitions([
@@ -150,6 +154,9 @@ return function (ContainerBuilder $containerBuilder) {
             ]));
             $inputFilter->add($input);
 
+            $input = new Input('items');
+            $input->setRequired(false);
+            $inputFilter->add($input);
             
             return $inputFilter;
         }

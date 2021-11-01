@@ -3,8 +3,9 @@ declare(strict_types=1);
 
 namespace App\Module\Restaurant\Entity\Embedded;
 
-use App\Module\Restaurant\Entity\Embedded\Price\Price;
 use App\Module\Restaurant\Entity\MenuEntity;
+use App\Storage\Entity\Embedded\PriceInterface;
+use App\Storage\Entity\Embedded\Price;
 use App\Storage\Entity\EntityInterface;
 use App\Storage\Entity\EntityTrait;
 use App\Storage\Entity\ReferenceInterface;
@@ -152,7 +153,7 @@ class MenuItem implements EntityInterface {
     /**
      * @return Price
      */
-    public function getPrice(): Price {
+    public function getPrice(): PriceInterface {
         return $this->price;
     }
 
@@ -160,7 +161,7 @@ class MenuItem implements EntityInterface {
      * @param Price $price
      * @return MenuItem
      */
-    public function setPrice(Price $price): MenuItem {
+    public function setPrice(PriceInterface $price): MenuItem {
         $this->price = $price;
         return $this;
     }
