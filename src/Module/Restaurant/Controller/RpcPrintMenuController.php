@@ -147,6 +147,7 @@ class RpcPrintMenuController implements RpcControllerInterface {
             }
         }
 
+        // Retrive qrcode
         $qrcode = null;
         switch($menu->getStatus()) {
             case MenuEntity::$STATUS_ENABLE:
@@ -157,14 +158,9 @@ class RpcPrintMenuController implements RpcControllerInterface {
                 break;
         }
 
-/*
-        echo '<pre>';
-var_dump($qrcode);
-echo '</pre>';
-die();
-*/
-//$menu->setColorHeader('#c0ff00');
-//$menu->setBackgroundHeader('#990000');
+          // Retrive logo
+        $logo = $organization->getLogo()->getId() ? 
+            $this->resourceStorage->get($organization->getLogo()->getId()) : null;
 
         return $this->twig->render(
             $response,
@@ -174,7 +170,8 @@ die();
                 'organization'=> $organization,
                 'menu' => $menu,
                 'hasEnglish' => $hasEnglish,
-                'qrcode' => $qrcode
+                'qrcode' => $qrcode,
+                'logo' => $logo
             ]
         );
     }

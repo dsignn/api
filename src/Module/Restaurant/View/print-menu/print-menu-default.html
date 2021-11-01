@@ -30,7 +30,7 @@
     }
 
     .header-top {
-        margin-bottom: 50px;
+        margin: 20px;
         display: flex;
         justify-content: space-between;;
         position: relative;
@@ -39,14 +39,17 @@
     .restaurant-info {
         text-align: center;
         line-height: 1.45;
+        padding: 0 10px;
+        max-width: 410px;
     }
 
     .restaurant-logo {
         width: 150px;
         height: 150px;
-        background-image: url(https://dsign-cdn-prod.s3.eu-central-1.amazonaws.com/78bf9056-712a-4fc4-ab94-88b1e8f8365e);
-        background-color: #833c0a;
-        background-size: 90px;
+        {% if logo  %};
+        background-image: url( {{ logo.src }});
+        {% endif %}
+        background-size: cover;
         background-repeat: no-repeat;
         background-position: center;
     }
@@ -59,7 +62,9 @@
     .restaurant-qrcode {
         width: 150px;
         height: 150px;
-       
+        {% if qrcode  %};
+        background-image: url( {{ qrcode.src }});
+        {% endif %}
         background-repeat: no-repeat;
         background-position: center;
     }
