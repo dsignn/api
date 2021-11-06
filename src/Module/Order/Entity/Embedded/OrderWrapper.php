@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace App\Module\Order\Entity\Embedded;
 
-use App\Storage\Entity\Embedded\PriceInterface;
-use App\Storage\Entity\Embedded\Price;
+use App\Storage\Entity\Embedded\Price\PriceInterface;
+use App\Storage\Entity\Embedded\Price\Price;
 
 /**
- * Class OrderItem
- * @package App\Module\Order\Embedded
+ * Class OrderWrapper
+ * @package App\Module\Order\Entity\Embedded
  */
-class OrderItem {
+class OrderWrapper {
 
     /**
      * @var integer
@@ -18,9 +18,10 @@ class OrderItem {
     protected $quantity = 0;
     
     /**
-     * @var PriceInterface
+     *
+     * @var object
      */
-    protected $price;
+    protected $orderedItem;
 
     /**
      * Get the value of quantity
@@ -37,28 +38,28 @@ class OrderItem {
      * @param  integer  $quantity
      * @return  self
      */ 
-    public function setQuantity($quantity): OrderItem {
+    public function setQuantity($quantity): OrderWrapper {
         $this->quantity = $quantity;
         return $this;
     }
 
     /**
-     * Get the value of price
+     * Get the value of item
      *
-     * @return  string
+     * @return  object
      */ 
-    public function getPrice(): PriceInterface {
-        return $this->price;
+    public function getOrderedItem() {
+        return $this->orderedItem;
     }
 
     /**
-     * Set the value of price
+     * Set the value of item
      *
-     * @param  string  $price
+     * @param  object  $orderedItem
      * @return  self
      */ 
-    public function setPrice(PriceInterface $price) {
-        $this->price = $price;
+    public function setOrderedItem($orderedItem): OrderWrapper {
+        $this->orderedItem = $orderedItem;
         return $this;
     }
 }

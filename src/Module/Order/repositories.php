@@ -35,8 +35,10 @@ use Laminas\Filter\StringToLower;
 use Laminas\Filter\ToInt;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Hydrator\ObjectPropertyHydrator;
+use Laminas\InputFilter\CollectionInputFilter;
 use Laminas\InputFilter\Input;
-use Laminas\InputFilter\InputFilter;
+use App\InputFilter\InputFilter;
+use App\Module\Order\Storage\Adapter\Mongo\OrderMongoAdapter;
 use Laminas\Validator\Digits;
 use Laminas\Validator\InArray;
 use MongoDB\Client;
@@ -61,7 +63,7 @@ return function (ContainerBuilder $containerBuilder) {
             $resultSetPaginator->setHydrator($hydrator);
             $resultSetPaginator->setEntityPrototype($c->get('OrderEntityPrototype'));
 
-            $mongoAdapter = new MongoAdapter($c->get(Client::class), $settings['storage']['name'], $serviceSetting['collection']);
+            $mongoAdapter = new OrderMongoAdapter($c->get(Client::class), $settings['storage']['name'], $serviceSetting['collection']);
             $mongoAdapter->setResultSet($resultSet);
             $mongoAdapter->setResultSetPaginate($resultSetPaginator);
 
@@ -154,9 +156,28 @@ return function (ContainerBuilder $containerBuilder) {
             ]));
             $inputFilter->add($input);
 
-            $input = new Input('items');
-            $input->setRequired(false);
-            $inputFilter->add($input);
+
+            $priceInputFilter = new InputFilter();
+
+            $input = new Input('value');
+
+
+            $priceInputFilter->add($input, 'value');
+
+            $orderItemInputFilter = new InputFilter();
+            $orderItemInputFilter->add($priceInputFilter, 'price');
+
+
+            $orderWrapperInputFilter = new InputFilter();
+            $input = new Input('quantity');
+          
+            $orderWrapperInputFilter->add($input, 'quantity');
+            $orderWrapperInputFilter->add( $orderItemInputFilter, 'orderedItem');
+           
+            $collectionItem = new CollectionInputFilter();
+            $collectionItem->setInputFilter($orderWrapperInputFilter);
+
+            $inputFilter->add($collectionItem, 'items');
             
             return $inputFilter;
         }

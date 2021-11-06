@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Module\Restaurant\Storage\Adapter\Mongo;
+namespace App\Module\Order\Storage\Adapter\Mongo;
 
 use App\Storage\Adapter\Mongo\MongoAdapter;
 use MongoDB\BSON\ObjectId;
 
 /**
- * Class MenuMongoAdapter
- * @package App\Module\Restaurant\Storage\Adapter\Mongo
+ * Class OrderMongoAdapter
+ * @package App\Module\Order\Storage\Adapeter\Mongo
  */
-class MenuMongoAdapter extends MongoAdapter {
+class OrderMongoAdapter extends MongoAdapter {
 
     /**
      * @param $search
