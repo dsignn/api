@@ -245,6 +245,7 @@ class ResourceController implements RestControllerInterface {
         $page = isset($query['page']) ? intval($query['page']) ? intval($query['page']) : 1 : 1;
         $itemPerPage = isset($query['item-per-page']) ? intval($query['item-per-page']) ? intval($query['item-per-page']) : 10 : 10;
         $pagination = $this->storage->getPage($page, $itemPerPage);
+
         $acceptService = $this->getAcceptService($request);
         return $acceptService->transformAccept($response, $pagination);
     }

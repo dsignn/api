@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 use App\Crypto\CryptoOpenSsl;
 use App\Filter\DefaultFilter;
+use App\Hydrator\MapHydrator;
 use App\Hydrator\Strategy\HydratorArrayStrategy;
 use App\Hydrator\Strategy\HydratorStrategy;
 use App\Hydrator\Strategy\Mongo\MongoDateStrategy;
@@ -38,7 +39,12 @@ use Laminas\Hydrator\ObjectPropertyHydrator;
 use Laminas\InputFilter\CollectionInputFilter;
 use Laminas\InputFilter\Input;
 use App\InputFilter\InputFilter;
+use App\Module\Order\Entity\Embedded\CarOrder;
+use App\Module\Order\Entity\Embedded\MenuOrder;
 use App\Module\Order\Storage\Adapter\Mongo\OrderMongoAdapter;
+use App\Module\Restaurant\Entity\Embedded\MenuItem;
+use App\Storage\Entity\Embedded\Price\Price;
+use App\Storage\Entity\MultiEntityPrototype;
 use Laminas\Validator\Digits;
 use Laminas\Validator\InArray;
 use MongoDB\Client;
@@ -84,6 +90,20 @@ return function (ContainerBuilder $containerBuilder) {
             return $storage;
         }
     ])->addDefinitions([
+        'OrderItemEntityPrototype' => function(ContainerInterface $c) {
+
+            $multiEntityPrototype = new MultiEntityPrototype('type');
+            $multiEntityPrototype->addEntityPrototype(
+                MenuOrder::TYPE_MENU,
+                new MenuOrder()
+            )->addEntityPrototype(
+                CarOrder::TYPE_MENU,
+                new CarOrder()
+            );
+
+            return $multiEntityPrototype;
+        }
+    ])->addDefinitions([
         'RestOrderEntityHydrator' => function(ContainerInterface $c) {
 
 
@@ -93,8 +113,36 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addStrategy('createdAt', $c->get('EntityDateRestStrategy'));
             $hydrator->addStrategy('lastUpdateAt', $c->get('EntityDateRestStrategy'));
             $hydrator->addStrategy('organization', new HydratorStrategy($c->get('ReferenceRestHydrator'), new SingleEntityPrototype(new Reference())));
-            $hydrator->addStrategy('items', new HydratorArrayStrategy(new ObjectPropertyHydrator, new SingleEntityPrototype(new stdClass())));
+         
+            $objectHydrator = new ObjectPropertyHydrator();
 
+            $orderedItemHydrator = new MapHydrator();
+            $orderedItemHydrator->setTypeField('type');
+            $orderedItemHydrator->setEntityPrototype(
+                $c->get('OrderItemEntityPrototype')
+            );
+
+            $orderMenuHydrator = new ClassMethodsHydrator();
+            $orderMenuHydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
+            $orderMenuHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
+            $orderMenuHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
+            $orderMenuHydrator->addStrategy('price', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Price())));
+
+            $orderCarHydrator = new ClassMethodsHydrator();
+            $orderCarHydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
+            $orderCarHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
+            $orderCarHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
+            $orderCarHydrator->addStrategy('price', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Price())));
+
+            $orderedItemHydrator->addHydrator(MenuOrder::TYPE_MENU, $orderMenuHydrator)
+                ->addHydrator(CarOrder::TYPE_MENU, $orderCarHydrator);
+
+            $objectHydrator->addStrategy('orderedItem', new HydratorStrategy($orderedItemHydrator,  $c->get('OrderItemEntityPrototype')));
+            
+            $hydrator->addStrategy('items', new HydratorArrayStrategy($objectHydrator, new SingleEntityPrototype(new stdClass())));
+            
+         
+            
             return $hydrator;
         }
     ])->addDefinitions([
@@ -107,7 +155,33 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addStrategy('createdAt', new MongoDateStrategy());
             $hydrator->addStrategy('lastUpdateAt', new MongoDateStrategy());
             $hydrator->addStrategy('organization', new HydratorStrategy($c->get('ReferenceMongoHydrator'), new SingleEntityPrototype(new Reference())));
-            $hydrator->addStrategy('items', new HydratorArrayStrategy(new ObjectPropertyHydrator, new SingleEntityPrototype(new stdClass())));
+
+            $objectHydrator = new ObjectPropertyHydrator();
+
+            $orderedItemHydrator = new MapHydrator();
+            $orderedItemHydrator->setTypeField('type');
+            $orderedItemHydrator->setEntityPrototype(
+                $c->get('OrderItemEntityPrototype')
+            );
+
+            $orderMenuHydrator = new ClassMethodsHydrator();
+            $orderMenuHydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
+            $orderMenuHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
+            $orderMenuHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
+            $orderMenuHydrator->addStrategy('price', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Price())));
+
+            $orderCarHydrator = new ClassMethodsHydrator();
+            $orderCarHydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
+            $orderCarHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
+            $orderCarHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
+            $orderCarHydrator->addStrategy('price', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Price())));
+
+            $orderedItemHydrator->addHydrator(MenuOrder::TYPE_MENU, $orderMenuHydrator)
+                ->addHydrator(CarOrder::TYPE_MENU, $orderCarHydrator);
+
+            $objectHydrator->addStrategy('orderedItem', new HydratorStrategy($orderedItemHydrator,  $c->get('OrderItemEntityPrototype')));
+            
+            $hydrator->addStrategy('items', new HydratorArrayStrategy($objectHydrator, new SingleEntityPrototype(new stdClass())));
             
             return $hydrator;
         }
@@ -160,13 +234,13 @@ return function (ContainerBuilder $containerBuilder) {
             $priceInputFilter = new InputFilter();
 
             $input = new Input('value');
-
-
             $priceInputFilter->add($input, 'value');
 
             $orderItemInputFilter = new InputFilter();
             $orderItemInputFilter->add($priceInputFilter, 'price');
 
+            $input = new Input('type');
+            $orderItemInputFilter->add($input, 'type');
 
             $orderWrapperInputFilter = new InputFilter();
             $input = new Input('quantity');
