@@ -7,10 +7,10 @@ use App\Storage\Entity\Embedded\Price\PriceInterface;
 use App\Storage\Entity\Embedded\Price\Price;
 
 /**
- * Class OrderWrapper
+ * Class OrderItemWrapper
  * @package App\Module\Order\Entity\Embedded
  */
-class OrderWrapper {
+class OrderItemWrapper {
 
     /**
      * @var integer
@@ -38,7 +38,7 @@ class OrderWrapper {
      * @param  integer  $quantity
      * @return  self
      */ 
-    public function setQuantity($quantity): OrderWrapper {
+    public function setQuantity($quantity): OrderItemWrapper {
         $this->quantity = $quantity;
         return $this;
     }
@@ -58,7 +58,7 @@ class OrderWrapper {
      * @param  object  $orderedItem
      * @return  self
      */ 
-    public function setOrderedItem($orderedItem): OrderWrapper {
+    public function setOrderedItem($orderedItem): OrderItemWrapper {
         $this->orderedItem = $orderedItem;
         return $this;
     }

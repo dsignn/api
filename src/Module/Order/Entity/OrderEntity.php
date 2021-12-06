@@ -40,12 +40,32 @@ class OrderEntity implements EntityInterface {
         /**
      * @var string
      */
-    const STATUS_DELIVERED = 'delivered';
+    const STATUS_CLOSE = 'close';
 
     /**
      * @var string
      */
     const STATUS_INVALID = 'invalid';
+
+    /**
+     * state of order
+     */
+    const FINITE_STATE_MACHINE = [
+        OrderEntity::STATUS_CHECK => [
+            OrderEntity::STATUS_QUEUE,
+            OrderEntity::STATUS_INVALID
+        ],
+        OrderEntity::STATUS_QUEUE => [
+            OrderEntity::STATUS_PREPARATION
+        ],
+        OrderEntity::STATUS_PREPARATION => [
+            OrderEntity::STATUS_DELIVERING,
+            OrderEntity::STATUS_CLOSE
+        ],
+        OrderEntity::STATUS_DELIVERING => [
+            OrderEntity::STATUS_CLOSE
+        ]
+    ];
 
     /**
      * Traits
