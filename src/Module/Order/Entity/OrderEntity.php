@@ -48,6 +48,16 @@ class OrderEntity implements EntityInterface {
     const STATUS_INVALID = 'invalid';
 
     /**
+     * @var string
+     */
+    const TYPE_INDOOR = 'indoor';
+
+    /**
+     * @var string
+     */
+    const TYPE_DELIVERY = 'delivery';
+
+    /**
      * state of order
      */
     const FINITE_STATE_MACHINE = [
@@ -78,6 +88,11 @@ class OrderEntity implements EntityInterface {
     protected $organization;
 
     /**
+     * @var string
+     */
+    protected $name;
+
+    /**
      * @var array
      */
     protected $items = [];
@@ -97,6 +112,16 @@ class OrderEntity implements EntityInterface {
      */
     protected $status;
 
+    /**
+     * @var array
+     */
+    protected $additionalInfo =  [];
+
+    /**
+     * @var string
+     */
+    protected $type;
+    
     /**
      * OrderEntity constructor.
      */
@@ -196,6 +221,64 @@ class OrderEntity implements EntityInterface {
      */ 
     public function setItems(array $items): OrderEntity {
         $this->items = $items;
+        return $this;
+    }
+
+        /**
+     * Get the value of orders
+     *
+     * @return  array
+     */ 
+    public function getType() {
+        return $this->type;
+    }
+
+    /**
+     * Set the value of items
+     *
+     * @param  array  $items
+     * @return  self
+     */ 
+    public function setType(string $type): OrderEntity {
+        $this->type = $type;
+        return $this;
+    }
+
+    /**
+     * Get the value of additionalInfo
+     *
+     * @return  array
+     */ 
+    public function getAdditionalInfo() {
+        return $this->additionalInfo;
+    }
+
+    /**
+     * Set the value of additionalInfo
+     *
+     * @param  string  $additionalInfo
+     * @return  self
+     */ 
+    public function setAdditionalInfo(array $additionalInfo) {
+        $this->additionalInfo = $additionalInfo;
+        return $this;
+    }
+
+    /**
+     * Get the value of name
+     *
+     * @return  string
+     */ 
+    public function getName() {
+        return $this->name;
+    }
+
+    /**
+     * @param  string  $name
+     * @return  self
+     */ 
+    public function setName(string $name) {
+        $this->name = $name;
         return $this;
     }
 }

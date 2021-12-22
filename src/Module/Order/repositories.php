@@ -224,12 +224,26 @@ return function (ContainerBuilder $containerBuilder) {
                     OrderEntity::STATUS_QUEUE,
                     OrderEntity::STATUS_PREPARATION,
                     OrderEntity::STATUS_DELIVERING,
-                    OrderEntity::STATUS_DELIVERED,
                     OrderEntity::STATUS_INVALID,
                 ]
             ]));
             $inputFilter->add($input);
 
+            $input = new Input('name');
+            $inputFilter->add($input);
+
+            $input = new Input('type');
+            $input->getValidatorChain()->attach(new InArray([
+                'haystack' => [
+                    OrderEntity::TYPE_DELIVERY,
+                    OrderEntity::TYPE_INDOOR
+                ]
+            ]));
+            $inputFilter->add($input);
+
+            $input = new Input('additionalInfo');
+            $input->setRequired(false);
+            $inputFilter->add($input, 'additionalInfo');
 
             $priceInputFilter = new InputFilter();
 
