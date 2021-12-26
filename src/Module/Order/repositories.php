@@ -41,6 +41,7 @@ use Laminas\InputFilter\Input;
 use App\InputFilter\InputFilter;
 use App\Module\Order\Entity\Embedded\CarOrder;
 use App\Module\Order\Entity\Embedded\MenuOrder;
+use App\Module\Order\Middleware\CorsOrderAuthentication;
 use App\Module\Order\Storage\Adapter\Mongo\OrderMongoAdapter;
 use App\Module\Restaurant\Entity\Embedded\MenuItem;
 use App\Storage\Entity\Embedded\Price\Price;
@@ -54,6 +55,10 @@ use Psr\Container\ContainerInterface;
 return function (ContainerBuilder $containerBuilder) {
 
     $containerBuilder->addDefinitions([
+        CorsOrderAuthentication::class => function(ContainerInterface $c) {
+            return new CorsOrderAuthentication($c->get('settings')['order-cors']);
+        }
+    ])->addDefinitions([
 
         OrderStorageInterface::class => function(ContainerInterface $c) {
             $settings = $c->get('settings');

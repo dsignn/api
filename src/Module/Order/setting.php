@@ -39,7 +39,8 @@ return function (&$setting) {
                     '/order/{id:[0-9a-fA-F]{24}}' => [
                         'PUT' => 'OrderValidation'
                     ]
-                ]
+                ],
+                'order-cors' => 'http://127.0.0.160:8081'
             ]
         ]
     );
