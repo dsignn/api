@@ -4,7 +4,7 @@ define(["exports"], function (_exports) {
   Object.defineProperty(_exports, "__esModule", {
     value: true
   });
-  _exports.Storage = _exports.Localize = _exports.Listener$1 = _exports.Listener = _exports.EventManagerAware = _exports.EventManager = _exports.Event = _exports.$index = _exports.$Storage = _exports.$Localize = _exports.$Listener = _exports.$EventManagerAware = _exports.$EventManager = _exports.$Event = void 0;
+  _exports.Storage = _exports.OrderService = _exports.OrderItemWrapper = _exports.OrderEntity = _exports.Localize = _exports.Listener$1 = _exports.Listener = _exports.EventManagerAware = _exports.EventManager = _exports.Event = _exports.EntityIdentifier = _exports.$index = _exports.$Storage = _exports.$OrderService = _exports.$OrderItemWrapper = _exports.$OrderEntity = _exports.$Localize = _exports.$Listener = _exports.$EventManagerAware = _exports.$EventManager = _exports.$Event = _exports.$EntityIdentifier = void 0;
 
   /**
    * @class
@@ -451,9 +451,9 @@ define(["exports"], function (_exports) {
               for (var cont = 0; result.length > cont; cont++) {
                 result[cont] = _this4.hydrator ? _this4.hydrator.hydrate(result[cont]) : result[cont];
               }
-            }
+            } //console.log(this.adapter.getNameCollection(), result);
 
-            console.log(_this4.adapter.getNameCollection(), result);
+
             resolve(result);
           }).catch(function (error) {
             reject(error);
@@ -549,5 +549,563 @@ define(["exports"], function (_exports) {
   var Storage$1 = {
     Storage: Storage
   };
+  /**
+   *
+   */
+
   _exports.$Storage = Storage$1;
+
+  var EntityIdentifier =
+  /*#__PURE__*/
+  function () {
+    function EntityIdentifier() {
+      babelHelpers.classCallCheck(this, EntityIdentifier);
+    }
+
+    babelHelpers.createClass(EntityIdentifier, [{
+      key: "getId",
+
+      /**
+       * @inheritDoc
+       */
+      value: function getId() {
+        return this.id;
+      }
+      /**
+       * @inheritDoc
+       */
+
+    }, {
+      key: "setId",
+      value: function setId(id) {
+        this.id = id;
+        return this;
+      }
+    }]);
+    return EntityIdentifier;
+  }();
+
+  _exports.EntityIdentifier = EntityIdentifier;
+  var EntityIdentifier$1 = {
+    EntityIdentifier: EntityIdentifier
+  };
+  /**
+   * @class OrderEntity
+   */
+
+  _exports.$EntityIdentifier = EntityIdentifier$1;
+
+  var OrderItemWrapper =
+  /*#__PURE__*/
+  function () {
+    babelHelpers.createClass(OrderItemWrapper, null, [{
+      key: "STATUS_TO_DO",
+
+      /**
+       * Dish to do
+       *
+       * @return {string}
+       */
+      get: function get() {
+        return 'to_do';
+      }
+      /**
+       * Dish able to be delivering
+       *
+       * @return {string}
+       */
+
+    }, {
+      key: "STATUS_DELIVERED",
+      get: function get() {
+        return 'delivered';
+      }
+      /**
+       * Dish terminate
+       *
+       * @return {string}
+       */
+
+    }, {
+      key: "STATUS_TERMINATE",
+      get: function get() {
+        return 'terminate';
+      }
+    }]);
+
+    function OrderItemWrapper(item) {
+      babelHelpers.classCallCheck(this, OrderItemWrapper);
+
+      /**
+       * 
+       */
+      this.ordered = item;
+      this.status = OrderItemWrapper.STATUS_TO_DO;
+    }
+
+    return OrderItemWrapper;
+  }();
+
+  _exports.OrderItemWrapper = OrderItemWrapper;
+  var OrderItemWrapper$1 = {
+    OrderItemWrapper: OrderItemWrapper
+  };
+  _exports.$OrderItemWrapper = OrderItemWrapper$1;
+
+  var OrderEntity =
+  /*#__PURE__*/
+  function (_EntityIdentifier) {
+    babelHelpers.inherits(OrderEntity, _EntityIdentifier);
+    babelHelpers.createClass(OrderEntity, null, [{
+      key: "STATUS_CHECK",
+
+      /**
+       * Status to check
+       *
+       * @return {string}
+       */
+      get: function get() {
+        return 'check';
+      }
+      /**
+       * Status on queue
+       *
+       * @return {string}
+       */
+
+    }, {
+      key: "STATUS_QUEUE",
+      get: function get() {
+        return 'queue';
+      }
+      /**
+       * Status on preparation
+       *
+       * @return {string}
+       */
+
+    }, {
+      key: "STATUS_PREPARATION",
+      get: function get() {
+        return 'preparation';
+      }
+      /**
+       * Status at table
+       *
+       * @return {string}
+       */
+
+    }, {
+      key: "STATUS_DELIVERING",
+      get: function get() {
+        return 'delivering';
+      }
+      /**
+       * Status at table
+       *
+       * @return {string}
+       */
+
+    }, {
+      key: "STATUS_CLOSE",
+      get: function get() {
+        return 'close';
+      }
+      /**
+       * Status at table
+       *
+       * @return {string}
+       */
+
+    }, {
+      key: "STATUS_INVALID",
+      get: function get() {
+        return 'invalid';
+      }
+      /**
+       * State of order
+       */
+
+    }, {
+      key: "FINITE_STATE_MACHINE",
+      get: function get() {
+        var variable = {};
+        variable[OrderEntity.STATUS_CHECK] = [OrderEntity.STATUS_QUEUE, OrderEntity.STATUS_INVALID];
+        variable[OrderEntity.STATUS_QUEUE] = [OrderEntity.STATUS_PREPARATION];
+        variable[OrderEntity.STATUS_PREPARATION] = [OrderEntity.STATUS_QUEUE, OrderEntity.STATUS_DELIVERING, OrderEntity.STATUS_CLOSE];
+        variable[OrderEntity.STATUS_DELIVERING] = [OrderEntity.STATUS_CLOSE];
+        return variable;
+      }
+    }]);
+
+    function OrderEntity() {
+      var _this8;
+
+      babelHelpers.classCallCheck(this, OrderEntity);
+      _this8 = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(OrderEntity).call(this));
+      _this8.id = null;
+      _this8.name = null;
+      _this8.additionalInfo = {};
+      /**
+       * @type {Array}
+       */
+
+      _this8.items = [];
+      _this8.status = OrderEntity.STATUS_CHECK;
+      _this8.createdAt = null;
+      _this8.lastUpdateAt = null;
+      _this8.organization = {};
+      _this8.currenteSelected = false;
+      return _this8;
+    }
+    /**
+     * @param {string} key 
+     * @param {any} value
+     * @returns 
+     */
+
+
+    babelHelpers.createClass(OrderEntity, [{
+      key: "pushAdditionInfo",
+      value: function pushAdditionInfo(key, value) {
+        this.additionalInfo[key] = value;
+        return this;
+      }
+      /**
+       * 
+       * @param {string} id 
+       * @param {string} ?status 
+       * @returns 
+       */
+
+    }, {
+      key: "getTotalItemOrder",
+      value: function getTotalItemOrder(id, status) {
+        var total = 0;
+
+        for (var cont = 0; this.items.length > cont; cont++) {
+          if (id === this.items[cont].ordered._id && (status === undefined || status !== undefined && status === this.items[cont].status)) {
+            total++;
+          }
+
+          if (id === undefined && (status === undefined || status !== undefined && status === this.items[cont].status)) {
+            total++;
+          }
+        }
+
+        return total;
+      }
+      /**
+       * @param {string} id 
+       */
+
+    }, {
+      key: "getItemOrderPrice",
+      value: function getItemOrderPrice(id) {
+        var price = {
+          value: 0
+        };
+
+        var itemOrder = this._getItemOrder(id);
+
+        if (!itemOrder || !itemOrder.ordered || !itemOrder.ordered.price) {
+          return price;
+        }
+
+        var total = this.getTotalItemOrder(id);
+        price.value = itemOrder.ordered.price.value * total; // TODO PRICE OBJECT
+
+        return price;
+      }
+      /**
+       * @param {string} id 
+       */
+
+    }, {
+      key: "getTotalItemOrderPrice",
+      value: function getTotalItemOrderPrice() {
+        var orderItems = this.getDistinctItemOrder();
+        var price = {
+          value: 0
+        };
+        var tmpPrice;
+
+        for (var cont = 0; orderItems.length > cont; cont++) {
+          tmpPrice = this.getItemOrderPrice(orderItems[cont].ordered._id);
+          price.value += tmpPrice.value;
+        }
+
+        return price;
+      }
+      /**
+       * @param {string} id 
+       * @returns 
+       */
+
+    }, {
+      key: "_getItemOrder",
+      value: function _getItemOrder(id) {
+        return this.items.find(function (element) {
+          return element.ordered._id === id;
+        });
+      }
+      /**
+       * @param {object} item 
+       * @returns OrderEntity
+       */
+
+    }, {
+      key: "addItemOrder",
+      value: function addItemOrder(item) {
+        this.items.push(new OrderItemWrapper(item));
+        return this;
+      }
+      /**
+       * @param {object} item 
+       * @returns OrderEntity
+       */
+
+    }, {
+      key: "removeItemOrder",
+      value: function removeItemOrder(item) {
+        var index = this.items.findIndex(function (element) {
+          // TODO get id
+          return element.ordered._id === item._id && element.status === OrderItemWrapper.STATUS_TO_DO;
+          ;
+        });
+
+        if (index > -1) {
+          this.items.splice(index, 1);
+        }
+
+        return this;
+      }
+      /**
+       * @returns Array
+       */
+
+    }, {
+      key: "getDistinctItemOrder",
+      value: function getDistinctItemOrder() {
+        var _this9 = this;
+
+        var orders = [];
+
+        var _loop = function _loop(cont) {
+          var has = orders.find(function (element) {
+            /**
+             * TODO add getId()
+             */
+            return element.ordered._id === _this9.items[cont].ordered._id;
+          });
+
+          if (!has) {
+            orders.push(_this9.items[cont]);
+          }
+        };
+
+        for (var cont = 0; this.items.length > cont; cont++) {
+          _loop(cont);
+        }
+
+        return orders;
+      }
+    }]);
+    return OrderEntity;
+  }(EntityIdentifier);
+
+  _exports.OrderEntity = OrderEntity;
+  var OrderEntity$1 = {
+    OrderEntity: OrderEntity
+  };
+  _exports.$OrderEntity = OrderEntity$1;
+
+  var OrderService =
+  /*#__PURE__*/
+  function (_EventManagerAware2) {
+    babelHelpers.inherits(OrderService, _EventManagerAware2);
+    babelHelpers.createClass(OrderService, null, [{
+      key: "CHANGE_DEFAUL_ORDER",
+
+      /**
+       * Name of the "message" send from sender when play timeslot
+       *
+       * @return {string}
+       */
+      get: function get() {
+        return 'change-default-order';
+      }
+      /**
+       * Name of the "message" send from sender when play timeslot
+       *
+       * @return {string}
+       */
+
+    }, {
+      key: "LOAD_DEFAUL_ORDER",
+      get: function get() {
+        return 'load-default-order';
+      }
+      /**
+       * 
+       * @param {StorageInterface} storage 
+       */
+
+    }]);
+
+    function OrderService(storage) {
+      var _this10;
+
+      babelHelpers.classCallCheck(this, OrderService);
+      _this10 = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(OrderService).call(this));
+      _this10.storage = storage;
+      _this10.currentOrder = null;
+      return _this10;
+    }
+
+    babelHelpers.createClass(OrderService, [{
+      key: "getStorage",
+      value: function getStorage() {
+        return this.storage;
+      }
+      /** 
+       *  @returns OrderEntity|null
+       */
+
+    }, {
+      key: "getCurrentOrder",
+      value: function getCurrentOrder() {
+        return this.currentOrder;
+      }
+      /**
+       * 
+       * @param {OrderEntity} currentOrder 
+       * @returns OrderService
+       */
+
+    }, {
+      key: "setCurrentOrder",
+      value: function () {
+        var _setCurrentOrder = babelHelpers.asyncToGenerator(
+        /*#__PURE__*/
+        regeneratorRuntime.mark(function _callee(order) {
+          var allOrder, cont;
+          return regeneratorRuntime.wrap(function _callee$(_context) {
+            while (1) {
+              switch (_context.prev = _context.next) {
+                case 0:
+                  _context.next = 2;
+                  return this.getStorage().getAll({
+                    'restaurantId': order.organization.id
+                  });
+
+                case 2:
+                  allOrder = _context.sent;
+                  cont = 0;
+
+                case 4:
+                  if (!(allOrder.length > cont)) {
+                    _context.next = 11;
+                    break;
+                  }
+
+                  allOrder[cont].currenteSelected = false;
+                  _context.next = 8;
+                  return this.getStorage().update(allOrder[cont]);
+
+                case 8:
+                  cont++;
+                  _context.next = 4;
+                  break;
+
+                case 11:
+                  order.currenteSelected = true;
+                  this.currentOrder = order;
+                  _context.next = 15;
+                  return this.getStorage().update(order);
+
+                case 15:
+                  this.getEventManager().emit(OrderService.CHANGE_DEFAUL_ORDER, order);
+                  return _context.abrupt("return", this);
+
+                case 17:
+                case "end":
+                  return _context.stop();
+              }
+            }
+          }, _callee, this);
+        }));
+
+        function setCurrentOrder(_x) {
+          return _setCurrentOrder.apply(this, arguments);
+        }
+
+        return setCurrentOrder;
+      }()
+      /**
+       * @param {string} restaurantId 
+       * @returns 
+       */
+
+    }, {
+      key: "loadCurreOrder",
+      value: function () {
+        var _loadCurreOrder = babelHelpers.asyncToGenerator(
+        /*#__PURE__*/
+        regeneratorRuntime.mark(function _callee2(restaurantId) {
+          var orders, order;
+          return regeneratorRuntime.wrap(function _callee2$(_context2) {
+            while (1) {
+              switch (_context2.prev = _context2.next) {
+                case 0:
+                  _context2.next = 2;
+                  return this.getStorage().getAll({
+                    'restaurantId': restaurantId,
+                    'currenteSelected': true
+                  });
+
+                case 2:
+                  orders = _context2.sent;
+
+                  if (!(orders > 1)) {
+                    _context2.next = 6;
+                    break;
+                  }
+
+                  console.warn('too many orders set as default', restaurantId);
+                  return _context2.abrupt("return");
+
+                case 6:
+                  order = null;
+
+                  if (orders.length > 0) {
+                    this.currentOrder = orders[0];
+                    this.getEventManager().emit(OrderService.LOAD_DEFAUL_ORDER, this.currentOrder);
+                  }
+
+                  return _context2.abrupt("return", this.currentOrder);
+
+                case 9:
+                case "end":
+                  return _context2.stop();
+              }
+            }
+          }, _callee2, this);
+        }));
+
+        function loadCurreOrder(_x2) {
+          return _loadCurreOrder.apply(this, arguments);
+        }
+
+        return loadCurreOrder;
+      }()
+    }]);
+    return OrderService;
+  }(EventManagerAware);
+
+  _exports.OrderService = OrderService;
+  var OrderService$1 = {
+    OrderService: OrderService
+  };
+  _exports.$OrderService = OrderService$1;
 });
