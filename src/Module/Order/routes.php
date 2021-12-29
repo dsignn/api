@@ -16,7 +16,7 @@ return function (App $app) {
 
         $group->get('', [OrderController::class, 'paginate']);
 
-        $group->options('', [OrderController::class, 'options']);
+        $group->options('', [OptionController::class, 'options']);
 
         $group->get('/{id:[0-9a-fA-F]{24}}',  [OrderController::class, 'get']);
 
