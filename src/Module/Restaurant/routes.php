@@ -18,7 +18,7 @@ return function (App $app) {
 
     $app->group('/menu', function (Group $group) {
 
-        $group->options('', [MenuController::class, 'options']);
+        $group->options('', [OptionController::class, 'options']);
 
         $group->post('',  [MenuController::class, 'post']);
 
