@@ -28,15 +28,18 @@ class CorsOrderAuthentication extends CorsMiddleware {
      */
     public function process(Request $request, RequestHandler $handler): Response {
     
-        $response = $handler->handle($request);
         if (CorsMiddleware::isXhr($request)) {
             $skip = str_contains($request->getHeaderLine(CorsMiddleware::$ORIGIN_HEADER), $this->origin);
-            $response = $handler->handle($request->withAttribute('app-skip-auth', $skip));
-            $response = $response->withHeader('Test-origin', CorsMiddleware::getCorsRequestHeader($request));
-            $response = $response->withHeader('Test-internal-origin', $this->origin);           
+
+            $request = $request->withAttribute('app-skip-auth', $this->toSkip($request) ? 1 : 0);
+            //$response = $handler->handle($request->withAttribute('app-skip-auth', $skip));
+            //$response = $response->withHeader('Test-origin', CorsMiddleware::getCorsRequestHeader($request));
+            //$response = $response->withHeader('Test-internal-origin', $this->origin);           
         }
-        return $response;
+        return $handler->handle($request);;
     }
 
-
+    protected function toSkip(Request $request) {
+        return str_contains(CorsMiddleware::getCorsRequestHeader($request), $this->origin);
+    }
 }
