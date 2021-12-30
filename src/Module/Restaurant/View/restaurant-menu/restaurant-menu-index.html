@@ -6,7 +6,6 @@
   <link id="favicon" rel="shortcut icon" href="/favicon.ico">
   <title>{{menu.organization.name}} menu</title>
   <meta name="theme-color" content="{{ menu.background_header }}">
-  <title>Menu</title>
   <script>/**
  * Copyright (c) 2014-present, Facebook, Inc.
  *
@@ -172,6 +171,7 @@
     window.configApp.menu = {{ menu | e('js') | json_encode | raw }}
   </script>
   <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=no">
+
   <script>if (!window.customElements) {
       document.write('<!--');
     }</script>
@@ -4341,7 +4341,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       });
     });</script>
   <style is="custom-style" id="colorCustomStyle">
-
     :root {
       --munu-background-color: {{ menu.background_header }};
       --munu-color: {{ menu.color_header }};
@@ -4354,7 +4353,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         --paper-input-container-input-color: var(--munu-color);
       }
     }
-
     body {
       overflow-x: hidden;
       font-family: Roboto;
