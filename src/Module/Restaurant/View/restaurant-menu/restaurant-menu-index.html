@@ -4341,11 +4341,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       });
     });</script>
   <style is="custom-style" id="colorCustomStyle">
-    :root {
-      --munu-background-color: {{ menu.background_header }};
-      --munu-color: {{ menu.color_header }};
-    }
-
     :host {
       --paper-input-container: {
         --paper-input-container-color: var(--munu-color);
@@ -4353,7 +4348,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         --paper-input-container-input-color: var(--munu-color);
       }
     }
-    body {  
+
+    body {
       overflow-x: hidden;
       font-family: Roboto;
     }

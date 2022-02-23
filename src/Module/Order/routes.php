@@ -33,8 +33,8 @@ return function (App $app) {
         $group->options('/all',  [OrderController::class, 'options']);
     })
         ->add($app->getContainer()->get(ValidationMiddleware::class))
-        ->add($app->getContainer()->get(AuthorizationMiddleware::class))
+        ->add($app->getContainer()->get(AuthorizationMiddleware::class))  
         ->add($app->getContainer()->get(CorsOrderAuthentication::class))
-    //    ->add($app->getContainer()->get(AuthenticationMiddleware::class))
+        
     ;
 };

@@ -117,10 +117,6 @@ class OrderEntity implements EntityInterface {
      */
     protected $additionalInfo =  [];
 
-    /**
-     * @var string
-     */
-    protected $type;
     
     /**
      * OrderEntity constructor.
@@ -221,26 +217,6 @@ class OrderEntity implements EntityInterface {
      */ 
     public function setItems(array $items): OrderEntity {
         $this->items = $items;
-        return $this;
-    }
-
-        /**
-     * Get the value of orders
-     *
-     * @return  array
-     */ 
-    public function getType() {
-        return $this->type;
-    }
-
-    /**
-     * Set the value of items
-     *
-     * @param  array  $items
-     * @return  self
-     */ 
-    public function setType(string $type): OrderEntity {
-        $this->type = $type;
         return $this;
     }
 

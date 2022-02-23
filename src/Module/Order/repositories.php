@@ -44,10 +44,12 @@ use App\Module\Order\Entity\Embedded\MenuOrder;
 use App\Module\Order\Middleware\CorsOrderAuthentication;
 use App\Module\Order\Storage\Adapter\Mongo\OrderMongoAdapter;
 use App\Module\Restaurant\Entity\Embedded\MenuItem;
+use App\Module\User\Storage\UserStorageInterface;
 use App\Storage\Entity\Embedded\Price\Price;
 use App\Storage\Entity\MultiEntityPrototype;
 use Laminas\Validator\Digits;
 use Laminas\Validator\InArray;
+use League\OAuth2\Server\ResourceServer;
 use MongoDB\Client;
 use Psr\Container\ContainerInterface;
 
@@ -56,7 +58,16 @@ return function (ContainerBuilder $containerBuilder) {
 
     $containerBuilder->addDefinitions([
         CorsOrderAuthentication::class => function(ContainerInterface $c) {
-            return new CorsOrderAuthentication($c->get('settings')['order-cors']);
+            $authSetting = $c->get('settings')['authentication'];
+            $authSetting['origin'] =  $c->get('settings')['order-cors'];
+            
+            return new CorsOrderAuthentication(
+                $c->get(ResourceServer::class),
+                $c->get(UserStorageInterface    ::class),
+                $c->get('AccessTokenStorage'),
+                $c->get('ClientStorage'),
+                $authSetting
+            );
         }
     ])->addDefinitions([
 

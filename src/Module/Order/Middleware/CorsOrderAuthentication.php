@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace App\Module\Order\Middleware;
 
+use App\Middleware\Authentication\AuthenticationMiddleware;
 use App\Middleware\CorsMiddleware;
-
+use App\Storage\StorageInterface;
+use League\OAuth2\Server\ResourceServer;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -12,15 +14,20 @@ use Psr\Http\Server\MiddlewareInterface as Middleware;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Psr7\Response as ResponseSlim;
 
-class CorsOrderAuthentication extends CorsMiddleware {
+class CorsOrderAuthentication extends AuthenticationMiddleware {
 
     protected $origin;
 
-    /**
-     * @param string $origin
-     */
-    public function __construct(string $origin) {
-        $this->origin = $origin;
+    public function __construct(ResourceServer $server, StorageInterface $userStorage, StorageInterface $tokenStorage, StorageInterface $clientStorage, array $settings = []) {
+        $this->server = $server;
+        $this->userStorage = $userStorage;
+        $this->tokenStorage = $tokenStorage;
+        $this->clientStorage = $clientStorage;
+        $this->settings = $settings;
+
+        if ($settings['origin']) {
+            $this->origin = $settings['origin'];
+        }
     }
 
     /**
@@ -29,14 +36,9 @@ class CorsOrderAuthentication extends CorsMiddleware {
     public function process(Request $request, RequestHandler $handler): Response {
     
         if (CorsMiddleware::isXhr($request)) {
-            $skip = str_contains($request->getHeaderLine(CorsMiddleware::$ORIGIN_HEADER), $this->origin);
-
-            $request = $request->withAttribute('app-skip-auth', $this->toSkip($request) ? 1 : 0);
-            //$response = $handler->handle($request->withAttribute('app-skip-auth', $skip));
-            //$response = $response->withHeader('Test-origin', CorsMiddleware::getCorsRequestHeader($request));
-            //$response = $response->withHeader('Test-internal-origin', $this->origin);           
+            return $handler->handle($request);   
         }
-        return $handler->handle($request);;
+        return parent::process($request, $handler);
     }
 
     protected function toSkip(Request $request) {
