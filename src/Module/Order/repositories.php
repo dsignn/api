@@ -248,15 +248,6 @@ return function (ContainerBuilder $containerBuilder) {
             $input = new Input('name');
             $inputFilter->add($input);
 
-            $input = new Input('type');
-            $input->getValidatorChain()->attach(new InArray([
-                'haystack' => [
-                    OrderEntity::TYPE_DELIVERY,
-                    OrderEntity::TYPE_INDOOR
-                ]
-            ]));
-            $inputFilter->add($input);
-
             $input = new Input('additionalInfo');
             $input->setRequired(false);
             $inputFilter->add($input, 'additionalInfo');
@@ -264,19 +255,23 @@ return function (ContainerBuilder $containerBuilder) {
             $priceInputFilter = new InputFilter();
 
             $input = new Input('value');
+            $input->setRequired(false);
             $priceInputFilter->add($input, 'value');
 
             $orderItemInputFilter = new InputFilter();
             $orderItemInputFilter->add($priceInputFilter, 'price');
 
-            $input = new Input('type');
-            $orderItemInputFilter->add($input, 'type');
+            $input = new Input('name');
+            $orderItemInputFilter->add($input, 'name');
+
+            $input = new Input('_id');
+            $orderItemInputFilter->add($input, '_id');
 
             $orderWrapperInputFilter = new InputFilter();
-            $input = new Input('quantity');
-          
-            $orderWrapperInputFilter->add($input, 'quantity');
-            $orderWrapperInputFilter->add( $orderItemInputFilter, 'orderedItem');
+            $orderWrapperInputFilter->add( $orderItemInputFilter, 'ordered');
+
+            $input = new Input('status');
+            $orderWrapperInputFilter->add($input, 'status');
            
             $collectionItem = new CollectionInputFilter();
             $collectionItem->setInputFilter($orderWrapperInputFilter);

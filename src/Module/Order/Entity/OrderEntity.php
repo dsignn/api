@@ -116,7 +116,6 @@ class OrderEntity implements EntityInterface {
      * @var array
      */
     protected $additionalInfo =  [];
-
     
     /**
      * OrderEntity constructor.
