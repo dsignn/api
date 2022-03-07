@@ -32,3 +32,9 @@ php console/console.php oauth:generate-public-key
 ```bash
 php console/console.php user-repo:create
 ```
+
+### Generate Order
+
+The platform can manage order, the flow status is:
+
+![Flow order status](./doc/order/assets/order-status.png)

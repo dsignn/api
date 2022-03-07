@@ -66,11 +66,12 @@ class OrderEntity implements EntityInterface {
             OrderEntity::STATUS_INVALID
         ],
         OrderEntity::STATUS_QUEUE => [
-            OrderEntity::STATUS_PREPARATION
+            OrderEntity::STATUS_PREPARATION,
+            OrderEntity::STATUS_CLOSE
         ],
         OrderEntity::STATUS_PREPARATION => [
-            OrderEntity::STATUS_DELIVERING,
-            OrderEntity::STATUS_CLOSE
+            OrderEntity::STATUS_QUEUE,
+            OrderEntity::STATUS_DELIVERING
         ],
         OrderEntity::STATUS_DELIVERING => [
             OrderEntity::STATUS_CLOSE
