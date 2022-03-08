@@ -241,6 +241,7 @@ return function (ContainerBuilder $containerBuilder) {
                     OrderEntity::STATUS_PREPARATION,
                     OrderEntity::STATUS_DELIVERING,
                     OrderEntity::STATUS_INVALID,
+                    OrderEntity::STATUS_CLOSE
                 ]
             ]));
             $inputFilter->add($input);
