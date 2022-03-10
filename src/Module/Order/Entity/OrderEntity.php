@@ -20,7 +20,7 @@ class OrderEntity implements EntityInterface {
     /**
      * @var string
      */
-    const STATUS_CHECK = 'can-order';
+    const STATUS_CAN_ORDER = 'can-order';
 
     /**
      * @var string
@@ -61,7 +61,7 @@ class OrderEntity implements EntityInterface {
      * state of order
      */
     const FINITE_STATE_MACHINE = [
-        OrderEntity::STATUS_CHECK => [
+        OrderEntity::STATUS_CAN_ORDER => [
             OrderEntity::STATUS_QUEUE,
             OrderEntity::STATUS_INVALID,
             OrderEntity::STATUS_CLOSE
@@ -72,7 +72,7 @@ class OrderEntity implements EntityInterface {
         ],
         OrderEntity::STATUS_PREPARATION => [
             OrderEntity::STATUS_QUEUE,
-            OrderEntity::STATUS_CHECK,
+            OrderEntity::STATUS_CAN_ORDER,
             OrderEntity::STATUS_CLOSE
         ],
         OrderEntity::STATUS_DELIVERING => [
@@ -124,7 +124,7 @@ class OrderEntity implements EntityInterface {
      * OrderEntity constructor.
      */
     public function __construct() {
-        $this->status = self::STATUS_CHECK;
+        $this->status = self::STATUS_CAN_ORDER;
     }
 
         /**

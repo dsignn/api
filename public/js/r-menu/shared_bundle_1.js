@@ -657,7 +657,7 @@ define(["exports"], function (_exports) {
   function (_EntityIdentifier) {
     babelHelpers.inherits(OrderEntity, _EntityIdentifier);
     babelHelpers.createClass(OrderEntity, null, [{
-      key: "STATUS_CHECK",
+      key: "STATUS_CAN_ORDER",
 
       /**
        * Status to check
@@ -730,7 +730,7 @@ define(["exports"], function (_exports) {
       key: "FINITE_STATE_MACHINE",
       get: function get() {
         var variable = {};
-        variable[OrderEntity.STATUS_CHECK] = [OrderEntity.STATUS_QUEUE, OrderEntity.STATUS_INVALID];
+        variable[OrderEntity.STATUS_CAN_ORDER] = [OrderEntity.STATUS_QUEUE, OrderEntity.STATUS_INVALID];
         variable[OrderEntity.STATUS_QUEUE] = [OrderEntity.STATUS_PREPARATION];
         variable[OrderEntity.STATUS_PREPARATION] = [OrderEntity.STATUS_QUEUE, OrderEntity.STATUS_DELIVERING, OrderEntity.STATUS_CLOSE];
         variable[OrderEntity.STATUS_DELIVERING] = [OrderEntity.STATUS_CLOSE];
@@ -751,7 +751,7 @@ define(["exports"], function (_exports) {
        */
 
       _this8.items = [];
-      _this8.status = OrderEntity.STATUS_CHECK;
+      _this8.status = OrderEntity.STATUS_CAN_ORDER;
       _this8.createdAt = null;
       _this8.lastUpdateAt = null;
       _this8.organization = {};
