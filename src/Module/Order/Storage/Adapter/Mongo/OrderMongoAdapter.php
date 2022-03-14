@@ -6,7 +6,10 @@ namespace App\Module\Order\Storage\Adapter\Mongo;
 use App\Module\Order\Entity\OrderEntity;
 use App\Storage\Adapter\Mongo\MongoAdapter;
 use App\Storage\ResultSet\ResultSetInterface;
+use App\Storage\ResultSet\ResultSetPaginateInterface;
 use MongoDB\BSON\ObjectId;
+use MongoDB\Driver\Cursor;
+
 
 use function Aws\filter;
 
@@ -53,11 +56,65 @@ class OrderMongoAdapter extends MongoAdapter {
         }
         return $filter;
     }
-        /**
+  
+    /**
      * @inheritDoc
      */
     public function getAll(array $search = [], array $order = []): ResultSetInterface {
+       
+        $resultSet = clone $this->getResultSet();
+        return $resultSet->setDataSource(
+            $this->search($search)
+        );
+    }
 
+        /**
+     * @inheritDoc
+     */
+    public function getPage($page = 1, $itemPerPage = 10, array $search = [], array $order = []): ResultSetPaginateInterface {
+
+        $resultSet = clone $this->getResultSetPaginate();
+        return $resultSet->setPage($page)
+            ->setItemPerPage($itemPerPage)
+            ->setCount($this->getCount($search))
+            ->setDataSource($this->search($search, $page, $itemPerPage));
+    }
+
+    /**
+     * Template aggregation
+     *
+     * @param array $search
+     * @return Cursor
+     */
+    protected function search(array $search, $page = null, $itemPerPage = null) {
+
+        return  $this->getCollection()->aggregate(
+            $this->getAggregationArraySearch($search, $page, $itemPerPage), 
+            $this->arrayOptions);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param array $search
+     * @return int
+     */
+    protected function getCount(array $search) {
+        $aggreagate = $this->getAggregationArraySearch($search);
+        array_push($aggreagate, ['$count' => 'total']);
+        $cursor = $this->getCollection()->aggregate($aggreagate);
+        $boison = $cursor->toArray();
+
+        return count($boison) ? $boison[0]->total : 0;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param array $search
+     * @return array
+     */
+    private function getAggregationArraySearch(array $search, $page = null, $itemPerPage = null) {
         $aggreagate = [
             [
                 '$project' => [
@@ -84,6 +141,7 @@ class OrderMongoAdapter extends MongoAdapter {
                     ]
                 ]
             ],
+            // TODO ADD SORT AFTER FILTER
             [
                 '$sort' => [
                     'computedStatus' => 1,
@@ -100,11 +158,16 @@ class OrderMongoAdapter extends MongoAdapter {
                 array_unshift($aggreagate, $filter[$cont]);
             }
         }
-       
-        $resultSet = clone $this->getResultSet();
-        return $resultSet->setDataSource(
-            $this->getCollection()->aggregate($aggreagate, $this->arrayOptions)
-        );
+ 
+        // Pagination setting
+        if ($page && $itemPerPage) {
+
+
+            array_push($aggreagate, [ '$skip' => ($page-1) * $itemPerPage]);
+            array_push($aggreagate, [ '$limit' => $itemPerPage]);
+        }
+
+        return $aggreagate;
     }
 }
 
