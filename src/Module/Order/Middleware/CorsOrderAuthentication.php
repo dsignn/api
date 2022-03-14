@@ -35,7 +35,7 @@ class CorsOrderAuthentication extends AuthenticationMiddleware {
      */
     public function process(Request $request, RequestHandler $handler): Response {
     
-        if (CorsMiddleware::isXhr($request)) {
+        if (CorsMiddleware::isXhr($request) && !$request->getHeaderLine('Authorization')) {
             return $handler->handle($request);   
         }
         return parent::process($request, $handler);

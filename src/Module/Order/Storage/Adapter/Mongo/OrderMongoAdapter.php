@@ -7,6 +7,7 @@ use App\Module\Order\Entity\OrderEntity;
 use App\Storage\Adapter\Mongo\MongoAdapter;
 use App\Storage\ResultSet\ResultSetInterface;
 use App\Storage\ResultSet\ResultSetPaginateInterface;
+use Exception;
 use MongoDB\BSON\ObjectId;
 use MongoDB\Driver\Cursor;
 
@@ -30,28 +31,55 @@ class OrderMongoAdapter extends MongoAdapter {
 
             switch ($key) {
                 case 'id':
-                                    // TODO add try
-                    $match = [
-                        '$match' => [
-                            '_id' => new ObjectId($value)
-                        ]
-                    ];
+                    
+                    try {
+                        $match = [
+                            '$match' => [
+                                '_id' => new ObjectId($value)
+                            ]
+                         ];
 
-                    array_push($filter, $match);
+                        array_push($filter, $match);
+                    } catch (Exception $exception) {
+                        // TODO log???
+                    }   
+    
                     break;
                 case 'organizations':
                     $ids = [];
                     foreach ($value as $id) {
-                        array_push($ids, new ObjectId('6076e79969205a3f58735397'));
+                        array_push($ids, new ObjectId($id));
                     };
 
-                    $match = [
-                        '$match' => [
-                            'organization.id' => ['$in' => $ids]
-                        ]
-                    ];
-                    array_push($filter, $match); 
+                    try {
+                        $match = [
+                            '$match' => [
+                                'organization.id' => ['$in' => $ids]
+                            ]
+                        ];
+                        array_push($filter, $match); 
+                 
+                    } catch (Exception $exception) {
+                        // TODO log???
+                    }   
                     break;
+                case 'status':
+                    /*
+                    if ($value === 'for-kitchen') {
+                        $match = [
+                            '$match' => [
+                                'status' => [
+                                    '$in' =>  [
+                                        OrderEntity::STATUS_PREPARATION,
+                                        OrderEntity::STATUS_QUEUE,
+                                    ]
+                                ]
+
+                            ]
+                        ];
+                    }
+                        break;*/
+
             }
         }
         return $filter;
