@@ -5,7 +5,7 @@ namespace App\Module\Order\Controller;
 
 use App\Controller\AllRpcController;
 use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
-use App\Module\Organization\Storage\OrganizationStorageInterface;
+use App\Module\Order\Storage\OrderStorageInterface;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -23,10 +23,10 @@ class AllRpcOrderController extends AllRpcController {
 
     /**
      * AllRpcResourceController constructor.
-     * @param OrganizationStorageInterface $storage
+     * @param OrderStorageInterface $storage
      * @param ContainerInterface $container
      */
-    public function __construct(OrganizationStorageInterface $storage, ContainerInterface $container) {
+    public function __construct(OrderStorageInterface $storage, ContainerInterface $container) {
         parent::__construct($storage, $container);
     }
 }

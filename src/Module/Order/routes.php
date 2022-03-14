@@ -5,6 +5,7 @@ use App\Controller\OptionController;
 use App\Middleware\Authentication\AuthenticationMiddleware;
 use App\Middleware\Authorization\AuthorizationMiddleware;
 use App\Middleware\Validation\ValidationMiddleware;
+use App\Module\Order\Controller\AllRpcOrderController;
 use App\Module\Order\Controller\OrderController;
 use App\Module\Order\Middleware\CorsOrderAuthentication;
 use Slim\App;
@@ -28,7 +29,7 @@ return function (App $app) {
 
         $group->delete('/{id:[0-9a-fA-F]{24}}',  [OrderController::class, 'delete']);
 
-        $group->get('/all',  [AllRpcOrganizationController::class, 'rpc']);
+        $group->get('/all',  [AllRpcOrderController::class, 'rpc']);
 
         $group->options('/all',  [OrderController::class, 'options']);
     })
