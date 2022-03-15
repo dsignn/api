@@ -64,7 +64,7 @@ class OrderMongoAdapter extends MongoAdapter {
                     }   
                     break;
                 case 'status':
-                    /*
+                    
                     if ($value === 'for-kitchen') {
                         $match = [
                             '$match' => [
@@ -78,7 +78,8 @@ class OrderMongoAdapter extends MongoAdapter {
                             ]
                         ];
                     }
-                        break;*/
+                    array_push($filter, $match); 
+                    break;
 
             }
         }
