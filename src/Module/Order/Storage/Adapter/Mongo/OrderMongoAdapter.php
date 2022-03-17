@@ -70,6 +70,7 @@ class OrderMongoAdapter extends MongoAdapter {
                             '$match' => [
                                 'status' => [
                                     '$in' =>  [
+                                        OrderEntity::STATUS_CAN_ORDER,
                                         OrderEntity::STATUS_PREPARATION,
                                         OrderEntity::STATUS_QUEUE,
                                     ]
@@ -174,6 +175,7 @@ class OrderMongoAdapter extends MongoAdapter {
             [
                 '$sort' => [
                     'computedStatus' => 1,
+                    'created_at' => -1,
                     'last_update_at' => -1
                 ]
             ]
