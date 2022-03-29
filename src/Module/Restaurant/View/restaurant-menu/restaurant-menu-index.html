@@ -3590,7 +3590,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }, {
             key: "get",
             value: function get(id) {
-              return this.localStorageAdapter.get(id);
+              var _this12 = this;
+
+              return new Promise(function (resolve, reject) {
+                _this12.xmlhAdapter.get(id).then(function (respXml) {
+                  resolve(respXml);
+                }).catch(function (error) {
+                  console.error('errore respXml', error);
+                  reject(error);
+                });
+
+                ;
+              });
             }
             /**
              * @param {object} data
@@ -3600,13 +3611,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }, {
             key: "save",
             value: function save(data) {
-              var _this12 = this;
+              var _this13 = this;
 
               return new Promise(function (resolve, reject) {
-                _this12.xmlhAdapter.save(data).then(function (respXml) {
+                _this13.xmlhAdapter.save(data).then(function (respXml) {
                   console.log('salva respXml', respXml);
 
-                  _this12.localStorageAdapter.save(respXml).then(function (respLocalStorage) {
+                  _this13.localStorageAdapter.save(respXml).then(function (respLocalStorage) {
                     console.log('salva respLocalStorage', respLocalStorage);
                     resolve(respLocalStorage);
                   }).catch(function (error) {
@@ -3627,7 +3638,69 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }, {
             key: "update",
             value: function update(data) {
-              return this.localStorageAdapter.update(data);
+              var _this14 = this;
+
+              return new Promise(function (resolve, reject) {
+                _this14.xmlhAdapter.update(data).then(function (respXml) {
+                  console.log('salva respXml', respXml);
+
+                  _this14.localStorageAdapter.update(respXml).then(function (respLocalStorage) {
+                    console.log('salva respLocalStorage', respLocalStorage);
+                    resolve(respLocalStorage);
+                  }).catch(function (error) {
+                    console.error('errore respLocalStorage', error);
+                    reject(error);
+                  });
+                }).catch(function (error) {
+                  console.error('errore respXml', error);
+                  reject(error);
+                });
+              });
+            }
+            /**
+             * @param {object} data
+             * @return {Promise<any>}
+             */
+
+          }, {
+            key: "updateLocal",
+            value: function updateLocal(data) {
+              var _this15 = this;
+
+              return new Promise(function (resolve, reject) {
+                _this15.localStorageAdapter.update(data).then(function (respLocalStorage) {
+                  resolve(respLocalStorage);
+                }).catch(function (error) {
+                  reject(error);
+                });
+              });
+            }
+            /**
+             * @param {*} restaurantId 
+             * @returns 
+             */
+
+          }, {
+            key: "getCurrentOrder",
+            value: function getCurrentOrder(restaurantId) {
+              var _this16 = this;
+
+              return new Promise(function (resolve, reject) {
+                var search = {
+                  'restaurantId': restaurantId,
+                  'currenteSelected': true
+                };
+
+                _this16.localStorageAdapter.getAll(search).then(function (respLocalStorage) {
+                  var result = null;
+
+                  if (respLocalStorage.length > 0) {
+                    result = respLocalStorage[0];
+                  }
+
+                  resolve(result);
+                });
+              });
             }
             /**
              * @param {object} data
@@ -3894,29 +3967,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }, {
             key: "get",
             value: function get(id) {
-              var _this13 = this;
+              var _this17 = this;
 
               return new Promise(function (resolve, reject) {
                 var request = new XMLHttpRequest();
                 var method = 'GET';
-                request.open(method, _this13.urlBuilder.buildUrl(_this13.rootPath, _this13.getNameCollection(), method, id), true); // Append headers
+                request.open(method, _this17.urlBuilder.buildUrl(_this17.rootPath, _this17.getNameCollection(), method, id), true); // Append headers
 
-                _this13._appendHeaders(request, method); // Result handler
+                _this17._appendHeaders(request, method); // Result handler
 
 
                 request.addEventListener('load', function () {
                   if (request.status >= 300) {
                     return reject({
                       status: request.status,
-                      message: _this13.errorStatus[request.status]
+                      message: _this17.errorStatus[request.status]
                     });
                   }
 
-                  resolve(_this13.dataDecode.dataDecode(request.response));
+                  resolve(_this17.dataDecode.dataDecode(request.response));
                 }); // Error handler
 
                 request.addEventListener('error', function () {
-                  console.log('error', request.status);
                   reject(request.response);
                 });
                 request.send();
@@ -3929,29 +4001,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }, {
             key: "getAll",
             value: function getAll(filter) {
-              var _this14 = this;
+              var _this18 = this;
 
               return new Promise(function (resolve, reject) {
                 var request = new XMLHttpRequest();
                 var method = 'GET';
-                request.open(method, "".concat(_this14.urlBuilder.buildUrl(_this14.rootPath, _this14.getNameCollection(), method, 'all')).concat(_this14._buildQueryString(filter)), true); // Append headers
+                request.open(method, "".concat(_this18.urlBuilder.buildUrl(_this18.rootPath, _this18.getNameCollection(), method, 'all')).concat(_this18._buildQueryString(filter)), true); // Append headers
 
-                _this14._appendHeaders(request, method); // Result handler
+                _this18._appendHeaders(request, method); // Result handler
 
 
                 request.addEventListener('load', function () {
                   if (request.status >= 300) {
                     return reject({
                       status: request.status,
-                      message: _this14.errorStatus[request.status]
+                      message: _this18.errorStatus[request.status]
                     });
                   }
 
-                  resolve(_this14.dataDecode.dataDecode(request.response));
+                  resolve(_this18.dataDecode.dataDecode(request.response));
                 }); // Error handler
 
                 request.addEventListener('error', function () {
-                  console.log('error', request.status);
                   reject(request.response);
                 });
                 request.send();
@@ -3964,33 +4035,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }, {
             key: "getPaged",
             value: function getPaged(page, itemCount, filter) {
-              var _this15 = this;
+              var _this19 = this;
 
               return new Promise(function (resolve, reject) {
                 var request = new XMLHttpRequest();
                 var method = 'GET';
                 filter['page'] = page;
                 filter['item-per-page'] = itemCount;
-                request.open(method, "".concat(_this15.urlBuilder.buildUrl(_this15.rootPath, _this15.getNameCollection(), method)).concat(_this15._buildQueryString(filter)), true); // Append headers
+                request.open(method, "".concat(_this19.urlBuilder.buildUrl(_this19.rootPath, _this19.getNameCollection(), method)).concat(_this19._buildQueryString(filter)), true); // Append headers
 
-                _this15._appendHeaders(request, method); // Result handler
+                _this19._appendHeaders(request, method); // Result handler
 
 
                 request.addEventListener('load', function () {
                   if (request.status >= 300) {
                     return reject({
                       status: request.status,
-                      message: _this15.errorStatus[request.status]
+                      message: _this19.errorStatus[request.status]
                     });
                   }
 
-                  var decodeResponse = _this15.dataDecode.dataDecode(request.response);
+                  var decodeResponse = _this19.dataDecode.dataDecode(request.response);
 
                   resolve(new Pagination(decodeResponse['data'], decodeResponse['meta']['page'], decodeResponse['meta']['item-per-page'], decodeResponse['meta']['total-count']));
                 }); // Error handler
 
                 request.addEventListener('error', function () {
-                  console.log('error', request.status);
                   reject(request.response);
                 });
                 request.send();
@@ -4003,7 +4073,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }, {
             key: "remove",
             value: function remove(data) {
-              var _this16 = this;
+              var _this20 = this;
 
               return new Promise(function (resolve, reject) {
                 var request = new XMLHttpRequest();
@@ -4014,16 +4084,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   throw 'id not found';
                 }
 
-                request.open(method, _this16.urlBuilder.buildUrl(_this16.rootPath, _this16.getNameCollection(), method, id), true); // Append headers
+                request.open(method, _this20.urlBuilder.buildUrl(_this20.rootPath, _this20.getNameCollection(), method, id), true); // Append headers
 
-                _this16._appendHeaders(request, method); // Result handler
+                _this20._appendHeaders(request, method); // Result handler
 
 
                 request.addEventListener('load', function () {
                   if (request.status >= 300) {
                     return reject({
                       status: request.status,
-                      message: _this16.errorStatus[request.status]
+                      message: _this20.errorStatus[request.status]
                     });
                   }
 
@@ -4031,7 +4101,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }); // Error handler
 
                 request.addEventListener('error', function () {
-                  console.log('error', request.status);
                   reject(request.response);
                 });
                 request.send();
@@ -4044,25 +4113,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }, {
             key: "save",
             value: function save(data) {
-              var _this17 = this;
+              var _this21 = this;
 
               return new Promise(function (resolve, reject) {
                 var request = new XMLHttpRequest();
                 var method = 'POST';
-                request.open(method, _this17.urlBuilder.buildUrl(_this17.rootPath, _this17.getNameCollection(), method), true); // Append headers
+                request.open(method, _this21.urlBuilder.buildUrl(_this21.rootPath, _this21.getNameCollection(), method), true); // Append headers
 
-                _this17._appendHeaders(request, method); // Result handler
+                _this21._appendHeaders(request, method); // Result handler
 
 
                 request.addEventListener('load', function () {
                   if (request.status >= 300) {
                     var response = {
                       status: request.status,
-                      message: _this17.errorStatus[request.status]
+                      message: _this21.errorStatus[request.status]
                     };
 
                     if (request.status === 422 && request.response) {
-                      var errorResponse = _this17.dataDecode.dataDecode(request.response);
+                      var errorResponse = _this21.dataDecode.dataDecode(request.response);
 
                       if (errorResponse['errors']) {
                         response['errors'] = errorResponse['errors'];
@@ -4072,14 +4141,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     return reject(response);
                   }
 
-                  resolve(_this17.dataDecode.dataDecode(request.response));
+                  resolve(_this21.dataDecode.dataDecode(request.response));
                 }); // Error handler
 
                 request.addEventListener('error', function () {
-                  console.log('error', request.status);
                   reject(request.response);
                 });
-                request.send(_this17.dataEncode.dataEncode(data));
+                request.send(_this21.dataEncode.dataEncode(data));
               });
             }
             /**
@@ -4089,25 +4157,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }, {
             key: "update",
             value: function update(data) {
-              var _this18 = this;
+              var _this22 = this;
 
               return new Promise(function (resolve, reject) {
                 var request = new XMLHttpRequest();
-                var method = _this18.updateMethod;
-                request.open(method, _this18.urlBuilder.buildUrl(_this18.rootPath, _this18.getNameCollection(), method, data.id), true); // Append headers
+                var method = _this22.updateMethod;
+                request.open(method, _this22.urlBuilder.buildUrl(_this22.rootPath, _this22.getNameCollection(), method, data.id), true); // Append headers
 
-                _this18._appendHeaders(request, method); // Result handler
+                _this22._appendHeaders(request, method); // Result handler
 
 
                 request.addEventListener('load', function () {
                   if (request.status >= 300) {
                     var response = {
                       status: request.status,
-                      message: _this18.errorStatus[request.status]
+                      message: _this22.errorStatus[request.status]
                     };
 
                     if (request.status === 422 && request.response) {
-                      var errorResponse = _this18.dataDecode.dataDecode(request.response);
+                      var errorResponse = _this22.dataDecode.dataDecode(request.response);
 
                       if (errorResponse['errors']) {
                         response['errors'] = errorResponse['errors'];
@@ -4117,14 +4185,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     return reject(response);
                   }
 
-                  resolve(_this18.dataDecode.dataDecode(request.response));
+                  resolve(_this22.dataDecode.dataDecode(request.response));
                 }); // Error handler
 
                 request.addEventListener('error', function () {
-                  console.log('error', request.status);
                   reject(request.response);
                 });
-                request.send(_this18.dataEncode.dataEncode(data));
+                request.send(_this22.dataEncode.dataEncode(data));
               });
             }
             /**
@@ -4140,7 +4207,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }, {
             key: "request",
             value: function request(method, url, headers, data, query, options) {
-              var _this19 = this;
+              var _this23 = this;
 
               //87f76db7d67bc36fd5ec6ace436cf29f34d10c9042af249a524b982b42208498+Vs2Zub8u32AsiAApZ8klEZYXUC5i48vyIcDqLN6gfWuaH5V8OpNz69n6HxcHn1l
               return new Promise(function (resolve, reject) {
@@ -4149,7 +4216,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                  * Create request
                  */
 
-                request.open(method, "".concat(url).concat(_this19._buildQueryString(query)), true);
+                request.open(method, "".concat(url).concat(_this23._buildQueryString(query)), true);
                 /**
                  * Append headers
                  */
@@ -4162,11 +4229,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   if (request.status >= 300) {
                     var response = {
                       status: request.status,
-                      message: _this19.errorStatus[request.status]
+                      message: _this23.errorStatus[request.status]
                     };
 
                     if (request.status === 422 && request.response) {
-                      var errorResponse = _this19.dataDecode.dataDecode(request.response);
+                      var errorResponse = _this23.dataDecode.dataDecode(request.response);
 
                       if (errorResponse['errors']) {
                         response['errors'] = errorResponse['errors'];
@@ -4176,18 +4243,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     return reject(response);
                   }
 
-                  resolve(_this19.dataDecode.dataDecode(request.response));
+                  resolve(_this23.dataDecode.dataDecode(request.response));
                 }); // Error handler
 
                 request.addEventListener('error', function () {
-                  console.warn('Error xmlh adapter:', request.status);
                   reject(request.response);
                 });
                 /**
                  * Decode message
                  */
 
-                request.send(_this19.dataEncode.dataEncode(Object.keys(data).length === 0 && data.constructor === Object ? data : null));
+                request.send(_this23.dataEncode.dataEncode(Object.keys(data).length === 0 && data.constructor === Object ? data : null));
               });
             }
           }]);
@@ -4306,7 +4372,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * Order service
        */
 
-      container.set('OrderService', new _shared_bundle_.OrderService(orderStorage));
+      var service = new _shared_bundle_.OrderService(orderStorage);
+      setInterval(service.pollingCurrentOrder.bind(service), 8000);
+      container.set('OrderService', service);
       window.container = container;
 
       var loadMenuApp = function loadMenuApp() {
@@ -4341,6 +4409,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       });
     });</script>
   <style is="custom-style" id="colorCustomStyle">
+    :root {
+
+      --status-can-order: #2da82d;
+      --status-in-queue: #f0e500;
+      --status-in-preparation: #3250a8;
+      --status-close: #db0202;
+    }
+
     :host {
       --paper-input-container: {
         --paper-input-container-color: var(--munu-color);

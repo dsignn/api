@@ -70,7 +70,6 @@ class OrderMongoAdapter extends MongoAdapter {
                             '$match' => [
                                 'status' => [
                                     '$in' =>  [
-                                        OrderEntity::STATUS_CAN_ORDER,
                                         OrderEntity::STATUS_PREPARATION,
                                         OrderEntity::STATUS_QUEUE,
                                     ]
@@ -159,6 +158,7 @@ class OrderMongoAdapter extends MongoAdapter {
                     "computedStatus" => [
                         '$switch' => [
                             'branches' => [
+                                [ 'case' => [ '$eq' => [ OrderEntity::STATUS_VALIDATING,  '$status' ] ], 'then' => 0 ] ,
                                 [ 'case' => [ '$eq' => [ OrderEntity::STATUS_CAN_ORDER,  '$status' ] ], 'then' => 1 ] ,
                                 [ 'case' => [ '$eq' => [ OrderEntity::STATUS_QUEUE,  '$status' ] ], 'then' => 2 ],
                                 [ 'case' => [ '$eq' => [ OrderEntity::STATUS_PREPARATION,  '$status' ] ], 'then' => 3 ],
@@ -192,7 +192,6 @@ class OrderMongoAdapter extends MongoAdapter {
  
         // Pagination setting
         if ($page && $itemPerPage) {
-
 
             array_push($aggreagate, [ '$skip' => ($page-1) * $itemPerPage]);
             array_push($aggreagate, [ '$limit' => $itemPerPage]);

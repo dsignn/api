@@ -16,7 +16,11 @@ use DateTime;
  */
 class OrderEntity implements EntityInterface {
 
-       
+    /**
+     * @var string
+     */
+    const STATUS_VALIDATING = 'validating';       
+
     /**
      * @var string
      */
@@ -61,6 +65,10 @@ class OrderEntity implements EntityInterface {
      * state of order
      */
     const FINITE_STATE_MACHINE = [
+        OrderEntity::STATUS_VALIDATING => [
+            OrderEntity::STATUS_INVALID,
+            OrderEntity::STATUS_QUEUE
+        ],
         OrderEntity::STATUS_CAN_ORDER => [
             OrderEntity::STATUS_QUEUE,
             OrderEntity::STATUS_INVALID,
@@ -124,7 +132,7 @@ class OrderEntity implements EntityInterface {
      * OrderEntity constructor.
      */
     public function __construct() {
-        $this->status = self::STATUS_CAN_ORDER;
+        $this->status = self::STATUS_VALIDATING;
     }
 
         /**

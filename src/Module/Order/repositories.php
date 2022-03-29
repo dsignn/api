@@ -236,6 +236,7 @@ return function (ContainerBuilder $containerBuilder) {
             $input = new Input('status');
             $input->getValidatorChain()->attach(new InArray([
                 'haystack' => [
+                    OrderEntity::STATUS_VALIDATING,
                     OrderEntity::STATUS_CAN_ORDER,
                     OrderEntity::STATUS_QUEUE,
                     OrderEntity::STATUS_PREPARATION,

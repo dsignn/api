@@ -451,9 +451,7 @@ define(["exports"], function (_exports) {
               for (var cont = 0; result.length > cont; cont++) {
                 result[cont] = _this4.hydrator ? _this4.hydrator.hydrate(result[cont]) : result[cont];
               }
-            } //console.log(this.adapter.getNameCollection(), result);
-
-
+            }
             resolve(result);
           }).catch(function (error) {
             reject(error);
@@ -665,7 +663,7 @@ define(["exports"], function (_exports) {
        * @return {string}
        */
       get: function get() {
-        return 'check';
+        return 'can-order';
       }
       /**
        * Status on queue
@@ -928,7 +926,7 @@ define(["exports"], function (_exports) {
       key: "CHANGE_DEFAUL_ORDER",
 
       /**
-       * Name of the "message" send from sender when play timeslot
+       * Change default order
        *
        * @return {string}
        */
@@ -936,7 +934,18 @@ define(["exports"], function (_exports) {
         return 'change-default-order';
       }
       /**
-       * Name of the "message" send from sender when play timeslot
+       * Update default order
+       *
+       * @return {string}
+       */
+
+    }, {
+      key: "UPDATE_DEFAUL_ORDER",
+      get: function get() {
+        return 'update-default-order';
+      }
+      /**
+       * Load default order
        *
        * @return {string}
        */
@@ -1001,34 +1010,26 @@ define(["exports"], function (_exports) {
 
                 case 2:
                   allOrder = _context.sent;
-                  cont = 0;
 
-                case 4:
-                  if (!(allOrder.length > cont)) {
-                    _context.next = 11;
-                    break;
+                  for (cont = 0; allOrder.length > cont; cont++) {
+                    allOrder[cont].currenteSelected = false;
+                    this.storage.adapter.updateLocal(allOrder[cont]).then(function (updateData) {
+                      console.log('update  for disable');
+                    }).catch(function (error) {
+                      console.error('ERROR for disable', error);
+                    });
                   }
 
-                  allOrder[cont].currenteSelected = false;
-                  _context.next = 8;
-                  return this.getStorage().update(allOrder[cont]);
-
-                case 8:
-                  cont++;
-                  _context.next = 4;
-                  break;
-
-                case 11:
                   order.currenteSelected = true;
-                  this.currentOrder = order;
-                  _context.next = 15;
-                  return this.getStorage().update(order);
+                  _context.next = 7;
+                  return this.storage.adapter.updateLocal(order);
 
-                case 15:
+                case 7:
+                  this.currentOrder = order;
                   this.getEventManager().emit(OrderService.CHANGE_DEFAUL_ORDER, order);
                   return _context.abrupt("return", this);
 
-                case 17:
+                case 10:
                 case "end":
                   return _context.stop();
               }
@@ -1043,6 +1044,47 @@ define(["exports"], function (_exports) {
         return setCurrentOrder;
       }()
       /**
+       * 
+       */
+
+    }, {
+      key: "sendOrderInQueue",
+      value: function sendOrderInQueue() {
+        var _this11 = this;
+
+        this.currentOrder.status = OrderEntity.STATUS_QUEUE;
+        this.storage.update(this.currentOrder).then(function (updateData) {
+          console.log('Update after send order', updateData);
+
+          _this11.getEventManager().emit(OrderService.UPDATE_DEFAUL_ORDER, _this11.currentOrder);
+        }).catch(function (error) {
+          _this11.currentOrder.status = OrderEntity.STATUS_QUEUE;
+          console.error('Error after send order', error);
+        });
+      }
+      /**
+        * @returns
+       */
+
+    }, {
+      key: "pollingCurrentOrder",
+      value: function pollingCurrentOrder() {
+        var _this12 = this;
+
+        if (this.currentOrder) {
+          this.storage.get(this.currentOrder.id).then(function (data) {
+            _this12.currentOrder = data;
+            _this12.currentOrder.currenteSelected = true;
+
+            _this12.storage.adapter.updateLocal(data).then(function (updateData) {//console.log('update local');
+            }).catch(function (error) {//console.error('ERROR', error);
+            });
+
+            _this12.getEventManager().emit(OrderService.UPDATE_DEFAUL_ORDER, _this12.currentOrder);
+          });
+        }
+      }
+      /**
        * @param {string} restaurantId 
        * @returns 
        */
@@ -1053,39 +1095,27 @@ define(["exports"], function (_exports) {
         var _loadCurreOrder = babelHelpers.asyncToGenerator(
         /*#__PURE__*/
         regeneratorRuntime.mark(function _callee2(restaurantId) {
-          var orders, order;
+          var order;
           return regeneratorRuntime.wrap(function _callee2$(_context2) {
             while (1) {
               switch (_context2.prev = _context2.next) {
                 case 0:
                   _context2.next = 2;
-                  return this.getStorage().getAll({
-                    'restaurantId': restaurantId,
-                    'currenteSelected': true
+                  return this.getStorage().adapter.getCurrentOrder({
+                    'restaurantId': restaurantId
                   });
 
                 case 2:
-                  orders = _context2.sent;
+                  order = _context2.sent;
 
-                  if (!(orders > 1)) {
-                    _context2.next = 6;
-                    break;
-                  }
-
-                  console.warn('too many orders set as default', restaurantId);
-                  return _context2.abrupt("return");
-
-                case 6:
-                  order = null;
-
-                  if (orders.length > 0) {
-                    this.currentOrder = orders[0];
+                  if (order) {
+                    this.currentOrder = this.storage.hydrator.hydrate(order);
                     this.getEventManager().emit(OrderService.LOAD_DEFAUL_ORDER, this.currentOrder);
                   }
 
                   return _context2.abrupt("return", this.currentOrder);
 
-                case 9:
+                case 5:
                 case "end":
                   return _context2.stop();
               }
