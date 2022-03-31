@@ -41,7 +41,7 @@ class OrderEntity implements EntityInterface {
      */
     const STATUS_DELIVERING = 'delivering';
 
-        /**
+    /**
      * @var string
      */
     const STATUS_CLOSE = 'close';

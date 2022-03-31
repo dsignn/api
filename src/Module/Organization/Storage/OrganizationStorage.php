@@ -38,7 +38,7 @@ class OrganizationStorage extends Storage implements OrganizationStorageInterfac
                         ['menus' => [
                             '$elemMatch' => [
                                 "status" => [
-                                    '$in' => [MenuEntity::$STATUS_ENABLE, MenuEntity::$STATUS_DELIVERY]
+                                    '$in' => [MenuEntity::STATUS_ENABLE]
                                 ]
                             ]
                         ]
@@ -59,7 +59,7 @@ class OrganizationStorage extends Storage implements OrganizationStorageInterfac
                                 'as' => 'menu',
                                 'cond' => [
                                     '$in' => [
-                                        '$$menu.status', [MenuEntity::$STATUS_DELIVERY, MenuEntity::$STATUS_ENABLE]
+                                        '$$menu.status', [MenuEntity::STATUS_ENABLE]
                                     ]
                                 ]
                             ]

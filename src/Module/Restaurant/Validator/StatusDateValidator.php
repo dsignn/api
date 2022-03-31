@@ -47,7 +47,7 @@ class StatusDateValidator extends AbstractValidator implements ValidatorInterfac
         $this->setOptions(["format" => $this->getFormat()]);
 
 
-        if (is_array($context) && $context['status'] && $context['status'] === MenuEntity::$STATUS_DATE) {
+        if (is_array($context) && $context['type'] && $context['type'] === MenuEntity::TYPE_DAILY) {
 
             switch (true) {
                 case !$value === true:

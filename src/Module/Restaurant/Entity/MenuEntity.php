@@ -21,27 +21,29 @@ class MenuEntity implements EntityInterface
     /**
      * @var string
      */
-    static public $STATUS_ENABLE = 'indoor';
+    const STATUS_DISABLE = 'disable';
+
 
     /**
      * @var string
      */
-    static public $STATUS_DELIVERY = 'delivery';
+    const STATUS_ENABLE = 'enable';
+
 
     /**
      * @var string
      */
-    static public $STATUS_DATE = 'date';
+    const TYPE_INDOOR = 'indoor';
 
     /**
      * @var string
      */
-    static public $STATUS_DISABLE = 'disable';
+    const TYPE_DELIVERY = 'delivery';
 
     /**
      * @var string
      */
-    protected $name = '';
+    const TYPE_DAILY = 'daily';
 
     /**
      * @var array<MenuItem>
@@ -84,6 +86,11 @@ class MenuEntity implements EntityInterface
     protected $status = '';
 
     /**
+     * @var string
+     */
+    protected $type = '';
+
+    /**
      * @var \DateTime
      */
     protected $statusDate = null;
@@ -93,7 +100,8 @@ class MenuEntity implements EntityInterface
      */
     public function __construct() {
         $this->organization = new Reference();
-        $this->status = MenuEntity::$STATUS_DISABLE;
+        $this->status = MenuEntity::STATUS_DISABLE;
+        $this->type = MenuEntity::TYPE_INDOOR;
     }
 
     /**
@@ -260,6 +268,22 @@ class MenuEntity implements EntityInterface
      */
     public function setStatusDate(\DateTime $statusDate = null): MenuEntity {
         $this->statusDate = $statusDate;
+        return $this;
+    }
+
+        /**
+     * @return \DateTime
+     */
+    public function getType() {
+        return $this->type;
+    }
+
+    /**
+     * @param string $statusDate
+     * @return MenuEntity
+     */
+    public function setType(string $type = null): MenuEntity {
+        $this->type = $type;
         return $this;
     }
 }

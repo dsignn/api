@@ -294,7 +294,7 @@ return function (ContainerBuilder $containerBuilder) {
                     MenuItem::STATUS_OVER
                 ]
             ]));
-            $input->getFilterChain()->attach(new DefaultFilter(MenuEntity::$STATUS_DISABLE));
+            $input->getFilterChain()->attach(new DefaultFilter(MenuItem::STATUS_AVAILABLE));
             $menuItem->add($input, 'status');
 
             // Status menu field
@@ -341,14 +341,27 @@ return function (ContainerBuilder $containerBuilder) {
             $input->setRequired(false);
             $input->getValidatorChain()->attach(new InArray([
                 'haystack' => [
-                    MenuEntity::$STATUS_DISABLE,
-                    MenuEntity::$STATUS_ENABLE,
-                    MenuEntity::$STATUS_DATE,
-                    MenuEntity::$STATUS_DELIVERY,
+                    MenuEntity::STATUS_ENABLE,
+                    MenuEntity::STATUS_DISABLE,
                 ]
             ]));
-            $input->getFilterChain()->attach(new DefaultFilter(MenuEntity::$STATUS_DISABLE));
+
+            $input->getFilterChain()->attach(new DefaultFilter(MenuEntity::STATUS_DISABLE));
             $inputFilter->add($input, 'status');
+
+            // Status menu field
+            $input = new Input('type');
+            $input->setRequired(false);
+            $input->getValidatorChain()->attach(new InArray([
+                'haystack' => [
+                    MenuEntity::TYPE_INDOOR,
+                    MenuEntity::TYPE_INDOOR,
+                    MenuEntity::TYPE_DAILY,
+                ]
+            ]));
+            
+            $input->getFilterChain()->attach(new DefaultFilter(MenuEntity::TYPE_INDOOR));
+            $inputFilter->add($input, 'type');
 
             $input = new AppInput('statusDate');
             $input->getValidatorChain()->attach(new StatusDateValidator());

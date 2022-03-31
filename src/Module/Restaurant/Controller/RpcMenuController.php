@@ -78,10 +78,10 @@ class RpcMenuController implements RpcControllerInterface {
 
         switch (true) {
             case isset($query['delivery']) === true:
-                $status = MenuEntity::$STATUS_DELIVERY;
+                $type = MenuEntity::TYPE_DELIVERY;
                 break;
             default:
-                $status = MenuEntity::$STATUS_ENABLE;
+                $type = MenuEntity::TYPE_INDOOR;
         }
 
         switch (true) {
@@ -116,7 +116,7 @@ class RpcMenuController implements RpcControllerInterface {
 
                 return $this->organizationNotFound($response, $request);
             }
-            $menu = $this->menuStorage->getMenuByRestaurantSlug($slug, $status);
+            $menu = $this->menuStorage->getMenuByRestaurantSlug($slug, $type);
          
             if (!$menu) {
          

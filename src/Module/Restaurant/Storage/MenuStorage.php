@@ -18,11 +18,11 @@ class MenuStorage extends Storage implements MenuStorageInterface
 
     /**
      * @param string $slug
-     * @param string $status
+     * @param string $type
      * @param null $date
      * @return array|null
      */
-    public function getMenuByRestaurantSlug(string $slug,string $status, \DateTime $date = null) {
+    public function getMenuByRestaurantSlug(string $slug, string $type, \DateTime $date = null) {
         $menu = null;
         if ($this->storage instanceof MongoAdapter) {
 
@@ -47,7 +47,7 @@ class MenuStorage extends Storage implements MenuStorageInterface
                 ],
                 [
                     '$match' =>
-                        ['menu.status' => $status],
+                        ['menu.type' => $type],
                 ],
                 [
                     '$lookup' => [

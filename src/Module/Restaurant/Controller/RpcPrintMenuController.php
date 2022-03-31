@@ -149,11 +149,11 @@ class RpcPrintMenuController implements RpcControllerInterface {
 
         // Retrive qrcode
         $qrcode = null;
-        switch($menu->getStatus()) {
-            case MenuEntity::$STATUS_ENABLE:
+        switch($menu->getType()) {
+            case MenuEntity::TYPE_INDOOR:
                 $qrcode = $this->resourceStorage->get($organization->getQrCode()->getId());
                 break;
-            case MenuEntity::$STATUS_DELIVERY:
+            case MenuEntity::TYPE_DELIVERY:
                 $qrcode = $this->resourceStorage->get($organization->getQrCodeDelivery()->getId());
                 break;
         }
