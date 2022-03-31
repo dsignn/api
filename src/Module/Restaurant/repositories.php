@@ -355,7 +355,7 @@ return function (ContainerBuilder $containerBuilder) {
             $input->getValidatorChain()->attach(new InArray([
                 'haystack' => [
                     MenuEntity::TYPE_INDOOR,
-                    MenuEntity::TYPE_INDOOR,
+                    MenuEntity::TYPE_DELIVERY,
                     MenuEntity::TYPE_DAILY,
                 ]
             ]));

@@ -40,7 +40,7 @@ class DisableMenu {
             $collection = $adapter->getCollection();
 
             $cond = [
-                "status" => $entity->getStatus(),
+                "type" => $entity->getType(),
                 "organization.id" => new ObjectId($entity->getOrganization()->getId()),
                 "_id" => ['$ne' => new ObjectId($entity->getId())]
             ];
