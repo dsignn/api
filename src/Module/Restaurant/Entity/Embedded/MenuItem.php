@@ -7,6 +7,7 @@ use App\Module\Restaurant\Entity\MenuEntity;
 use App\Storage\Entity\Embedded\Price\Price;
 use App\Storage\Entity\Embedded\Price\PriceAwareInterface;
 use App\Storage\Entity\Embedded\Price\PriceAwareInterfaceTrait;
+use App\Storage\Entity\Embedded\Price\PriceInterface;
 use App\Storage\Entity\EntityInterface;
 use App\Storage\Entity\EntityTrait;
 use App\Storage\Entity\ReferenceInterface;
@@ -91,6 +92,11 @@ class MenuItem implements EntityInterface, PriceAwareInterface {
      * @var array<ReferenceInterface>
      */
     protected $photos = [];
+
+    /**
+     * @var PriceInterface
+     */
+    protected $price;
 
     /**
      * MenuItem constructor.

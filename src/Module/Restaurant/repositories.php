@@ -17,6 +17,7 @@ use App\InputFilter\Input as AppInput;
 use App\InputFilter\InputFilter;
 use App\Module\Restaurant\Entity\CategoryEntity;
 use App\Module\Restaurant\Entity\Embedded\MenuItem;
+use App\Module\Restaurant\Entity\Embedded\SetMenu;
 use App\Storage\Entity\Embedded\Price\Price;
 use App\Module\Restaurant\Entity\MenuEntity;
 use App\Module\Restaurant\Event\DisableMenu;
@@ -42,6 +43,8 @@ use Laminas\Filter\Boolean;
 use Laminas\Filter\Callback;
 use Laminas\Filter\ToInt;
 use Laminas\Hydrator\ClassMethodsHydrator;
+use App\Hydrator\ClassMethodsHydrator as Test;
+use App\Module\Restaurant\Entity\Embedded\FixedMenu;
 use Laminas\Hydrator\Filter\FilterComposite;
 use Laminas\Hydrator\ObjectPropertyHydrator;
 use Laminas\InputFilter\CollectionInputFilter;
@@ -167,6 +170,10 @@ return function (ContainerBuilder $containerBuilder) {
             $menuItemHydrator->addStrategy('price', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Price())));
             $menuItemHydrator->addStrategy('photos', new HydratorArrayStrategy($c->get('ReferenceMongoHydrator'), new SingleEntityPrototype(new Reference())));
 
+            $setMenu = new Test();
+            $setMenu->setNamingStrategy(new CamelCaseStrategy());
+            $setMenu->addStrategy('price', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Price())));
+
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
             $hydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
@@ -174,6 +181,7 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addStrategy('organization', new HydratorStrategy($c->get('ReferenceMongoHydrator'), new SingleEntityPrototype(new Reference())));
             $hydrator->addStrategy('items', new HydratorArrayStrategy($menuItemHydrator, new SingleEntityPrototype(new MenuItem())));
             $hydrator->addStrategy('statusDate', new MongoDateStrategy());
+            $hydrator->addStrategy('fixedMenu', new HydratorStrategy($setMenu, new SingleEntityPrototype(new FixedMenu())));
 
             return $hydrator;
         }
@@ -187,6 +195,10 @@ return function (ContainerBuilder $containerBuilder) {
             $menuItemHydrator->addStrategy('price', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Price())));
             $menuItemHydrator->addStrategy('photos', new HydratorArrayStrategy($c->get('ReferenceRestHydrator'), new SingleEntityPrototype(new Reference())));
 
+            $setMenu = new Test();
+            $setMenu->setNamingStrategy(new CamelCaseStrategy());
+            $setMenu->addStrategy('price', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Price())));
+
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new CamelCaseStrategy());
             $hydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
@@ -194,6 +206,7 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addStrategy('organization', new HydratorStrategy($c->get('ReferenceRestHydrator'), new SingleEntityPrototype(new Reference())));
             $hydrator->addStrategy('items', new HydratorArrayStrategy($menuItemHydrator, new SingleEntityPrototype(new MenuItem())));
             $hydrator->addStrategy('statusDate', $c->get('EntityDateRestStrategy'));
+            $hydrator->addStrategy('fixedMenu', new HydratorStrategy($setMenu, new SingleEntityPrototype(new FixedMenu())));
 
             return $hydrator;
         }
@@ -207,12 +220,17 @@ return function (ContainerBuilder $containerBuilder) {
             $menuItemHydrator->addStrategy('price', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Price())));
             $menuItemHydrator->addStrategy('photos', new HydratorArrayStrategy($c->get('RestResourceEntityHydrator'), $c->get('ResourceEntityPrototype')));
 
+            $setMenu = new Test();
+            $setMenu->setNamingStrategy(new CamelCaseStrategy());
+            $setMenu->addStrategy('price', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Price())));
+
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new CamelCaseStrategy());
             $hydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
             $hydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
             $hydrator->addStrategy('organization', new HydratorStrategy($c->get('ReferenceRestHydrator'), new SingleEntityPrototype(new Reference())));
             $hydrator->addStrategy('items', new HydratorArrayStrategy($menuItemHydrator, new SingleEntityPrototype(new MenuItem())));
+            $hydrator->addStrategy('fixedMenu', new HydratorStrategy($setMenu, new SingleEntityPrototype(new FixedMenu())));
 
             return $hydrator;
         }
@@ -254,6 +272,14 @@ return function (ContainerBuilder $containerBuilder) {
             $input->setRequired(false);
             $input->getFilterChain()->attach(new ToFloatFilter());
             $price->add($input, 'value');
+
+            $fixedMenu = new InputFilter();
+            $fixedMenu->add($price, 'price');
+           
+            $input = new Input('enable');
+            $input->setRequired(false);
+            $input->getFilterChain()->attach(new Boolean());
+            $fixedMenu->add($input, 'enable');
 
             /**
              *  START InputFilter menu item embedded
@@ -321,8 +347,6 @@ return function (ContainerBuilder $containerBuilder) {
             $collectionItem->setInputFilter($menuItem);
 
             $inputFilter = new InputFilter();
-            $inputFilter->add($organization, 'organization');
-            $inputFilter->add($collectionItem, 'items');
 
             $input = new Input('name');
             $inputFilter->add($input, 'name');
@@ -378,6 +402,10 @@ return function (ContainerBuilder $containerBuilder) {
             $input->setRequired(false);
             $input->getFilterChain()->attach(new ToStringFilter());
             $inputFilter->add($input, 'note');
+
+            $inputFilter->add($organization, 'organization');
+            $inputFilter->add($collectionItem, 'items');
+            $inputFilter->add($fixedMenu, 'fixedMenu');
 
             return $inputFilter;
         }

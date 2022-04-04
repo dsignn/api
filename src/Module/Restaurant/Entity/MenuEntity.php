@@ -3,7 +3,11 @@ declare(strict_types=1);
 
 namespace App\Module\Restaurant\Entity;
 
+use App\Module\Restaurant\Entity\Embedded\FixedMenu;
 use App\Module\Restaurant\Entity\Embedded\MenuItem;
+use App\Module\Restaurant\Entity\Embedded\SetMenu;
+use App\Storage\Entity\Embedded\Price\Price;
+use App\Storage\Entity\Embedded\Price\PriceInterface;
 use App\Storage\Entity\EntityInterface;
 use App\Storage\Entity\EntityTrait;
 use App\Storage\Entity\Reference;
@@ -96,12 +100,19 @@ class MenuEntity implements EntityInterface
     protected $statusDate = null;
 
     /**
+     * @var FixedMenu
+     */
+    protected $fixedMenu;
+
+    /**
      * MenuEntity constructor.
      */
     public function __construct() {
         $this->organization = new Reference();
         $this->status = MenuEntity::STATUS_DISABLE;
         $this->type = MenuEntity::TYPE_INDOOR;
+        $this->fixedMenu = new FixedMenu();
+        $this->fixedMenu->setPrice(new Price());
     }
 
     /**
@@ -284,6 +295,22 @@ class MenuEntity implements EntityInterface
      */
     public function setType(string $type = null): MenuEntity {
         $this->type = $type;
+        return $this;
+    }
+
+    /**
+     * @return  FixedMenu
+     */ 
+    public function getFixedMenu(): FixedMenu {
+        return $this->fixedMenu;
+    }
+
+    /**
+     * @param  FixedMenu $fixedMenu
+     * @return  MenuEntity
+     */ 
+    public function setFixedMenu(FixedMenu $fixedMenu) {
+        $this->fixedMenu = $fixedMenu;
         return $this;
     }
 }
