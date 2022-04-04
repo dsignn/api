@@ -72,11 +72,6 @@ class MenuEntity implements EntityInterface
     /**
      * @var string
      */
-    protected $note = '';
-
-    /**
-     * @var string
-     */
     protected $layoutType = 'dsign-menu-item-image';
 
     /**
@@ -216,22 +211,6 @@ class MenuEntity implements EntityInterface
      */
     public function setLayoutType(string $layoutType): void {
         $this->layoutType = $layoutType;
-    }
-
-    /**
-     * @return string
-     */
-    public function getNote(): string {
-        return $this->note;
-    }
-
-    /**
-     * @param string $note
-     * @return MenuEntity
-     */
-    public function setNote(string $note): MenuEntity {
-        $this->note = $note;
-        return $this;
     }
 
     /**

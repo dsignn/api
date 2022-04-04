@@ -43,7 +43,6 @@ use Laminas\Filter\Boolean;
 use Laminas\Filter\Callback;
 use Laminas\Filter\ToInt;
 use Laminas\Hydrator\ClassMethodsHydrator;
-use App\Hydrator\ClassMethodsHydrator as Test;
 use App\Module\Restaurant\Entity\Embedded\FixedMenu;
 use Laminas\Hydrator\Filter\FilterComposite;
 use Laminas\Hydrator\ObjectPropertyHydrator;
@@ -170,7 +169,7 @@ return function (ContainerBuilder $containerBuilder) {
             $menuItemHydrator->addStrategy('price', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Price())));
             $menuItemHydrator->addStrategy('photos', new HydratorArrayStrategy($c->get('ReferenceMongoHydrator'), new SingleEntityPrototype(new Reference())));
 
-            $setMenu = new Test();
+            $setMenu = new ClassMethodsHydrator();
             $setMenu->setNamingStrategy(new CamelCaseStrategy());
             $setMenu->addStrategy('price', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Price())));
 
@@ -195,7 +194,7 @@ return function (ContainerBuilder $containerBuilder) {
             $menuItemHydrator->addStrategy('price', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Price())));
             $menuItemHydrator->addStrategy('photos', new HydratorArrayStrategy($c->get('ReferenceRestHydrator'), new SingleEntityPrototype(new Reference())));
 
-            $setMenu = new Test();
+            $setMenu = new ClassMethodsHydrator();
             $setMenu->setNamingStrategy(new CamelCaseStrategy());
             $setMenu->addStrategy('price', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Price())));
 
@@ -220,7 +219,7 @@ return function (ContainerBuilder $containerBuilder) {
             $menuItemHydrator->addStrategy('price', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Price())));
             $menuItemHydrator->addStrategy('photos', new HydratorArrayStrategy($c->get('RestResourceEntityHydrator'), $c->get('ResourceEntityPrototype')));
 
-            $setMenu = new Test();
+            $setMenu = new ClassMethodsHydrator();
             $setMenu->setNamingStrategy(new CamelCaseStrategy());
             $setMenu->addStrategy('price', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Price())));
 
@@ -280,6 +279,11 @@ return function (ContainerBuilder $containerBuilder) {
             $input->setRequired(false);
             $input->getFilterChain()->attach(new Boolean());
             $fixedMenu->add($input, 'enable');
+
+                       
+            $input = new Input('note');
+            $input->setRequired(false);
+            $fixedMenu->add($input, 'note');
 
             /**
              *  START InputFilter menu item embedded
@@ -397,11 +401,6 @@ return function (ContainerBuilder $containerBuilder) {
             $input->setAllowEmpty(true);
             $input->getFilterChain()->attach(new Boolean());
             $inputFilter->add($input, 'enableOrder');
-
-            $input = new Input('note');
-            $input->setRequired(false);
-            $input->getFilterChain()->attach(new ToStringFilter());
-            $inputFilter->add($input, 'note');
 
             $inputFilter->add($organization, 'organization');
             $inputFilter->add($collectionItem, 'items');

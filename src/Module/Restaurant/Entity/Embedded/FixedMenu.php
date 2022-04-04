@@ -4,14 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\Restaurant\Entity\Embedded;
 
-use App\Module\Restaurant\Entity\MenuEntity;
-use App\Storage\Entity\Embedded\Price\Price;
 use App\Storage\Entity\Embedded\Price\PriceAwareInterface;
 use App\Storage\Entity\Embedded\Price\PriceAwareInterfaceTrait;
-use App\Storage\Entity\Embedded\Price\PriceInterface;
-use App\Storage\Entity\EntityInterface;
-use App\Storage\Entity\EntityTrait;
-use App\Storage\Entity\ReferenceInterface;
 
 /**
  * Class FixedMenu
@@ -25,6 +19,11 @@ class FixedMenu implements PriceAwareInterface {
      * @var boolean
      */
     protected $enable = false;
+
+    /**
+     * @return string
+     */
+    protected $note;
 
     /**
      * Get the value of enable
@@ -41,6 +40,21 @@ class FixedMenu implements PriceAwareInterface {
      */
     public function setEnable(bool $enable) {
         $this->enable = $enable;
+        return $this;
+    }
+
+    /**
+      * @return  string|null
+     */ 
+    public function getNote() {
+        return $this->note;
+    }
+
+    /**
+     * @return  FixedMenu
+     */ 
+    public function setNote($note) {
+        $this->note = $note;
         return $this;
     }
 }
