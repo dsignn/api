@@ -44,6 +44,7 @@ use Laminas\Filter\Callback;
 use Laminas\Filter\ToInt;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use App\Module\Restaurant\Entity\Embedded\FixedMenu;
+use App\Validator\ArrayIntersec;
 use Laminas\Hydrator\Filter\FilterComposite;
 use Laminas\Hydrator\ObjectPropertyHydrator;
 use Laminas\InputFilter\CollectionInputFilter;
@@ -277,10 +278,10 @@ return function (ContainerBuilder $containerBuilder) {
            
             $input = new Input('enable');
             $input->setRequired(false);
+            $input->setAllowEmpty(true);
             $input->getFilterChain()->attach(new Boolean());
             $fixedMenu->add($input, 'enable');
-
-                       
+    
             $input = new Input('note');
             $input->setRequired(false);
             $fixedMenu->add($input, 'note');
@@ -344,6 +345,22 @@ return function (ContainerBuilder $containerBuilder) {
             $input->setRequired(false);
             $input->getFilterChain()->attach(new DefaultFilter([]));
             $menuItem->add($input, 'allergens');
+
+
+            $validator = new ArrayIntersec();
+            $validator->setHaystack([
+                MenuItem::PROPERTY_BIOLOGICAL,
+                MenuItem::PROPERTY_FROZEN,
+                MenuItem::PROPERTY_PULLED_DOWN,
+                MenuItem::PROPERTY_SPICE
+            ]);
+
+            $input = new Input('additionalProperty');
+            $input->setRequired(false);
+            $input->getFilterChain()->attach(new DefaultFilter([]));
+            $input->getValidatorChain()->attach($validator);
+            $menuItem->add($input, 'additionalProperty');
+
             /**
              * END
              */

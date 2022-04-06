@@ -52,6 +52,26 @@ class MenuItem implements EntityInterface, PriceAwareInterface {
     const VEGAN_DISH = 'vegan';
 
     /**
+     * @var string
+     */
+    const PROPERTY_SPICE = 'spicy';
+
+    /**
+     * @var string
+     */
+    const PROPERTY_BIOLOGICAL = 'biological';
+
+    /**
+     * 
+     */
+    const PROPERTY_PULLED_DOWN = 'pulled-down';
+
+    /**
+     * 
+     */
+    const PROPERTY_FROZEN = 'frozen';
+
+    /**
      * @var array
      */
     protected $name = [];
@@ -71,11 +91,15 @@ class MenuItem implements EntityInterface, PriceAwareInterface {
      */
     protected $new = 0;
 
-        /**
+    /**
      * @var array
      */
     protected $allergens = [];
 
+    /**
+     * @var array
+     */
+    protected $additionalProperty = [];
 
     /**
      * [$NORMAL_DISH, $VEGETARIAN_DISH, $VEGAN_DISH]
@@ -233,6 +257,23 @@ class MenuItem implements EntityInterface, PriceAwareInterface {
      */
     public function setAllergens(array $allergens =  []): MenuItem {
         $this->allergens = $allergens;
+        return $this;
+    }
+
+    /**
+     * @return  array
+     */ 
+    public function getAdditionalProperty() {
+        return $this->additionalProperty;
+    }
+
+    /**
+     * @param  array  $additionalProperty
+     * @return MenuEntity
+     */ 
+    public function setAdditionalProperty(array $additionalProperty) {
+        $this->additionalProperty = $additionalProperty;
+
         return $this;
     }
 }
