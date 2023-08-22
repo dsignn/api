@@ -177,8 +177,6 @@ class MenuItem implements EntityInterface, PriceAwareInterface {
         return $this;
     }
 
-
-
     /**
      * @return int
      */
@@ -198,8 +196,7 @@ class MenuItem implements EntityInterface, PriceAwareInterface {
     /**
      * @return array
      */
-    public function getPhotos(): array
-    {
+    public function getPhotos(): array {
         return $this->photos;
     }
 
