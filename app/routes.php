@@ -27,12 +27,6 @@ return function (App $app) {
     $resourceRoute = include_once __DIR__ . "/../src/Module/Resource/routes.php";
     $resourceRoute($app);
 
-    $timeslotRoute = include_once __DIR__ . "/../src/Module/Timeslot/routes.php";
-    $timeslotRoute($app);
-
-    $restaurantRoute = include_once __DIR__ . "/../src/Module/Restaurant/routes.php";
-    $restaurantRoute($app);
-
     $orderRoute = include_once __DIR__ . "/../src/Module/Order/routes.php";
     $orderRoute($app);
 };

@@ -1,4 +1,0 @@
-var config = {
-    dev: false,
-    apiUrl: 'http://127.0.0.150/'
-};

@@ -21,13 +21,4 @@ return function (ContainerBuilder $containerBuilder) {
 
     $resourceRepositories = include_once __DIR__ . "/../src/Module/Resource/repositories.php";
     $resourceRepositories($containerBuilder);
-
-    $timeslotRepositories = include_once __DIR__ . "/../src/Module/Timeslot/repositories.php";
-    $timeslotRepositories($containerBuilder);
-
-    $restaurantRepositories = include_once __DIR__ . "/../src/Module/Restaurant/repositories.php";
-    $restaurantRepositories($containerBuilder);
-
-    $orderRepositories = include_once __DIR__ . "/../src/Module/Order/repositories.php";
-    $orderRepositories($containerBuilder);
 };

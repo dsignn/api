@@ -22,15 +22,6 @@ return function (ContainerBuilder $containerBuilder) {
     $resourceSetting = include_once __DIR__ . "/../src/Module/Resource/setting.php";
     $resourceSetting($setting);
 
-    $timeslotSetting = include_once __DIR__ . "/../src/Module/Timeslot/setting.php";
-    $timeslotSetting($setting);
-
-    $restaurantSetting = include_once __DIR__ . "/../src/Module/Restaurant/setting.php";
-    $restaurantSetting($setting);
-
-    $orderSetting = include_once __DIR__ . "/../src/Module/Order/setting.php";
-    $orderSetting($setting);
-
     $localSetting = include_once __DIR__ . "/local-setting.php";
     $localSetting($setting);
 
