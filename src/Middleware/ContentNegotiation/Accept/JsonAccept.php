@@ -54,6 +54,8 @@ class JsonAccept implements AcceptTransformInterface {
             case is_array($data) === true:
                 $computeData = $data;
                 break;
+            default:
+                $computeData = [$data];
         }
 
         $body = new Stream(fopen('php://temp', 'r+'));

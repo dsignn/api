@@ -8,9 +8,15 @@ use Slim\App;
 return function (App $app) {
 
     $app->get('/', function (Request $request, Response $response) {
-        $response->getBody()->write('pong');
+       
+        $accept = $request->getAttribute('AcceptService');
+        if ($accept) {
+            $response = $accept->transformAccept($response, 'pong');
+        } else {
+            $response->getBody()->write('pong');
+        }
         return $response;
-    });
+    })->add($app->getContainer()->get('ContentNegotiationMiddleware'));
 
     $oauthRoute = include_once __DIR__ . "/../src/Module/Oauth/routes.php";
     $oauthRoute($app);
@@ -27,6 +33,6 @@ return function (App $app) {
     $resourceRoute = include_once __DIR__ . "/../src/Module/Resource/routes.php";
     $resourceRoute($app);
 
-    $orderRoute = include_once __DIR__ . "/../src/Module/Order/routes.php";
-    $orderRoute($app);
+    $machineRoute = include_once __DIR__ . "/../src/Module/Machine/routes.php";
+    $machineRoute($app);
 };

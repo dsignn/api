@@ -93,6 +93,7 @@ class ContentNegotiationMiddleware implements Middleware
      * @inheritDoc
      */
     public function process(Request $request, RequestHandler $handler): Response {
+
         $path = $request->getAttribute('__route__')->getPattern();
         $method = $request->getMethod();
 
@@ -109,7 +110,7 @@ class ContentNegotiationMiddleware implements Middleware
         if(!$this->isValidContentTypeHeader($request)) {
             return (new ResponseSlim())->withStatus(415);
         };
-
+      
         /** @var AcceptTransformInterface $acceptService */
         $acceptService = $this->getAcceptService($path, $method, $request->getHeaderLine(self::$ACCEPT));
 
@@ -236,16 +237,17 @@ class ContentNegotiationMiddleware implements Middleware
      */
     protected function getAcceptService($path, $method, $header) {
         $settings = $this->getSetting($path, $method);
-
+      
         $service = null;
         $default = isset($this->defaultAcceptServices[$header]) ? $this->defaultAcceptServices[$header] : '';
         $custom = isset($settings['acceptService']) ? $settings['acceptService'] : '';
 
         $serviceName = $custom ? $custom : $default;
+     
         if ($this->acceptContainer->has($serviceName)) {
             $service = $this->acceptContainer->get($serviceName);
         }
-
+    
         return $service;
     }
 

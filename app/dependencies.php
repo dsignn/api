@@ -5,6 +5,7 @@ use App\Middleware\Authentication\AuthenticationMiddleware;
 use App\Middleware\Authorization\AuthorizationMiddleware;
 use App\Middleware\ContentNegotiation\Accept\AcceptContainer;
 use App\Middleware\ContentNegotiation\Accept\JsonAccept;
+use App\Middleware\ContentNegotiation\ContentNegotiationMiddleware;
 use App\Middleware\ContentNegotiation\ContentType\ContentTypeContainer;
 use App\Middleware\ContentNegotiation\ContentType\JsonContentType;
 use App\Middleware\ContentNegotiation\ContentType\MultipartFormDataContentType;
@@ -129,6 +130,20 @@ return function (ContainerBuilder $containerBuilder) {
                     return $value;
                 }
             );
+        },
+
+        "ContentNegotiationMiddleware" => function(ContainerInterface $c) {
+
+            $contentNegotiationMiddleware = new ContentNegotiationMiddleware($c->get('settings')['contentNegotiation']);
+            $contentNegotiationMiddleware->setAcceptContainer($c->get(AcceptContainer::class))
+                ->setContentTypeContainer($c->get(ContentTypeContainer::class));
+            $contentNegotiationMiddleware->setDefaultAcceptServices([
+                'application/json' => JsonAccept::class
+            ])->setDefaultContentTypeServices([
+                'application/json' => JsonContentType::class
+            ]);
+
+            return $contentNegotiationMiddleware;
         },
 
         "MongoIdRestStrategy" => function(ContainerInterface $c) {
