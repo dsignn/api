@@ -111,6 +111,7 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addFilter('activationCode', new MethodMatchFilter('getActivationCode'),  FilterComposite::CONDITION_AND);
             $hydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
             $hydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
+            
             $recoverPasswordHydrator = new ClassMethodsHydrator();
             $recoverPasswordHydrator->setNamingStrategy(new CamelCaseStrategy());
             $recoverPasswordHydrator->addStrategy('date', new MongoDateStrategy());
@@ -203,14 +204,14 @@ return function (ContainerBuilder $containerBuilder) {
                 ->attach($container->get(EmailExistValidator::class));
 
             $nameOrganization = new Input('nameOrganization');
-            $nameOrganization->setRequired(false);
+            $nameOrganization->setRequired(true);
             $nameOrganization->getValidatorChain()
                 ->attach($container->get(UniqueNameOrganization::class));
 
             // Role field
             $role = new Input('roleId');
             $role->getValidatorChain()->attach(new InArray([
-                'haystack' => ['guest', 'restaurantOwner']
+                'haystack' => ['guest', 'organizationOwner']
             ]));
             // Password field
             $password = $password = new Input('password');

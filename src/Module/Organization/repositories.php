@@ -75,11 +75,8 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->setNamingStrategy(new CamelCaseStrategy());
             $hydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
             $hydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
-            $hydrator->addStrategy('qrCode', new HydratorStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
-            $hydrator->addStrategy('qrCodeDelivery', new HydratorStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
             $hydrator->addStrategy('logo', new HydratorStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
-            $hydrator->addStrategy('whatsappPhone', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Phone())));
-            $hydrator->addStrategy('address', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Address())));
+            
             return $hydrator;
         }
     ])->addDefinitions([
@@ -93,11 +90,8 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
             $hydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
             $hydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
-            $hydrator->addStrategy('qrCode', new HydratorStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
-            $hydrator->addStrategy('qrCodeDelivery', new HydratorStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
             $hydrator->addStrategy('logo', new HydratorStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
-            $hydrator->addStrategy('whatsappPhone', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Phone())));
-            $hydrator->addStrategy('address', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Address())));
+           
             return $hydrator;
         }
     ])->addDefinitions([
@@ -115,21 +109,6 @@ return function (ContainerBuilder $containerBuilder) {
                 ->attach($c->get(UniqueNameOrganization::class));
 
             $inputFilter->add($name);
-
-            $price = new InputFilter();
-
-            $input = new Input('number');
-            $input->setRequired(false);
-            $input->getFilterChain()->attach(new ToInt());
-            $price->add($input, 'number');
-
-            $input = new Input('prefix');
-            $input->setRequired(false);
-            $input->getValidatorChain()->attach(new InArray( ['haystack' => getPrefix()]));
-            $price->add($input, 'prefix');
-
-            $menuItem = new InputFilter();
-            $menuItem->add($price, 'whatsappPhone');
 
             return $inputFilter;
         }
@@ -149,46 +128,9 @@ return function (ContainerBuilder $containerBuilder) {
 
             $inputFilter->add($input);
 
-            $input = new Input('qrCode');
-            $input->setRequired(false);
-            $inputFilter->add($input);
-
-            $input = new Input('qrCodeDelivery');
-            $input->setRequired(false);
-            $inputFilter->add($input);
-
             $input = new Input('logo');
             $input->setRequired(false);
             $inputFilter->add($input);
-
-            $input = new Input('siteUrl');
-            $input->setRequired(false);
-            $inputFilter->add($input);
-
-            $price = new InputFilter();
-
-            $input = new Input('number');
-            $input->setRequired(false);
-            $input->getFilterChain()->attach(new ToInt());
-            $price->add($input, 'number');
-
-            $input = new Input('prefix');
-            $input->setRequired(false);
-            $input->getValidatorChain()->attach(new InArray( ['haystack' => getPrefix()]));
-            $price->add($input, 'prefix');
-
-            $inputFilter->add($price, 'whatsappPhone');
-
-            $input = new Input('tableNumber');
-            $input->setRequired(false);
-            $input->getFilterChain()->attach(new ToInt());
-            $input->getValidatorChain()->attach(new Digits());
-            $inputFilter->add($input);
-
-            // TODO add in other service
-            $inputFilterAddress = new Input('address');
-            $inputFilterAddress->setRequired(false);
-            $inputFilter->add($inputFilterAddress);
 
             return $inputFilter;
         }

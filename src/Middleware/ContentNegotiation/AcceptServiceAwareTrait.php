@@ -27,7 +27,7 @@ trait AcceptServiceAwareTrait {
      * @return AcceptTransformInterface
      * @throws ServiceNotFound
      */
-    protected function getAcceptService(Request $request) {
+    protected function  getAcceptService(Request $request) {
 
         /** @var AcceptTransformInterface $acceptService */
         $acceptService = $request->getAttribute('AcceptService');

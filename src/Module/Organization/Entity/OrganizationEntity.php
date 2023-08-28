@@ -23,12 +23,8 @@ class OrganizationEntity implements EntityInterface {
      * OrganizationEntity constructor.
      */
     public function __construct() {
-
-        $this->qrCode = new Reference();
-        $this->qrCodeDelivery = new Reference();
+        
         $this->logo = new Reference();
-        $this->whatsappPhone = new Phone();
-        $this->address = new Address();
     }
 
     /**
@@ -44,37 +40,7 @@ class OrganizationEntity implements EntityInterface {
     /**
      * @var ReferenceInterface
      */
-    protected $qrCode;
-
-    /**
-     * @var ReferenceInterface
-     */
-    protected $qrCodeDelivery;
-
-    /**
-     * @var ReferenceInterface
-     */
     protected $logo;
-
-    /**
-     * @var string
-     */
-    protected $whatsappPhone;
-
-    /**
-     * @var Address
-     */
-    protected $address;
-
-    /**
-     * @var string
-     */
-    protected $siteUrl = '';
-
-    /**
-     * @var int
-     */
-    protected $tableNumber = 0;
 
     /**
      * @return string
@@ -111,38 +77,6 @@ class OrganizationEntity implements EntityInterface {
     /**
      * @return ReferenceInterface
      */
-    public function getQrCode(): ReferenceInterface {
-        return $this->qrCode;
-    }
-
-    /**
-     * @param ReferenceInterface $qrCode
-     * @return OrganizationEntity
-     */
-    public function setQrCode(ReferenceInterface $qrCode): OrganizationEntity {
-        $this->qrCode = $qrCode;
-        return $this;
-    }
-
-    /**
-     * @return ReferenceInterface
-     */
-    public function getQrCodeDelivery(): ReferenceInterface {
-        return $this->qrCodeDelivery;
-    }
-
-    /**
-     * @param ReferenceInterface $qrCodeDelivery
-     * @return OrganizationEntity
-     */
-    public function setQrCodeDelivery(ReferenceInterface $qrCodeDelivery): OrganizationEntity {
-        $this->qrCodeDelivery = $qrCodeDelivery;
-        return $this;
-    }
-
-    /**
-     * @return ReferenceInterface
-     */
     public function getLogo(): ReferenceInterface {
         return $this->logo;
     }
@@ -153,74 +87,6 @@ class OrganizationEntity implements EntityInterface {
      */
     public function setLogo(ReferenceInterface $logo): OrganizationEntity {
         $this->logo = $logo;
-        return $this;
-    }
-
-    /**
-     * @return Phone
-     */
-    public function getWhatsappPhone(): Phone {
-        return $this->whatsappPhone;
-    }
-
-    /**
-     * @param string $whatsappPhone
-     * @return OrganizationEntity
-     */
-    public function setWhatsappPhone(Phone $whatsappPhone): OrganizationEntity {
-        $this->whatsappPhone = $whatsappPhone;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSiteUrl() {
-        return $this->siteUrl;
-    }
-
-    /**
-     * @param string $siteUrl
-     * @return OrganizationEntity
-     */
-    public function setSiteUrl(string $siteUrl = null): OrganizationEntity {
-        $this->siteUrl = $siteUrl;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTableNumber(): int {
-        return $this->tableNumber;
-    }
-
-    /**
-     * @param int $tableNumber
-     * @return OrganizationEntity
-     */
-    public function setTableNumber(int $tableNumber = 0): OrganizationEntity {
-        $this->tableNumber = $tableNumber;
-        return $this;
-    }
-
-    /**
-     * Get the value of address
-     *
-     * @return  Address
-     */ 
-    public function getAddress() {
-        return $this->address;
-    }
-
-    /**
-     * Set the value of address
-     *
-     * @param  Address  $address
-     * @return  self
-     */ 
-    public function setAddress(Address $address) {
-        $this->address = $address;
         return $this;
     }
 }

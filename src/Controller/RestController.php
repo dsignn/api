@@ -10,6 +10,7 @@ use App\Storage\Event\PreProcess;
 use App\Storage\StorageInterface;
 use Laminas\InputFilter\InputFilterInterface;
 use Notihnio\RequestParser\RequestParser;
+use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -100,15 +101,14 @@ class RestController implements RestControllerInterface {
             $data = $validator->getValues();
         }
 
+   
         $entity = $this->storage->getEntityPrototype()->getPrototype($data);
-
+   
         $preprocess = new PreProcess($entity, $data);
         $this->storage->getEventManager()->trigger(RestController::$PREPROCESS_POST, $preprocess);
         $data = $preprocess->getData();
 
-        $this->storage->getHydrator()->hydrate($data, $entity);
-        // Preprocess data we can manipulate data and entity
-
+        $this->storage->getHydrator()->hydrate($data, $entity); 
         $this->storage->save($entity);
         $acceptService = $this->getAcceptService($request);
         return $acceptService->transformAccept($response, $entity);

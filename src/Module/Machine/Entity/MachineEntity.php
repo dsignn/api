@@ -12,28 +12,44 @@ use App\Storage\Entity\EntityTrait as StorageEntityTrait;
  */
 class MachineEntity implements EntityInterface {
 
-    use StorageEntityTrait;
+    public $id;
 
     /**
      * @var
      */
-    protected $totalMem;
+    public $totalMem;
     
     /**
      * @var
      */
-    protected $freeMem;
+    public $freeMem;
 
     /**
      * @var
      */
-    protected $cpu;
+    public $cpu;
 
     /**
      * Undocumented variable
      *
      * @var [type]
      */
-    protected $addresses;
+    public $addresses;
+
+    /**
+     * @return string
+     */
+    public function getId() {
+        return $this->id;
+    }
+
+    /**
+     * @param $id
+     * @return EntityTrait
+     */
+    public function setId($id) {
+        $this->id = $id;
+        return $this;
+    }
 }
 

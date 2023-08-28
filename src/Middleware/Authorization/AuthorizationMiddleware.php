@@ -46,7 +46,7 @@ class AuthorizationMiddleware implements Middleware {
         )->addRole(
             new GenericRole('admin')
         )->addRole(
-            new GenericRole('restaurantOwner')
+            new GenericRole('organizationOwner')
         );
     }
 
@@ -125,7 +125,7 @@ class AuthorizationMiddleware implements Middleware {
         if ($user) {
 
             switch ($user->getRoleId()) {
-                case 'restaurantOwner':
+                case 'organizationOwner':
                     $organizations = [];
                     /** @var ReferenceInterface $organization */
                     foreach ($user->getOrganizations() as &$organization) {
