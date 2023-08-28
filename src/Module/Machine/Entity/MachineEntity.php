@@ -4,13 +4,16 @@ declare(strict_types=1);
 namespace App\Module\Machine\Entity;
 
 use App\Storage\Entity\EntityInterface;
-use App\Storage\Entity\EntityTrait as StorageEntityTrait;
+use App\Storage\Entity\Embedded\Date\DateAwareInterface;
+use App\Storage\Entity\Embedded\Date\DateAwareInterfaceTrait;
 
 /**
  * Class MachineEntity
  * @package App\Module\Machine\Entity
  */
-class MachineEntity implements EntityInterface {
+class MachineEntity implements EntityInterface, DateAwareInterface {
+
+    use DateAwareInterfaceTrait;
 
     public $id;
 

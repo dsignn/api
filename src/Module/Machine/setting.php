@@ -34,7 +34,7 @@ return function (&$setting) {
                 ],
                 'validation' => [
                     '/machine' => [
-                        'POST' => 'MonitorPostValidation'
+                        'POST' => 'MachinePostValidator'
                     ]
                 ]
             ],

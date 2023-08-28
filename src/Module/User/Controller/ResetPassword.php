@@ -15,7 +15,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 /**
- * Class PasswordToken
+ * Class ResetPassword
  * @package App\Module\User\Controller
  */
 class ResetPassword implements RpcControllerInterface {
