@@ -35,6 +35,11 @@ class AuthenticationMiddleware implements Middleware {
     /**
      * @var StorageInterface
      */
+    protected $organizationStorage;
+
+    /**
+     * @var StorageInterface
+     */
     protected $tokenStorage;
 
     /**
@@ -51,13 +56,21 @@ class AuthenticationMiddleware implements Middleware {
      * AuthenticationMiddleware constructor.
      * @param ResourceServer $server
      * @param StorageInterface $userStorage
+     * @param StorageInterface $organizationStorage
      * @param StorageInterface $tokenStorage
      * @param StorageInterface $clientStorage
      * @param array $settings
      */
-    public function __construct(ResourceServer $server, StorageInterface $userStorage, StorageInterface $tokenStorage, StorageInterface $clientStorage, array $settings = []) {
+    public function __construct(ResourceServer $server, 
+        StorageInterface $userStorage, 
+        StorageInterface $organizationStorage, 
+        StorageInterface $tokenStorage, 
+        StorageInterface $clientStorage, 
+        array $settings = []) {
+
         $this->server = $server;
         $this->userStorage = $userStorage;
+        $this->organizationStorage = $organizationStorage;
         $this->tokenStorage = $tokenStorage;
         $this->clientStorage = $clientStorage;
         $this->settings = $settings;
@@ -100,6 +113,7 @@ class AuthenticationMiddleware implements Middleware {
      */
     protected function getUser($identifier) {
 
+        // TODO get aggregate query
         $user = null;
         if ($identifier) {
             $resultSet = $this->userStorage->getAll(
@@ -107,6 +121,16 @@ class AuthenticationMiddleware implements Middleware {
             );
 
             $user = $resultSet->current();
+
+            if ($user) {
+                $organizations = $user->getOrganizations(); 
+                $orgs = [];
+                foreach ($organizations as &$value) {
+                   array_push($orgs, $this->organizationStorage->get($value->getId())); 
+                }
+
+                $user->setOrganizations($orgs); 
+            }
         }
        
         return $user;

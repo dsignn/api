@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use App\Middleware\Authentication\AuthenticationMiddleware;
+use App\Middleware\Authentication\InjectOrganizationByRoleMiddleware;
 use App\Middleware\Authorization\AuthorizationMiddleware;
 use App\Middleware\ContentNegotiation\Accept\AcceptContainer;
 use App\Middleware\ContentNegotiation\Accept\JsonAccept;
@@ -10,6 +11,8 @@ use App\Middleware\ContentNegotiation\ContentType\ContentTypeContainer;
 use App\Middleware\ContentNegotiation\ContentType\JsonContentType;
 use App\Middleware\ContentNegotiation\ContentType\MultipartFormDataContentType;
 use App\Middleware\Validation\ValidationMiddleware;
+use App\Module\Organization\Entity\OrganizationEntity;
+use App\Module\Organization\Storage\OrganizationStorageInterface;
 use App\Module\User\Storage\UserStorageInterface;
 use DI\ContainerBuilder;
 use GuzzleHttp\Client;
@@ -87,10 +90,16 @@ return function (ContainerBuilder $containerBuilder) {
             return $twig;
         },
 
+        InjectOrganizationByRoleMiddleware::class => function(ContainerInterface $c) {
+
+            return new InjectOrganizationByRoleMiddleware();
+        },
+
         AuthenticationMiddleware::class => function(ContainerInterface $c) {
             return new AuthenticationMiddleware(
                 $c->get(ResourceServer::class),
                 $c->get(UserStorageInterface::class),
+                $c->get(OrganizationStorageInterface::class),
                 $c->get('AccessTokenStorage'),
                 $c->get('ClientStorage'),
                 $c->get('settings')['authentication']

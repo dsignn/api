@@ -15,6 +15,8 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
+use function DI\get;
+
 /**
  * Class RestController
  * @package App\Controller
@@ -244,7 +246,11 @@ class RestController implements RestControllerInterface {
      */
     protected function getData(Request $request) {
 
-        $data = array_merge($request->getParsedBody() !== null ? $request->getParsedBody() : [], $request->getUploadedFiles());
+        $data = array_merge(
+            $request->getParsedBody() !== null ? $request->getParsedBody() : [], 
+            $request->getUploadedFiles(),
+            $request->getAttribute('app-body-data') ? $request->getAttribute('app-body-data') : []
+        );
 
         if (count($data) === 0) {
             $requestParams = RequestParser::parse();

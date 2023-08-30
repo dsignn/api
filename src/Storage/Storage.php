@@ -73,13 +73,6 @@ class Storage implements StorageInterface {
      */
     public function get(string $id) {
         $data = $this->storage->get($id);
-        /*
-        echo '<pre>';
-        var_dump($data);
-        var_dump('suca');
-        echo '</pre>';
-        die();
-        */
         return $this->hydrator && $data ?
             $this->hydrator->hydrate($data, clone $this->getEntityPrototype()->getPrototype($data)) :
             $data;
