@@ -99,7 +99,10 @@ return function (ContainerBuilder $containerBuilder) {
             )->addEntityPrototype(
                 'video/mp4',
                 new VideoResourceEntity()
-            );
+            )->addEntityPrototype(
+                'video/webm',
+                new VideoResourceEntity()
+            );;
 
             return $multiEntityPrototype;
         }
@@ -136,6 +139,9 @@ return function (ContainerBuilder $containerBuilder) {
             )->addHydrator(
                 'video/mp4',
                 $videoHydrator
+            )->addHydrator(
+                'video/webm',
+                $videoHydrator
             );
 
             return $hydrator;
@@ -170,7 +176,10 @@ return function (ContainerBuilder $containerBuilder) {
             )->addHydrator(
                 'video/mp4',
                 $videoHydrator
-            );
+            )->addHydrator(
+                'video/webm',
+                $videoHydrator
+            );;
 
             return $hydrator;
         }
