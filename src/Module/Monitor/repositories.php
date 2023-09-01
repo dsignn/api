@@ -57,7 +57,6 @@ return function (ContainerBuilder $containerBuilder) {
     ])->addDefinitions([
         'RestMonitorEntityHydrator' => function(ContainerInterface $c) {
 
-
             $organizationHydrator = new ClassMethodsHydrator();
             $organizationHydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
             $organizationHydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
@@ -78,11 +77,9 @@ return function (ContainerBuilder $containerBuilder) {
     ])->addDefinitions([
         'StorageMonitorEntityHydrator' => function(ContainerInterface $c) {
 
-
             $organizationHydrator = new ClassMethodsHydrator();
             $organizationHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
             $organizationHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
-
 
             $monitorHydrator = new ClassMethodsHydrator();
             $monitorHydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
@@ -108,7 +105,6 @@ return function (ContainerBuilder $containerBuilder) {
             $description = new Input('description');
 
             $organizationReference = new Input('organizationReference');
-            
             $organizationReference->getValidatorChain()->attach(new NotEmpty());
 
             

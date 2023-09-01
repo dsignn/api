@@ -21,6 +21,7 @@ use App\Storage\Adapter\Mongo\MongoAdapter;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydratePaginateResultSet;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
 use App\Storage\Entity\MultiEntityPrototype;
+use App\Storage\Entity\Reference;
 use App\Storage\Entity\SingleEntityPrototype;
 use App\Storage\Storage;
 use App\Validator\File\FileMimeType;
@@ -30,6 +31,7 @@ use DI\ContainerBuilder;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\InputFilter\Input;
 use Laminas\InputFilter\InputFilter;
+use Laminas\Validator\NotEmpty;
 use MongoDB\Client;
 use Psr\Container\ContainerInterface;
 
@@ -115,15 +117,21 @@ return function (ContainerBuilder $containerBuilder) {
                 $c->get('ResourceEntityPrototype')
             );
 
+            $organizationHydrator = new ClassMethodsHydrator();
+            $organizationHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
+            $organizationHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
+
             $imageHydrator = new ClassMethodsHydrator();
             $imageHydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
             $imageHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
             $imageHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
+            $imageHydrator->addStrategy('organizationReference', new HydratorStrategy($organizationHydrator, new SingleEntityPrototype(new Reference())));
 
             $videoHydrator = new ClassMethodsHydrator();
             $videoHydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
             $videoHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
             $videoHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
+            $videoHydrator->addStrategy('organizationReference', new HydratorStrategy($organizationHydrator, new SingleEntityPrototype(new Reference())));
 
             $strategyDimension = new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Dimension()));
 
@@ -153,15 +161,23 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->setTypeField('mimeType');
             $hydrator->setEntityPrototype($c->get('ResourceEntityPrototype'));
 
+            $organizationHydrator = new ClassMethodsHydrator();
+            $organizationHydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
+            $organizationHydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
+
             $imageHydrator = new ClassMethodsHydrator();
             $imageHydrator->setNamingStrategy(new CamelCaseStrategy());
             $imageHydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
             $imageHydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
+            $imageHydrator->addStrategy('organizationReference', new HydratorStrategy($organizationHydrator, new SingleEntityPrototype(new Reference())));
+
 
             $videoHydrator = new ClassMethodsHydrator();
             $videoHydrator->setNamingStrategy(new CamelCaseStrategy());
             $videoHydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
             $videoHydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
+            $videoHydrator->addStrategy('organizationReference', new HydratorStrategy($organizationHydrator, new SingleEntityPrototype(new Reference())));
+
 
             $strategyDimension = new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Dimension()));
             $imageHydrator->addStrategy('dimension', $strategyDimension);
@@ -214,6 +230,10 @@ return function (ContainerBuilder $containerBuilder) {
             $input->getFilterChain()->attach(new StringToArray());
             $inputFilter->add($input);
 
+            $input = new Input('organizationReference');
+            $input->getValidatorChain()->attach(new NotEmpty());
+            $inputFilter->add($input);
+
             return $inputFilter;
         }
     ])->addDefinitions([
@@ -238,6 +258,10 @@ return function (ContainerBuilder $containerBuilder) {
             $input = new Input('tags');
             $input->setRequired(false);
             $input->getFilterChain()->attach(new StringToArray());
+            $inputFilter->add($input);
+
+            $input = new Input('organizationReference');
+            $input->getValidatorChain()->attach(new NotEmpty());
             $inputFilter->add($input);
 
             return $inputFilter;

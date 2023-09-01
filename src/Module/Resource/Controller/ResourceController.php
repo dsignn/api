@@ -59,7 +59,8 @@ class ResourceController implements RestControllerInterface {
      */
     public function post(Request $request, Response $response) {
 
-        $data = array_merge($request->getParsedBody(), $request->getUploadedFiles());
+        $data = $this->getData($request);
+
 
         if ($request->getAttribute('app-validation')) {
             /** @var InputFilterInterface $validator */
@@ -105,8 +106,7 @@ class ResourceController implements RestControllerInterface {
             return $response->withStatus(404);
         }
 
-        $requestParams = RequestParser::parse();
-        $data = array_merge($requestParams->files, $requestParams->params);
+        $data = $this->getData($request);
 
         if ($request->getAttribute('app-validation')) {
             /** @var InputFilterInterface $validator */
@@ -151,8 +151,7 @@ class ResourceController implements RestControllerInterface {
             return $response->withStatus(404);
         }
 
-        $requestParams = RequestParser::parse();
-        $data = array_merge($requestParams->files, $requestParams->params);
+        $data = $this->getData($request);
 
         if ($request->getAttribute('app-validation')) {
             /** @var InputFilterInterface $validator */
@@ -257,5 +256,26 @@ class ResourceController implements RestControllerInterface {
      */
     public function options(Request $request, Response $response) {
         return $response->withStatus(200);
+    }
+
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    protected function getData(Request $request) {
+
+        $data = array_merge(
+            $request->getParsedBody() !== null ? $request->getParsedBody() : [], 
+            $request->getUploadedFiles(),
+            $request->getAttribute('app-body-data') ? $request->getAttribute('app-body-data') : []
+        );
+
+        if (count($data) === 0) {
+            $requestParams = RequestParser::parse();
+            $data = array_merge($requestParams->files, $requestParams->params);
+        }
+
+        return $data;
     }
 }
