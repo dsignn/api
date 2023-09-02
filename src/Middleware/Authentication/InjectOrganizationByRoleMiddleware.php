@@ -24,10 +24,13 @@ class InjectOrganizationByRoleMiddleware implements Middleware {
         
         $user = $request->getAttribute('app-user');
 
-        if ($user->getRoleId() === 'admin') {
-            return $handler->handle($request);
+        switch(true) {
+            case !$user:
+            case $user->getRoleId() === 'admin':
+                return $handler->handle($request);
+                break;
         }
-
+       
         $org = $this->recoverFromAuth($request);
 
         if ($org) { 

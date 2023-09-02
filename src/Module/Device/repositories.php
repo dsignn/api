@@ -6,9 +6,9 @@ use App\Hydrator\Strategy\Mongo\MongoDateStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
 use App\Hydrator\Strategy\NamingStrategy\CamelCaseStrategy;
 use App\InputFilter\Input;
-use App\Module\Machine\Entity\MachineEntity;
-use App\Module\Machine\Storage\MachineStorage;
-use App\Module\Machine\Storage\MachineStorageInterface;
+use App\Module\Device\Entity\DeviceEntity;
+use App\Module\Device\Storage\DeviceStorage;
+use App\Module\Device\Storage\DeviceStorageInterface;
 use App\Storage\Adapter\Mongo\MongoAdapter;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydratePaginateResultSet;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
@@ -23,16 +23,16 @@ use Psr\Container\ContainerInterface;
 return function (ContainerBuilder $containerBuilder) {
 
     $containerBuilder->addDefinitions([
-        MachineStorageInterface::class => function(ContainerInterface $c) {
+        DeviceStorageInterface::class => function(ContainerInterface $c) {
 
             $settings = $c->get('settings');
-            $serviceSetting = $settings['storage']['machine'];
+            $serviceSetting = $settings['storage']['device'];
 
-            $hydrator = $c->get('StorageMachineEntityHydrator');
+            $hydrator = $c->get('StorageDeviceEntityHydrator');
 
             $resultSet = new MongoHydrateResultSet();
            // $resultSet->setHydrator($hydrator);
-           // $resultSet->setEntityPrototype($c->get('MachineEntityPrototype'));
+           // $resultSet->setEntityPrototype($c->get('DeviceEntityPrototype'));
 
             $resultSetPaginator = new MongoHydratePaginateResultSet();
             //$resultSetPaginator->setHydrator($hydrator);
@@ -42,19 +42,19 @@ return function (ContainerBuilder $containerBuilder) {
             $mongoAdapter->setResultSet($resultSet);
             $mongoAdapter->setResultSetPaginate($resultSetPaginator);
 
-            $storage = new MachineStorage($mongoAdapter);
+            $storage = new DeviceStorage($mongoAdapter);
             $storage->setHydrator($hydrator);
-            $storage->setEntityPrototype($c->get('MachineEntityPrototype'));
+            $storage->setEntityPrototype($c->get('DeviceEntityPrototype'));
 
             return $storage;
         }
     ])->addDefinitions([
-        'MachineEntityPrototype' => function(ContainerInterface $c) {
-            return new SingleEntityPrototype(new MachineEntity());
+        'DeviceEntityPrototype' => function(ContainerInterface $c) {
+            return new SingleEntityPrototype(new DeviceEntity());
         }
     ])
     ->addDefinitions([
-        'RestMachineEntityHydrator' => function(ContainerInterface $c) {
+        'RestDeviceEntityHydrator' => function(ContainerInterface $c) {
         
             $hydrator = new ObjectPropertyHydrator();
             $hydrator->setNamingStrategy(new CamelCaseStrategy());
@@ -66,7 +66,7 @@ return function (ContainerBuilder $containerBuilder) {
             return $hydrator;
         }
     ])->addDefinitions([
-        'StorageMachineEntityHydrator' => function(ContainerInterface $c) {
+        'StorageDeviceEntityHydrator' => function(ContainerInterface $c) {
 
             $hydrator = new ObjectPropertyHydrator();
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
@@ -76,7 +76,7 @@ return function (ContainerBuilder $containerBuilder) {
         }
     ])
     ->addDefinitions([
-        'MachinePostValidator' => function(ContainerInterface $c) {
+        'DevicePostValidator' => function(ContainerInterface $c) {
 
        
             $inputFilter = new AppInputFilter();

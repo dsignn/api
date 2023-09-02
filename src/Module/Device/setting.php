@@ -14,18 +14,18 @@ return function (&$setting) {
         [
             "settings" => [
                 'storage' => [
-                    'machine' => [
-                        'collection' => 'machine'
+                    'device' => [
+                        'collection' => 'device'
                     ],
                 ],
                 'contentNegotiation' => [
-                    '/machine' => [
+                    '/device' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
                             'contentTypeFilter' => ['/application\/json/']
                         ]
                     ],
-                    '/machine/{id:[0-9a-fA-F]{24}}' => [
+                    '/device/{id:[0-9a-fA-F]{24}}' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
                             'contentTypeFilter' => ['/application\/json/']
@@ -33,8 +33,8 @@ return function (&$setting) {
                     ],
                 ],
                 'validation' => [
-                    '/machine' => [
-                        'POST' => 'MachinePostValidator'
+                    '/device' => [
+                        'POST' => 'DevicePostValidator'
                     ]
                 ]
             ],

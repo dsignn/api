@@ -1,17 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Module\Machine\Entity;
+namespace App\Module\Device\Entity;
 
 use App\Storage\Entity\EntityInterface;
 use App\Storage\Entity\Embedded\Date\DateAwareInterface;
 use App\Storage\Entity\Embedded\Date\DateAwareInterfaceTrait;
 
 /**
- * Class MachineEntity
- * @package App\Module\Machine\Entity
+ * Class DeviceEntity
+ * @package App\Module\Device\Entity
  */
-class MachineEntity implements EntityInterface, DateAwareInterface {
+class DeviceEntity implements EntityInterface, DateAwareInterface {
 
     use DateAwareInterfaceTrait;
 

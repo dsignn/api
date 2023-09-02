@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Module\Machine\Controller;
+namespace App\Module\Device\Controller;
 
 use App\Controller\RpcControllerInterface;
-use App\Module\Machine\Storage\MachineStorageInterface;
+use App\Module\Device\Storage\DeviceStorageInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -12,10 +12,10 @@ use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
 use DateTime;
 
 /**
- * Class MachineController
- * @package App\Module\Machine\Controller
+ * Class DeviceController
+ * @package App\Module\Device\Controller
  */
-class MachineUpsertRpcRestController implements RpcControllerInterface {
+class DeviceUpsertRpcRestController implements RpcControllerInterface {
 
     use AcceptServiceAwareTrait;
 
@@ -29,7 +29,7 @@ class MachineUpsertRpcRestController implements RpcControllerInterface {
      * @param UserStorageInterface $storage
      * @param ContainerInterface $container
      */
-    public function __construct(MachineStorageInterface $storage) {
+    public function __construct(DeviceStorageInterface $storage) {
         $this->storage = $storage;
     }
 

@@ -22,6 +22,6 @@ return function (ContainerBuilder $containerBuilder) {
     $resourceRepositories = include_once __DIR__ . "/../src/Module/Resource/repositories.php";
     $resourceRepositories($containerBuilder);
 
-    $machineRepositories = include_once __DIR__ . "/../src/Module/Machine/repositories.php";
+    $machineRepositories = include_once __DIR__ . "/../src/Module/Device/repositories.php";
     $machineRepositories($containerBuilder);
 };

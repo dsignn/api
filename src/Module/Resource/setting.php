@@ -73,6 +73,40 @@ return function (&$setting) {
                         'PATCH' => 'ResourceValidator'
                     ]
                 ],
+                'authorization' => [
+                    '/resource' => [
+                        'organizationOwner' => [
+                            'allow' => true,
+                            'privileges' => [
+                                [
+                                    "method" => "GET",
+                                    'allow' => true,
+                                ],
+                                [
+                                    "method" => "POST",
+                                    'allow' => true,
+                                ]
+                            ]
+                        ]
+                    ],
+                    '/resource/{id:[0-9a-fA-F]{24}}' => [
+                        'organizationOwner' => [
+                            'allow' => false,
+                            'privileges' => [
+                                [
+                                    "method" => "GET",
+                                    'allow' => true,
+                                    //     'assertion' => 'Test',
+                                ],
+                                [
+                                    "method" => "POST",
+                                    'allow' => false,
+                                    //       'assertion' => 'Test',
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
             ]
         ]
     );

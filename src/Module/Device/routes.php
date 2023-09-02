@@ -2,18 +2,18 @@
 declare(strict_types=1);
 
 use App\Middleware\Validation\ValidationMiddleware;
-use App\Module\Machine\Controller\MachineController;
-use App\Module\Machine\Controller\MachineUpsertRpcRestController;
+use App\Module\Device\Controller\DeviceController;
+use App\Module\Device\Controller\DeviceUpsertRpcRestController;
 use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 
 return function (App $app) {
 
-    $app->group('/machine', function (Group $group) {
+    $app->group('/device', function (Group $group) {
 
-        $group->options('', [MachineController::class, 'options']);
+        $group->options('', [DeviceController::class, 'options']);
 
-        $group->post('',  [MachineUpsertRpcRestController::class, 'rpc']);
+        $group->post('',  [DeviceUpsertRpcRestController::class, 'rpc']);
 
     })->add($app->getContainer()->get(ValidationMiddleware::class))
        // ->add($app->getContainer()->get(AuthorizationMiddleware::class))

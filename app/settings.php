@@ -22,7 +22,7 @@ return function (ContainerBuilder $containerBuilder) {
     $resourceSetting = include_once __DIR__ . "/../src/Module/Resource/setting.php";
     $resourceSetting($setting);
 
-    $machineSetting = include_once __DIR__ . "/../src/Module/Machine/setting.php";
+    $machineSetting = include_once __DIR__ . "/../src/Module/Device/setting.php";
     $machineSetting($setting);
 
     $localSetting = include_once __DIR__ . "/local-setting.php";
