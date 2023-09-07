@@ -158,7 +158,6 @@ class ContentNegotiationMiddleware implements Middleware
         return $check;
     }
 
-
     /**
      * @param Request $request
      * @return bool

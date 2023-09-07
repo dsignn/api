@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use App\Module\Monitor\Http\QueryString\MonitorQueryString;
 use Graze\ArrayMerger\RecursiveArrayMerger;
 
 /**
@@ -35,6 +36,18 @@ return function (&$setting) {
                 'validation' => [
                     '/monitor' => [
                         'POST' => 'MonitorPostValidation'
+                    ]
+                ],
+                'queryString' => [
+                    '/monitor' => [
+                        'default' => [
+                            'service' => MonitorQueryString::class
+                        ]
+                    ],
+                    '/monitor/{id:[0-9a-fA-F]{24}}' => [
+                        'default' => [
+                            'service' => MonitorQueryString::class
+                        ]
                     ]
                 ]
             ],

@@ -10,12 +10,14 @@ use App\Middleware\ContentNegotiation\ContentNegotiationMiddleware;
 use App\Middleware\ContentNegotiation\ContentType\ContentTypeContainer;
 use App\Middleware\ContentNegotiation\ContentType\JsonContentType;
 use App\Middleware\ContentNegotiation\ContentType\MultipartFormDataContentType;
+use App\Middleware\QueryString\QueryStringMiddleware;
 use App\Middleware\Validation\ValidationMiddleware;
 use App\Module\Organization\Entity\OrganizationEntity;
 use App\Module\Organization\Storage\OrganizationStorageInterface;
 use App\Module\User\Storage\UserStorageInterface;
 use DI\ContainerBuilder;
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Query;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Hydrator\Strategy\ClosureStrategy;
 use League\OAuth2\Server\ResourceServer;
@@ -173,7 +175,6 @@ return function (ContainerBuilder $containerBuilder) {
             );
         },
 
-
         "EntityDateRestStrategy" => function(ContainerInterface $c) {
             return new ClosureStrategy(
                 function ($value) {
@@ -196,7 +197,6 @@ return function (ContainerBuilder $containerBuilder) {
             );
         },
 
-
         "ReferenceMongoHydrator" =>  function(ContainerInterface $c) {
             $hydrator = new ClassMethodsHydrator();
             $hydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
@@ -209,8 +209,11 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
             $hydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
             return $hydrator;
+        },
+
+        QueryStringMiddleware::class => function(ContainerInterface $c) {
+     
+            return new QueryStringMiddleware($c);
         }
-
-
     ]);
 };

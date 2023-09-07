@@ -39,8 +39,13 @@ class AllRpcController implements RpcControllerInterface {
      */
     public function rpc(Request $request, Response $response) {
 
-        $filter = $request->getAttribute('app-data-filter') ? $request->getAttribute('app-data-filter') : [];
+        $filter = $request->getAttribute('app-query-string') ? $request->getAttribute('app-query-string') : [];
         $query = array_merge($filter, $request->getQueryParams());
+
+        $storageFilter = $request->getAttribute('app-storage-filter');
+        if ($storageFilter) {
+            $query = $storageFilter->computeQueryString($query);
+        }
 
         $search = $this->storage->getAll($query, []);
         $acceptService = $this->getAcceptService($request);

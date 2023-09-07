@@ -49,7 +49,7 @@ class InjectOrganizationByRoleMiddleware implements Middleware {
                 $queryString = [];
             }
 
-            $queryString['organization_id'] = $org->getId();
+            $queryString['organization_reference'] = $org->getId();
         }
 
         return $handler->handle(

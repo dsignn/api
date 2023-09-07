@@ -19,6 +19,7 @@ use Laminas\Hydrator\ClassMethodsHydrator;
 use MongoDB\Client;
 use Psr\Container\ContainerInterface;
 use App\InputFilter\InputFilter as AppInputFilter;
+use App\Module\Monitor\Http\QueryString\MonitorQueryString;
 use App\Storage\Entity\Reference;
 use Laminas\Validator\NotEmpty;
 
@@ -117,6 +118,10 @@ return function (ContainerBuilder $containerBuilder) {
                 ;
 
             return $inputFilter;
+        }
+    ])->addDefinitions([
+        MonitorQueryString::class => function(ContainerInterface $c) {
+            return new MonitorQueryString();
         }
     ]);
 };

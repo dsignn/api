@@ -76,8 +76,6 @@ class AuthorizationMiddleware implements Middleware {
             );
         }
 
-        $request = $this->injectFilterData($request);
-
         return $handler->handle($request);
     }
 
@@ -111,37 +109,5 @@ class AuthorizationMiddleware implements Middleware {
                 }
             }
         }
-    }
-
-    /**
-     * @param ServerRequestInterface $request
-     * @return ServerRequestInterface
-     */
-    protected function injectFilterData(ServerRequestInterface $request) {
-
-        /** @var UserEntity $user */
-        $user = $request->getAttribute('app-user');
-
-        if ($user) {
-
-            switch ($user->getRoleId()) {
-                case 'organizationOwner':
-                    $organizations = [];
-                    /** @var ReferenceInterface $organization */
-                    foreach ($user->getOrganizations() as &$organization) {
-                        array_push($organizations, $organization->getId());
-                    }
-             
-                    if (count($organizations) > 0) {               
-                        $request = $request->withAttribute(
-                            'app-data-filter',
-                            ['organizations' => $organizations]
-                        );
-                    }
-                    break;
-            }
-        }
-
-        return $request;
     }
 }
