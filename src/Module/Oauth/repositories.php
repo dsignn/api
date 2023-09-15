@@ -8,6 +8,8 @@ use App\Hydrator\Strategy\HydratorStrategy;
 use App\Hydrator\Strategy\Mongo\MongoDateStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\UnderscoreNamingStrategy;
+use App\InputFilter\Input;
+use App\InputFilter\InputFilter as AppInputFilter;
 use App\Module\Oauth\Entity\AccessTokenEntity;
 use App\Module\Oauth\Entity\AuthCodeEntity;
 use App\Module\Oauth\Entity\ClientEntity;
@@ -19,12 +21,15 @@ use App\Module\Oauth\Repository\ClientRepository;
 use App\Module\Oauth\Repository\RefreshTokenRepository;
 use App\Module\Oauth\Repository\ScopeRepository;
 use App\Module\Oauth\Repository\UserRepository;
+use App\Module\Oauth\Storage\ClientStorage;
+use App\Module\Oauth\Storage\ClientStorageInterface;
 use App\Storage\Adapter\Mongo\MongoAdapter;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
 use App\Storage\Entity\SingleEntityPrototype;
 use App\Storage\Storage;
 use DI\ContainerBuilder;
 use Laminas\Hydrator\ClassMethodsHydrator;
+use Laminas\Validator\NotEmpty;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Grant\AuthCodeGrant;
 use League\OAuth2\Server\Grant\ClientCredentialsGrant;
@@ -34,6 +39,8 @@ use League\OAuth2\Server\Grant\RefreshTokenGrant;
 use League\OAuth2\Server\ResourceServer;
 use MongoDB\Client;
 use Psr\Container\ContainerInterface;
+
+use function DI\add;
 
 return function (ContainerBuilder $containerBuilder) {
 
@@ -52,7 +59,24 @@ return function (ContainerBuilder $containerBuilder) {
             return new LaminasCrypto($content);
         },
 
-        'ClientStorage' => function(ContainerInterface $c) {
+        'ClientPostValidation' => function(ContainerInterface $container) {
+
+            $inputFilter = new AppInputFilter();
+
+            $name = new Input('name');
+            $name->getValidatorChain()->attach(new NotEmpty());
+
+            $password = new Input('password');
+            $password->getValidatorChain()->attach(new NotEmpty());
+
+            $inputFilter
+                ->add($name)
+                ->add($password);
+
+            return $inputFilter;
+        },
+
+        ClientStorageInterface::class => function(ContainerInterface $c) {
 
             $settings = $c->get('settings');
             $serviceSetting = $settings['oauth']['client']['storage'];
@@ -66,7 +90,7 @@ return function (ContainerBuilder $containerBuilder) {
             $mongoAdapter = new MongoAdapter($c->get(Client::class), $serviceSetting['name'], $serviceSetting['collection']);
             $mongoAdapter->setResultSet($resultSet);
 
-            $storage = new Storage($mongoAdapter);
+            $storage = new ClientStorage($mongoAdapter);
             $storage->setHydrator($hydrator);
             $storage->setEntityPrototype($c->get('ClientEntityPrototype'));
 
@@ -89,7 +113,7 @@ return function (ContainerBuilder $containerBuilder) {
         },
 
         ClientRepository::class => function(ContainerInterface $c) {
-            return new ClientRepository($c->get('ClientStorage'), $c->get('OAuthCrypto'));
+            return new ClientRepository($c->get(ClientStorageInterface::class), $c->get('OAuthCrypto'));
         },
 
         'AccessTokenStorage' => function(ContainerInterface $c) {

@@ -16,9 +16,6 @@ class OrganizationStorage extends Storage implements OrganizationStorageInterfac
 
     /**
      * Undocumented function
-     *
-     * @return void
-     */
     public function getRandomRestaurantMenu(): array {
 
         $organizations = new MongoHydrateResultSet();
@@ -97,4 +94,6 @@ class OrganizationStorage extends Storage implements OrganizationStorageInterfac
       
         return $organizations;
     }
+
+    */
 }

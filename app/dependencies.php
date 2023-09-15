@@ -12,6 +12,7 @@ use App\Middleware\ContentNegotiation\ContentType\JsonContentType;
 use App\Middleware\ContentNegotiation\ContentType\MultipartFormDataContentType;
 use App\Middleware\QueryString\QueryStringMiddleware;
 use App\Middleware\Validation\ValidationMiddleware;
+use App\Module\Oauth\Storage\ClientStorageInterface;
 use App\Module\Organization\Entity\OrganizationEntity;
 use App\Module\Organization\Storage\OrganizationStorageInterface;
 use App\Module\User\Storage\UserStorageInterface;
@@ -98,12 +99,13 @@ return function (ContainerBuilder $containerBuilder) {
         },
 
         AuthenticationMiddleware::class => function(ContainerInterface $c) {
+
             return new AuthenticationMiddleware(
                 $c->get(ResourceServer::class),
                 $c->get(UserStorageInterface::class),
                 $c->get(OrganizationStorageInterface::class),
                 $c->get('AccessTokenStorage'),
-                $c->get('ClientStorage'),
+                $c->get(ClientStorageInterface::class),
                 $c->get('settings')['authentication']
             );
         },

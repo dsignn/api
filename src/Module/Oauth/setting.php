@@ -17,6 +17,23 @@ return function (&$setting) {
                             'contentTypeFilter' => ['/application\/json/']
                         ]
                     ],
+                    '/oauth/client' => [
+                        'default' => [
+                            'acceptFilter' => ['/application\/json/'],
+                            'contentTypeFilter' => ['/application\/json/']
+                        ]
+                    ],
+                    '/oauth/client/{id:[0-9a-fA-F]{24}}' => [
+                        'default' => [
+                            'acceptFilter' => ['/application\/json/'],
+                            'contentTypeFilter' => ['/application\/json/']
+                        ]
+                    ]
+                ],
+                'validation' => [
+                    '/oauth/client' => [
+                        'POST' => 'ClientPostValidation'
+                    ]
                 ],
                 'oauth' => [
                     'encryption-key' => 'h1Z6HajxU9ObuJKotafqqxriGuuuRhqSd1VZK7wAnXU=',
