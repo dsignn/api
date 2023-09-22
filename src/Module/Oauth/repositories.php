@@ -15,6 +15,7 @@ use App\Module\Oauth\Entity\AuthCodeEntity;
 use App\Module\Oauth\Entity\ClientEntity;
 use App\Module\Oauth\Entity\RefreshTokenEntity;
 use App\Module\Oauth\Entity\ScopeEntity;
+use App\Module\Oauth\Event\PasswordEvent;
 use App\Module\Oauth\Repository\AccessTokenRepository;
 use App\Module\Oauth\Repository\AuthCodeRepository;
 use App\Module\Oauth\Repository\ClientRepository;
@@ -25,11 +26,14 @@ use App\Module\Oauth\Storage\ClientStorage;
 use App\Module\Oauth\Storage\ClientStorageInterface;
 use App\Storage\Adapter\Mongo\MongoAdapter;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
+use App\Storage\Entity\Reference;
 use App\Storage\Entity\SingleEntityPrototype;
 use App\Storage\Storage;
+use App\Validator\Mongo\ObjectIdValidator;
 use DI\ContainerBuilder;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Validator\NotEmpty;
+use Laminas\InputFilter\InputFilter;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Grant\AuthCodeGrant;
 use League\OAuth2\Server\Grant\ClientCredentialsGrant;
@@ -40,7 +44,7 @@ use League\OAuth2\Server\ResourceServer;
 use MongoDB\Client;
 use Psr\Container\ContainerInterface;
 
-use function DI\add;
+//use function DI\add;
 
 return function (ContainerBuilder $containerBuilder) {
 
@@ -61,6 +65,12 @@ return function (ContainerBuilder $containerBuilder) {
 
         'ClientPostValidation' => function(ContainerInterface $container) {
 
+            $organizationFilter = new InputFilter();
+     
+            $id = new Input('id');
+            $id->getValidatorChain()->attach(new ObjectIdValidator());
+            $organizationFilter->add($id);
+
             $inputFilter = new AppInputFilter();
 
             $name = new Input('name');
@@ -69,9 +79,15 @@ return function (ContainerBuilder $containerBuilder) {
             $password = new Input('password');
             $password->getValidatorChain()->attach(new NotEmpty());
 
+            $identifier = new Input('identifier');
+            $identifier->getValidatorChain()->attach(new NotEmpty());
+
             $inputFilter
                 ->add($name)
-                ->add($password);
+                ->add($password)
+                ->add($identifier)
+                ->add($organizationFilter, 'organizationReference')
+            ;
 
             return $inputFilter;
         },
@@ -94,6 +110,11 @@ return function (ContainerBuilder $containerBuilder) {
             $storage->setHydrator($hydrator);
             $storage->setEntityPrototype($c->get('ClientEntityPrototype'));
 
+            $storage->getEventManager()->attach(
+                Storage::$BEFORE_SAVE,
+                new PasswordEvent($c->get('OAuthCrypto'))
+            );
+
             return $storage;
         },
 
@@ -103,11 +124,15 @@ return function (ContainerBuilder $containerBuilder) {
 
         'StorageClientEntityHydrator' => function(ContainerInterface $c) {
 
+            $organizationHydrator = new ClassMethodsHydrator();
+            $organizationHydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
+            $organizationHydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
+
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
             $hydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
             $hydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
-
+            $hydrator->addStrategy('organizationReference', new HydratorStrategy($organizationHydrator, new SingleEntityPrototype(new Reference())));
 
             return $hydrator;
         },

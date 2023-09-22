@@ -108,8 +108,6 @@ return function (ContainerBuilder $containerBuilder) {
             $organizationReference = new Input('organizationReference');
             $organizationReference->getValidatorChain()->attach(new NotEmpty());
 
-            
-
             $inputFilter
                 ->add($name)
                 ->add($monitors)

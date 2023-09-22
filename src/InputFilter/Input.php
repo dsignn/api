@@ -37,6 +37,4 @@ class Input extends AppInput {
 
         return $result;
     }
-
-
 }

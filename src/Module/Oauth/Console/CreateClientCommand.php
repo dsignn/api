@@ -67,7 +67,7 @@ class CreateClientCommand extends SymfonyCommand {
         $client = new ClientEntity();
         $client->setName($name);
         $client->setIdentifier($identifier);
-        $client->setPassword($this->crypto->crypto($password));
+        $client->setPassword($password);
         $client->setIsConfidential(true);
 
         try {
