@@ -7,8 +7,6 @@ use App\Controller\RpcControllerInterface;
 use App\Module\Device\Storage\DeviceStorageInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-
-use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
 use DateTime;
 
 /**
@@ -16,8 +14,6 @@ use DateTime;
  * @package App\Module\Device\Controller
  */
 class DeviceUpsertRpcRestController implements RpcControllerInterface {
-
-    use AcceptServiceAwareTrait;
 
     /**
      * @var StorageInterface
@@ -49,12 +45,8 @@ class DeviceUpsertRpcRestController implements RpcControllerInterface {
             $validator->setData($data);
 
             if (!$validator->isValid()) {
-                $acceptService = $this->getAcceptService($request);
-                $response = $acceptService->transformAccept(
-                    $response,
-                    ['errors' => $validator->getMessages()]
-                );
-                return $response->withStatus(422);
+                $response = $response->withStatus(422);
+                return $this->getAcceptData($request, $response, ['errors' => $validator->getMessages()]);
             }
         }
 
@@ -71,7 +63,21 @@ class DeviceUpsertRpcRestController implements RpcControllerInterface {
 
         $this->storage->update($entity);
 
-        $acceptService = $this->getAcceptService($request);
-        return $acceptService->transformAccept($response, $entity);
+        return $this->getAcceptData($request, $response, $entity);
+    }
+
+
+        /**
+     * @param Request $request
+     * @param Response $response
+     * @return void
+     */
+    protected function getAcceptData(Request $request, Response $response, $entity) {
+        $acceptService = $request->getAttribute('app-accept-service');
+        if ($acceptService) {
+            return $acceptService->transformAccept($response, $entity);
+        } else {
+            return $response->withStatus(200);
+        }
     }
 }

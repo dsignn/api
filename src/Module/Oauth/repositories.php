@@ -124,15 +124,28 @@ return function (ContainerBuilder $containerBuilder) {
 
         'StorageClientEntityHydrator' => function(ContainerInterface $c) {
 
-            $organizationHydrator = new ClassMethodsHydrator();
-            $organizationHydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
-            $organizationHydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
-
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
             $hydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
             $hydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
-            $hydrator->addStrategy('organizationReference', new HydratorStrategy($organizationHydrator, new SingleEntityPrototype(new Reference())));
+            $hydrator->addStrategy('organizationReference', new HydratorStrategy(
+                $c->get('OrganizationReferenceStorageHydrator'), 
+                new SingleEntityPrototype(new Reference()))
+            );
+
+            return $hydrator;
+        },
+
+        'RestClientEntityHydrator'  => function(ContainerInterface $c) {
+
+            $hydrator = new ClassMethodsHydrator();
+            $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
+            $hydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
+            $hydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
+            $hydrator->addStrategy('organizationReference', new HydratorStrategy(
+                $c->get('OrganizationReferenceRestHydrator'), 
+                new SingleEntityPrototype(new Reference()))
+            );
 
             return $hydrator;
         },

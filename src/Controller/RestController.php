@@ -3,14 +3,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\InputFilter\Input;
-use App\InputFilter\InputFilter;
-use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
 use App\Storage\Event\PreProcess;
 use App\Storage\StorageInterface;
 use Laminas\InputFilter\InputFilterInterface;
 use Notihnio\RequestParser\RequestParser;
-use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -32,11 +28,6 @@ class RestController implements RestControllerInterface {
      * @var string
      */
     static public $PREPROCESS_PATCH = 'preprocess_patch';
-
-    /**
-     *
-     */
-    use AcceptServiceAwareTrait;
 
     /**
      * @var string
@@ -75,8 +66,7 @@ class RestController implements RestControllerInterface {
             return $response->withStatus(404);
         }
 
-        $acceptService = $this->getAcceptService($request);
-        return $acceptService->transformAccept($response, $entity);
+        return $this->getAcceptData($request, $response, $entity);
     }
 
     /**
@@ -93,12 +83,8 @@ class RestController implements RestControllerInterface {
             $validator->setData($data);
 
             if (!$validator->isValid()) {
-                $acceptService = $this->getAcceptService($request);
-                $response = $acceptService->transformAccept(
-                    $response,
-                    ['errors' => $validator->getMessages()]
-                );
-                return $response->withStatus(422);
+                $response = $response->withStatus(422);
+                return $this->getAcceptData($request, $response, ['errors' => $validator->getMessages()]);
             }
 
             $data = $validator->getValues();
@@ -113,8 +99,8 @@ class RestController implements RestControllerInterface {
 
         $this->storage->getHydrator()->hydrate($data, $entity); 
         $this->storage->save($entity);
-        $acceptService = $this->getAcceptService($request);
-        return $acceptService->transformAccept($response, $entity);
+    
+        return $this->getAcceptData($request, $response, $entity);
     }
 
     /**
@@ -136,12 +122,8 @@ class RestController implements RestControllerInterface {
             $validator = $request->getAttribute('app-validation');
             $validator->setData($data);
             if (!$validator->isValid()) {
-                $acceptService = $this->getAcceptService($request);
-                $response = $acceptService->transformAccept(
-                    $response,
-                    ['errors' => $validator->getMessages()]
-                );
-                return $response->withStatus(422);
+                $response = $response->withStatus(422);
+                return $this->getAcceptData($request, $response, ['errors' => $validator->getMessages()]);
             }
             $data = $validator->getValues();
         }
@@ -152,8 +134,7 @@ class RestController implements RestControllerInterface {
 
         $this->storage->update($entity);
 
-        $acceptService = $this->getAcceptService($request);
-        return $acceptService->transformAccept($response, $entity);
+        return $this->getAcceptData($request, $response, $entity);
     }
 
     /**
@@ -175,12 +156,8 @@ class RestController implements RestControllerInterface {
             $validator = $request->getAttribute('app-validation');
             $validator->setData($data);
             if (!$validator->isValid()) {
-                $acceptService = $this->getAcceptService($request);
-                $response = $acceptService->transformAccept(
-                    $response,
-                    ['errors' => $validator->getMessages()]
-                );
-                return $response->withStatus(422);
+                $response = $response->withStatus(422);
+                return $this->getAcceptData($request, $response, ['errors' => $validator->getMessages()]);
             }
 
             $data = $validator->getValues();
@@ -196,8 +173,7 @@ class RestController implements RestControllerInterface {
         $this->storage->getHydrator()->hydrate($data, $entity);
         $this->storage->update($entity);
 
-        $acceptService = $this->getAcceptService($request);
-        return $acceptService->transformAccept($response, $entity);
+        return $this->getAcceptData($request, $response, $entity);
     }
 
     /**
@@ -234,8 +210,7 @@ class RestController implements RestControllerInterface {
 
         $pagination = $this->storage->getPage($page, $itemPerPage, $query);
 
-        $acceptService = $this->getAcceptService($request);
-        return $acceptService->transformAccept($response, $pagination);
+        return $this->getAcceptData($request, $response, $pagination);
     }
 
     /**
@@ -265,5 +240,19 @@ class RestController implements RestControllerInterface {
         }
 
         return $data;
+    }
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return void
+     */
+    protected function getAcceptData(Request $request, Response $response, $entity) {
+        $acceptService = $request->getAttribute('app-accept-service');
+        if ($acceptService) {
+            return $acceptService->transformAccept($response, $entity);
+        } else {
+            return $response->withStatus(200);
+        }
     }
 }

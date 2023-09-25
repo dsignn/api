@@ -20,6 +20,7 @@ return function (&$setting) {
                     '/oauth/client' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestClientEntityHydrator',
                             'contentTypeFilter' => ['/application\/json/']
                         ]
                     ],

@@ -150,6 +150,22 @@ return function (ContainerBuilder $containerBuilder) {
         SlugifyInterface::class => function(ContainerInterface $c) {
             return new GenericSlugify();
         }
+    ])->addDefinitions([
+        'OrganizationReferenceStorageHydrator' => function(ContainerInterface $c) {
+            $organizationHydrator = new ClassMethodsHydrator();
+            $organizationHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
+            $organizationHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
+
+            return $organizationHydrator;
+        }
+    ])->addDefinitions([
+        'OrganizationReferenceRestHydrator' => function(ContainerInterface $c) {
+            $organizationHydrator = new ClassMethodsHydrator();
+            $organizationHydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
+            $organizationHydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
+
+            return $organizationHydrator;
+        }
     ]);
 };
 

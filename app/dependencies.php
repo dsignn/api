@@ -147,7 +147,7 @@ return function (ContainerBuilder $containerBuilder) {
 
         "ContentNegotiationMiddleware" => function(ContainerInterface $c) {
 
-            $contentNegotiationMiddleware = new ContentNegotiationMiddleware($c->get('settings')['contentNegotiation']);
+            $contentNegotiationMiddleware = new ContentNegotiationMiddleware($c->get('settings')['contentNegotiation'], $c);
             $contentNegotiationMiddleware->setAcceptContainer($c->get(AcceptContainer::class))
                 ->setContentTypeContainer($c->get(ContentTypeContainer::class));
             $contentNegotiationMiddleware->setDefaultAcceptServices([

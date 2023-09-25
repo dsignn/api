@@ -25,6 +25,7 @@ class JsonAccept implements AcceptTransformInterface {
     public function transformAccept(Response $response, $data): Response {
         $computeData = [];
 
+ 
         switch (true) {
             case $data instanceof ResultSetPaginateInterface === true:
 

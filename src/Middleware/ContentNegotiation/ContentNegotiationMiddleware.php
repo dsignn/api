@@ -7,6 +7,8 @@ use App\Middleware\ContentNegotiation\Accept\AcceptContainer;
 use App\Middleware\ContentNegotiation\Accept\AcceptTransformInterface;
 use App\Middleware\ContentNegotiation\ContentType\ContentTypeContainer;
 use App\Middleware\ContentNegotiation\ContentType\ContentTypeTransformInterface;
+use Laminas\Hydrator\HydratorInterface;
+use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -56,6 +58,11 @@ class ContentNegotiationMiddleware implements Middleware
      */
     protected $acceptContainer;
 
+     /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
     /**
      * @var array
      */
@@ -85,8 +92,9 @@ class ContentNegotiationMiddleware implements Middleware
      * ContentNegotiationMiddleware constructor.
      * @param $setting
      */
-    public function __construct($setting) {
+    public function __construct($setting, $container) {
         $this->settings = $setting;
+        $this->container = $container;
     }
 
     /**
@@ -111,8 +119,14 @@ class ContentNegotiationMiddleware implements Middleware
             return (new ResponseSlim())->withStatus(415);
         };
       
+        /** @var HydratorInterface $acceptHydratorService */
+        $acceptHydratorService = $this->getAcceptHydratorService($path, $method);
+
         /** @var AcceptTransformInterface $acceptService */
         $acceptService = $this->getAcceptService($path, $method, $request->getHeaderLine(self::$ACCEPT));
+        if($acceptHydratorService && $acceptService) {
+            $acceptService->setHydrator($acceptHydratorService);
+        }
 
         /** @var ContentTypeTransformInterface $contentTypeService */
         $contentTypeService = $this->getContentTypeService($path, $method, $request->getHeaderLine(self::$CONTENT_TYPE));
@@ -128,6 +142,11 @@ class ContentNegotiationMiddleware implements Middleware
         if ($acceptService) {
             $request = $request->withAttribute(
                 'AcceptService',
+                $acceptService
+            );
+
+            $request = $request->withAttribute(
+                'app-accept-service',
                 $acceptService
             );
         }
@@ -247,6 +266,17 @@ class ContentNegotiationMiddleware implements Middleware
             $service = $this->acceptContainer->get($serviceName);
         }
     
+        return $service;
+    }
+
+    /**
+     * @param $path
+     * @param $method
+     */
+    protected function getAcceptHydratorService($path, $method) {
+        $settings = $this->getSetting($path, $method);
+        $service = isset($settings['acceptFilterHydrator']) ? $this->container->get($settings['acceptFilterHydrator']) : null;
+       
         return $service;
     }
 
