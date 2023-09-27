@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Module\Device\Controller;
 
+use App\Controller\AcceptTrait;
 use App\Controller\RpcControllerInterface;
 use App\Module\Device\Storage\DeviceStorageInterface;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -14,6 +15,8 @@ use DateTime;
  * @package App\Module\Device\Controller
  */
 class DeviceUpsertRpcRestController implements RpcControllerInterface {
+
+    use AcceptTrait;
 
     /**
      * @var StorageInterface
@@ -64,20 +67,5 @@ class DeviceUpsertRpcRestController implements RpcControllerInterface {
         $this->storage->update($entity);
 
         return $this->getAcceptData($request, $response, $entity);
-    }
-
-
-        /**
-     * @param Request $request
-     * @param Response $response
-     * @return void
-     */
-    protected function getAcceptData(Request $request, Response $response, $entity) {
-        $acceptService = $request->getAttribute('app-accept-service');
-        if ($acceptService) {
-            return $acceptService->transformAccept($response, $entity);
-        } else {
-            return $response->withStatus(200);
-        }
     }
 }

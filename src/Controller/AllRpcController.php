@@ -14,6 +14,8 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 class AllRpcController implements RpcControllerInterface {
 
+    use AcceptTrait;
+
     /**
      * @var StorageInterface
      */
@@ -48,8 +50,7 @@ class AllRpcController implements RpcControllerInterface {
         }
 
         $search = $this->storage->getAll($query, []);
-        $acceptService = $this->getAcceptService($request);
 
-        return $acceptService->transformAccept($response, $search);
+        return $this->getAcceptData($request, $response, $search);
     }
 }

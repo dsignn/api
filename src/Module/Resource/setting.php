@@ -23,6 +23,7 @@ return function (&$setting) {
                     '/resource' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestResourceEntityHydrator',
                             'contentTypeFilter' => ['/multipart\/form-data/'],
                             'contentTypeService' => MultipartFormDataContentType::class
                         ]
@@ -30,6 +31,7 @@ return function (&$setting) {
                     '/resource/all' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestResourceEntityHydrator',
                             'contentTypeFilter' => ['/multipart\/form-data/'],
                             'contentTypeService' => MultipartFormDataContentType::class
                         ]
@@ -37,11 +39,13 @@ return function (&$setting) {
                     '/resource/{id:[0-9a-fA-F]{24}}' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestResourceEntityHydrator',
                             'contentTypeFilter' => ['/multipart\/form-data/'],
                             'contentTypeService' => MultipartFormDataContentType::class
                         ],
                         'PUT' => [
                             'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestResourceEntityHydrator',
                             'contentTypeFilter' => ['/multipart\/form-data/'],
                             'contentTypeService' => MultipartFormDataContentType::class
                         ]

@@ -15,11 +15,6 @@ use Psr\Container\ContainerInterface;
 class OrganizationController extends RestController implements RestControllerInterface {
 
     /**
-     * @var string
-     */
-    protected $hydratorService = 'RestOrganizationEntityHydrator';
-
-    /**
      * @inheritDoc
      */
     public function __construct(OrganizationStorageInterface $storage, ContainerInterface $container) {

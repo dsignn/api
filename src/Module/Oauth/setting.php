@@ -14,6 +14,7 @@ return function (&$setting) {
                     '/me' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestUserEntityHydrator',
                             'contentTypeFilter' => ['/application\/json/']
                         ]
                     ],
@@ -27,6 +28,7 @@ return function (&$setting) {
                     '/oauth/client/{id:[0-9a-fA-F]{24}}' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestClientEntityHydrator',
                             'contentTypeFilter' => ['/application\/json/']
                         ]
                     ]

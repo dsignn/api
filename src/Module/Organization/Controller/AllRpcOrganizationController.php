@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Module\Organization\Controller;
 
 use App\Controller\AllRpcController;
-use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
 use App\Module\Organization\Storage\OrganizationStorageInterface;
 use Psr\Container\ContainerInterface;
 
@@ -13,8 +12,6 @@ use Psr\Container\ContainerInterface;
  * @package App\Module\Organization\Controller
  */
 class AllRpcOrganizationController extends AllRpcController {
-
-    use AcceptServiceAwareTrait;
 
     /**
      * @var string

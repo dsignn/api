@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Module\Oauth\Controller;
 
-use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
 use App\Module\Oauth\Exception\UsernameConflictException;
 use App\Module\Oauth\Exception\UsernameNotFoundException;
 use App\Module\Oauth\Exception\UserNotEnableException;
@@ -20,8 +19,6 @@ use Slim\Psr7\Factory\StreamFactory;
  * @package App\Module\Oauth\Controller
  */
 class OauthController {
-
-    use AcceptServiceAwareTrait;
 
     /**
      * @var AuthorizationServer

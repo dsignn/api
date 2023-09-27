@@ -13,10 +13,6 @@ use Psr\Container\ContainerInterface;
  * @package App\Module\Device\Controller
  */
 class DeviceController extends RestController implements RestControllerInterface {
-    /**
-     * @var string
-     */
-    protected $hydratorService = 'RestDeviceEntityHydrator';
 
     /**
      * MonitorController constructor.

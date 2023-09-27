@@ -15,6 +15,8 @@ return function (App $app) {
 
         $group->post('',  [DeviceUpsertRpcRestController::class, 'rpc']);
 
+        $group->get('', [DeviceController::class, 'paginate']);
+
     })->add($app->getContainer()->get(ValidationMiddleware::class))
        // ->add($app->getContainer()->get(AuthorizationMiddleware::class))
       //  ->add($app->getContainer()->get(AuthenticationMiddleware::class))

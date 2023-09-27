@@ -71,8 +71,7 @@ class JsonAccept implements AcceptTransformInterface {
             return $response->withStatus(415);
         }
 
-        return $response->withStatus(200)
-            ->withHeader('Content-Type', 'application/json')
+        return $response->withHeader('Content-Type', 'application/json')
             ->withBody($body);
     }
 }

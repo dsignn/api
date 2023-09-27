@@ -22,12 +22,14 @@ return function (&$setting) {
                     '/device' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestDeviceEntityHydrator',
                             'contentTypeFilter' => ['/application\/json/']
                         ]
                     ],
                     '/device/{id:[0-9a-fA-F]{24}}' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestDeviceEntityHydrator',
                             'contentTypeFilter' => ['/application\/json/']
                         ]
                     ],

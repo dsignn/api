@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace App\Module\User\Controller;
 
+use App\Controller\AcceptTrait;
 use App\Controller\RpcControllerInterface;
 use App\Crypto\CryptoInterface;
 use App\Mail\MailerInterface;
-use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
 use App\Module\User\Entity\UserEntity;
 use App\Module\User\Storage\UserStorageInterface;
 use App\Storage\StorageInterface;
@@ -20,7 +20,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 class ResetPassword implements RpcControllerInterface {
 
-    use AcceptServiceAwareTrait;
+    use AcceptTrait;
 
     /**
      * @var string
@@ -59,7 +59,23 @@ class ResetPassword implements RpcControllerInterface {
 
         $data = $request->getParsedBody();
 
-        // TODO validation
+        if (!isset($data['token'])) {
+            // TODO LOCALIZATION
+            $response = $response->withStatus(422);
+
+            return $this->getAcceptData($request, $response, ['errors' => 
+                ['token' => "Must be not empty"]
+            ]);
+        }
+
+        if (!isset($data['password'])) {
+            // TODO LOCALIZATION
+            $response = $response->withStatus(422);
+
+            return $this->getAcceptData($request, $response, ['errors' => 
+                ['password' => "Must be not empty"]
+            ]);
+        }
 
         $resultSet = $this->storage->getAll(['recover_password.token' => $data['token']]);
         /** @var UserEntity $user */
@@ -80,7 +96,6 @@ class ResetPassword implements RpcControllerInterface {
 
         $this->storage->update($user);
 
-        $AcceptService = $this->getAcceptService($request);
-        return $AcceptService->transformAccept($response, $user);
+        return $this->getAcceptData($request, $response, $user);
     }
 }

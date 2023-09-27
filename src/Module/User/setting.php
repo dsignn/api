@@ -40,6 +40,22 @@ return function (&$setting) {
                     '/activation-code' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestUserEntityHydrator',
+                            'contentTypeFilter' => ['/application\/json/']
+                        ]
+                    ],
+                    '/recover-password' => [
+                        'default' => [
+                            'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RpcPasswordUserEntityHydrator',
+                            'contentTypeFilter' => ['/application\/json/']
+                        ]
+                    ],
+                    
+                    '/reset-password' => [
+                        'default' => [
+                            'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestUserEntityHydrator',
                             'contentTypeFilter' => ['/application\/json/']
                         ]
                     ],

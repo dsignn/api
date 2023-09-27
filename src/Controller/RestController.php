@@ -19,6 +19,8 @@ use function DI\get;
  */
 class RestController implements RestControllerInterface {
 
+    use AcceptTrait;
+
     /**
      * @var string
      */
@@ -240,19 +242,5 @@ class RestController implements RestControllerInterface {
         }
 
         return $data;
-    }
-
-    /**
-     * @param Request $request
-     * @param Response $response
-     * @return void
-     */
-    protected function getAcceptData(Request $request, Response $response, $entity) {
-        $acceptService = $request->getAttribute('app-accept-service');
-        if ($acceptService) {
-            return $acceptService->transformAccept($response, $entity);
-        } else {
-            return $response->withStatus(200);
-        }
     }
 }

@@ -22,18 +22,15 @@ return function (&$setting) {
                     '/organization' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestOrganizationEntityHydrator',
                             'contentTypeFilter' => ['/application\/json/']
                         ]
                     ],
                     '/organization/{id:[0-9a-fA-F]{24}}' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestOrganizationEntityHydrator',
                             'contentTypeFilter' => ['/application\/json/']
-                        ]
-                    ],
-                    '/generate-qrcode/{id:[0-9a-fA-F]{24}}' => [
-                        'default' => [
-                            'acceptFilter' => ['/application\/json/']
                         ]
                     ],
                     '/organization/upload-resource' => [

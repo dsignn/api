@@ -2,8 +2,8 @@
 
 namespace App\Module\Oauth\Controller;
 
+use App\Controller\AcceptTrait;
 use App\Controller\RpcControllerInterface;
-use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -14,7 +14,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 class MeController implements RpcControllerInterface {
 
-    use AcceptServiceAwareTrait;
+    use AcceptTrait;
 
     /**
      * @var string
@@ -44,8 +44,7 @@ class MeController implements RpcControllerInterface {
             return $response->withStatus(404);
         }
 
-        $acceptService = $this->getAcceptService($request);
-        return $acceptService->transformAccept($response, $user);
+        return $this->getAcceptData($request, $response, $user);
     }
 
     /**
