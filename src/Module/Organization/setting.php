@@ -47,6 +47,26 @@ return function (&$setting) {
                         'PUT' => 'PutOrganizationValidator'
                     ]
                 ],
+                'authentication' => [
+                    '/organization/all' => [
+                        'GET' => [
+                            'public' => true
+                        ]
+                    ]
+                ],
+                'authorization' => [
+                    '/organization/all' => [
+                        'guest' => [
+                            'allow' => true,
+                            'privileges' => [
+                                [
+                                    "method" => "GET",
+                                    'allow' => true,
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
             ]
         ]
     );

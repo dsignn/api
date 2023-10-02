@@ -66,7 +66,7 @@ class UniqueNameOrganization extends AbstractValidator implements ValidatorInter
      * @param mixed $value
      * @return bool|void
      */
-    public function isValid($value) {
+    public function isValid($value, ?iterable $context = null) {
 
         $this->setValue($value);
 

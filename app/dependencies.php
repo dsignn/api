@@ -21,6 +21,8 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Query;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Hydrator\Strategy\ClosureStrategy;
+use Laminas\Permissions\Acl\Acl;
+use Laminas\Permissions\Acl\Role\GenericRole;
 use League\OAuth2\Server\ResourceServer;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
@@ -110,9 +112,21 @@ return function (ContainerBuilder $containerBuilder) {
             );
         },
 
+        Acl::class => function(ContainerInterface $c) {
+            $roles = $c->get('settings')['authorizationRoles'];
+            $acl = new Acl();
+
+            for ($cont = 0; $cont < count($roles); $cont++) {
+                $acl->addRole(new GenericRole($roles[$cont]));
+            }
+
+            return $acl;
+        },
+
         AuthorizationMiddleware::class => function(ContainerInterface $c) {
             return new AuthorizationMiddleware(
-                $c->get('settings')['authorization']
+                $c->get('settings')['authorization'],
+                $c->get(Acl::class)
             );
         },
 

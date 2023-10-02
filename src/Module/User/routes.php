@@ -2,6 +2,8 @@
 declare(strict_types=1);
 
 use App\Controller\OptionController;
+use App\Middleware\Authentication\AuthenticationMiddleware;
+use App\Middleware\Authorization\AuthorizationMiddleware;
 use App\Middleware\Validation\ValidationMiddleware;
 use App\Module\User\Controller\ActivationToken;
 use App\Module\User\Controller\PasswordToken;
@@ -31,8 +33,8 @@ return function (App $app) {
         $group->delete('/{id:[0-9a-fA-F]{24}}',  [UserController::class, 'delete']);
     })
         ->add($app->getContainer()->get(ValidationMiddleware::class))
-     //   ->add($app->getContainer()->get(AuthorizationMiddleware::class))
-       // ->add($app->getContainer()->get(AuthenticationMiddleware::class))
+        ->add($app->getContainer()->get(AuthorizationMiddleware::class))
+        ->add($app->getContainer()->get(AuthenticationMiddleware::class))
     ;
 
     $app->post('/recover-password', [PasswordToken::class, 'rpc']);

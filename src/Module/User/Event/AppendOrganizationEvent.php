@@ -63,6 +63,8 @@ class AppendOrganizationEvent {
             $response = $this->getRequest($preprocess);
             $organization = new OrganizationEntity();
 
+            var_dump(    $response->getStatusCode());
+            die();
             $this->hydrator->hydrate(
                 json_decode($response->getBody()->getContents(), true),
                 $organization

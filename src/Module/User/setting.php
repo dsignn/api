@@ -71,7 +71,7 @@ return function (&$setting) {
                 'authentication' => [
                     '/user' => [
                         'POST' => [
-                            'skip' => true
+                            'public' => true
                         ]
                     ]
                 ],

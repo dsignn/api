@@ -83,7 +83,7 @@ class AuthenticationMiddleware implements Middleware {
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
 
-        if ($this->skip($request) || $request->getMethod() === 'OPTIONS') {
+        if ($this->isPublic($request) || $request->getMethod() === 'OPTIONS') {
             return $handler->handle($request);
         }
 
@@ -166,14 +166,18 @@ class AuthenticationMiddleware implements Middleware {
      * @param ServerRequestInterface $request
      * @return bool
      */
-    protected function skip(ServerRequestInterface $request) {
+    protected function isPublic(ServerRequestInterface $request) {
 
-        $skip = false;
+        $isPublic = false;
         $path = $request->getAttribute('__route__')->getPattern();
-        if (isset($this->settings[$path]) && is_array($this->settings[$path]) && isset($this->settings[$path][$request->getMethod()])) {
-            $skip = (bool) $this->settings[$path][$request->getMethod()];
+        if (isset($this->settings[$path]) && 
+            is_array($this->settings[$path]) && 
+            isset($this->settings[$path][$request->getMethod()]) &&
+            isset($this->settings[$path][$request->getMethod()]['public'])) {
+
+            $isPublic = $this->settings[$path][$request->getMethod()]['public'];
         }
 
-        return $skip;
+        return $isPublic;
     }
-}
+} 

@@ -36,18 +36,9 @@ class AuthorizationMiddleware implements Middleware {
      * AuthorizationMiddleware constructor.
      * @param array $settings
      */
-    public function __construct(array $settings = []) {
+    public function __construct(array $settings = [], Acl $acl) {
         $this->settings = $settings;
-        $this->acl = new Acl();
-
-        /** TODO add storage and add to it */
-        $this->acl->addRole(
-            new GenericRole('guest')
-        )->addRole(
-            new GenericRole('admin')
-        )->addRole(
-            new GenericRole('organizationOwner')
-        );
+        $this->acl = $acl;
     }
 
     /**
@@ -67,6 +58,7 @@ class AuthorizationMiddleware implements Middleware {
         $this->acl->addResource($resource);
         $this->loadPermission($resource, $request);
 
+     
         // TODO REMOVE
         if (!$this->acl->isAllowed($role, $resource, $method) && false) {
             throw new HttpException(
@@ -88,6 +80,7 @@ class AuthorizationMiddleware implements Middleware {
 
         /** @var $role RoleInterface */
         $method = $request->getMethod();
+    
         if (isset($this->settings[$resource->getResourceId()])) {
 
             foreach ($this->settings[$resource->getResourceId()] as $role => $list) {
