@@ -14,7 +14,9 @@ use App\Mail\adapter\SendinblueMailer;
 use App\Mail\Contact;
 use App\Mail\MailerInterface;
 use App\Module\Oauth\Filter\PasswordFilter;
-use App\Module\Organization\Validator\UniqueNameOrganization;
+use App\Module\Organization\Storage\OrganizationStorage;
+use App\Module\Organization\Storage\OrganizationStorageInterface;
+use App\Module\Organization\Validator\OrganizationSaveValidator;
 use App\Module\User\Entity\Embedded\ActivationCode;
 use App\Module\User\Entity\Embedded\RecoverPassword;
 use App\Module\User\Entity\UserEntity;
@@ -59,7 +61,8 @@ return function (ContainerBuilder $containerBuilder) {
                 $c->get(Client::class),
                 $c->get('settings')['httpClient']["url"],
                 $c->get('RestOrganizationEntityHydrator'),
-                $c->get('settings')['client']
+                $c->get('settings')['client'],
+                $c->get(OrganizationStorageInterface::class)
             );
         },
 
@@ -188,7 +191,6 @@ return function (ContainerBuilder $containerBuilder) {
                 'email',
                 'password',
                 'roleId',
-                'nameOrganization',
                 'organizations'
             ]);
 
@@ -203,10 +205,10 @@ return function (ContainerBuilder $containerBuilder) {
                 ->attach(new EmailAddress())
                 ->attach($container->get(EmailExistValidator::class));
 
-            $nameOrganization = new Input('nameOrganization');
+            $nameOrganization = new Input('organization');
             $nameOrganization->setRequired(true);
             $nameOrganization->getValidatorChain()
-                ->attach($container->get(UniqueNameOrganization::class));
+                ->attach($container->get(OrganizationSaveValidator::class));
 
             // Role field
             $role = new Input('roleId');

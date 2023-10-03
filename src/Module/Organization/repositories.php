@@ -15,7 +15,6 @@ use App\Module\Organization\Storage\OrganizationStorageInterface;
 use App\Module\Organization\Url\GenericSlugify;
 use App\Module\Organization\Url\SlugifyInterface;
 use App\Module\Organization\Validator\HasOrganization;
-use App\Module\Organization\Validator\UniqueNameOrganization;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydratePaginateResultSet;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
 use App\Storage\Entity\Reference;
@@ -27,8 +26,7 @@ use Laminas\Filter\ToInt;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\InputFilter\Input;
 use App\InputFilter\InputFilter;
-use Laminas\Validator\Digits;
-use Laminas\Validator\InArray;
+use App\Module\Organization\Validator\OrganizationSaveValidator;
 use MongoDB\Client;
 use Psr\Container\ContainerInterface;
 
@@ -105,9 +103,6 @@ return function (ContainerBuilder $containerBuilder) {
             $name->getFilterChain()
                 ->attach(new StringToLower());
 
-            $name->getValidatorChain()
-                ->attach($c->get(UniqueNameOrganization::class));
-
             $inputFilter->add($name);
 
             return $inputFilter;
@@ -124,7 +119,7 @@ return function (ContainerBuilder $containerBuilder) {
                 ->attach(new StringToLower());
 
             $input->getValidatorChain()
-                ->attach($c->get(UniqueNameOrganization::class)->setFindIdInRequest(true));
+                ->attach($c->get(OrganizationSaveValidator::class)->setFindIdInRequest(true));
 
             $inputFilter->add($input);
 
@@ -139,8 +134,8 @@ return function (ContainerBuilder $containerBuilder) {
             return new SingleEntityPrototype(new OrganizationEntity());
         }
     ])->addDefinitions([
-        UniqueNameOrganization::class => function(ContainerInterface $c) {
-            return new UniqueNameOrganization($c->get(OrganizationStorageInterface::class), $c);
+        OrganizationSaveValidator::class => function(ContainerInterface $c) {
+            return new OrganizationSaveValidator($c->get(OrganizationStorageInterface::class), $c);
         }
     ])->addDefinitions([
         HasOrganization::class => function(ContainerInterface $c) {

@@ -27,6 +27,7 @@ return function (&$setting) {
                 'contentNegotiation' => [
                     '/user' => [
                         'default' => [
+                            'acceptFilterHydrator' => 'RestUserEntityHydrator',
                             'acceptFilter' => ['/application\/json/'],
                             'contentTypeFilter' => ['/application\/json/']
                         ]
@@ -34,6 +35,7 @@ return function (&$setting) {
                     '/user/{id:[0-9a-fA-F]{24}}' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestUserEntityHydrator',
                             'contentTypeFilter' => ['/application\/json/']
                         ]
                     ],
