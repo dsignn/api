@@ -190,7 +190,7 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
         if (count($order)) {
             $options['sort'] = $order;
         }
-  
+
         return $this->getCollection()->find(
             $this->transformSearch($search),
             $options
@@ -202,6 +202,7 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
      * @return mixed
      */
     protected function transformSearch(array $search) {
+
         return $search;
     }
 

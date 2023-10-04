@@ -21,13 +21,8 @@ class OrganizationMongoAdapter extends MongoAdapter {
         foreach ($search as $key => &$value) {
 
             switch ($key) {
-                case 'organizations':
-                    $ids = [];
-                    foreach ($value as $id) {
-                        array_push($ids, new ObjectId($id));
-                    }
-                    $search['_id'] = ['$in' => $ids];
-                    unset($search[$key]);
+                case 'name':
+                    $search[$key] = new \MongoDB\BSON\Regex($search[$key], 'i');
                     break;
             }
         }
