@@ -125,6 +125,7 @@ class ContentNegotiationMiddleware implements Middleware
         /** @var AcceptTransformInterface $acceptService */
         $acceptService = $this->getAcceptService($path, $method, $request->getHeaderLine(self::$ACCEPT));
         if($acceptHydratorService && $acceptService) {
+          
             $acceptService->setHydrator($acceptHydratorService);
         }
 
@@ -275,8 +276,8 @@ class ContentNegotiationMiddleware implements Middleware
      */
     protected function getAcceptHydratorService($path, $method) {
         $settings = $this->getSetting($path, $method);
+
         $service = isset($settings['acceptFilterHydrator']) ? $this->container->get($settings['acceptFilterHydrator']) : null;
-       
         return $service;
     }
 

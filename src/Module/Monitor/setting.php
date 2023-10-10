@@ -23,12 +23,14 @@ return function (&$setting) {
                     '/monitor' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestMonitorEntityHydrator',
                             'contentTypeFilter' => ['/application\/json/']
                         ]
                     ],
                     '/monitor/{id:[0-9a-fA-F]{24}}' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestMonitorEntityHydrator',
                             'contentTypeFilter' => ['/application\/json/']
                         ]
                     ],

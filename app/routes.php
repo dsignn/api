@@ -33,6 +33,9 @@ return function (App $app) {
     $resourceRoute = include_once __DIR__ . "/../src/Module/Resource/routes.php";
     $resourceRoute($app);
 
+    $playlistRoute = include_once __DIR__ . "/../src/Module/Playlist/routes.php";
+    $playlistRoute($app);
+
     $machineRoute = include_once __DIR__ . "/../src/Module/Device/routes.php";
     $machineRoute($app);
 };
