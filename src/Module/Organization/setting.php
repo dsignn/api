@@ -38,6 +38,13 @@ return function (&$setting) {
                             'acceptFilter' => ['/application\/json/']
                         ]
                     ],
+                    '/organization/all' => [
+                        'default' => [
+                            'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestOrganizationEntityHydrator',
+                            'contentTypeFilter' => ['/application\/json/']
+                        ]
+                    ],
                 ],
                 'validation' => [
                     '/organization' => [

@@ -20,11 +20,11 @@ return function (App $app) {
 
         $group->get('', [UserController::class, 'paginate']);
 
-        $group->get('/{id:[0-9a-fA-F]{24}}',  [UserController::class, 'get']);
-
         $group->post('',  [UserController::class, 'post']);
 
         $group->put('/{id:[0-9a-fA-F]{24}}',  [UserController::class, 'put']);
+
+        $group->get('/{id:[0-9a-fA-F]{24}}',  [UserController::class, 'get']);
 
         $group->patch('/{id:[0-9a-fA-F]{24}}',  [UserController::class, 'patch']);
 
