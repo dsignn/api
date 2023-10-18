@@ -1,13 +1,12 @@
 <?php
 declare(strict_types=1);
 
-use App\Crypto\CryptoOpenSsl;
+
 use App\Crypto\LaminasCrypto;
 use App\Hydrator\Strategy\HydratorArrayStrategy;
 use App\Hydrator\Strategy\HydratorStrategy;
 use App\Hydrator\Strategy\Mongo\MongoDateStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
-use App\Hydrator\Strategy\Mongo\NamingStrategy\UnderscoreNamingStrategy;
 use App\InputFilter\Input;
 use App\InputFilter\InputFilter as AppInputFilter;
 use App\Module\Oauth\Entity\AccessTokenEntity;
@@ -16,6 +15,7 @@ use App\Module\Oauth\Entity\ClientEntity;
 use App\Module\Oauth\Entity\RefreshTokenEntity;
 use App\Module\Oauth\Entity\ScopeEntity;
 use App\Module\Oauth\Event\PasswordEvent;
+use App\Module\Oauth\Grant\OrganizationTokenGrant;
 use App\Module\Oauth\Repository\AccessTokenRepository;
 use App\Module\Oauth\Repository\AuthCodeRepository;
 use App\Module\Oauth\Repository\ClientRepository;
@@ -24,6 +24,7 @@ use App\Module\Oauth\Repository\ScopeRepository;
 use App\Module\Oauth\Repository\UserRepository;
 use App\Module\Oauth\Storage\ClientStorage;
 use App\Module\Oauth\Storage\ClientStorageInterface;
+use App\Module\Organization\Storage\OrganizationStorageInterface;
 use App\Storage\Adapter\Mongo\MongoAdapter;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
 use App\Storage\Entity\Reference;
@@ -371,6 +372,15 @@ return function (ContainerBuilder $containerBuilder) {
             $server->enableGrantType(
                 $grant,
                 new DateInterval('P1M') // new access tokens will expire after a month
+            );
+
+            $server->enableGrantType(
+                new OrganizationTokenGrant(
+                    $c->get(AccessTokenRepository::class),
+                    $c->get(ScopeRepository::class),
+                    $c->get(OrganizationStorageInterface::class)
+                ),
+                new DateInterval('P1000Y') 
             );
 
             /**

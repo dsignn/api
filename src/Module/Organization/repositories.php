@@ -27,6 +27,9 @@ use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\InputFilter\Input;
 use App\InputFilter\InputFilter;
 use App\Module\Organization\Validator\OrganizationSaveValidator;
+use Laminas\Hydrator\Filter\FilterComposite;
+use Laminas\Hydrator\Filter\GetFilter;
+use Laminas\Hydrator\Filter\MethodMatchFilter;
 use MongoDB\Client;
 use Psr\Container\ContainerInterface;
 
@@ -74,6 +77,8 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
             $hydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
             $hydrator->addStrategy('logo', new HydratorStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
+
+            $hydrator->addFilter('identifier', new MethodMatchFilter('getIdentifier'), FilterComposite::CONDITION_AND);
             
             return $hydrator;
         }

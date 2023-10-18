@@ -5,6 +5,7 @@ namespace App\Module\Organization\Storage\adapter\Mongo;
 
 use App\Storage\Adapter\Mongo\MongoAdapter;
 use MongoDB\BSON\ObjectId;
+use MongoDB\BSON\Regex;
 
 /**
  * Class OrganizationMongoAdapter
@@ -22,11 +23,12 @@ class OrganizationMongoAdapter extends MongoAdapter {
 
             switch ($key) {
                 case 'name':
-                    $search[$key] = new \MongoDB\BSON\Regex($search[$key], 'i');
+                    $search[$key] = new Regex($search[$key], 'i');
                     break;
             }
         }
 
+        var_dump($search);
         return $search;
     }
 }

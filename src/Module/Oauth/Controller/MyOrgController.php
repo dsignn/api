@@ -9,10 +9,10 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 /**
- * Class MeController
+ * Class MyOrgController
  * @package App\Module\Oauth\Controller
  */
-class MeController implements RpcControllerInterface {
+class MyOrgController implements RpcControllerInterface {
 
     use AcceptTrait;
 
@@ -33,13 +33,13 @@ class MeController implements RpcControllerInterface {
      * @inheritDoc
      */
     public function rpc(Request $request, Response $response) {
-        $user = $request->getAttribute('app-user');
+        $org = $request->getAttribute('app-organization');
 
-        if (!$user) {
+        if (!$org) {
             return $response->withStatus(404);
         }
 
-        return $this->getAcceptData($request, $response, $user);
+        return $this->getAcceptData($request, $response, $org);
     }
 
     /**

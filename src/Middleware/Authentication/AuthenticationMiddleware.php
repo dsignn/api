@@ -5,6 +5,7 @@ namespace App\Middleware\Authentication;
 
 use App\Module\Oauth\Entity\AccessTokenEntity;
 use App\Module\Oauth\Entity\ClientEntity;
+use App\Module\Organization\Entity\OrganizationEntity;
 use App\Module\User\Entity\UserEntity;
 use App\Storage\StorageInterface;
 use Exception;
@@ -103,6 +104,7 @@ class AuthenticationMiddleware implements Middleware {
 
         return $handler->handle(
             $request->withAttribute('app-user', $this->getUser($request->getAttribute('oauth_user_id')))
+                ->withAttribute('app-organization', $this->getOrganization($request->getAttribute('oauth_user_id')))
                 ->withAttribute('app-client', $this->getClient($request->getAttribute('oauth_access_token_id')))
         );
     }
@@ -134,6 +136,26 @@ class AuthenticationMiddleware implements Middleware {
         }
        
         return $user;
+    }
+
+    /**
+     * @param $identifier
+     * @return OrganizationEntity|null
+     */
+    protected function getOrganization($identifier) {
+        $org = null;
+        if (str_contains($identifier, 'organization_')) {
+
+            $stringId = str_replace("organization_", "", "$identifier");
+    
+            try { 
+                $org = $this->organizationStorage->get($stringId);
+            } catch (Exception $e) {
+                // TODO Log error
+            }
+        }
+
+        return $org;
     }
 
     /**

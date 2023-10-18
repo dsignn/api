@@ -9,13 +9,13 @@ use App\Storage\Entity\EntityInterface;
 use App\Storage\Entity\EntityTrait;
 use App\Storage\Entity\Reference;
 use App\Storage\Entity\ReferenceInterface;
-
+use League\OAuth2\Server\Entities\UserEntityInterface;
 
 /**
  * Class OrganizationEntity
  * @package App\Module\Organization\Entity
  */
-class OrganizationEntity implements EntityInterface {
+class OrganizationEntity implements EntityInterface, UserEntityInterface {
 
     use EntityTrait;
 
@@ -25,6 +25,12 @@ class OrganizationEntity implements EntityInterface {
     public function __construct() {
         
         $this->logo = new Reference();
+    }
+
+    /**
+     */
+    public function getIdentifier() {
+        return 'organization_' . $this->getId();
     }
 
     /**

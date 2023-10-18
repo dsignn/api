@@ -6,6 +6,7 @@ use App\Middleware\Authentication\AuthenticationMiddleware;
 use App\Middleware\Validation\ValidationMiddleware;
 use App\Module\Oauth\Controller\ClientController;
 use App\Module\Oauth\Controller\MeController;
+use App\Module\Oauth\Controller\MyOrgController;
 use App\Module\Oauth\Controller\OauthController;
 use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
@@ -22,7 +23,9 @@ return function (App $app) {
 
     $app->get('/me', [MeController::class, 'rpc'])
         ->add($app->getContainer()->get(AuthenticationMiddleware::class));
-    ;
+    
+    $app->get('/my-org', [MyOrgController::class, 'rpc'])
+        ->add($app->getContainer()->get(AuthenticationMiddleware::class));
 
     /**
      * Client oauth

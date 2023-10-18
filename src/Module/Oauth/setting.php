@@ -18,6 +18,13 @@ return function (&$setting) {
                             'contentTypeFilter' => ['/application\/json/']
                         ]
                     ],
+                    '/my-org' => [
+                        'default' => [
+                            'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestOrganizationEntityHydrator',
+                            'contentTypeFilter' => ['/application\/json/']
+                        ]
+                    ],
                     '/oauth/client' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],

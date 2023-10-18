@@ -49,6 +49,15 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface {
         $this->storage->save($accessTokenEntity);
     }
 
+    public function getByIdentifier(string $identifier) {
+        $resultSet = $this->storage->getAll(['user_identifier' => $identifier]);
+        if ($resultSet->count() > 1) {
+            // TODO log error
+        }
+
+        return $resultSet->current();
+    }
+
     /**
      * {@inheritdoc}
      */
