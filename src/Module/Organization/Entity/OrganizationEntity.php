@@ -39,14 +39,15 @@ class OrganizationEntity implements EntityInterface, UserEntityInterface {
     protected $name = '';
 
     /**
-     * @var string
-     */
-    protected $normalizeName = '';
-
-    /**
      * @var ReferenceInterface
      */
     protected $logo;
+
+    /**
+     *
+     * @var string
+     */
+    protected $oauthToken;
 
     /**
      * @return string
@@ -63,23 +64,7 @@ class OrganizationEntity implements EntityInterface, UserEntityInterface {
         $this->name = $name;
         return $this;
     }
-
-    /**
-     * @return string
-     */
-    public function getNormalizeName(): string {
-        return $this->normalizeName;
-    }
-
-    /**
-     * @param string $normalizeName
-     * @return OrganizationEntity
-     */
-    public function setNormalizeName(string $normalizeName): OrganizationEntity {
-        $this->normalizeName = $normalizeName;
-        return $this;
-    }
-
+    
     /**
      * @return ReferenceInterface
      */
@@ -93,6 +78,28 @@ class OrganizationEntity implements EntityInterface, UserEntityInterface {
      */
     public function setLogo(ReferenceInterface $logo): OrganizationEntity {
         $this->logo = $logo;
+        return $this;
+    }
+
+    /**
+     * Get the value of oauthToken
+     *
+     * @return  string
+     */ 
+    public function getOauthToken()
+    {
+        return $this->oauthToken;
+    }
+
+    /**
+     * Set the value of oauthToken
+     *
+     * @param  string  $oauthToken
+     *
+     * @return  self
+     */ 
+    public function setOauthToken(string $oauthToken) {
+        $this->oauthToken = $oauthToken;
         return $this;
     }
 }

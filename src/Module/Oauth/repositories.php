@@ -187,6 +187,7 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
             $hydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
             $hydrator->addStrategy('client', new HydratorStrategy(  new ClassMethodsHydrator(), new SingleEntityPrototype(new ClientEntity())));
+            $hydrator->addStrategy('start_date_time', new MongoDateStrategy(new DateTimeImmutable()));
             $hydrator->addStrategy('expiry_date_time', new MongoDateStrategy(new DateTimeImmutable()));
             $hydrator->addStrategy('scopes', new HydratorArrayStrategy(  new ClassMethodsHydrator(), new SingleEntityPrototype(new ScopeEntity())));
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Module\Oauth\Grant;
 
 use App\Module\Oauth\Entity\AccessTokenEntity;
+use App\Module\Organization\Entity\OrganizationEntity;
 use App\Storage\StorageInterface;
 use League\OAuth2\Server\Grant\AbstractGrant;
 use DateInterval;
@@ -24,6 +25,9 @@ use function DI\value;
  */
 class OrganizationTokenGrant extends AbstractGrant {
 
+    /**
+     * @var StorageInterface
+     */
     protected $organizationStorage;
 
     public function __construct(
@@ -58,6 +62,7 @@ class OrganizationTokenGrant extends AbstractGrant {
             throw OAuthServerException::invalidRequest('organization_id');
         }
 
+        /** @var OrganizationEntity $organization  */
         $organization = $this->organizationStorage->get($organizationId);
         if (!$organization) {
             throw new OAuthServerException(
@@ -82,15 +87,16 @@ class OrganizationTokenGrant extends AbstractGrant {
             
             $accessToken->setUserIdentifier($organization->getIdentifier());
             $accessToken->setExpiryDateTime((new DateTimeImmutable())->add($accessTokenTTL));
+            $accessToken->setStartDateTime(new DateTimeImmutable());
             $accessToken->setPrivateKey($this->privateKey);
             $accessToken->setIdentifier($this->generateUniqueIdentifier());
 
             $this->accessTokenRepository->persistNewAccessToken($accessToken);
+
+            $organization->setOauthToken((string) $accessToken);
+            $this->organizationStorage->update($organization);
         }
 
-        //var_dump($accessToken);
-
-        //die();
         $accessToken->setPrivateKey($this->privateKey);
         $responseType->setAccessToken($accessToken);
 

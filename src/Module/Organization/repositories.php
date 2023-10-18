@@ -8,7 +8,6 @@ use App\Hydrator\Strategy\NamingStrategy\CamelCaseStrategy;
 use App\Module\Organization\Entity\Embedded\Address\Address;
 use App\Module\Organization\Entity\Embedded\Phone\Phone;
 use App\Module\Organization\Entity\OrganizationEntity;
-use App\Module\Organization\Event\SluggerNameEvent;
 use App\Module\Organization\Storage\adapter\Mongo\OrganizationMongoAdapter;
 use App\Module\Organization\Storage\OrganizationStorage;
 use App\Module\Organization\Storage\OrganizationStorageInterface;
@@ -60,8 +59,6 @@ return function (ContainerBuilder $containerBuilder) {
             $storage->setHydrator($hydrator);
             $storage->setEntityPrototype($c->get('OrganizationEntityPrototype'));
 
-            $storage->getEventManager()->attach(Storage::$BEFORE_SAVE, new SluggerNameEvent($c->get(SlugifyInterface::class)));
-            $storage->getEventManager()->attach(Storage::$BEFORE_UPDATE, new SluggerNameEvent($c->get(SlugifyInterface::class)));
             return $storage;
         }
     ])->addDefinitions([

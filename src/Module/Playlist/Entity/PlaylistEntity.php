@@ -17,9 +17,19 @@ class PlaylistEntity implements EntityInterface {
     use StorageEntityTrait;
 
     /**
-     * @var
+     * @var string
      */
     protected $name;
+
+    /**
+     * @var array
+     */
+    protected $resources;
+
+    /**
+     * @var [type]
+     */
+    protected $monitorContainerReference;
 
    
     /**
@@ -35,6 +45,48 @@ class PlaylistEntity implements EntityInterface {
      */
     public function setName($name): PlaylistEntity {
         $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * Get the value of monitorContainerReference
+     *
+     * @return  [type]
+     */ 
+    public function getMonitorContainerReference() {
+        return $this->monitorContainerReference;
+    }
+
+    /**
+     * Set the value of monitorContainerReference
+     *
+     * @param  [type]  $monitorContainerReference
+     *
+     * @return  self
+     */ 
+    public function setMonitorContainerReference( $monitorContainerReference) {
+        $this->monitorContainerReference = $monitorContainerReference;
+        return $this;
+    }
+
+    /**
+     * Get the value of resources
+     *
+     * @return  array
+     */ 
+    public function getResources() {
+        return $this->resources;
+    }
+
+    /**
+     * Set the value of resources
+     *
+     * @param  array  $resources
+     *
+     * @return  self
+     */ 
+    public function setResources(array $resources) {
+        $this->resources = $resources;
         return $this;
     }
 }
