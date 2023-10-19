@@ -87,7 +87,7 @@ class Storage implements StorageInterface {
             Storage::$BEFORE_SAVE,
             $entity
         );
-
+        
         $dataSave = $this->storage->save($this->hydrator->extract($entity));
         $this->hydrator->hydrate($dataSave, $entity);
 

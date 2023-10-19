@@ -29,6 +29,10 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface {
         $this->storage = $storage;
     }
 
+    public function getStorage() {
+        return $this->storage;
+    }
+
     /**
      * {@inheritdoc}
      */

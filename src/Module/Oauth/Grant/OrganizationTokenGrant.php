@@ -9,6 +9,7 @@ use App\Storage\StorageInterface;
 use League\OAuth2\Server\Grant\AbstractGrant;
 use DateInterval;
 use DateTimeImmutable;
+use DateTimeZone;
 use Exception;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
@@ -75,31 +76,41 @@ class OrganizationTokenGrant extends AbstractGrant {
         }
 
         $accessToken = $this->accessTokenRepository->getByIdentifier($organization->getIdentifier());
-    
+
+        echo '<pre>';
+
         if ($accessToken) {
             // TODO alter expiration date :)
+            $accessToken->setPrivateKey($this->privateKey);          
+          
         } else {
 
             $accessToken = new AccessTokenEntity();
             foreach ($scopes as $scope) {
                 $accessToken->addScope($scope);
             }
-            
+            $now = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s'));
+            $expired = (DateTimeImmutable::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s')))->add($accessTokenTTL);
+
             $accessToken->setUserIdentifier($organization->getIdentifier());
-            $accessToken->setExpiryDateTime((new DateTimeImmutable())->add($accessTokenTTL));
-            $accessToken->setStartDateTime(new DateTimeImmutable());
+            $accessToken->setExpiryDateTime($expired);
+            $accessToken->setStartDateTime($now);
             $accessToken->setPrivateKey($this->privateKey);
             $accessToken->setIdentifier($this->generateUniqueIdentifier());
 
+
             $this->accessTokenRepository->persistNewAccessToken($accessToken);
+            // TODO workaround
+            $accessToken = $this->accessTokenRepository->getByIdentifier($organization->getIdentifier());
+            $accessToken->setPrivateKey($this->privateKey);
 
             $organization->setOauthToken((string) $accessToken);
             $this->organizationStorage->update($organization);
-        }
+        }   
 
-        $accessToken->setPrivateKey($this->privateKey);
+
         $responseType->setAccessToken($accessToken);
-
+   
         return $responseType;
     }
 

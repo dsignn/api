@@ -28,7 +28,6 @@ class OrganizationMongoAdapter extends MongoAdapter {
             }
         }
 
-        var_dump($search);
         return $search;
     }
 }
