@@ -91,6 +91,8 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
             $hydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
             $hydrator->addStrategy('logo', new HydratorStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
+
+            $hydrator->addFilter('identifier', new MethodMatchFilter('getIdentifier'), FilterComposite::CONDITION_AND);
            
             return $hydrator;
         }
