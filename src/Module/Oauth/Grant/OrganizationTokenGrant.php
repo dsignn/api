@@ -77,8 +77,6 @@ class OrganizationTokenGrant extends AbstractGrant {
 
         $accessToken = $this->accessTokenRepository->getByIdentifier($organization->getIdentifier());
 
-        echo '<pre>';
-
         if ($accessToken) {
             // TODO alter expiration date :)
             $accessToken->setPrivateKey($this->privateKey);          
