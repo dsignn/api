@@ -31,12 +31,11 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator = $c->get('StorageDeviceEntityHydrator');
 
             $resultSet = new MongoHydrateResultSet();
-           // $resultSet->setHydrator($hydrator);
-           // $resultSet->setEntityPrototype($c->get('DeviceEntityPrototype'));
+            $resultSet->setHydrator($hydrator);
 
             $resultSetPaginator = new MongoHydratePaginateResultSet();
-            //$resultSetPaginator->setHydrator($hydrator);
-            //$resultSetPaginator->setEntityPrototype($c->get('MonitorEntityPrototype'));
+            $resultSetPaginator->setHydrator($hydrator);
+            $resultSetPaginator->setEntityPrototype($c->get('DeviceEntityPrototype'));
 
             $mongoAdapter = new MongoAdapter($c->get(Client::class), $settings['storage']['name'], $serviceSetting['collection']);
             $mongoAdapter->setResultSet($resultSet);
