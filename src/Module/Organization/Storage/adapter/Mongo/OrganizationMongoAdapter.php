@@ -19,15 +19,20 @@ class OrganizationMongoAdapter extends MongoAdapter {
      */
     protected function transformSearch(array $search) {
 
+;
         foreach ($search as $key => &$value) {
 
             switch ($key) {
                 case 'name':
                     $search[$key] = new Regex($search[$key], 'i');
                     break;
+                case 'organization_reference': 
+                    $search['_id'] = [ '$in' => [new ObjectId($search[$key])]];
+                    unset($search['organization_reference']);
+                    break;
             }
         }
-
+  
         return $search;
     }
 }

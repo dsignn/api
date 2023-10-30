@@ -98,7 +98,7 @@ class OrganizationEntity implements EntityInterface, UserEntityInterface {
      *
      * @return  self
      */ 
-    public function setOauthToken(string $oauthToken) {
+    public function setOauthToken(string $oauthToken = null) {
         $this->oauthToken = $oauthToken;
         return $this;
     }
