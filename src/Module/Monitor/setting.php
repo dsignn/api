@@ -51,6 +51,32 @@ return function (&$setting) {
                             'service' => MonitorQueryString::class
                         ]
                     ]
+                ],
+                'authorization' => [
+                    '/monitor/all' => [
+                        'admin' => [
+                            'allow' => true,
+                        ],
+                        'organizationOwner' => [
+                            'allow' => true,
+                        ],
+                    ],
+                    '/monitor/{id:[0-9a-fA-F]{24}}' => [
+                        'admin' => [
+                            'allow' => true,
+                        ],
+                        'organizationOwner' => [
+                            'allow' => true,
+                        ],
+                    ],
+                    '/monitor' => [
+                        'admin' => [
+                            'allow' => true,
+                        ],
+                        'organizationOwner' => [
+                            'allow' => true,
+                        ],
+                    ]
                 ]
             ],
         ]

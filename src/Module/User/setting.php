@@ -88,34 +88,27 @@ return function (&$setting) {
                     '/user' => [
                         'admin' => [
                             'allow' => true,
+                        ],
+                        'organizationOwner' => [
+                            'allow' => true,
                             'privileges' => [
-                                [
-                                    "method" => "GET",
-                                    'allow' => true,
-                               //     'assertion' => 'Test',
-                                ],
                                 [
                                     "method" => "POST",
                                     'allow' => false,
-                             //       'assertion' => 'Test',
                                 ]
                             ]
-                        ]
+                        ],
                     ],
                     '/user/{id:[0-9a-fA-F]{24}}' => [
                         'admin' => [
-                            'allow' => false,
-                            'assertion' => 'Test',
+                            'allow' => true,
+                        ],
+                        'organizationOwner' => [
+                            'allow' => true,
                             'privileges' => [
                                 [
-                                    "method" => "GET",
-                                    'allow' => true,
-                                    //     'assertion' => 'Test',
-                                ],
-                                [
-                                    "method" => "POST",
+                                    "method" => "DELETE",
                                     'allow' => false,
-                                    //       'assertion' => 'Test',
                                 ]
                             ]
                         ]

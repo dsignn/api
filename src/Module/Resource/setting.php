@@ -79,6 +79,9 @@ return function (&$setting) {
                 ],
                 'authorization' => [
                     '/resource' => [
+                        'admin' => [
+                            'allow' => true,
+                        ],
                         'organizationOwner' => [
                             'allow' => true,
                             'privileges' => [
@@ -94,6 +97,9 @@ return function (&$setting) {
                         ]
                     ],
                     '/resource/{id:[0-9a-fA-F]{24}}' => [
+                        'admin' => [
+                            'allow' => true,
+                        ],
                         'organizationOwner' => [
                             'allow' => false,
                             'privileges' => [

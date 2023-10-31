@@ -39,6 +39,32 @@ return function (&$setting) {
                     '/playlist' => [
                         'POST' => 'PlaylistPostValidation'
                     ]
+                ],
+                'authorization' => [
+                    '/playlist/all' => [
+                        'admin' => [
+                            'allow' => true,
+                        ],
+                        'organizationOwner' => [
+                            'allow' => true,
+                        ],
+                    ],
+                    '/playlist/{id:[0-9a-fA-F]{24}}' => [
+                        'admin' => [
+                            'allow' => true,
+                        ],
+                        'organizationOwner' => [
+                            'allow' => true,
+                        ],
+                    ],
+                    '/playlist' => [
+                        'admin' => [
+                            'allow' => true,
+                        ],
+                        'organizationOwner' => [
+                            'allow' => true,
+                        ],
+                    ]
                 ]
             ]
         ]

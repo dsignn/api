@@ -63,6 +63,12 @@ return function (&$setting) {
                 ],
                 'authorization' => [
                     '/organization/all' => [
+                        'admin' => [
+                            'allow' => true,
+                        ],
+                        'organizationOwner' => [
+                            'allow' => true,
+                        ],
                         'guest' => [
                             'allow' => true,
                             'privileges' => [
@@ -72,6 +78,28 @@ return function (&$setting) {
                                 ]
                             ]
                         ]
+                    ],
+                    '/organization/{id:[0-9a-fA-F]{24}}' => [
+                        'admin' => [
+                            'allow' => true,
+                        ],
+                        'organizationOwner' => [
+                            'allow' => true,
+                            'privileges' => [
+                                [
+                                    "method" => "DELETE",
+                                    'allow' => false,
+                                ]
+                            ]
+                        ]
+                    ],
+                    '/organization' => [
+                        'admin' => [
+                            'allow' => true,
+                        ],
+                        'organizationOwner' => [
+                            'allow' => true,
+                        ],
                     ]
                 ]
             ]

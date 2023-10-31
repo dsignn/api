@@ -58,9 +58,8 @@ class AuthorizationMiddleware implements Middleware {
         $this->acl->addResource($resource);
         $this->loadPermission($resource, $request);
 
-     
         // TODO REMOVE
-        if (!$this->acl->isAllowed($role, $resource, $method) && false) {
+        if (!$this->acl->isAllowed($role, $resource, $method)) {
             throw new HttpException(
                 $request,
                 sprintf('Unauthorized role %s for the resource %s method %s ', $role->getRoleId(), $resource->getResourceId(), $method),

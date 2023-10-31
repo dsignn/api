@@ -50,12 +50,14 @@ class InjectOrganizationByRoleMiddleware implements Middleware {
             }
 
             $queryString['organization_reference'] = $org->getId();
-        }
 
-        return $handler->handle(
-            $request->withAttribute('app-body-data', $bodyData)
-                ->withAttribute('app-query-string', $queryString)
-        );
+            return $handler->handle(
+                $request->withAttribute('app-body-data', $bodyData)
+                    ->withAttribute('app-query-string', $queryString)
+            );
+        } else {
+            return $handler->handle($request);
+        }
     }
 
     /**
