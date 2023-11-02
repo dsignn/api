@@ -17,6 +17,7 @@ use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
 use App\Storage\Entity\SingleEntityPrototype;
 use DI\ContainerBuilder;
 use App\InputFilter\InputFilter as AppInputFilter;
+use App\Module\Device\Http\QueryString\DeviceQueryString;
 use Laminas\Hydrator\ObjectPropertyHydrator;
 use Laminas\Hydrator\Strategy\DateTimeImmutableFormatterStrategy;
 use Laminas\Validator\NotEmpty;
@@ -95,6 +96,10 @@ return function (ContainerBuilder $containerBuilder) {
 
             return $inputFilter;
         }
-    ])
-    ;
+    ])->addDefinitions([
+        DeviceQueryString::class => function(ContainerInterface $c) {
+            return new DeviceQueryString();
+        }
+    ]);
+    
 };

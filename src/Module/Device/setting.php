@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Module\Device\Http\QueryString\DeviceQueryString;
 use Graze\ArrayMerger\RecursiveArrayMerger;
 
 /**
@@ -38,6 +39,18 @@ return function (&$setting) {
                 'validation' => [
                     '/device' => [
                         'POST' => 'DevicePostValidator'
+                    ]
+                ],
+                'queryString' => [
+                    '/device' => [
+                        'default' => [
+                            'service' => DeviceQueryString::class
+                        ]
+                    ],
+                    '/device/{id:[0-9a-fA-F]{24}}' => [
+                        'default' => [
+                            'service' => DeviceQueryString::class
+                        ]
                     ]
                 ],
                 'authorization' => [
