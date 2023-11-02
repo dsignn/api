@@ -1,31 +1,35 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Hydrator\Strategy\Mongo;
+namespace App\Hydrator\Strategy;
 
 use DateTimeInterface;
 use Laminas\Hydrator\Strategy\StrategyInterface;
 use MongoDB\BSON\UTCDateTime;
 
-use function DI\value;
-
 /**
- * Class MongoDateStrategy
+ * Class DateStrategy
  * @package App\Hydrator\Strategy\Mongo
  */
-class MongoDateStrategy implements StrategyInterface {
+class DateStrategy implements StrategyInterface {
 
     protected $datePrototype;
+
+    protected $format = 'Y-m-d H:i:s';
 
     /**
      * MongoDateStrategy constructor.
      * @param null $datePrototype
      * @throws \Exception
      */
-    public function __construct($datePrototype = null) {
+    public function __construct($datePrototype = null, $format = null) {
 
         $datePrototype = $datePrototype ? $datePrototype : new \DateTime();
         $this->setDatePrototype($datePrototype);
+
+        if ($format) {
+            $this->format = $format;
+        }
     }
 
     /**
@@ -35,7 +39,7 @@ class MongoDateStrategy implements StrategyInterface {
 
 
         if ($value instanceof DateTimeInterface) {
-            $value = new UTCDateTime($value);
+            $value = $value->format($this->format);
         }
 
         return $value;
@@ -71,7 +75,7 @@ class MongoDateStrategy implements StrategyInterface {
     /**
      * @inheritDoc
      */
-    public function setDatePrototype(DateTimeInterface $datePrototype): MongoDateStrategy {
+    public function setDatePrototype(DateTimeInterface $datePrototype): DateStrategy {
         $this->datePrototype = $datePrototype;
         return $this;
     }

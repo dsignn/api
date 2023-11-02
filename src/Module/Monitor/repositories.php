@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use App\Filter\DefaultFilter;
 use App\Hydrator\Strategy\HydratorArrayStrategy;
 use App\Hydrator\Strategy\HydratorStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
@@ -21,6 +22,8 @@ use Psr\Container\ContainerInterface;
 use App\InputFilter\InputFilter as AppInputFilter;
 use App\Module\Monitor\Http\QueryString\MonitorQueryString;
 use App\Storage\Entity\Reference;
+use App\Validator\Mongo\ObjectIdValidator;
+use Laminas\InputFilter\InputFilter;
 use Laminas\Validator\NotEmpty;
 
 return function (ContainerBuilder $containerBuilder) {
@@ -105,14 +108,26 @@ return function (ContainerBuilder $containerBuilder) {
 
             $description = new Input('description');
 
-            $organizationReference = new Input('organizationReference');
-            $organizationReference->getValidatorChain()->attach(new NotEmpty());
+            $organizationReference = new InputFilter();
+
+            $id = new Input('id');
+            $id->getValidatorChain()
+                ->attach(new NotEmpty())
+                ->attach(new ObjectIdValidator());
+            
+            $organizationReference->add($id);
+
+            $collection = new Input('collection');
+            $collection->getFilterChain()
+                ->attach(new DefaultFilter('collection'));
+
+            $organizationReference->add($collection);
 
             $inputFilter
                 ->add($name)
                 ->add($monitors)
                 ->add($description)
-                ->add($organizationReference)
+                ->add($organizationReference, 'organizationReference')
                 ;
 
             return $inputFilter;

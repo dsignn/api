@@ -32,6 +32,10 @@ class DeviceEntity implements EntityInterface, DateAwareInterface {
      */
     public $cpu;
 
+    public $createdDate;
+
+    public $lastUpdateDate;
+
     /**
      * Undocumented variable
      *

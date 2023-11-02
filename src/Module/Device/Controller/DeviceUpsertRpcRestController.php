@@ -41,7 +41,10 @@ class DeviceUpsertRpcRestController implements RpcControllerInterface {
 
         $data = $request->getParsedBody();
 
-      
+        if ($request->getAttribute('app-organization')) {
+            $data['organization_reference'] = $request->getAttribute('app-organization')->getId();
+        }
+
         if ($request->getAttribute('app-validation')) {
             /** @var InputFilterInterface $validator */
             $validator = $request->getAttribute('app-validation');
@@ -52,7 +55,6 @@ class DeviceUpsertRpcRestController implements RpcControllerInterface {
                 return $this->getAcceptData($request, $response, ['errors' => $validator->getMessages()]);
             }
         }
-
 
         $entity = $this->storage->get($data['id']);
    

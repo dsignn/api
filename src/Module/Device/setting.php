@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use Graze\ArrayMerger\RecursiveArrayMerger;
@@ -43,17 +44,47 @@ return function (&$setting) {
                     '/device/all' => [
                         'admin' => [
                             'allow' => true,
-                        ]
+                        ],
+                        'organizationOwner' => [
+                            'allow' => true,
+                        ],
                     ],
                     '/device/{id:[0-9a-fA-F]{24}}' => [
                         'admin' => [
                             'allow' => true,
-                        ]
+                        ],
+                        'organizationOwner' => [
+                            'allow' => true,
+                            'privileges' => [
+                                [
+                                    "method" => "DELETE",
+                                    'allow' => false,
+                                ]
+                            ]
+                        ],
                     ],
                     '/device' => [
                         'admin' => [
                             'allow' => true,
-                        ]
+                        ],
+                        'organizationOwner' => [
+                            'allow' => true,
+                            'privileges' => [
+                                [
+                                    "method" => "POST",
+                                    'allow' => false,
+                                ]
+                            ]
+                        ],
+                        'guest' => [
+                            'allow' => false,
+                            'privileges' => [
+                                [
+                                    "method" => "POST",
+                                    'allow' => true,
+                                ]
+                            ]
+                        ],
                     ]
                 ]
             ],

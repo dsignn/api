@@ -2,7 +2,9 @@
 declare(strict_types=1);
 
 use App\Hydrator\Strategy\HydratorArrayStrategy;
+use App\Hydrator\Strategy\DateStrategy;
 use App\Hydrator\Strategy\Mongo\MongoDateStrategy;
+use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
 use App\Hydrator\Strategy\NamingStrategy\CamelCaseStrategy;
 use App\InputFilter\Input;
@@ -16,6 +18,7 @@ use App\Storage\Entity\SingleEntityPrototype;
 use DI\ContainerBuilder;
 use App\InputFilter\InputFilter as AppInputFilter;
 use Laminas\Hydrator\ObjectPropertyHydrator;
+use Laminas\Hydrator\Strategy\DateTimeImmutableFormatterStrategy;
 use Laminas\Validator\NotEmpty;
 use MongoDB\Client;
 use Psr\Container\ContainerInterface;
@@ -59,8 +62,9 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->setNamingStrategy(new CamelCaseStrategy());
             $hydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
             $hydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
-
-           
+            $hydrator->addStrategy('organizationReference', $c->get('MongoIdRestStrategy'));
+            $hydrator->addStrategy('lastUpdateDate', new DateStrategy());
+            $hydrator->addStrategy('createdDate', new DateStrategy());
            
             return $hydrator;
         }
@@ -69,8 +73,12 @@ return function (ContainerBuilder $containerBuilder) {
 
             $hydrator = new ObjectPropertyHydrator();
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
-
-            $hydrator->addStrategy('date', new MongoDateStrategy());
+            
+            $hydrator->addStrategy('last_update_date', new MongoDateStrategy());
+            $hydrator->addStrategy('lastUpdateDate', new MongoDateStrategy());
+            $hydrator->addStrategy('createdDate', new MongoDateStrategy());
+            $hydrator->addStrategy('organizationReference' ,$c->get('MongoIdStorageStrategy'));
+           
             return $hydrator;
         }
     ])

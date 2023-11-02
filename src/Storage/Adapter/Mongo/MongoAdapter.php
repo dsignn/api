@@ -108,6 +108,7 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
             throw new \Exception('Id not set', 500);
         }
 
+
         /** @var UpdateResult $result */
         $result = $this->getCollection()->updateOne(
             ["_id" =>   $data['_id']],

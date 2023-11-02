@@ -92,7 +92,6 @@ class RestController implements RestControllerInterface {
             $data = $validator->getValues();
         }
 
-   
         $entity = $this->storage->getEntityPrototype()->getPrototype($data);
    
         $preprocess = new PreProcess($entity, $data);
@@ -184,7 +183,7 @@ class RestController implements RestControllerInterface {
     public function delete(Request $request, Response $response) {
 
         $id = $request->getAttribute('__route__')->getArgument('id');
-
+        
         if (!$this->storage->delete($id)) {
             return $response->withStatus(404);
         }
