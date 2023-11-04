@@ -23,7 +23,7 @@ return function (App $app) {
 
         $group->post('',  [ResourceController::class, 'post']);
 
-        $group->patch('/{id:[0-9a-fA-F]{24}}',  [ResourceController::class, 'patch']);
+        $group->post('/{id:[0-9a-fA-F]{24}}',  [ResourceController::class, 'patch']);
 
         $group->options('/{id:[0-9a-fA-F]{24}}',  [ResourceController::class, 'options']);
 

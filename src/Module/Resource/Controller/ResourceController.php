@@ -55,7 +55,6 @@ class ResourceController implements RestControllerInterface {
 
         $data = $this->getData($request);
 
-
         if ($request->getAttribute('app-validation')) {
             /** @var InputFilterInterface $validator */
             $validator = $request->getAttribute('app-validation');

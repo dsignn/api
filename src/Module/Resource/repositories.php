@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use App\Crypto\CryptoOpenSsl;
+use App\Filter\DefaultFilter;
 use App\Filter\File\FileTransform;
 use App\Filter\StringToArray;
 use App\Hydrator\MapHydrator;
@@ -26,6 +27,7 @@ use App\Storage\Entity\SingleEntityPrototype;
 use App\Storage\Storage;
 use App\Validator\File\FileMimeType;
 use App\Validator\File\FileSize;
+use App\Validator\Mongo\ObjectIdValidator;
 use Aws\S3\S3Client;
 use DI\ContainerBuilder;
 use Laminas\Hydrator\ClassMethodsHydrator;
@@ -230,9 +232,22 @@ return function (ContainerBuilder $containerBuilder) {
             $input->getFilterChain()->attach(new StringToArray());
             $inputFilter->add($input);
 
-            $input = new Input('organizationReference');
-            $input->getValidatorChain()->attach(new NotEmpty());
-            $inputFilter->add($input);
+            $organizationReference = new InputFilter();
+
+            $id = new Input('id');
+            $id->getValidatorChain()
+                ->attach(new NotEmpty())
+                ->attach(new ObjectIdValidator());
+            
+            $organizationReference->add($id);
+
+            $collection = new Input('collection');
+            $collection->setRequired(false);
+            $collection->getFilterChain()
+                ->attach(new DefaultFilter('collection'));
+
+            $organizationReference->add($collection);
+            $inputFilter->add($organizationReference, 'organizationReference');
 
             return $inputFilter;
         }
@@ -260,9 +275,22 @@ return function (ContainerBuilder $containerBuilder) {
             $input->getFilterChain()->attach(new StringToArray());
             $inputFilter->add($input);
 
-            $input = new Input('organizationReference');
-            $input->getValidatorChain()->attach(new NotEmpty());
-            $inputFilter->add($input);
+            $organizationReference = new InputFilter();
+
+            $id = new Input('id');
+            $id->getValidatorChain()
+                ->attach(new NotEmpty())
+                ->attach(new ObjectIdValidator());
+            
+            $organizationReference->add($id);
+
+            $collection = new Input('collection');
+            $collection->setRequired(false);
+            $collection->getFilterChain()
+                ->attach(new DefaultFilter('collection'));
+
+            $organizationReference->add($collection);
+            $inputFilter->add($organizationReference, 'organizationReference');
 
             return $inputFilter;
         }

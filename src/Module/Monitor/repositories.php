@@ -118,6 +118,7 @@ return function (ContainerBuilder $containerBuilder) {
             $organizationReference->add($id);
 
             $collection = new Input('collection');
+            $collection->setRequired(false);
             $collection->getFilterChain()
                 ->attach(new DefaultFilter('collection'));
 
