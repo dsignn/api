@@ -50,7 +50,6 @@ class QueryStringMiddleware implements Middleware {
         $method = $request->getMethod();
 
         $setting = $this->getSetting($path, $method);
-
       
         if ($setting && isset($setting["service"]) && is_string($setting["service"]) && $this->container->has($setting["service"])) {
              

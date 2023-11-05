@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use App\Middleware\ContentNegotiation\ContentType\MultipartFormDataContentType;
+use App\Module\Resource\Http\QueryString\ResourceQueryString;
 use Graze\ArrayMerger\RecursiveArrayMerger;
 
 /**
@@ -116,7 +117,19 @@ return function (&$setting) {
                             ]
                         ]
                     ]
-                ]
+                ],
+                'queryString' => [
+                    '/resource' => [
+                        'default' => [
+                            'service' => ResourceQueryString::class
+                        ]
+                    ],
+                    '/resource/{id:[0-9a-fA-F]{24}}' => [
+                        'default' => [
+                            'service' => ResourceQueryString::class
+                        ]
+                    ]
+                ],
             ]
         ]
     );

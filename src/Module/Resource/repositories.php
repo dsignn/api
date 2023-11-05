@@ -16,6 +16,7 @@ use App\Module\Resource\Entity\VideoResourceEntity;
 use App\Module\Resource\Event\MetadataEvent;
 use App\Module\Resource\Event\S3DeleteEvent;
 use App\Module\Resource\Event\S3UploaderEvent;
+use App\Module\Resource\Http\QueryString\ResourceQueryString;
 use App\Module\Resource\Storage\ResourceStorage;
 use App\Module\Resource\Storage\ResourceStorageInterface;
 use App\Storage\Adapter\Mongo\MongoAdapter;
@@ -293,6 +294,10 @@ return function (ContainerBuilder $containerBuilder) {
             $inputFilter->add($organizationReference, 'organizationReference');
 
             return $inputFilter;
+        }
+    ])->addDefinitions([
+        ResourceQueryString::class => function(ContainerInterface $c) {
+            return new ResourceQueryString();
         }
     ]);
 };
