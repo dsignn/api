@@ -32,7 +32,7 @@ services:
           - api.dev
     volumes:
       - ./docker/php-fpm/etc:/usr/local/php/etc
-      - ./docker/php-fpm/etc/php.ini:/etc/php.ini
+      - ./docker/php-fpm/etc/php.ini:/usr/local/php/etc/php.ini
       - .:/var/www/application
       - ~/.ssh:/root/.ssh
       - ./logs:/var/www/logs

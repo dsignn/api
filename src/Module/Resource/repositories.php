@@ -10,6 +10,7 @@ use App\Hydrator\Strategy\HydratorStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\UnderscoreNamingStrategy;
 use App\Hydrator\Strategy\NamingStrategy\CamelCaseStrategy;
+use App\Module\Resource\Entity\AudioResourceEntity;
 use App\Module\Resource\Entity\Embedded\Dimension;
 use App\Module\Resource\Entity\ImageResourceEntity;
 use App\Module\Resource\Entity\VideoResourceEntity;
@@ -107,7 +108,13 @@ return function (ContainerBuilder $containerBuilder) {
             )->addEntityPrototype(
                 'video/webm',
                 new VideoResourceEntity()
-            );;
+            )->addEntityPrototype(
+                'audio/ogg',
+                new AudioResourceEntity()
+            )->addEntityPrototype(
+                'audio/mp3',
+                new AudioResourceEntity()
+            );
 
             return $multiEntityPrototype;
         }
@@ -141,6 +148,13 @@ return function (ContainerBuilder $containerBuilder) {
             $imageHydrator->addStrategy('dimension', $strategyDimension);
             $videoHydrator->addStrategy('dimension', $strategyDimension);
 
+            $audioHydrator = new ClassMethodsHydrator();
+            $audioHydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
+            $audioHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
+            $audioHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
+            $audioHydrator->addStrategy('organizationReference', new HydratorStrategy($organizationHydrator, new SingleEntityPrototype(new Reference())));
+
+
             $hydrator->addHydrator(
                 'image/jpeg',
                 $imageHydrator
@@ -153,6 +167,12 @@ return function (ContainerBuilder $containerBuilder) {
             )->addHydrator(
                 'video/webm',
                 $videoHydrator
+            )->addHydrator(
+                'audio/ogg',
+                $audioHydrator
+            )->addHydrator(
+                'audio/mp3',
+                $audioHydrator
             );
 
             return $hydrator;
@@ -186,6 +206,12 @@ return function (ContainerBuilder $containerBuilder) {
             $imageHydrator->addStrategy('dimension', $strategyDimension);
             $videoHydrator->addStrategy('dimension', $strategyDimension);
 
+            $audioHydrator = new ClassMethodsHydrator();
+            $audioHydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
+            $audioHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
+            $audioHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
+            $audioHydrator->addStrategy('organizationReference', new HydratorStrategy($organizationHydrator, new SingleEntityPrototype(new Reference())));
+
             $hydrator->addHydrator(
                 'image/jpeg',
                 $imageHydrator
@@ -198,8 +224,13 @@ return function (ContainerBuilder $containerBuilder) {
             )->addHydrator(
                 'video/webm',
                 $videoHydrator
-            );;
-
+            )->addHydrator(
+                'audio/ogg',
+                $audioHydrator
+            )->addHydrator(
+                'audio/mp3',
+                $audioHydrator
+            );
             return $hydrator;
         }
     ])->addDefinitions([
@@ -220,7 +251,7 @@ return function (ContainerBuilder $containerBuilder) {
             $input->getFilterChain()->attach(new FileTransform());
             $input->getValidatorChain()->attach(new FileSize(['max' => '20MB',]));
             $input->getValidatorChain()->attach(new FileMimeType(
-                ['mimeTypes' => ['image/png', 'image/jpeg', 'image/jpg', 'video/mp4', 'video/webm'],])
+                ['mimeTypes' => ['image/png', 'image/jpeg', 'image/jpg', 'video/mp4', 'video/webm', 'audio/ogg'],])
             );
             $inputFilter->add($input);
 
@@ -263,7 +294,7 @@ return function (ContainerBuilder $containerBuilder) {
             $input->getFilterChain()->attach(new FileTransform());
             $input->getValidatorChain()->attach(new FileSize(['max' => '20MB',]));
             $input->getValidatorChain()->attach(new FileMimeType(
-                    ['mimeTypes' => ['image/png', 'image/jpeg', 'image/jpg', 'video/mp4', 'video/webm'],])
+                    ['mimeTypes' => ['image/png', 'image/jpeg', 'image/jpg', 'video/mp4', 'video/webm', 'audio/ogg'],])
             );
             $inputFilter->add($input);
 
