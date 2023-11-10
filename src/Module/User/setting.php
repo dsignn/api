@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+use App\Module\Resource\Http\QueryString\ResourceQueryString;
+use App\Module\User\Http\QueryString\UserQueryString;
 use Graze\ArrayMerger\RecursiveArrayMerger;
 
 /**
@@ -113,7 +115,19 @@ return function (&$setting) {
                             ]
                         ]
                     ]
-                ]
+                ],
+                'queryString' => [
+                    '/user' => [
+                        'default' => [
+                            'service' => UserQueryString::class
+                        ]
+                    ],
+                    '/user/{id:[0-9a-fA-F]{24}}' => [
+                        'default' => [
+                            'service' => UserQueryString::class
+                        ]
+                    ]
+                ],
             ]
         ]
     );
