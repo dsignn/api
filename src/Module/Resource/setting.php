@@ -116,6 +116,14 @@ return function (&$setting) {
                                 ]
                             ]
                         ]
+                    ],
+                    '/resource/all' => [
+                        'admin' => [
+                            'allow' => true,
+                        ],
+                        'organizationOwner' => [
+                            'allow' => true,
+                        ]
                     ]
                 ],
                 'queryString' => [
@@ -128,7 +136,12 @@ return function (&$setting) {
                         'default' => [
                             'service' => ResourceQueryString::class
                         ]
-                    ]
+                    ],
+                    '/resource/all' => [
+                        'default' => [
+                            'service' => ResourceQueryString::class
+                        ]
+                    ]             
                 ],
             ]
         ]
