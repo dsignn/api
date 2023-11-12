@@ -229,13 +229,12 @@ class ResourceController implements RestControllerInterface {
         unset($query['item-per-page']);
         
         $storageFilter = $request->getAttribute('app-storage-filter');
-  
         if ($storageFilter) {
             $query = $storageFilter->computeQueryString($query);
         }
 
         $pagination = $this->storage->getPage($page, $itemPerPage, $query);
-
+   
         return $this->getAcceptData($request, $response, $pagination);
     }
 

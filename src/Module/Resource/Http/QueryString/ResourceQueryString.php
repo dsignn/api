@@ -35,6 +35,22 @@ class ResourceQueryString implements QueryStringInterface {
                         // TODO 
                     }
                     break;
+                case $key === 'size':
+                    if (is_array($data[$key]) && isset($data[$key]['direction']) && isset($data[$key]['value'])) {
+                        $mb = (int)$data[$key]['value'] * 1000000;
+                        $query['size'] = [ $data[$key]['direction'] == 'down' ? '$lte' : '$gte' => $mb];
+                    }
+                    break;    
+                case $key === 'height':
+                    if (is_array($data[$key]) && isset($data[$key]['direction']) && isset($data[$key]['value'])) {
+                        $query['dimension.height'] = [ $data[$key]['direction'] == 'down' ? '$lte' : '$gte' => (int) $data[$key]['value']];
+                    }
+                    break;
+                case $key === 'width':
+                    if (is_array($data[$key]) && isset($data[$key]['direction']) && isset($data[$key]['value'])) {
+                        $query['dimension.width'] = [ $data[$key]['direction'] == 'down' ? '$lte' : '$gte' => (int) $data[$key]['value']];
+                    }
+                    break;
             }
         }
 
