@@ -146,15 +146,9 @@ class ResourceController implements RestControllerInterface {
                 return $this->getAcceptData($request, $response, ['errors' => $validator->getMessages()]);
          
             }
-
-            $dataFilter = $validator->getValues();
-            foreach ($dataFilter as $key => $value) {
-                if(!isset($data[$key])) {
-                    unset($dataFilter[$key]);
-                }
-
-            }
-            $data = $dataFilter;
+           
+            // Remove data that are filtered but not set in data patch
+            $data = $this->mergeData($data, $validator->getValues());
         }
 
         if (isset($data['file'])) {
@@ -247,6 +241,24 @@ class ResourceController implements RestControllerInterface {
         return $response->withStatus(200);
     }
 
+    /**
+     * @param [type] $data
+     * @param [type] $dataFilter
+     * @return void
+     */
+    protected function mergeData($data, $dataFilter) {
+
+        foreach ($dataFilter as $key => $value) {
+
+            if (isset($data[$key]) && is_array($data[$key]) ) {
+                $dataFilter[$key] = $this->mergeData($data[$key], $dataFilter[$key]);
+            } else if(!isset($data[$key])) {
+                unset($dataFilter[$key]);
+            }
+        }
+
+        return $dataFilter;
+    }
 
     /**
      * @param Request $request

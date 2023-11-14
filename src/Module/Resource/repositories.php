@@ -32,6 +32,7 @@ use App\Validator\File\FileSize;
 use App\Validator\Mongo\ObjectIdValidator;
 use Aws\S3\S3Client;
 use DI\ContainerBuilder;
+use Laminas\Filter\ToInt;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\InputFilter\Input;
 use Laminas\InputFilter\InputFilter;
@@ -207,9 +208,9 @@ return function (ContainerBuilder $containerBuilder) {
             $videoHydrator->addStrategy('dimension', $strategyDimension);
 
             $audioHydrator = new ClassMethodsHydrator();
-            $audioHydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
-            $audioHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
-            $audioHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
+            $audioHydrator->setNamingStrategy(new CamelCaseStrategy());
+            $audioHydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
+            $audioHydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
             $audioHydrator->addStrategy('organizationReference', new HydratorStrategy($organizationHydrator, new SingleEntityPrototype(new Reference())));
 
             $hydrator->addHydrator(
@@ -306,6 +307,21 @@ return function (ContainerBuilder $containerBuilder) {
             $input->setRequired(false);
             $input->getFilterChain()->attach(new StringToArray());
             $inputFilter->add($input);
+
+            $dimension = new InputFilter();
+
+            $input = new Input('height');
+            $input->setRequired(false);
+            $input->getFilterChain()->attach(new ToInt());
+            $dimension->add($input);
+
+            $input = new Input('width');
+            $input->setRequired(false);
+            $input->getFilterChain()->attach(new ToInt());
+            $dimension->add($input);
+
+            $inputFilter->add($dimension, 'dimension');
+
 
             $organizationReference = new InputFilter();
 

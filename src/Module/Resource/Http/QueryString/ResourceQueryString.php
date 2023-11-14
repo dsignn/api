@@ -22,11 +22,13 @@ class ResourceQueryString implements QueryStringInterface {
 
         $query = [];
 
+       // echo '<pre>';
+       // var_dump($data);
         foreach($data as $key => $value) {
-          
-            switch(true) {
+
+            switch (true) {
                 case $key === 'name':
-                    $query[$key] = new Regex(preg_quote($value),'i');
+                    $query[$key] = new Regex(preg_quote($value), 'i');
                     break;
                 case $key === 'organization_reference':
                     try {
@@ -38,22 +40,27 @@ class ResourceQueryString implements QueryStringInterface {
                 case $key === 'size':
                     if (is_array($data[$key]) && isset($data[$key]['direction']) && isset($data[$key]['value'])) {
                         $mb = (int)$data[$key]['value'] * 1000000;
-                        $query['size'] = [ $data[$key]['direction'] == 'down' ? '$lte' : '$gte' => $mb];
+                        $query['size'] = [$data[$key]['direction'] == 'down' ? '$lte' : '$gte' => $mb];
                     }
-                    break;    
+                    break;
                 case $key === 'height':
                     if (is_array($data[$key]) && isset($data[$key]['direction']) && isset($data[$key]['value'])) {
-                        $query['dimension.height'] = [ $data[$key]['direction'] == 'down' ? '$lte' : '$gte' => (int) $data[$key]['value']];
+                        $query['dimension.height'] = [$data[$key]['direction'] == 'down' ? '$lte' : '$gte' => (int) $data[$key]['value']];
                     }
                     break;
                 case $key === 'width':
                     if (is_array($data[$key]) && isset($data[$key]['direction']) && isset($data[$key]['value'])) {
-                        $query['dimension.width'] = [ $data[$key]['direction'] == 'down' ? '$lte' : '$gte' => (int) $data[$key]['value']];
+                        $query['dimension.width'] = [$data[$key]['direction'] == 'down' ? '$lte' : '$gte' => (int) $data[$key]['value']];
                     }
+                    break;
+                case $key === 'tags':
+                    $query[$key] = ['$in' => $value];
                     break;
             }
         }
 
+        ///var_dump($query);
+        //die();
         return $query;
     }
 }

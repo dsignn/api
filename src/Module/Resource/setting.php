@@ -75,7 +75,8 @@ return function (&$setting) {
                         'POST' => 'ResourcePostValidator'
                     ],
                     '/resource/{id:[0-9a-fA-F]{24}}' => [
-                        'PATCH' => 'ResourceValidator'
+                      //  'PATCH' => 'ResourceValidator'
+                        'POST' => 'ResourceValidator'
                     ]
                 ],
                 'authorization' => [
@@ -102,19 +103,7 @@ return function (&$setting) {
                             'allow' => true,
                         ],
                         'organizationOwner' => [
-                            'allow' => false,
-                            'privileges' => [
-                                [
-                                    "method" => "GET",
-                                    'allow' => true,
-                                    //     'assertion' => 'Test',
-                                ],
-                                [
-                                    "method" => "POST",
-                                    'allow' => false,
-                                    //       'assertion' => 'Test',
-                                ]
-                            ]
+                            'allow' => true,
                         ]
                     ],
                     '/resource/all' => [
