@@ -335,7 +335,7 @@ return function (ContainerBuilder $containerBuilder) {
             $collection = new Input('collection');
             $collection->setRequired(false);
             $collection->getFilterChain()
-                ->attach(new DefaultFilter('collection'));
+                ->attach(new DefaultFilter('resource'));
 
             $organizationReference->add($collection);
             $inputFilter->add($organizationReference, 'organizationReference');

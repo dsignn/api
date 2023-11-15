@@ -4,6 +4,7 @@ declare(strict_types=1);
 use App\Controller\RestController;
 use App\Crypto\CryptoInterface;
 use App\Crypto\CryptoOpenSsl;
+use App\Filter\DefaultFilter;
 use App\Hydrator\Strategy\HydratorArrayStrategy;
 use App\Hydrator\Strategy\HydratorStrategy;
 use App\Hydrator\Strategy\Mongo\MongoDateStrategy;
@@ -37,6 +38,7 @@ use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
 use App\Storage\Entity\Reference;
 use App\Storage\Entity\SingleEntityPrototype;
 use App\Storage\Storage;
+use App\Validator\Mongo\ObjectIdValidator;
 use DI\ContainerBuilder;
 use GuzzleHttp\Client;
 use Laminas\Hydrator\ClassMethodsHydrator;
@@ -47,6 +49,7 @@ use Laminas\InputFilter\Input;
 use Laminas\InputFilter\InputFilter;
 use Laminas\Validator\EmailAddress;
 use Laminas\Validator\InArray;
+use Laminas\Validator\NotEmpty;
 use Laminas\Validator\StringLength;
 use MongoDB\Client as MongoClient;
 use Psr\Container\ContainerInterface;
@@ -112,8 +115,26 @@ return function (ContainerBuilder $containerBuilder) {
             $name = new Input('name');
             // Last name field          
 
-            $inputFilter
-                ->add($name);
+            $inputFilter->add($name);
+
+            $collectionResourceInputFilter = new CollectionInputFilter();
+            $resourceInputFilter = new InputFilter();
+
+            $id = new Input('id');
+            $id->getValidatorChain()
+                ->attach(new ObjectIdValidator());
+
+            
+            $collection = new Input('collection');
+            $collection->setRequired(false);
+            $collection->getFilterChain()
+                ->attach(new DefaultFilter('resource'));    
+
+            $resourceInputFilter->add($id)
+                ->add($collection);
+            $collectionResourceInputFilter->setInputFilter($resourceInputFilter);
+
+            $inputFilter->add($collectionResourceInputFilter, 'resources');
 
             return $inputFilter;
         }

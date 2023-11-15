@@ -12,9 +12,9 @@ use App\Storage\Entity\EntityTrait as StorageEntityTrait;
  * Class MonitorEntity
  * @package App\Module\Monitor\Entity
  */
-class PlaylistEntity implements EntityInterface {
+class PlaylistEntity implements EntityInterface, OrganizationAwareInterface {
 
-    use StorageEntityTrait;
+    use StorageEntityTrait, OrganizationAwareTrait;
 
     /**
      * @var string
