@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use App\Module\Playlist\Http\QueryString\PlaylistQueryString;
 use Graze\ArrayMerger\RecursiveArrayMerger;
 
 /**
@@ -65,7 +66,24 @@ return function (&$setting) {
                             'allow' => true,
                         ],
                     ]
-                ]
+                ],
+                'queryString' => [
+                    '/playlist' => [
+                        'default' => [
+                            'service' => PlaylistQueryString::class
+                        ]
+                    ],
+                    '/playlist/{id:[0-9a-fA-F]{24}}' => [
+                        'default' => [
+                            'service' => PlaylistQueryString::class
+                        ]
+                    ],
+                    '/playlist/all' => [
+                        'default' => [
+                            'service' => PlaylistQueryString::class
+                        ]
+                    ]             
+                ],
             ]
         ]
     );

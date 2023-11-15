@@ -83,7 +83,7 @@ class RestController implements RestControllerInterface {
             /** @var InputFilterInterface $validator */
             $validator = $request->getAttribute('app-validation');
             $validator->setData($data);
-
+          
             if (!$validator->isValid()) {
                 $response = $response->withStatus(422);
                 return $this->getAcceptData($request, $response, ['errors' => $validator->getMessages()]);
@@ -98,6 +98,7 @@ class RestController implements RestControllerInterface {
         $this->storage->getEventManager()->trigger(RestController::$PREPROCESS_POST, $preprocess);
         $data = $preprocess->getData();
 
+        
         $this->storage->getHydrator()->hydrate($data, $entity); 
         $this->storage->save($entity);
     

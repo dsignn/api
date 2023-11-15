@@ -322,7 +322,6 @@ return function (ContainerBuilder $containerBuilder) {
 
             $inputFilter->add($dimension, 'dimension');
 
-
             $organizationReference = new InputFilter();
 
             $id = new Input('id');

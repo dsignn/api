@@ -69,8 +69,6 @@ class InputFilter extends BaseInputFilter {
             }
             
             $input = $inputFilter->get($key);
-
-
             
             if ($input instanceof InputFilter && is_array($value)) {
                 $values[$key] = $input->getValuesWrapper($value, $input);

@@ -19,6 +19,7 @@ use App\Module\Organization\Storage\OrganizationStorage;
 use App\Module\Organization\Storage\OrganizationStorageInterface;
 use App\Module\Organization\Validator\OrganizationSaveValidator;
 use App\Module\Playlist\Entity\PlaylistEntity;
+use App\Module\Playlist\Http\QueryString\PlaylistQueryString;
 use App\Module\Playlist\Storage\PlaylistStorage;
 use App\Module\Playlist\Storage\PlaylistStorageInterface;
 use App\Module\User\Entity\Embedded\ActivationCode;
@@ -88,19 +89,29 @@ return function (ContainerBuilder $containerBuilder) {
         },
         'RestPlaylistEntityHydrator' => function(ContainerInterface $c) {
 
+            $organizationHydrator = new ClassMethodsHydrator();
+            $organizationHydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
+            $organizationHydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
+
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new CamelCaseStrategy());
             $hydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
             $hydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
-
+            $hydrator->addStrategy('organizationReference', new HydratorStrategy($organizationHydrator, new SingleEntityPrototype(new Reference())));
             return $hydrator;
         },
         'StoragePlaylistEntityHydrator' => function(ContainerInterface $c) {
+
+            $organizationHydrator = new ClassMethodsHydrator();
+            $organizationHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
+            $organizationHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
 
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
             $hydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
             $hydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
+            $hydrator->addStrategy('organizationReference', new HydratorStrategy($organizationHydrator, new SingleEntityPrototype(new Reference())));
+
           
             return $hydrator;
         },
@@ -136,7 +147,29 @@ return function (ContainerBuilder $containerBuilder) {
 
             $inputFilter->add($collectionResourceInputFilter, 'resources');
 
+            $organizationReference = new InputFilter();
+
+            $id = new Input('id');
+            $id->setRequired(true);
+            $id->getValidatorChain()
+                ->attach(new NotEmpty())
+                ->attach(new ObjectIdValidator());
+            
+            $organizationReference->add($id);
+
+            $collection = new Input('collection');
+            $collection->setRequired(false);
+            $collection->getFilterChain()
+                ->attach(new DefaultFilter('organization'));
+
+            $organizationReference->add($collection);
+            $inputFilter->add($organizationReference, 'organizationReference');
+
             return $inputFilter;
+        }
+    ])->addDefinitions([
+        PlaylistQueryString::class => function(ContainerInterface $c) {
+            return new PlaylistQueryString();
         }
     ]);
 };
