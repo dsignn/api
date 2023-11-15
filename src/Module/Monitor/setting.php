@@ -34,6 +34,13 @@ return function (&$setting) {
                             'contentTypeFilter' => ['/application\/json/']
                         ]
                     ],
+                    '/monitor/all' => [
+                        'default' => [
+                            'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestMonitorEntityHydrator',
+                            'contentTypeFilter' => ['/application\/json/']
+                        ]
+                    ],
                 ],
                 'validation' => [
                     '/monitor' => [
@@ -47,6 +54,11 @@ return function (&$setting) {
                         ]
                     ],
                     '/monitor/{id:[0-9a-fA-F]{24}}' => [
+                        'default' => [
+                            'service' => MonitorQueryString::class
+                        ]
+                    ],
+                    '/monitor/all' => [
                         'default' => [
                             'service' => MonitorQueryString::class
                         ]
