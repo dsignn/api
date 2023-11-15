@@ -22,8 +22,6 @@ class ResourceQueryString implements QueryStringInterface {
 
         $query = [];
 
-       // echo '<pre>';
-       // var_dump($data);
         foreach($data as $key => $value) {
 
             switch (true) {
@@ -59,8 +57,6 @@ class ResourceQueryString implements QueryStringInterface {
             }
         }
 
-        ///var_dump($query);
-        //die();
         return $query;
     }
 }
