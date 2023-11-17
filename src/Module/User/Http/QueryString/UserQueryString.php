@@ -6,6 +6,7 @@ namespace App\Module\User\Http\QueryString;
 use App\Middleware\QueryString\QueryStringInterface;
 use Exception;
 use MongoDB\BSON\ObjectId;
+use MongoDB\BSON\Regex;
 
 /**
  * Class ResourceQueryString
@@ -24,6 +25,13 @@ class UserQueryString implements QueryStringInterface {
         foreach($data as $key => $value) {
           
             switch(true) {
+                case $key === 'name':
+                case $key === 'last_name':
+                    $query[$key] = new Regex(preg_quote($value), 'i');
+                    break;
+                case $key === 'role_id':
+                    $query[$key] = $value;
+                    break;
                 case $key === 'organization_reference':
                     try {
                         $query['organizations.id'] = new ObjectId($value);
