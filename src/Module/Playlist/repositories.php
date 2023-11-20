@@ -165,6 +165,30 @@ return function (ContainerBuilder $containerBuilder) {
             $organizationReference->add($collection);
             $inputFilter->add($organizationReference, 'organizationReference');
 
+            $monitorReference = new InputFilter();
+
+            $id = new Input('id');
+            $id->getValidatorChain()
+                ->attach(new NotEmpty())
+                ->attach(new ObjectIdValidator());
+            
+            $monitorReference->add($id);
+
+            $parentId = new Input('parentId');
+            $parentId->getValidatorChain()
+                ->attach(new NotEmpty())
+                ->attach(new ObjectIdValidator());
+            
+            $monitorReference->add($parentId);
+
+            $collection = new Input('collection');
+            $collection->setRequired(false);
+            $collection->getFilterChain()
+                ->attach(new DefaultFilter('monitor'));
+
+            $monitorReference->add($collection);
+            $inputFilter->add($monitorReference, 'monitorContainerReference');
+
             return $inputFilter;
         }
     ])->addDefinitions([

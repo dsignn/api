@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use App\Controller\OptionController;
 use App\Middleware\Authentication\AuthenticationMiddleware;
 use App\Middleware\Authentication\InjectOrganizationByRoleMiddleware;
 use App\Middleware\Authorization\AuthorizationMiddleware;
