@@ -84,15 +84,15 @@ class AuthenticationMiddleware implements Middleware {
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
 
-        if ($this->isPublic($request) || $request->getMethod() === 'OPTIONS') {
-            return $handler->handle($request);
-        }
-
-        // TODO refactor add in othe middleware
+        // TODO refactor add in other middleware
         if (isset($request->getQueryParams()['auth'])) {
             $request = $request->withAddedHeader('authorization', 'Bearer ' . $request->getQueryParams()['auth']);        
         }
-   
+
+        if (($this->isPublic($request) && !$request->getHeaderLine('authorization')) || $request->getMethod() === 'OPTIONS' ) {
+            return $handler->handle($request);
+        }
+
         try {
             $request = $this->server->validateAuthenticatedRequest($request);
         } catch (OAuthServerException $exception) {

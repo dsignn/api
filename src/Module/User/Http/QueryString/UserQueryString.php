@@ -28,7 +28,7 @@ class UserQueryString implements QueryStringInterface {
                 case $key === 'name':
                 case $key === 'last_name':
                     $query[$key] = new Regex(preg_quote($value), 'i');
-                    break;
+                    break;                   
                 case $key === 'role_id':
                     $query[$key] = $value;
                     break;
@@ -36,7 +36,7 @@ class UserQueryString implements QueryStringInterface {
                     try {
                         $query['organizations.id'] = new ObjectId($value);
                     } catch (Exception $e) {
-                        // TODO 
+                        // TODO LOG ????
                     }
                     break;
             }

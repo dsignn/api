@@ -109,7 +109,7 @@ class AppendOrganizationEvent {
             'headers' => [
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
-                'Authorization' => $tokenResponse['access_token']
+                'Authorization' => 'Bearer ' . $tokenResponse['access_token']
             ],
             'json' => [
                 'name' => $preProcess->getData()['organization'],
