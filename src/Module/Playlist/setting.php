@@ -39,6 +39,9 @@ return function (&$setting) {
                 'validation' => [
                     '/playlist' => [
                         'POST' => 'PlaylistPostValidation'
+                    ],
+                    '/playlist/{id:[0-9a-fA-F]{24}}' => [
+                        'PUT' => 'PlaylistPostValidation'
                     ]
                 ],
                 'authorization' => [

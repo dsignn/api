@@ -89,30 +89,34 @@ return function (ContainerBuilder $containerBuilder) {
         },
         'RestPlaylistEntityHydrator' => function(ContainerInterface $c) {
 
-            $organizationHydrator = new ClassMethodsHydrator();
-            $organizationHydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
-            $organizationHydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
+            $referenceHydrator = new ClassMethodsHydrator();
+            $referenceHydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
+            $referenceHydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
 
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new CamelCaseStrategy());
             $hydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
             $hydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
-            $hydrator->addStrategy('organizationReference', new HydratorStrategy($organizationHydrator, new SingleEntityPrototype(new Reference())));
+            $hydrator->addStrategy('organizationReference', new HydratorStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
+            $hydrator->addStrategy('resources', new HydratorArrayStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
+            $hydrator->addStrategy('binds', new HydratorArrayStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
+            
             return $hydrator;
         },
         'StoragePlaylistEntityHydrator' => function(ContainerInterface $c) {
 
-            $organizationHydrator = new ClassMethodsHydrator();
-            $organizationHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
-            $organizationHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
+            $referenceHydrator = new ClassMethodsHydrator();
+            $referenceHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
+            $referenceHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
 
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
             $hydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
             $hydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
-            $hydrator->addStrategy('organizationReference', new HydratorStrategy($organizationHydrator, new SingleEntityPrototype(new Reference())));
+            $hydrator->addStrategy('organizationReference', new HydratorStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
+            $hydrator->addStrategy('resources', new HydratorArrayStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
+            $hydrator->addStrategy('binds', new HydratorArrayStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
 
-          
             return $hydrator;
         },
         'PlaylistEntityPrototype' => function(ContainerInterface $c) {
@@ -146,6 +150,27 @@ return function (ContainerBuilder $containerBuilder) {
             $collectionResourceInputFilter->setInputFilter($resourceInputFilter);
 
             $inputFilter->add($collectionResourceInputFilter, 'resources');
+
+
+            $collectionBindInputFilter = new CollectionInputFilter();
+            $bindInputFilter = new InputFilter();
+
+            $id = new Input('id');
+            $id->setRequired(false);
+            $id->getValidatorChain()
+                ->attach(new ObjectIdValidator());
+
+            
+            $collection = new Input('collection');
+            $collection->setRequired(false);
+            $collection->getFilterChain()
+                ->attach(new DefaultFilter('playlist'));    
+
+            $bindInputFilter->add($id)
+                ->add($collection);
+           
+            $collectionBindInputFilter->setInputFilter($bindInputFilter);
+            $inputFilter->add($collectionBindInputFilter, 'binds');
 
             $organizationReference = new InputFilter();
 
