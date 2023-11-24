@@ -28,7 +28,7 @@ class DeviceEntity implements EntityInterface, DateAwareInterface {
     public $freeMem;
 
     /**
-     * @var
+     * @var 
      */
     public $cpu;
 
