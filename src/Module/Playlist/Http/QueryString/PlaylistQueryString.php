@@ -38,6 +38,18 @@ class PlaylistQueryString implements QueryStringInterface {
                 case $key === 'tags':
                     $query[$key] = ['$in' => $value];
                     break;
+                case $key === 'ids' && is_array($value):
+                    $ids = [];
+                    for ($cont = 0; count($value) > $cont; $cont++ ){
+                        try  {
+                            $id = new ObjectId($value[$cont]);
+                            array_push($ids, $id);
+                        } catch(Exception $exception) {
+                            // TODO LOGG???
+                        }  
+                    }
+                    $query['_id'] = ['$in' => $ids];              
+                    break;
             }
         }
 

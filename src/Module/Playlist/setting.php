@@ -34,7 +34,14 @@ return function (&$setting) {
                             'acceptFilterHydrator' => 'RestPlaylistEntityHydrator',
                             'contentTypeFilter' => ['/application\/json/']
                         ]
-                    ]
+                    ],
+                    '/playlist/all' => [
+                        'default' => [
+                                'acceptFilterHydrator' => 'RestPlaylistEntityHydrator',
+                                'acceptFilter' => ['/application\/json/'],
+                                'contentTypeFilter' => ['/application\/json/']
+                            ]
+                     ],
                 ],
                 'validation' => [
                     '/playlist' => [

@@ -31,6 +31,11 @@ class PlaylistEntity implements EntityInterface, OrganizationAwareInterface {
      */
     protected $monitorContainerReference;
 
+    /**
+     * @var array
+     */
+    protected $binds = [];
+
    
     /**
      * @return mixed
@@ -87,6 +92,22 @@ class PlaylistEntity implements EntityInterface, OrganizationAwareInterface {
      */ 
     public function setResources(array $resources) {
         $this->resources = $resources;
+        return $this;
+    }
+
+    /**
+     * @return  array
+     */ 
+    public function getBinds() {
+        return $this->binds;
+    }
+
+    /**
+     * @param  array  $binds
+     * @return  self
+     */ 
+    public function setBinds(array $binds) {
+        $this->binds = $binds;
         return $this;
     }
 }
