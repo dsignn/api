@@ -35,6 +35,19 @@ class PlaylistQueryString implements QueryStringInterface {
                         // TODO 
                     }
                     break;
+                case $key === 'monitor_container':
+
+                    if (is_array($value) && isset($value['id']) && isset($value['parentId'])) {
+                       
+                        try {
+                            $query['monitor_container_reference.id'] = new ObjectId($value['id']);
+                            $query['monitor_container_reference.parent_id'] = new ObjectId($value['parentId']);
+                        } catch (Exception $e) {
+                            // TODO 
+                        }
+                    }
+
+                    break;
                 case $key === 'tags':
                     $query[$key] = ['$in' => $value];
                     break;
@@ -52,7 +65,9 @@ class PlaylistQueryString implements QueryStringInterface {
                     break;
             }
         }
-
+     //   echo '<pre>';
+     //   var_dump($query);
+     //   die();
         return $query;
     }
 }

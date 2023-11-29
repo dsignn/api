@@ -14,6 +14,7 @@ use App\InputFilter\InputFilter as AppInputFilter;
 use App\Mail\adapter\SendinblueMailer;
 use App\Mail\Contact;
 use App\Mail\MailerInterface;
+use App\Module\Monitor\Entity\MonitorReference;
 use App\Module\Oauth\Filter\PasswordFilter;
 use App\Module\Organization\Storage\OrganizationStorage;
 use App\Module\Organization\Storage\OrganizationStorageInterface;
@@ -93,6 +94,12 @@ return function (ContainerBuilder $containerBuilder) {
             $referenceHydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
             $referenceHydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
 
+            $monitorHydrator = new ClassMethodsHydrator();
+            $monitorHydrator->setNamingStrategy(new CamelCaseStrategy());
+            $monitorHydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
+            $monitorHydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
+            $monitorHydrator->addStrategy('parentId', $c->get('MongoIdRestStrategy'));
+
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new CamelCaseStrategy());
             $hydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
@@ -100,6 +107,7 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addStrategy('organizationReference', new HydratorStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
             $hydrator->addStrategy('resources', new HydratorArrayStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
             $hydrator->addStrategy('binds', new HydratorArrayStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
+            $hydrator->addStrategy('monitorContainerReference', new HydratorStrategy($monitorHydrator, new SingleEntityPrototype(new MonitorReference())));
             
             return $hydrator;
         },
@@ -109,6 +117,11 @@ return function (ContainerBuilder $containerBuilder) {
             $referenceHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
             $referenceHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
 
+            $monitorHydrator = new ClassMethodsHydrator();
+            $monitorHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
+            $monitorHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
+            $monitorHydrator->addStrategy('parentId', $c->get('MongoIdStorageStrategy'));
+
             $hydrator = new ClassMethodsHydrator();
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
             $hydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
@@ -116,6 +129,7 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addStrategy('organizationReference', new HydratorStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
             $hydrator->addStrategy('resources', new HydratorArrayStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
             $hydrator->addStrategy('binds', new HydratorArrayStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
+            $hydrator->addStrategy('monitorContainerReference', new HydratorStrategy($monitorHydrator, new SingleEntityPrototype(new MonitorReference())));
 
             return $hydrator;
         },
