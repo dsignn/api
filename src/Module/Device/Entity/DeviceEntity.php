@@ -43,6 +43,8 @@ class DeviceEntity implements EntityInterface, DateAwareInterface {
      */
     public $addresses;
 
+    public $monitor;
+
     /**
      * @return string
      */

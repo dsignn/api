@@ -50,14 +50,18 @@ class DeviceUpsertRpcRestController implements RpcControllerInterface {
             $validator = $request->getAttribute('app-validation');
             $validator->setData($data);
 
+
             if (!$validator->isValid()) {
                 $response = $response->withStatus(422);
                 return $this->getAcceptData($request, $response, ['errors' => $validator->getMessages()]);
             }
         }
 
+     
+        $data = array_merge($data, $validator->getValues());
         $entity = $this->storage->get($data['id']);
    
+     
         if (!$entity) {
             $entity = $this->storage->getEntityPrototype()->getPrototype($data);
             $entity->setCreatedDate(new DateTime());

@@ -65,9 +65,6 @@ class PlaylistQueryString implements QueryStringInterface {
                     break;
             }
         }
-     //   echo '<pre>';
-     //   var_dump($query);
-     //   die();
         return $query;
     }
 }

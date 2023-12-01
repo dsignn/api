@@ -20,19 +20,19 @@ return function (App $app) {
 
         $group->get('', [PlaylistController::class, 'paginate']);
 
-        $group->get('/{id:[0-9a-fA-F]{24}}',  [PlaylistController::class, 'get']);
+        $group->get('/{id:[0-9a-fA-F]{24}}', [PlaylistController::class, 'get']);
 
-        $group->post('',  [PlaylistController::class, 'post']);
+        $group->post('', [PlaylistController::class, 'post']);
 
-        $group->put('/{id:[0-9a-fA-F]{24}}',  [PlaylistController::class, 'put']);
+        $group->put('/{id:[0-9a-fA-F]{24}}', [PlaylistController::class, 'put']);
 
-        $group->patch('/{id:[0-9a-fA-F]{24}}',  [PlaylistController::class, 'patch']);
+        $group->patch('/{id:[0-9a-fA-F]{24}}', [PlaylistController::class, 'patch']);
 
         $group->options('/{id:[0-9a-fA-F]{24}}', [PlaylistController::class, 'options']);
 
-        $group->delete('/{id:[0-9a-fA-F]{24}}',  [PlaylistController::class, 'delete']);
+        $group->delete('/{id:[0-9a-fA-F]{24}}', [PlaylistController::class, 'delete']);
         
-        $group->get('/all',  [AllRpcPlaylistController::class, 'rpc']);
+        $group->get('/all', [AllRpcPlaylistController::class, 'rpc']);
 
         $group->options('/all', [OptionController::class, 'options']);
     })
