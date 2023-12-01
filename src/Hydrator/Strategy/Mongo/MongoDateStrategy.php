@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Hydrator\Strategy\Mongo;
 
 use DateTimeInterface;
+use Exception;
 use Laminas\Hydrator\Strategy\StrategyInterface;
 use MongoDB\BSON\UTCDateTime;
 
@@ -55,6 +56,20 @@ class MongoDateStrategy implements StrategyInterface {
             case $value instanceof UTCDateTime === true && $dateTime instanceof \DateTime === true:
                 /** @var UTCDateTime $value */
                 $value = $value->toDateTime();
+                break;
+            case is_string($value) && !empty($value) && $dateTime instanceof \DateTimeImmutable === true:
+                try {
+                    $value = \DateTimeImmutable::createFromMutable(new \DateTime($value));
+                } catch (Exception $ex) {
+                    // TODO LOGGGG
+                }
+                break;
+            case is_string($value) && !empty($value) && $dateTime instanceof \DateTime === true:
+                try {
+                    $value = new \DateTime($value);
+                } catch (Exception $ex) {
+                    // TODO LOGGGG
+                }
                 break;
         }
 
