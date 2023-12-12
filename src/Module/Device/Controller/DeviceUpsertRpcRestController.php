@@ -71,7 +71,7 @@ class DeviceUpsertRpcRestController implements RpcControllerInterface {
         $entity->setLastUpdateDate(new DateTime());
 
         $this->storage->update($entity);
-
+        
         return $this->getAcceptData($request, $response, $entity);
     }
 }

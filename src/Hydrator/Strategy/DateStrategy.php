@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Hydrator\Strategy;
 
+use DateTime;
 use DateTimeInterface;
 use Laminas\Hydrator\Strategy\StrategyInterface;
 use MongoDB\BSON\UTCDateTime;
@@ -15,7 +16,7 @@ class DateStrategy implements StrategyInterface {
 
     protected $datePrototype;
 
-    protected $format = 'Y-m-d H:i:s';
+    protected $format = DateTime::ATOM;
 
     /**
      * MongoDateStrategy constructor.
