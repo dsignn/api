@@ -36,7 +36,7 @@ class AuthorizationMiddleware implements Middleware {
      * AuthorizationMiddleware constructor.
      * @param array $settings
      */
-    public function __construct(array $settings = [], Acl $acl) {
+    public function __construct(Acl $acl,  array $settings = []) {
         $this->settings = $settings;
         $this->acl = $acl;
     }
@@ -60,6 +60,7 @@ class AuthorizationMiddleware implements Middleware {
 
         // TODO REMOVE
         if (!$this->acl->isAllowed($role, $resource, $method)) {
+
             throw new HttpException(
                 $request,
                 sprintf('Unauthorized role %s for the resource %s method %s ', $role->getRoleId(), $resource->getResourceId(), $method),

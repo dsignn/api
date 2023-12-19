@@ -15,8 +15,12 @@ services:
 
   phpfpm:
     container_name: dsing-php
-    image: toni:1.0.0
-    user: 1000:1000
+    build:
+      context: .
+      dockerfile: docker/php-fpm/Dockerfile8.3
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
     networks:
       app_network:
         aliases:

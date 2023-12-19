@@ -41,6 +41,7 @@ RUN docker-php-ext-install gettext
 RUN docker-php-ext-enable mongodb
 RUN docker-php-ext-enable xdebug
 
+
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN cp /usr/local/bin/composer /usr/local/bin/composer2
@@ -48,6 +49,10 @@ RUN ls -la /usr/local/bin
 
 # Clear dependences
 #RUN apt-get remove -y git && apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN addgroup --gid 1000 slim
+RUN adduser --ingroup slim --shell /bin/sh slim
+USER slim
 
 WORKDIR /var/www/application
 ENTRYPOINT ["docker-php-entrypoint"]

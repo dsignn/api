@@ -32,9 +32,9 @@ class AccessTokenEntity implements AccessTokenEntityInterface, EntityInterface
     private function convertToJWT()
     {
         $this->initJwtConfiguration();
-//var_dump($this->getStartDateTime());
+
         return $this->jwtConfiguration->builder()
-            ->permittedFor($this->getClient()->getIdentifier())
+            ->permittedFor($this->getClient()->getIdentifier() ? $this->getClient()->getIdentifier() : '')
             ->identifiedBy($this->getIdentifier())
             ->issuedAt($this->getStartDateTime() ? $this->getStartDateTime() : new DateTimeImmutable())
             ->canOnlyBeUsedAfter($this->getStartDateTime() ? $this->getStartDateTime() : new DateTimeImmutable())

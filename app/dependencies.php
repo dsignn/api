@@ -125,8 +125,8 @@ return function (ContainerBuilder $containerBuilder) {
 
         AuthorizationMiddleware::class => function(ContainerInterface $c) {
             return new AuthorizationMiddleware(
-                $c->get('settings')['authorization'],
-                $c->get(Acl::class)
+                $c->get(Acl::class),
+                $c->get('settings')['authorization']
             );
         },
 
