@@ -61,8 +61,8 @@ return function (ContainerBuilder $containerBuilder) {
                 $c->get(Client::class),
                 $c->get('settings')['httpClient']["url"],
                 $c->get('RestOrganizationEntityHydrator'),
-                $c->get('settings')['client'],
-                $c->get(OrganizationStorageInterface::class)
+                $c->get(OrganizationStorageInterface::class),
+                $c->get('settings')['client']
             );
         },
 

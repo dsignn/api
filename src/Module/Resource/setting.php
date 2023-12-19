@@ -3,15 +3,15 @@ declare(strict_types=1);
 
 use App\Middleware\ContentNegotiation\ContentType\MultipartFormDataContentType;
 use App\Module\Resource\Http\QueryString\ResourceQueryString;
-use Graze\ArrayMerger\RecursiveArrayMerger;
+//use Graze\ArrayMerger\RecursiveArrayMerger;
 
 /**
  * Resource settings
  */
 return function (&$setting) {
 
-    $merger = new RecursiveArrayMerger();
-    $setting = $merger->merge(
+    //$merger = new RecursiveArrayMerger();
+    $setting = array_merge_recursive(
         $setting,
         [
             "settings" => [

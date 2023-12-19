@@ -1,17 +1,16 @@
 <?php
 declare(strict_types=1);
 
-use App\Module\Resource\Http\QueryString\ResourceQueryString;
 use App\Module\User\Http\QueryString\UserQueryString;
-use Graze\ArrayMerger\RecursiveArrayMerger;
+//use Graze\ArrayMerger\RecursiveArrayMerger;
 
 /**
  * User settings
  */
 return function (&$setting) {
 
-    $merger = new RecursiveArrayMerger();
-    $setting = $merger->merge(
+    //$merger = new RecursiveArrayMerger();
+    $setting = array_merge_recursive(
         $setting,
         [
             "settings" => [

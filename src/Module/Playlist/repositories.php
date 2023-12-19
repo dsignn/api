@@ -26,7 +26,6 @@ use App\Module\Playlist\Storage\PlaylistStorageInterface;
 use App\Module\User\Entity\Embedded\ActivationCode;
 use App\Module\User\Entity\Embedded\RecoverPassword;
 use App\Module\User\Entity\UserEntity;
-use App\Module\User\Event\AppendOrganizationEvent;
 use App\Module\User\Event\UserActivationCodeEvent;
 use App\Module\User\Event\UserPasswordEvent;
 use App\Module\User\Mail\adapter\UserGoogleMailer;

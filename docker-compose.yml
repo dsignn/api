@@ -1,6 +1,7 @@
-version: '3'
+version: '3.8'
 services:
   nginx:
+    container_name: dsign-ngnix
     image: nginx:1.13.3
     volumes:
       - ./docker/nginx/conf:/etc/nginx
@@ -12,33 +13,23 @@ services:
     ports:
       - "127.0.0.146:80:80"
 
-  nginx-menu:
-    image: nginx:1.13.3
-    volumes:
-      - ./docker/nginx/menu-conf:/etc/nginx
-      - .:/var/www/application
-    networks:
-      app_network:
-        aliases:
-          - api.dev
-    ports:
-      - "127.0.0.200:80:80"
-
   phpfpm:
-    build: docker/php-fpm
+    container_name: dsing-php
+    image: toni:1.0.0
+    user: 1000:1000
     networks:
       app_network:
         aliases:
           - api.dev
     volumes:
       - ./docker/php-fpm/etc:/usr/local/php/etc
-      - ./docker/php-fpm/etc/php.ini:/usr/local/php/etc/php.ini
       - .:/var/www/application
       - ~/.ssh:/root/.ssh
       - ./logs:/var/www/logs
 
 
   mongo:
+    container_name: dsign-mongo
     image: mongo:4.2
     networks:
       app_network:

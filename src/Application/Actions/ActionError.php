@@ -88,14 +88,13 @@ class ActionError implements JsonSerializable
     /**
      * @return array
      */
-    public function jsonSerialize()
-    {
+    public function jsonSerialize(): string {
         $payload = [
             'type' => $this->type,
             'description' => $this->description,
             'trace' => $this->trace,
         ];
 
-        return $payload;
+        return json_encode($payload);
     }
 }

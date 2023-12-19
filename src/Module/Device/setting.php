@@ -3,15 +3,15 @@
 declare(strict_types=1);
 
 use App\Module\Device\Http\QueryString\DeviceQueryString;
-use Graze\ArrayMerger\RecursiveArrayMerger;
+//use Graze\ArrayMerger\RecursiveArrayMerger;
 
 /**
  * Monitor settings
  */
 return function (&$setting) {
 
-    $merger = new RecursiveArrayMerger();
-    $setting = $merger->merge(
+   // $merger = new RecursiveArrayMerger();
+    $setting = array_merge_recursive(
         $setting,
         [
             "settings" => [

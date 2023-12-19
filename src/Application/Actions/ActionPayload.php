@@ -64,8 +64,7 @@ class ActionPayload implements JsonSerializable
     /**
      * @return array
      */
-    public function jsonSerialize()
-    {
+    public function jsonSerialize() : string {
         $payload = [
             'statusCode' => $this->statusCode,
         ];
@@ -76,6 +75,6 @@ class ActionPayload implements JsonSerializable
             $payload['error'] = $this->error;
         }
 
-        return $payload;
+        return json_encode($payload);
     }
 }

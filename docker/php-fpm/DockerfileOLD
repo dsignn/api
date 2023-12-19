@@ -2,26 +2,20 @@
 FROM centos:centos7
 
 # prerequisites
-RUN yum install -y  libcurl4-openssl-dev ldconfig curl cmake libtool  git gcc gcc-c++ cpp kernel-headers.x86_64 kernel-devel libxml2-devel libxslt-devel openssl-devel libcurl-devel readline-devel bzip2-devel tar wget make autoconf libpng-devel libssl-dev libsasl2-dev libjpeg-devel freetype-devel openldap-devel php-pear openssl
+RUN yum install -y libonig-dev libcurl4-openssl-dev ldconfig curl cmake libtool git gcc gcc-c++ cpp kernel-headers.x86_64 kernel-devel libxml2-devel libxslt-devel openssl-devel libcurl-devel readline-devel bzip2-devel tar wget make autoconf libpng-devel libssl-dev libsasl2-dev libjpeg-devel freetype-devel openldap-devel php-pear openssl ca-certificates oniguruma oniguruma-devel
 
 # cmake # @see https://cmake.org/
-RUN wget http://files1.directadmin.com/services/custombuild/cmake-3.9.2.tar.gz
-RUN tar xzf cmake-3.9.2.tar.gz
-WORKDIR cmake-3.9.2
-RUN ./configure
-RUN make
-RUN make install
+RUN wget -qO- "https://cmake.org/files/v3.27/cmake-3.27.0-linux-x86_64.tar.gz" | tar --strip-components=1 -xz -C /usr/local
 RUN cmake  --version
 
 # libzip # @see https://libzip.org/
-RUN wget https://nih.at/libzip/libzip-1.5.2.tar.gz
-RUN tar zxvf libzip-1.5.2.tar.gz
-WORKDIR  libzip-1.5.2
-RUN mkdir build
-WORKDIR  build
-RUN cmake ..
-RUN make
+RUN wget -c http://www.zlib.net/zlib-1.3.tar.gz
+RUN tar zxvf zlib-1.3.tar.gz
+WORKDIR  zlib-1.3
+RUN ./configure
+RUN make -j2
 RUN make install
+
 #RUN export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$PHP_DIR/libzip-1.4.0/lib"
 #RUN ln -s ../lib/zipconf.h $PHP_DIR//build-src/srclib/libzip-1.2.0/include/zipconf.h
 
@@ -44,8 +38,8 @@ WORKDIR /tmp
 
 # php
 RUN ls
-RUN wget -nv -O - http://php.net/distributions/php-7.2.32.tar.gz | tar zx
-WORKDIR php-7.2.32
+RUN wget -nv -O - http://php.net/distributions/php-8.2.0.tar.gz | tar zx
+WORKDIR php-8.2.0
 RUN rm configure
 RUN ./buildconf --force
 RUN ./configure --prefix=/usr/local/php \

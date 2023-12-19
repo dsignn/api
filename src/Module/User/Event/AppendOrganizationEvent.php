@@ -51,11 +51,12 @@ class AppendOrganizationEvent {
      * @param HydrationInterface $hydrator
      * @param array $clientCredentials
      */
-    public function __construct(Client $client, 
+    public function __construct(
+        Client $client, 
         string $url, 
         HydrationInterface $hydrator, 
-        array $clientCredentials = [],
-        StorageInterface $organizationStorage) {
+        StorageInterface $organizationStorage,
+        array $clientCredentials = []) {
 
         $this->client = $client;
         $this->url = $url;
