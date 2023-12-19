@@ -24,7 +24,7 @@ class AccessTokenEntity implements AccessTokenEntityInterface, EntityInterface
      */
     protected $startDateTime = null;
 
-        /**
+    /**
      * Generate a JWT from the access token
      *
      * @return Token
