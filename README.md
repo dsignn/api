@@ -28,13 +28,12 @@ php console/console.php oauth:generate-private-key
 php console/console.php oauth:generate-public-key
 ```
 
+### Generate client
+```bash
+php console/console.php oauth:create-client dsign-client dsign-client dsign4!
+```  
+
 ### Generate user
 ```bash
 php console/console.php user-repo:create
 ```
-
-### Generate Order
-
-The platform can manage order, the flow status is:
-
-![Flow order status](./doc/order/assets/order-status.png)
