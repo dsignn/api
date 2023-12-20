@@ -4,10 +4,13 @@ declare(strict_types=1);
 namespace App\Module\Resource\Event;
 
 use App\Module\Resource\Entity\AbstractResourceEntity;
+use App\Module\Resource\Entity\AudioResourceEntity;
 use App\Module\Resource\Entity\Embedded\Dimension;
 use App\Module\Resource\Entity\ImageResourceEntity;
 use App\Module\Resource\Entity\VideoResourceEntity;
 use FFMpeg\FFProbe;
+use FFMpeg\FFProbe\DataMapping\Stream;
+use FFMpeg\FFProbe\DataMapping\StreamCollection;
 use Laminas\EventManager\EventInterface;
 
 /**
@@ -46,18 +49,34 @@ class MetadataEvent {
             'ffprobe.binaries'  => '/usr/bin/ffprobe',
         ]);
 
+        /** @var StreamCollection $collection **/
+        /** @var Stream $stream **/
         switch (true) {
             case $entity instanceof ImageResourceEntity === true:
                 /** @var ImageResourceEntity $entity */
-                $stream = $ffprobe->streams($entity->getSrc())->videos()->first();
-                $entity->setDimension(new Dimension($stream->get('width'), $stream->get('height')));
+                $collection = $ffprobe->streams($entity->getSrc());
+                if ($collection->count()) {
+                    $stream =  $collection->first();
+                    $entity->setDimension(new Dimension($stream->get('width'), $stream->get('height')));
+                }
                 break;
             case $entity instanceof VideoResourceEntity === true:
                 /** @var VideoResourceEntity $entity */
-                $stream = $ffprobe->streams($entity->getSrc())->videos()->first();
-                $entity->setDimension(new Dimension($stream->get('width'), $stream->get('height')));
-                $entity->setDuration((float) $stream->get('duration'));
-                $entity->setAspectRatio($stream->get('sample_aspect_ratio'));
+                $collection = $ffprobe->streams($entity->getSrc());
+                if ($collection->count()) {
+                    $stream =  $collection->first();
+                    $entity->setDimension(new Dimension($stream->get('width'), $stream->get('height')));
+                    $entity->setDuration((float) $stream->get('duration'));
+                    $entity->setAspectRatio($stream->get('sample_aspect_ratio') ? $stream->get('sample_aspect_ratio') : '');
+                }
+                break;
+            case $entity instanceof AudioResourceEntity === true:
+                /** @var AudioResourceEntity $entity */
+                $collection = $ffprobe->streams($entity->getSrc());
+                if ($collection->count()) {
+                    $stream =  $collection->first();
+                    $entity->setDuration((float) $stream->get('duration'));
+                }
                 break;
         }
     }
@@ -70,3 +89,4 @@ class MetadataEvent {
         return strpos($entity->getSrc(), "http") === false ? false : true;
     }
 }
+

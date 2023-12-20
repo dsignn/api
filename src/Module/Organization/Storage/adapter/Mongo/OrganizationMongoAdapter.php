@@ -5,6 +5,7 @@ namespace App\Module\Organization\Storage\adapter\Mongo;
 
 use App\Storage\Adapter\Mongo\MongoAdapter;
 use MongoDB\BSON\ObjectId;
+use MongoDB\BSON\Regex;
 
 /**
  * Class OrganizationMongoAdapter
@@ -18,20 +19,20 @@ class OrganizationMongoAdapter extends MongoAdapter {
      */
     protected function transformSearch(array $search) {
 
+;
         foreach ($search as $key => &$value) {
 
             switch ($key) {
-                case 'organizations':
-                    $ids = [];
-                    foreach ($value as $id) {
-                        array_push($ids, new ObjectId($id));
-                    }
-                    $search['_id'] = ['$in' => $ids];
-                    unset($search[$key]);
+                case 'name':
+                    $search[$key] = new Regex($search[$key], 'i');
+                    break;
+                case 'organization_reference': 
+                    $search['_id'] = [ '$in' => [new ObjectId($search[$key])]];
+                    unset($search['organization_reference']);
                     break;
             }
         }
-
+  
         return $search;
     }
 }

@@ -36,18 +36,9 @@ class AuthorizationMiddleware implements Middleware {
      * AuthorizationMiddleware constructor.
      * @param array $settings
      */
-    public function __construct(array $settings = []) {
+    public function __construct(Acl $acl,  array $settings = []) {
         $this->settings = $settings;
-        $this->acl = new Acl();
-
-        /** TODO add storage and add to it */
-        $this->acl->addRole(
-            new GenericRole('guest')
-        )->addRole(
-            new GenericRole('admin')
-        )->addRole(
-            new GenericRole('restaurantOwner')
-        );
+        $this->acl = $acl;
     }
 
     /**
@@ -68,15 +59,14 @@ class AuthorizationMiddleware implements Middleware {
         $this->loadPermission($resource, $request);
 
         // TODO REMOVE
-        if (!$this->acl->isAllowed($role, $resource, $method) && false) {
+        if (!$this->acl->isAllowed($role, $resource, $method)) {
+
             throw new HttpException(
                 $request,
                 sprintf('Unauthorized role %s for the resource %s method %s ', $role->getRoleId(), $resource->getResourceId(), $method),
                 401
             );
         }
-
-        $request = $this->injectFilterData($request);
 
         return $handler->handle($request);
     }
@@ -90,6 +80,7 @@ class AuthorizationMiddleware implements Middleware {
 
         /** @var $role RoleInterface */
         $method = $request->getMethod();
+    
         if (isset($this->settings[$resource->getResourceId()])) {
 
             foreach ($this->settings[$resource->getResourceId()] as $role => $list) {
@@ -111,37 +102,5 @@ class AuthorizationMiddleware implements Middleware {
                 }
             }
         }
-    }
-
-    /**
-     * @param ServerRequestInterface $request
-     * @return ServerRequestInterface
-     */
-    protected function injectFilterData(ServerRequestInterface $request) {
-
-        /** @var UserEntity $user */
-        $user = $request->getAttribute('app-user');
-
-        if ($user) {
-
-            switch ($user->getRoleId()) {
-                case 'restaurantOwner':
-                    $organizations = [];
-                    /** @var ReferenceInterface $organization */
-                    foreach ($user->getOrganizations() as &$organization) {
-                        array_push($organizations, $organization->getId());
-                    }
-             
-                    if (count($organizations) > 0) {               
-                        $request = $request->withAttribute(
-                            'app-data-filter',
-                            ['organizations' => $organizations]
-                        );
-                    }
-                    break;
-            }
-        }
-
-        return $request;
     }
 }

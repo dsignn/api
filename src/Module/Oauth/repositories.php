@@ -1,30 +1,40 @@
 <?php
 declare(strict_types=1);
 
-use App\Crypto\CryptoOpenSsl;
+
 use App\Crypto\LaminasCrypto;
 use App\Hydrator\Strategy\HydratorArrayStrategy;
 use App\Hydrator\Strategy\HydratorStrategy;
 use App\Hydrator\Strategy\Mongo\MongoDateStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
-use App\Hydrator\Strategy\Mongo\NamingStrategy\UnderscoreNamingStrategy;
+use App\InputFilter\Input;
+use App\InputFilter\InputFilter as AppInputFilter;
 use App\Module\Oauth\Entity\AccessTokenEntity;
 use App\Module\Oauth\Entity\AuthCodeEntity;
 use App\Module\Oauth\Entity\ClientEntity;
 use App\Module\Oauth\Entity\RefreshTokenEntity;
 use App\Module\Oauth\Entity\ScopeEntity;
+use App\Module\Oauth\Event\PasswordEvent;
+use App\Module\Oauth\Grant\OrganizationTokenGrant;
 use App\Module\Oauth\Repository\AccessTokenRepository;
 use App\Module\Oauth\Repository\AuthCodeRepository;
 use App\Module\Oauth\Repository\ClientRepository;
 use App\Module\Oauth\Repository\RefreshTokenRepository;
 use App\Module\Oauth\Repository\ScopeRepository;
 use App\Module\Oauth\Repository\UserRepository;
+use App\Module\Oauth\Storage\ClientStorage;
+use App\Module\Oauth\Storage\ClientStorageInterface;
+use App\Module\Organization\Storage\OrganizationStorageInterface;
 use App\Storage\Adapter\Mongo\MongoAdapter;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
+use App\Storage\Entity\Reference;
 use App\Storage\Entity\SingleEntityPrototype;
 use App\Storage\Storage;
+use App\Validator\Mongo\ObjectIdValidator;
 use DI\ContainerBuilder;
 use Laminas\Hydrator\ClassMethodsHydrator;
+use Laminas\Validator\NotEmpty;
+use Laminas\InputFilter\InputFilter;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Grant\AuthCodeGrant;
 use League\OAuth2\Server\Grant\ClientCredentialsGrant;
@@ -34,6 +44,8 @@ use League\OAuth2\Server\Grant\RefreshTokenGrant;
 use League\OAuth2\Server\ResourceServer;
 use MongoDB\Client;
 use Psr\Container\ContainerInterface;
+
+//use function DI\add;
 
 return function (ContainerBuilder $containerBuilder) {
 
@@ -52,7 +64,36 @@ return function (ContainerBuilder $containerBuilder) {
             return new LaminasCrypto($content);
         },
 
-        'ClientStorage' => function(ContainerInterface $c) {
+        'ClientPostValidation' => function(ContainerInterface $container) {
+
+            $organizationFilter = new InputFilter();
+     
+            $id = new Input('id');
+            $id->getValidatorChain()->attach(new ObjectIdValidator());
+            $organizationFilter->add($id);
+
+            $inputFilter = new AppInputFilter();
+
+            $name = new Input('name');
+            $name->getValidatorChain()->attach(new NotEmpty());
+
+            $password = new Input('password');
+            $password->getValidatorChain()->attach(new NotEmpty());
+
+            $identifier = new Input('identifier');
+            $identifier->getValidatorChain()->attach(new NotEmpty());
+
+            $inputFilter
+                ->add($name)
+                ->add($password)
+                ->add($identifier)
+                ->add($organizationFilter, 'organizationReference')
+            ;
+
+            return $inputFilter;
+        },
+
+        ClientStorageInterface::class => function(ContainerInterface $c) {
 
             $settings = $c->get('settings');
             $serviceSetting = $settings['oauth']['client']['storage'];
@@ -66,9 +107,14 @@ return function (ContainerBuilder $containerBuilder) {
             $mongoAdapter = new MongoAdapter($c->get(Client::class), $serviceSetting['name'], $serviceSetting['collection']);
             $mongoAdapter->setResultSet($resultSet);
 
-            $storage = new Storage($mongoAdapter);
+            $storage = new ClientStorage($mongoAdapter);
             $storage->setHydrator($hydrator);
             $storage->setEntityPrototype($c->get('ClientEntityPrototype'));
+
+            $storage->getEventManager()->attach(
+                Storage::$BEFORE_SAVE,
+                new PasswordEvent($c->get('OAuthCrypto'))
+            );
 
             return $storage;
         },
@@ -83,13 +129,30 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
             $hydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
             $hydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
+            $hydrator->addStrategy('organizationReference', new HydratorStrategy(
+                $c->get('OrganizationReferenceStorageHydrator'), 
+                new SingleEntityPrototype(new Reference()))
+            );
 
+            return $hydrator;
+        },
+
+        'RestClientEntityHydrator'  => function(ContainerInterface $c) {
+
+            $hydrator = new ClassMethodsHydrator();
+            $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
+            $hydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
+            $hydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
+            $hydrator->addStrategy('organizationReference', new HydratorStrategy(
+                $c->get('OrganizationReferenceRestHydrator'), 
+                new SingleEntityPrototype(new Reference()))
+            );
 
             return $hydrator;
         },
 
         ClientRepository::class => function(ContainerInterface $c) {
-            return new ClientRepository($c->get('ClientStorage'), $c->get('OAuthCrypto'));
+            return new ClientRepository($c->get(ClientStorageInterface::class), $c->get('OAuthCrypto'));
         },
 
         'AccessTokenStorage' => function(ContainerInterface $c) {
@@ -124,6 +187,7 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
             $hydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
             $hydrator->addStrategy('client', new HydratorStrategy(  new ClassMethodsHydrator(), new SingleEntityPrototype(new ClientEntity())));
+            $hydrator->addStrategy('start_date_time', new MongoDateStrategy(new DateTimeImmutable()));
             $hydrator->addStrategy('expiry_date_time', new MongoDateStrategy(new DateTimeImmutable()));
             $hydrator->addStrategy('scopes', new HydratorArrayStrategy(  new ClassMethodsHydrator(), new SingleEntityPrototype(new ScopeEntity())));
 
@@ -309,6 +373,15 @@ return function (ContainerBuilder $containerBuilder) {
             $server->enableGrantType(
                 $grant,
                 new DateInterval('P1M') // new access tokens will expire after a month
+            );
+
+            $server->enableGrantType(
+                new OrganizationTokenGrant(
+                    $c->get(AccessTokenRepository::class),
+                    $c->get(ScopeRepository::class),
+                    $c->get(OrganizationStorageInterface::class)
+                ),
+                new DateInterval('P1000Y') 
             );
 
             /**

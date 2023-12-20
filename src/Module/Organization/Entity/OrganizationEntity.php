@@ -9,13 +9,13 @@ use App\Storage\Entity\EntityInterface;
 use App\Storage\Entity\EntityTrait;
 use App\Storage\Entity\Reference;
 use App\Storage\Entity\ReferenceInterface;
-
+use League\OAuth2\Server\Entities\UserEntityInterface;
 
 /**
  * Class OrganizationEntity
  * @package App\Module\Organization\Entity
  */
-class OrganizationEntity implements EntityInterface {
+class OrganizationEntity implements EntityInterface, UserEntityInterface {
 
     use EntityTrait;
 
@@ -23,12 +23,14 @@ class OrganizationEntity implements EntityInterface {
      * OrganizationEntity constructor.
      */
     public function __construct() {
-
-        $this->qrCode = new Reference();
-        $this->qrCodeDelivery = new Reference();
+        
         $this->logo = new Reference();
-        $this->whatsappPhone = new Phone();
-        $this->address = new Address();
+    }
+
+    /**
+     */
+    public function getIdentifier() {
+        return 'organization_' . $this->getId();
     }
 
     /**
@@ -37,44 +39,15 @@ class OrganizationEntity implements EntityInterface {
     protected $name = '';
 
     /**
-     * @var string
-     */
-    protected $normalizeName = '';
-
-    /**
-     * @var ReferenceInterface
-     */
-    protected $qrCode;
-
-    /**
-     * @var ReferenceInterface
-     */
-    protected $qrCodeDelivery;
-
-    /**
      * @var ReferenceInterface
      */
     protected $logo;
 
     /**
+     *
      * @var string
      */
-    protected $whatsappPhone;
-
-    /**
-     * @var Address
-     */
-    protected $address;
-
-    /**
-     * @var string
-     */
-    protected $siteUrl = '';
-
-    /**
-     * @var int
-     */
-    protected $tableNumber = 0;
+    protected $oauthToken;
 
     /**
      * @return string
@@ -91,55 +64,7 @@ class OrganizationEntity implements EntityInterface {
         $this->name = $name;
         return $this;
     }
-
-    /**
-     * @return string
-     */
-    public function getNormalizeName(): string {
-        return $this->normalizeName;
-    }
-
-    /**
-     * @param string $normalizeName
-     * @return OrganizationEntity
-     */
-    public function setNormalizeName(string $normalizeName): OrganizationEntity {
-        $this->normalizeName = $normalizeName;
-        return $this;
-    }
-
-    /**
-     * @return ReferenceInterface
-     */
-    public function getQrCode(): ReferenceInterface {
-        return $this->qrCode;
-    }
-
-    /**
-     * @param ReferenceInterface $qrCode
-     * @return OrganizationEntity
-     */
-    public function setQrCode(ReferenceInterface $qrCode): OrganizationEntity {
-        $this->qrCode = $qrCode;
-        return $this;
-    }
-
-    /**
-     * @return ReferenceInterface
-     */
-    public function getQrCodeDelivery(): ReferenceInterface {
-        return $this->qrCodeDelivery;
-    }
-
-    /**
-     * @param ReferenceInterface $qrCodeDelivery
-     * @return OrganizationEntity
-     */
-    public function setQrCodeDelivery(ReferenceInterface $qrCodeDelivery): OrganizationEntity {
-        $this->qrCodeDelivery = $qrCodeDelivery;
-        return $this;
-    }
-
+    
     /**
      * @return ReferenceInterface
      */
@@ -157,70 +82,24 @@ class OrganizationEntity implements EntityInterface {
     }
 
     /**
-     * @return Phone
-     */
-    public function getWhatsappPhone(): Phone {
-        return $this->whatsappPhone;
-    }
-
-    /**
-     * @param string $whatsappPhone
-     * @return OrganizationEntity
-     */
-    public function setWhatsappPhone(Phone $whatsappPhone): OrganizationEntity {
-        $this->whatsappPhone = $whatsappPhone;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSiteUrl() {
-        return $this->siteUrl;
-    }
-
-    /**
-     * @param string $siteUrl
-     * @return OrganizationEntity
-     */
-    public function setSiteUrl(string $siteUrl = null): OrganizationEntity {
-        $this->siteUrl = $siteUrl;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTableNumber(): int {
-        return $this->tableNumber;
-    }
-
-    /**
-     * @param int $tableNumber
-     * @return OrganizationEntity
-     */
-    public function setTableNumber(int $tableNumber = 0): OrganizationEntity {
-        $this->tableNumber = $tableNumber;
-        return $this;
-    }
-
-    /**
-     * Get the value of address
+     * Get the value of oauthToken
      *
-     * @return  Address
+     * @return  string
      */ 
-    public function getAddress() {
-        return $this->address;
+    public function getOauthToken()
+    {
+        return $this->oauthToken;
     }
 
     /**
-     * Set the value of address
+     * Set the value of oauthToken
      *
-     * @param  Address  $address
+     * @param  string  $oauthToken
+     *
      * @return  self
      */ 
-    public function setAddress(Address $address) {
-        $this->address = $address;
+    public function setOauthToken(string $oauthToken = null) {
+        $this->oauthToken = $oauthToken;
         return $this;
     }
 }

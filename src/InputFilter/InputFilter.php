@@ -60,30 +60,29 @@ class InputFilter extends BaseInputFilter {
      * @return array
      */
     public function getValuesWrapper(array $data, InputFilter $inputFilter): array {
+
+        $inputs = $this->validationGroup ?: array_keys($this->inputs);
         $values = [];
-        $data = $this->getData();
-        foreach($data as $key => $value) {
-
-            if (!$inputFilter->has($key)) {
-                continue;
-            }
+       // $data = $this->getData();
+       foreach ($inputs as $name) {
             
-            $input = $inputFilter->get($key);
-
-
+            $input = $this->inputs[$name];
             
-            if ($input instanceof InputFilter && is_array($value)) {
-                $values[$key] = $input->getValuesWrapper($value, $input);
-            } elseif ($input instanceof InputFilterInterface && is_array($value)) {
+            if ($input instanceof InputFilterInterface) {
 
-                $values[$key] = $input->getValues();
-            } elseif ($input instanceof InputInterface) {
-
-                $value = $input->getValue();
-                if (in_array($key, $this->propertyToRemove) && !$value) {
+                $value = $input->getValues();
+                if (in_array($name, $this->propertyToRemove) || !isset($data[$name])) {
                     continue;
                 }
-                $values[$key] = $value;
+    
+                $values[$name] = $input->getValues();
+            } elseif ($input instanceof InputInterface) {
+
+                $value = $input->getValue();           
+                if (in_array($name, $this->propertyToRemove) && !$value) {
+                    continue;
+                }
+                $values[$name] = $value;
             }
         }
 

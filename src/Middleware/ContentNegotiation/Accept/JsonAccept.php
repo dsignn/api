@@ -25,6 +25,7 @@ class JsonAccept implements AcceptTransformInterface {
     public function transformAccept(Response $response, $data): Response {
         $computeData = [];
 
+
         switch (true) {
             case $data instanceof ResultSetPaginateInterface === true:
 
@@ -49,11 +50,18 @@ class JsonAccept implements AcceptTransformInterface {
                 $computeData = $data->toArray();
                 break;
             case $data instanceof EntityInterface === true:
-                $computeData = $this->getHydrator()->extract($data);
+                if ($this->getHydrator()) {
+                    $computeData = $this->getHydrator()->extract($data);
+                } else {
+                    $computeData = $data;
+                }
+                
                 break;
             case is_array($data) === true:
                 $computeData = $data;
                 break;
+            default:
+                $computeData = [$data];
         }
 
         $body = new Stream(fopen('php://temp', 'r+'));
@@ -63,8 +71,7 @@ class JsonAccept implements AcceptTransformInterface {
             return $response->withStatus(415);
         }
 
-        return $response->withStatus(200)
-            ->withHeader('Content-Type', 'application/json')
+        return $response->withHeader('Content-Type', 'application/json')
             ->withBody($body);
     }
 }

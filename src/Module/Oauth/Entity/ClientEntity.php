@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Module\Oauth\Entity;
 
+use App\Module\Organization\Entity\OrganizationAwareInterface;
+use App\Module\Organization\Entity\OrganizationAwareTrait;
 use App\Storage\Entity\EntityInterface;
 use App\Storage\Entity\EntityTrait as StorageEntityTrait;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
@@ -13,9 +15,9 @@ use League\OAuth2\Server\Entities\Traits\EntityTrait;
  * Class ClientEntity
  * @package App\Module\Oauth\Entity
  */
-class ClientEntity implements ClientEntityInterface, EntityInterface
+class ClientEntity implements ClientEntityInterface, EntityInterface, OrganizationAwareInterface
 {
-    use ClientTrait, EntityTrait, StorageEntityTrait;
+    use ClientTrait, EntityTrait, StorageEntityTrait, OrganizationAwareTrait;
 
     /**
      * @var
@@ -64,6 +66,4 @@ class ClientEntity implements ClientEntityInterface, EntityInterface
         $this->isConfidential = $isConfidential;
         return $this;
     }
-
-
 }

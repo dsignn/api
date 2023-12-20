@@ -14,6 +14,8 @@ use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
  */
 class AuthCodeRepository implements AuthCodeRepositoryInterface {
 
+    protected $storage;
+
     /**
      * AuthCodeRepository constructor.
      * @param StorageInterface $storage

@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Module\Monitor\Entity;
 
+use App\Module\Organization\Entity\OrganizationAwareInterface;
+use App\Module\Organization\Entity\OrganizationAwareTrait;
 use App\Storage\Entity\EntityInterface;
 use App\Storage\Entity\EntityTrait as StorageEntityTrait;
 
@@ -10,9 +12,10 @@ use App\Storage\Entity\EntityTrait as StorageEntityTrait;
  * Class MonitorEntity
  * @package App\Module\Monitor\Entity
  */
-class MonitorEntity implements EntityInterface {
+class MonitorEntity implements EntityInterface, OrganizationAwareInterface {
 
     use StorageEntityTrait;
+    use OrganizationAwareTrait;
 
     /**
      * @var
@@ -62,7 +65,7 @@ class MonitorEntity implements EntityInterface {
     /**
      * @var \stdClass
      */
-    protected $defaultTimeslotReference;
+    protected $defaultResourceReference;
 
 
     /**
@@ -196,16 +199,16 @@ class MonitorEntity implements EntityInterface {
     /**
      * @return mixed
      */
-    public function getDefaultTimeslotReference() {
-        return $this->defaultTimeslotReference;
+    public function getDefaultResourceReference() {
+        return $this->defaultResourceReference;
     }
 
     /**
-     * @param $defaultTimeslotReference
+     * @param $defaultResourceReference
      * @return MonitorEntity
      */
-    public function setDefaultTimeslotReference($defaultTimeslotReference): MonitorEntity {
-        $this->defaultTimeslotReference = $defaultTimeslotReference;
+    public function setDefaultResourceReference($defaultResourceReference): MonitorEntity {
+        $this->defaultResourceReference = $defaultResourceReference;
         return $this;
     }
 

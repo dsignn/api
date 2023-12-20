@@ -2,18 +2,27 @@
 declare(strict_types=1);
 
 use App\Middleware\Authentication\AuthenticationMiddleware;
+use App\Middleware\Authentication\InjectOrganizationByRoleMiddleware;
 use App\Middleware\Authorization\AuthorizationMiddleware;
 use App\Middleware\ContentNegotiation\Accept\AcceptContainer;
 use App\Middleware\ContentNegotiation\Accept\JsonAccept;
+use App\Middleware\ContentNegotiation\ContentNegotiationMiddleware;
 use App\Middleware\ContentNegotiation\ContentType\ContentTypeContainer;
 use App\Middleware\ContentNegotiation\ContentType\JsonContentType;
 use App\Middleware\ContentNegotiation\ContentType\MultipartFormDataContentType;
+use App\Middleware\QueryString\QueryStringMiddleware;
 use App\Middleware\Validation\ValidationMiddleware;
+use App\Module\Oauth\Storage\ClientStorageInterface;
+use App\Module\Organization\Entity\OrganizationEntity;
+use App\Module\Organization\Storage\OrganizationStorageInterface;
 use App\Module\User\Storage\UserStorageInterface;
 use DI\ContainerBuilder;
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Query;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Hydrator\Strategy\ClosureStrategy;
+use Laminas\Permissions\Acl\Acl;
+use Laminas\Permissions\Acl\Role\GenericRole;
 use League\OAuth2\Server\ResourceServer;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
@@ -86,18 +95,37 @@ return function (ContainerBuilder $containerBuilder) {
             return $twig;
         },
 
+        InjectOrganizationByRoleMiddleware::class => function(ContainerInterface $c) {
+
+            return new InjectOrganizationByRoleMiddleware();
+        },
+
         AuthenticationMiddleware::class => function(ContainerInterface $c) {
+
             return new AuthenticationMiddleware(
                 $c->get(ResourceServer::class),
                 $c->get(UserStorageInterface::class),
+                $c->get(OrganizationStorageInterface::class),
                 $c->get('AccessTokenStorage'),
-                $c->get('ClientStorage'),
+                $c->get(ClientStorageInterface::class),
                 $c->get('settings')['authentication']
             );
         },
 
+        Acl::class => function(ContainerInterface $c) {
+            $roles = $c->get('settings')['authorizationRoles'];
+            $acl = new Acl();
+
+            for ($cont = 0; $cont < count($roles); $cont++) {
+                $acl->addRole(new GenericRole($roles[$cont]));
+            }
+
+            return $acl;
+        },
+
         AuthorizationMiddleware::class => function(ContainerInterface $c) {
             return new AuthorizationMiddleware(
+                $c->get(Acl::class),
                 $c->get('settings')['authorization']
             );
         },
@@ -131,6 +159,20 @@ return function (ContainerBuilder $containerBuilder) {
             );
         },
 
+        "ContentNegotiationMiddleware" => function(ContainerInterface $c) {
+
+            $contentNegotiationMiddleware = new ContentNegotiationMiddleware($c->get('settings')['contentNegotiation'], $c);
+            $contentNegotiationMiddleware->setAcceptContainer($c->get(AcceptContainer::class))
+                ->setContentTypeContainer($c->get(ContentTypeContainer::class));
+            $contentNegotiationMiddleware->setDefaultAcceptServices([
+                'application/json' => JsonAccept::class
+            ])->setDefaultContentTypeServices([
+                'application/json' => JsonContentType::class
+            ]);
+
+            return $contentNegotiationMiddleware;
+        },
+
         "MongoIdRestStrategy" => function(ContainerInterface $c) {
             return new ClosureStrategy(
                 function ($value) {
@@ -148,7 +190,6 @@ return function (ContainerBuilder $containerBuilder) {
                 }
             );
         },
-
 
         "EntityDateRestStrategy" => function(ContainerInterface $c) {
             return new ClosureStrategy(
@@ -172,7 +213,6 @@ return function (ContainerBuilder $containerBuilder) {
             );
         },
 
-
         "ReferenceMongoHydrator" =>  function(ContainerInterface $c) {
             $hydrator = new ClassMethodsHydrator();
             $hydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
@@ -185,8 +225,11 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
             $hydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
             return $hydrator;
+        },
+
+        QueryStringMiddleware::class => function(ContainerInterface $c) {
+     
+            return new QueryStringMiddleware($c);
         }
-
-
     ]);
 };

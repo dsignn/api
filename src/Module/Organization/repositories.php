@@ -8,14 +8,12 @@ use App\Hydrator\Strategy\NamingStrategy\CamelCaseStrategy;
 use App\Module\Organization\Entity\Embedded\Address\Address;
 use App\Module\Organization\Entity\Embedded\Phone\Phone;
 use App\Module\Organization\Entity\OrganizationEntity;
-use App\Module\Organization\Event\SluggerNameEvent;
 use App\Module\Organization\Storage\adapter\Mongo\OrganizationMongoAdapter;
 use App\Module\Organization\Storage\OrganizationStorage;
 use App\Module\Organization\Storage\OrganizationStorageInterface;
 use App\Module\Organization\Url\GenericSlugify;
 use App\Module\Organization\Url\SlugifyInterface;
 use App\Module\Organization\Validator\HasOrganization;
-use App\Module\Organization\Validator\UniqueNameOrganization;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydratePaginateResultSet;
 use App\Storage\Adapter\Mongo\ResultSet\MongoHydrateResultSet;
 use App\Storage\Entity\Reference;
@@ -27,8 +25,10 @@ use Laminas\Filter\ToInt;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\InputFilter\Input;
 use App\InputFilter\InputFilter;
-use Laminas\Validator\Digits;
-use Laminas\Validator\InArray;
+use App\Module\Organization\Validator\OrganizationSaveValidator;
+use Laminas\Hydrator\Filter\FilterComposite;
+use Laminas\Hydrator\Filter\GetFilter;
+use Laminas\Hydrator\Filter\MethodMatchFilter;
 use MongoDB\Client;
 use Psr\Container\ContainerInterface;
 
@@ -59,8 +59,6 @@ return function (ContainerBuilder $containerBuilder) {
             $storage->setHydrator($hydrator);
             $storage->setEntityPrototype($c->get('OrganizationEntityPrototype'));
 
-            $storage->getEventManager()->attach(Storage::$BEFORE_SAVE, new SluggerNameEvent($c->get(SlugifyInterface::class)));
-            $storage->getEventManager()->attach(Storage::$BEFORE_UPDATE, new SluggerNameEvent($c->get(SlugifyInterface::class)));
             return $storage;
         }
     ])->addDefinitions([
@@ -75,11 +73,10 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->setNamingStrategy(new CamelCaseStrategy());
             $hydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
             $hydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
-            $hydrator->addStrategy('qrCode', new HydratorStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
-            $hydrator->addStrategy('qrCodeDelivery', new HydratorStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
             $hydrator->addStrategy('logo', new HydratorStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
-            $hydrator->addStrategy('whatsappPhone', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Phone())));
-            $hydrator->addStrategy('address', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Address())));
+
+            $hydrator->addFilter('identifier', new MethodMatchFilter('getIdentifier'), FilterComposite::CONDITION_AND);
+            
             return $hydrator;
         }
     ])->addDefinitions([
@@ -93,11 +90,10 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
             $hydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
             $hydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
-            $hydrator->addStrategy('qrCode', new HydratorStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
-            $hydrator->addStrategy('qrCodeDelivery', new HydratorStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
             $hydrator->addStrategy('logo', new HydratorStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
-            $hydrator->addStrategy('whatsappPhone', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Phone())));
-            $hydrator->addStrategy('address', new HydratorStrategy(new ClassMethodsHydrator(), new SingleEntityPrototype(new Address())));
+
+            $hydrator->addFilter('identifier', new MethodMatchFilter('getIdentifier'), FilterComposite::CONDITION_AND);
+           
             return $hydrator;
         }
     ])->addDefinitions([
@@ -111,25 +107,7 @@ return function (ContainerBuilder $containerBuilder) {
             $name->getFilterChain()
                 ->attach(new StringToLower());
 
-            $name->getValidatorChain()
-                ->attach($c->get(UniqueNameOrganization::class));
-
             $inputFilter->add($name);
-
-            $price = new InputFilter();
-
-            $input = new Input('number');
-            $input->setRequired(false);
-            $input->getFilterChain()->attach(new ToInt());
-            $price->add($input, 'number');
-
-            $input = new Input('prefix');
-            $input->setRequired(false);
-            $input->getValidatorChain()->attach(new InArray( ['haystack' => getPrefix()]));
-            $price->add($input, 'prefix');
-
-            $menuItem = new InputFilter();
-            $menuItem->add($price, 'whatsappPhone');
 
             return $inputFilter;
         }
@@ -145,50 +123,13 @@ return function (ContainerBuilder $containerBuilder) {
                 ->attach(new StringToLower());
 
             $input->getValidatorChain()
-                ->attach($c->get(UniqueNameOrganization::class)->setFindIdInRequest(true));
+                ->attach($c->get(OrganizationSaveValidator::class)->setFindIdInRequest(true));
 
-            $inputFilter->add($input);
-
-            $input = new Input('qrCode');
-            $input->setRequired(false);
-            $inputFilter->add($input);
-
-            $input = new Input('qrCodeDelivery');
-            $input->setRequired(false);
             $inputFilter->add($input);
 
             $input = new Input('logo');
             $input->setRequired(false);
             $inputFilter->add($input);
-
-            $input = new Input('siteUrl');
-            $input->setRequired(false);
-            $inputFilter->add($input);
-
-            $price = new InputFilter();
-
-            $input = new Input('number');
-            $input->setRequired(false);
-            $input->getFilterChain()->attach(new ToInt());
-            $price->add($input, 'number');
-
-            $input = new Input('prefix');
-            $input->setRequired(false);
-            $input->getValidatorChain()->attach(new InArray( ['haystack' => getPrefix()]));
-            $price->add($input, 'prefix');
-
-            $inputFilter->add($price, 'whatsappPhone');
-
-            $input = new Input('tableNumber');
-            $input->setRequired(false);
-            $input->getFilterChain()->attach(new ToInt());
-            $input->getValidatorChain()->attach(new Digits());
-            $inputFilter->add($input);
-
-            // TODO add in other service
-            $inputFilterAddress = new Input('address');
-            $inputFilterAddress->setRequired(false);
-            $inputFilter->add($inputFilterAddress);
 
             return $inputFilter;
         }
@@ -197,8 +138,8 @@ return function (ContainerBuilder $containerBuilder) {
             return new SingleEntityPrototype(new OrganizationEntity());
         }
     ])->addDefinitions([
-        UniqueNameOrganization::class => function(ContainerInterface $c) {
-            return new UniqueNameOrganization($c->get(OrganizationStorageInterface::class), $c);
+        OrganizationSaveValidator::class => function(ContainerInterface $c) {
+            return new OrganizationSaveValidator($c->get(OrganizationStorageInterface::class), $c);
         }
     ])->addDefinitions([
         HasOrganization::class => function(ContainerInterface $c) {
@@ -207,6 +148,22 @@ return function (ContainerBuilder $containerBuilder) {
     ])->addDefinitions([
         SlugifyInterface::class => function(ContainerInterface $c) {
             return new GenericSlugify();
+        }
+    ])->addDefinitions([
+        'OrganizationReferenceStorageHydrator' => function(ContainerInterface $c) {
+            $organizationHydrator = new ClassMethodsHydrator();
+            $organizationHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
+            $organizationHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
+
+            return $organizationHydrator;
+        }
+    ])->addDefinitions([
+        'OrganizationReferenceRestHydrator' => function(ContainerInterface $c) {
+            $organizationHydrator = new ClassMethodsHydrator();
+            $organizationHydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
+            $organizationHydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
+
+            return $organizationHydrator;
         }
     ]);
 };

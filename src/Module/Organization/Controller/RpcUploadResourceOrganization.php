@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\Module\Organization\Controller;
 
+use App\Controller\AcceptTrait;
 use App\Controller\RpcControllerInterface;
-use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
 use App\Module\Organization\Entity\OrganizationEntity;
 use App\Module\Organization\Storage\OrganizationStorageInterface;
 use App\Module\Resource\Storage\ResourceStorageInterface;
@@ -24,7 +24,7 @@ use Slim\Psr7\Factory\StreamFactory;
  */
 class RpcUploadResourceOrganization implements RpcControllerInterface {
 
-    use AcceptServiceAwareTrait;
+    use AcceptTrait;
 
     /**
      * @var string
@@ -74,12 +74,8 @@ class RpcUploadResourceOrganization implements RpcControllerInterface {
             $validator = $request->getAttribute('app-validation');
             $validator->setData($data);
             if (!$validator->isValid()) {
-                $acceptService = $this->getAcceptService($request);
-                $response = $acceptService->transformAccept(
-                    $response,
-                    ['errors' => $validator->getMessages()]
-                );
-                return $response->withStatus(422);
+                $response = $response->withStatus(422);
+                return $this->getAcceptData($request, $response, ['errors' => $validator->getMessages()]);
             }
 
             $data = $validator->getValues();
@@ -106,8 +102,7 @@ class RpcUploadResourceOrganization implements RpcControllerInterface {
         $entity->setLogo(new Reference($resourceEntity->getId(), 'resource'));
         $this->organizationStorage->update($entity);
 
-        $acceptService = $this->getAcceptService($request);
-        return $acceptService->transformAccept($response, $entity);
+        return $this->getAcceptData($request, $response, $entity);
     }
 
     /**

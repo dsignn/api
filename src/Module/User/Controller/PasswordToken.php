@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace App\Module\User\Controller;
 
+use App\Controller\AcceptTrait;
 use App\Controller\RpcControllerInterface;
 use App\Crypto\CryptoInterface;
 use App\Mail\Contact;
 use App\Mail\ContactInterface;
 use App\Mail\MailerInterface;
-use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
 use App\Module\User\Entity\UserEntity;
 use App\Module\User\Mail\UserMailerInterface;
 use App\Module\User\Storage\UserStorageInterface;
@@ -23,12 +23,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 class PasswordToken implements RpcControllerInterface {
 
-    use AcceptServiceAwareTrait;
-
-    /**
-     * @var string
-     */
-    protected $hydratorService = 'RpcPasswordUserEntityHydrator';
+    use AcceptTrait;
 
     /**
      * @var StorageInterface
@@ -76,7 +71,14 @@ class PasswordToken implements RpcControllerInterface {
 
         $data = $request->getParsedBody();
 
-        // TODO validate data
+        if (count($data) === 0 || !isset($data['identifier'])) {
+            // TODO LOCALIZATION
+            $response = $response->withStatus(422);
+
+            return $this->getAcceptData($request, $response, ['errors' => 
+                ['identifier' => "Must be not empty"]
+            ]);
+        }
 
         $resultSet = $this->storage->getAll(['email' => $data['identifier']]);
         /** @var UserEntity $user */
@@ -97,8 +99,7 @@ class PasswordToken implements RpcControllerInterface {
         $toContact->setName($user->getName());
         $this->mailer->send([$toContact], $this->from ,'Change password', $this->getBodyMessage($user, $url));
 
-        $AcceptService = $this->getAcceptService($request);
-        return $AcceptService->transformAccept($response, $user);
+        return $this->getAcceptData($request, $response, $user);
     }
 
     /**

@@ -4,8 +4,11 @@ declare(strict_types=1);
 namespace App\Hydrator\Strategy\Mongo;
 
 use DateTimeInterface;
+use Exception;
 use Laminas\Hydrator\Strategy\StrategyInterface;
 use MongoDB\BSON\UTCDateTime;
+
+use function DI\value;
 
 /**
  * Class MongoDateStrategy
@@ -31,7 +34,6 @@ class MongoDateStrategy implements StrategyInterface {
      */
     public function extract($value, ?object $object = null) {
 
-
         if ($value instanceof DateTimeInterface) {
             $value = new UTCDateTime($value);
         }
@@ -46,16 +48,6 @@ class MongoDateStrategy implements StrategyInterface {
 
         $dateTime = clone $this->getDatePrototype();
         switch (true) {
-            /*
-            case $value instanceof MongoDate === true && $dateTime instanceof \DateTimeImmutable === true:
-                /** @var MongoDate $value
-                $value = \DateTimeImmutable::createFromMutable((new \DateTime())->setTimestamp($value->sec));
-                break;
-            case $value instanceof MongoDate === true && $dateTime instanceof \DateTime === true:
-                /** @var MongoDate $value
-                $value = $dateTime->setTimestamp($value->sec);
-                break;
-            */
             case $value instanceof UTCDateTime === true && $dateTime instanceof \DateTimeImmutable === true:
                 /** @var UTCDateTime $value */
                 $value = \DateTimeImmutable::createFromMutable($value->toDateTime());
@@ -64,7 +56,22 @@ class MongoDateStrategy implements StrategyInterface {
                 /** @var UTCDateTime $value */
                 $value = $value->toDateTime();
                 break;
+            case is_string($value) && !empty($value) && $dateTime instanceof \DateTimeImmutable === true:
+                try {
+                    $value = \DateTimeImmutable::createFromMutable(new \DateTime($value));
+                } catch (Exception $ex) {
+                    // TODO LOGGGG
+                }
+                break;
+            case is_string($value) && !empty($value) && $dateTime instanceof \DateTime === true:
+                try {
+                    $value = new \DateTime($value);
+                } catch (Exception $ex) {
+                    // TODO LOGGGG
+                }
+                break;
         }
+
         return $value;
     }
 

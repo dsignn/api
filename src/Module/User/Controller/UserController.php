@@ -16,11 +16,6 @@ use Psr\Container\ContainerInterface;
 class UserController extends RestController implements RestControllerInterface {
 
     /**
-     * @var string
-     */
-    protected $hydratorService = 'RestUserEntityHydrator';
-
-    /**
      * @inheritDoc
      */
     public function __construct(UserStorageInterface $storage, ContainerInterface $container) {

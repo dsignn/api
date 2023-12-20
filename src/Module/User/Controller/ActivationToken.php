@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\Module\User\Controller;
 
+use App\Controller\AcceptTrait;
 use App\Controller\RpcControllerInterface;
-use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
 use App\Module\User\Entity\UserEntity;
 use App\Module\User\Storage\UserStorageInterface;
 use App\Storage\StorageInterface;
@@ -18,12 +18,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 class ActivationToken implements RpcControllerInterface {
 
-    use AcceptServiceAwareTrait;
-
-    /**
-     * @var string
-     */
-    protected $hydratorService = 'RestUserEntityHydrator';
+    use AcceptTrait;
 
     /**
      * @var StorageInterface
@@ -49,6 +44,13 @@ class ActivationToken implements RpcControllerInterface {
 
         // TODO validation
 
+        if (count($data) === 0 || !isset($data['token'])) {
+            // TODO LOCALIZATION
+            $response = $response->withStatus(422);
+
+            return $this->getAcceptData($request, $response, ['errors' => 'No token in query string']);
+        }
+
         $resultSet = $this->storage->getAll(['activation_code.token' => $data['token']]);
         /** @var UserEntity $user */
         $user = $resultSet->current();
@@ -59,7 +61,6 @@ class ActivationToken implements RpcControllerInterface {
         $user->setStatus(UserEntity::$STATUS_ENABLE);
         $this->storage->update($user);
 
-        $AcceptService = $this->getAcceptService($request);
-        return $AcceptService->transformAccept($response, $user);
+        return $this->getAcceptData($request, $response, $user);
     }
 }
