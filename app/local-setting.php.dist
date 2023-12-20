@@ -82,7 +82,6 @@ return function (&$setting) {
                     ],
                     'bucket' => 'digital-signage-test-3'
                 ],
-                'order-cors' => 'dsign.local:8081',
                 'authorizationRoles' => [
                     'admin',
                     'organizationOwner',
