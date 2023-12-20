@@ -2,15 +2,16 @@
 declare(strict_types=1);
 
 use App\Middleware\ContentNegotiation\ContentType\MultipartFormDataContentType;
-use Graze\ArrayMerger\RecursiveArrayMerger;
+use App\Module\Resource\Http\QueryString\ResourceQueryString;
+//use Graze\ArrayMerger\RecursiveArrayMerger;
 
 /**
  * Resource settings
  */
 return function (&$setting) {
 
-    $merger = new RecursiveArrayMerger();
-    $setting = $merger->merge(
+    //$merger = new RecursiveArrayMerger();
+    $setting = array_merge_recursive(
         $setting,
         [
             "settings" => [
@@ -23,6 +24,7 @@ return function (&$setting) {
                     '/resource' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestResourceEntityHydrator',
                             'contentTypeFilter' => ['/multipart\/form-data/'],
                             'contentTypeService' => MultipartFormDataContentType::class
                         ]
@@ -30,6 +32,7 @@ return function (&$setting) {
                     '/resource/all' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestResourceEntityHydrator',
                             'contentTypeFilter' => ['/multipart\/form-data/'],
                             'contentTypeService' => MultipartFormDataContentType::class
                         ]
@@ -37,11 +40,13 @@ return function (&$setting) {
                     '/resource/{id:[0-9a-fA-F]{24}}' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestResourceEntityHydrator',
                             'contentTypeFilter' => ['/multipart\/form-data/'],
                             'contentTypeService' => MultipartFormDataContentType::class
                         ],
                         'PUT' => [
                             'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestResourceEntityHydrator',
                             'contentTypeFilter' => ['/multipart\/form-data/'],
                             'contentTypeService' => MultipartFormDataContentType::class
                         ]
@@ -70,8 +75,62 @@ return function (&$setting) {
                         'POST' => 'ResourcePostValidator'
                     ],
                     '/resource/{id:[0-9a-fA-F]{24}}' => [
-                        'PATCH' => 'ResourceValidator'
+                      //  'PATCH' => 'ResourceValidator'
+                        'POST' => 'ResourceValidator'
                     ]
+                ],
+                'authorization' => [
+                    '/resource' => [
+                        'admin' => [
+                            'allow' => true,
+                        ],
+                        'organizationOwner' => [
+                            'allow' => true,
+                            'privileges' => [
+                                [
+                                    "method" => "GET",
+                                    'allow' => true,
+                                ],
+                                [
+                                    "method" => "POST",
+                                    'allow' => true,
+                                ]
+                            ]
+                        ]
+                    ],
+                    '/resource/{id:[0-9a-fA-F]{24}}' => [
+                        'admin' => [
+                            'allow' => true,
+                        ],
+                        'organizationOwner' => [
+                            'allow' => true,
+                        ]
+                    ],
+                    '/resource/all' => [
+                        'admin' => [
+                            'allow' => true,
+                        ],
+                        'organizationOwner' => [
+                            'allow' => true,
+                        ]
+                    ]
+                ],
+                'queryString' => [
+                    '/resource' => [
+                        'default' => [
+                            'service' => ResourceQueryString::class
+                        ]
+                    ],
+                    '/resource/{id:[0-9a-fA-F]{24}}' => [
+                        'default' => [
+                            'service' => ResourceQueryString::class
+                        ]
+                    ],
+                    '/resource/all' => [
+                        'default' => [
+                            'service' => ResourceQueryString::class
+                        ]
+                    ]             
                 ],
             ]
         ]

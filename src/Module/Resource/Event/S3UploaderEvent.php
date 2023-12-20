@@ -229,6 +229,8 @@ class S3UploaderEvent {
 
         $nameFile = $entity->getS3path() ? $entity->getS3path() : $this->uuid();
 
+        
+
         /** @var Result $result */
         $result = $this->s3Client->putObject(
             array(

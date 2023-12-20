@@ -16,8 +16,16 @@ use Slim\Psr7\Response as ResponseSlim;
  */
 class CorsMiddleware implements Middleware
 {
+    /**
+     * @var string
+     */
     public static $ORIGIN_HEADER = 'Origin';
 
+    /**
+     * @var string
+     */
+    public static $REFERER_HEADER = 'Referer';
+  
     /**
      * @var bool
      */
@@ -33,16 +41,16 @@ class CorsMiddleware implements Middleware
      */
     public function process(Request $request, RequestHandler $handler): Response
     {
-        $header = $request->getHeaderLine(CorsMiddleware::$ORIGIN_HEADER);
-
         if (CorsMiddleware::isXhr($request)) {
+            $headerString = CorsMiddleware::getCorsRequestHeader($request);
             switch (true) {
                 case $this->isWildCard === true:
-                    return CorsMiddleware::addCorsHeader($handler->handle($request),'*', ['PUT', 'DELETE', 'POST', 'GET', 'PATCH', 'OPTIONS']);
+                    return CorsMiddleware::addCorsHeader($handler->handle($request), '*', ['PUT', 'DELETE', 'POST', 'GET', 'PATCH', 'OPTIONS']);
                     break;
                 default:
-                    if (in_array($this->enableHost)) {
-                        return CorsMiddleware::addCorsHeader($handler->handle($request), $header, ['PUT', 'DELETE', 'POST', 'GET', 'PATCH', 'OPTIONS']);
+                    // TODO controll
+                    if (in_array($headerString, $this->enableHost)) {
+                        return CorsMiddleware::addCorsHeader($handler->handle($request), $headerString, ['PUT', 'DELETE', 'POST', 'GET', 'PATCH', 'OPTIONS']);
                     } else {
                         $response = new ResponseSlim();
                         return $response->withStatus(403);
@@ -61,6 +69,7 @@ class CorsMiddleware implements Middleware
      * @return Response
      */
     public static function addCorsHeader(ResponseInterface $response, $allowOrigin, array $allowMethod) {
+
         return $response->withHeader('Access-Control-Allow-Credentials', 'true')
             ->withHeader('Access-Control-Allow-Origin', $allowOrigin)
             ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
@@ -76,7 +85,7 @@ class CorsMiddleware implements Middleware
     public static function isXhr(Request $request) {
 
         $isXhr = false;
-        if ($request->getHeaderLine('Origin') || $request->getHeaderLine('Referer')) {
+        if ($request->getHeaderLine(CorsMiddleware::$ORIGIN_HEADER) || $request->getHeaderLine(CorsMiddleware::$REFERER_HEADER)) {
             $isXhr = true;
         }
         return  $isXhr;
@@ -88,5 +97,16 @@ class CorsMiddleware implements Middleware
     protected function isEnableOrigin($origin) {
 
 
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Request $request
+     * @return void|string
+     */
+    static function getCorsRequestHeader(Request $request) {
+        return $request->getHeaderLine(CorsMiddleware::$ORIGIN_HEADER) ? $request->getHeaderLine(CorsMiddleware::$ORIGIN_HEADER) :
+            ($request->getHeaderLine(CorsMiddleware::$REFERER_HEADER) ? $request->getHeaderLine(CorsMiddleware::$REFERER_HEADER) : null);
     }
 }

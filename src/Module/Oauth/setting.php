@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-use Graze\ArrayMerger\RecursiveArrayMerger;
+//use Graze\ArrayMerger\RecursiveArrayMerger;
 
 return function (&$setting) {
 
-    $merger = new RecursiveArrayMerger();
-    $setting = $merger->merge(
+    //$merger = new RecursiveArrayMerger();
+    $setting = array_merge_recursive(
         $setting,
         [
             "settings" => [
@@ -14,9 +14,36 @@ return function (&$setting) {
                     '/me' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestUserEntityHydrator',
                             'contentTypeFilter' => ['/application\/json/']
                         ]
                     ],
+                    '/my-org' => [
+                        'default' => [
+                            'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestOrganizationEntityHydrator',
+                            'contentTypeFilter' => ['/application\/json/']
+                        ]
+                    ],
+                    '/oauth/client' => [
+                        'default' => [
+                            'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestClientEntityHydrator',
+                            'contentTypeFilter' => ['/application\/json/']
+                        ]
+                    ],
+                    '/oauth/client/{id:[0-9a-fA-F]{24}}' => [
+                        'default' => [
+                            'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestClientEntityHydrator',
+                            'contentTypeFilter' => ['/application\/json/']
+                        ]
+                    ]
+                ],
+                'validation' => [
+                    '/oauth/client' => [
+                        'POST' => 'ClientPostValidation'
+                    ]
                 ],
                 'oauth' => [
                     'encryption-key' => 'h1Z6HajxU9ObuJKotafqqxriGuuuRhqSd1VZK7wAnXU=',

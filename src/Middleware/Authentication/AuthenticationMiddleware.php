@@ -5,6 +5,7 @@ namespace App\Middleware\Authentication;
 
 use App\Module\Oauth\Entity\AccessTokenEntity;
 use App\Module\Oauth\Entity\ClientEntity;
+use App\Module\Organization\Entity\OrganizationEntity;
 use App\Module\User\Entity\UserEntity;
 use App\Storage\StorageInterface;
 use Exception;
@@ -35,6 +36,11 @@ class AuthenticationMiddleware implements Middleware {
     /**
      * @var StorageInterface
      */
+    protected $organizationStorage;
+
+    /**
+     * @var StorageInterface
+     */
     protected $tokenStorage;
 
     /**
@@ -51,13 +57,21 @@ class AuthenticationMiddleware implements Middleware {
      * AuthenticationMiddleware constructor.
      * @param ResourceServer $server
      * @param StorageInterface $userStorage
+     * @param StorageInterface $organizationStorage
      * @param StorageInterface $tokenStorage
      * @param StorageInterface $clientStorage
      * @param array $settings
      */
-    public function __construct(ResourceServer $server, StorageInterface $userStorage, StorageInterface $tokenStorage, StorageInterface $clientStorage, array $settings = []) {
+    public function __construct(ResourceServer $server, 
+        StorageInterface $userStorage, 
+        StorageInterface $organizationStorage, 
+        StorageInterface $tokenStorage, 
+        StorageInterface $clientStorage, 
+        array $settings = []) {
+
         $this->server = $server;
         $this->userStorage = $userStorage;
+        $this->organizationStorage = $organizationStorage;
         $this->tokenStorage = $tokenStorage;
         $this->clientStorage = $clientStorage;
         $this->settings = $settings;
@@ -70,7 +84,12 @@ class AuthenticationMiddleware implements Middleware {
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
 
-        if ($this->skip($request) || $request->getMethod() === 'OPTIONS') {
+        // TODO refactor add in other middleware
+        if (isset($request->getQueryParams()['auth'])) {
+            $request = $request->withAddedHeader('authorization', 'Bearer ' . $request->getQueryParams()['auth']);        
+        }
+
+        if (($this->isPublic($request) && !$request->getHeaderLine('authorization')) || $request->getMethod() === 'OPTIONS' ) {
             return $handler->handle($request);
         }
 
@@ -85,6 +104,7 @@ class AuthenticationMiddleware implements Middleware {
 
         return $handler->handle(
             $request->withAttribute('app-user', $this->getUser($request->getAttribute('oauth_user_id')))
+                ->withAttribute('app-organization', $this->getOrganization($request->getAttribute('oauth_user_id')))
                 ->withAttribute('app-client', $this->getClient($request->getAttribute('oauth_access_token_id')))
         );
     }
@@ -95,6 +115,7 @@ class AuthenticationMiddleware implements Middleware {
      */
     protected function getUser($identifier) {
 
+        // TODO get aggregate query
         $user = null;
         if ($identifier) {
             $resultSet = $this->userStorage->getAll(
@@ -102,9 +123,39 @@ class AuthenticationMiddleware implements Middleware {
             );
 
             $user = $resultSet->current();
+
+            if ($user) {
+                $organizations = $user->getOrganizations(); 
+                $orgs = [];
+                foreach ($organizations as &$value) {
+                   array_push($orgs, $this->organizationStorage->get($value->getId())); 
+                }
+
+                $user->setOrganizations($orgs); 
+            }
+        }
+       
+        return $user;
+    }
+
+    /**
+     * @param $identifier
+     * @return OrganizationEntity|null
+     */
+    protected function getOrganization($identifier) {
+        $org = null;
+        if (str_contains($identifier, 'organization_')) {
+
+            $stringId = str_replace("organization_", "", "$identifier");
+    
+            try { 
+                $org = $this->organizationStorage->get($stringId);
+            } catch (Exception $e) {
+                // TODO Log error
+            }
         }
 
-        return $user;
+        return $org;
     }
 
     /**
@@ -137,14 +188,18 @@ class AuthenticationMiddleware implements Middleware {
      * @param ServerRequestInterface $request
      * @return bool
      */
-    protected function skip(ServerRequestInterface $request) {
+    protected function isPublic(ServerRequestInterface $request) {
 
-        $skip = false;
+        $isPublic = false;
         $path = $request->getAttribute('__route__')->getPattern();
-        if (isset($this->settings[$path]) && is_array($this->settings[$path]) && isset($this->settings[$path][$request->getMethod()])) {
-            $skip = (bool) $this->settings[$path][$request->getMethod()];
+        if (isset($this->settings[$path]) && 
+            is_array($this->settings[$path]) && 
+            isset($this->settings[$path][$request->getMethod()]) &&
+            isset($this->settings[$path][$request->getMethod()]['public'])) {
+
+            $isPublic = $this->settings[$path][$request->getMethod()]['public'];
         }
 
-        return $skip;
+        return $isPublic;
     }
-}
+} 

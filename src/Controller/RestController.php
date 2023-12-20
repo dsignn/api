@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
 use App\Storage\Event\PreProcess;
 use App\Storage\StorageInterface;
 use Laminas\InputFilter\InputFilterInterface;
@@ -12,11 +11,15 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
+use function DI\get;
+
 /**
  * Class RestController
  * @package App\Controller
  */
 class RestController implements RestControllerInterface {
+
+    use AcceptTrait;
 
     /**
      * @var string
@@ -27,11 +30,6 @@ class RestController implements RestControllerInterface {
      * @var string
      */
     static public $PREPROCESS_PATCH = 'preprocess_patch';
-
-    /**
-     *
-     */
-    use AcceptServiceAwareTrait;
 
     /**
      * @var string
@@ -70,8 +68,7 @@ class RestController implements RestControllerInterface {
             return $response->withStatus(404);
         }
 
-        $acceptService = $this->getAcceptService($request);
-        return $acceptService->transformAccept($response, $entity);
+        return $this->getAcceptData($request, $response, $entity);
     }
 
     /**
@@ -82,33 +79,30 @@ class RestController implements RestControllerInterface {
         $data = $this->getData($request);
 
         if ($request->getAttribute('app-validation')) {
+           
             /** @var InputFilterInterface $validator */
             $validator = $request->getAttribute('app-validation');
             $validator->setData($data);
+          
             if (!$validator->isValid()) {
-                $acceptService = $this->getAcceptService($request);
-                $response = $acceptService->transformAccept(
-                    $response,
-                    ['errors' => $validator->getMessages()]
-                );
-                return $response->withStatus(422);
+                $response = $response->withStatus(422);
+                return $this->getAcceptData($request, $response, ['errors' => $validator->getMessages()]);
             }
 
             $data = $validator->getValues();
         }
 
         $entity = $this->storage->getEntityPrototype()->getPrototype($data);
-
+   
         $preprocess = new PreProcess($entity, $data);
         $this->storage->getEventManager()->trigger(RestController::$PREPROCESS_POST, $preprocess);
         $data = $preprocess->getData();
 
-        $this->storage->getHydrator()->hydrate($data, $entity);
-        // Preprocess data we can manipulate data and entity
-
+        
+        $this->storage->getHydrator()->hydrate($data, $entity); 
         $this->storage->save($entity);
-        $acceptService = $this->getAcceptService($request);
-        return $acceptService->transformAccept($response, $entity);
+    
+        return $this->getAcceptData($request, $response, $entity);
     }
 
     /**
@@ -125,31 +119,24 @@ class RestController implements RestControllerInterface {
 
         $data = $this->getData($request);
 
-
         if ($request->getAttribute('app-validation')) {
             /** @var InputFilterInterface $validator */
             $validator = $request->getAttribute('app-validation');
             $validator->setData($data);
             if (!$validator->isValid()) {
-                $acceptService = $this->getAcceptService($request);
-                $response = $acceptService->transformAccept(
-                    $response,
-                    ['errors' => $validator->getMessages()]
-                );
-                return $response->withStatus(422);
+                $response = $response->withStatus(422);
+                return $this->getAcceptData($request, $response, ['errors' => $validator->getMessages()]);
             }
-
             $data = $validator->getValues();
         }
 
-        $putEntity = clone $this->storage->getEntityPrototype()->getPrototype($request->getParsedBody());
-        $this->storage->getHydrator()->hydrate($data, $putEntity);
-        $putEntity->setId($id);
+        //$putEntity = clone $this->storage->getEntityPrototype()->getPrototype($request->getParsedBody());
+        $this->storage->getHydrator()->hydrate($data, $entity);
+        //$putEntity->setId($id);
 
-        $this->storage->update($putEntity);
+        $this->storage->update($entity);
 
-        $acceptService = $this->getAcceptService($request);
-        return $acceptService->transformAccept($response, $putEntity);
+        return $this->getAcceptData($request, $response, $entity);
     }
 
     /**
@@ -171,12 +158,8 @@ class RestController implements RestControllerInterface {
             $validator = $request->getAttribute('app-validation');
             $validator->setData($data);
             if (!$validator->isValid()) {
-                $acceptService = $this->getAcceptService($request);
-                $response = $acceptService->transformAccept(
-                    $response,
-                    ['errors' => $validator->getMessages()]
-                );
-                return $response->withStatus(422);
+                $response = $response->withStatus(422);
+                return $this->getAcceptData($request, $response, ['errors' => $validator->getMessages()]);
             }
 
             $data = $validator->getValues();
@@ -192,8 +175,7 @@ class RestController implements RestControllerInterface {
         $this->storage->getHydrator()->hydrate($data, $entity);
         $this->storage->update($entity);
 
-        $acceptService = $this->getAcceptService($request);
-        return $acceptService->transformAccept($response, $entity);
+        return $this->getAcceptData($request, $response, $entity);
     }
 
     /**
@@ -202,7 +184,7 @@ class RestController implements RestControllerInterface {
     public function delete(Request $request, Response $response) {
 
         $id = $request->getAttribute('__route__')->getArgument('id');
-
+        
         if (!$this->storage->delete($id)) {
             return $response->withStatus(404);
         }
@@ -215,17 +197,22 @@ class RestController implements RestControllerInterface {
      */
     public function paginate(Request $request, Response $response) {
 
-        $filter = $request->getAttribute('app-data-filter');
+        $filter = $request->getAttribute('app-query-string');
         $query =  array_merge($filter ? $filter : [], $request->getQueryParams());
 
         $page = isset($query['page']) ? intval($query['page']) ? intval($query['page']) : 1 : 1;
         unset($query['page']);
         $itemPerPage = isset($query['item-per-page']) ? intval($query['item-per-page']) ? intval($query['item-per-page']) : 10 : 10;
         unset($query['item-per-page']);
+      
+        $storageFilter = $request->getAttribute('app-storage-filter');
+        if ($storageFilter) {
+            $query = $storageFilter->computeQueryString($query);
+        }
+        
         $pagination = $this->storage->getPage($page, $itemPerPage, $query);
 
-        $acceptService = $this->getAcceptService($request);
-        return $acceptService->transformAccept($response, $pagination);
+        return $this->getAcceptData($request, $response, $pagination);
     }
 
     /**
@@ -243,7 +230,11 @@ class RestController implements RestControllerInterface {
      */
     protected function getData(Request $request) {
 
-        $data = array_merge($request->getParsedBody(), $request->getUploadedFiles());
+        $data = array_merge(
+            $request->getParsedBody() !== null ? $request->getParsedBody() : [], 
+            $request->getUploadedFiles(),
+            $request->getAttribute('app-body-data') ? $request->getAttribute('app-body-data') : []
+        );
 
         if (count($data) === 0) {
             $requestParams = RequestParser::parse();

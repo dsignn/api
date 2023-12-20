@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-use Graze\ArrayMerger\RecursiveArrayMerger;
+//use Graze\ArrayMerger\RecursiveArrayMerger;
 
 /**
  * Organization settings
  */
 return function (&$setting) {
 
-    $merger = new RecursiveArrayMerger();
-    $setting = $merger->merge(
+    //$merger = new RecursiveArrayMerger();
+    $setting = array_merge_recursive(
         $setting,
         [
             "settings" => [

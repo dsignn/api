@@ -9,6 +9,7 @@ use App\Storage\ObjectPrototypeInterface;
 use App\Storage\ObjectPrototypeTrait;
 use Laminas\Hydrator\HydratorAwareInterface;
 use Laminas\Hydrator\HydratorAwareTrait;
+use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 
 /**
  * Class MongoHydrateResultSet
@@ -21,8 +22,7 @@ class MongoHydrateResultSet extends MongoResultSet implements HydratorAwareInter
     /**
      * @inheritDoc
      */
-    public function current()
-    {
+    public function current() : mixed {
         $current = parent::current();
         if ($this->getHydrator() && $current) {
             $prototype = clone $this->getEntityPrototype()->getPrototype($current);
@@ -35,15 +35,13 @@ class MongoHydrateResultSet extends MongoResultSet implements HydratorAwareInter
     /**
      * @inheritDoc
      */
-    public function next()
-    {
+    public function next() : void {
         $next = parent::next();
         if ($this->getHydrator() && $next) {
             $prototype = clone $this->getEntityPrototype()->getPrototype($next);
             $this->getHydrator()->hydrate($next, $prototype);
             $next = $prototype;
         }
-        return $next;
     }
 
     /**
@@ -53,10 +51,12 @@ class MongoHydrateResultSet extends MongoResultSet implements HydratorAwareInter
         // TODO Better solution
         $data = parent::toArray();
 
+       
         if ($this->getHydrator()) {
             $hydrateArray = [];
             foreach ($data as $item) {
-                $prototype = clone $this->getEntityPrototype()->getPrototype($item);
+             
+                $prototype = clone $this->getEntityPrototype()->getPrototype($item);                
                 $this->getHydrator()->hydrate($item, $prototype);
                 array_push($hydrateArray,  $this->getHydrator()->extract($prototype));
             }

@@ -31,6 +31,7 @@ class MongoResultSet implements MongoResultSetInterface {
      */
     public function getDataSource(): Cursor {
         return $this->dataSource;
+  
     }
 
     /**
@@ -49,21 +50,21 @@ class MongoResultSet implements MongoResultSetInterface {
     /**
      * @inheritDoc
      */
-    public function current() {
+    public function current() : mixed {
         return isset($this->data[$this->index]) ? $this->data[$this->index] : null;
     }
 
     /**
      * @inheritDoc
      */
-    public function key() {
+    public function key() : mixed {
         return $this->index;
     }
 
     /**
      * @inheritDoc
      */
-    public function next() {
+    public function next() : void {
         $this->index = $this->index + 1;
         $this->data[$this->index];
     }
@@ -71,21 +72,21 @@ class MongoResultSet implements MongoResultSetInterface {
     /**
      * @inheritDoc
      */
-    public function rewind() {
+    public function rewind() : void {
         $this->index = 0;
     }
 
     /**
      * @inheritDoc
      */
-    public function valid() {
+    public function valid() : bool {
         return isset($this->data[$this->index]);
     }
 
     /**
      * @inheritDoc
      */
-    public function count() {
+    public function count() : int {
         return count($this->data);
     }
 

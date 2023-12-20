@@ -29,7 +29,7 @@ class MapHydrator implements HydratorInterface, EntityPrototypeAwareInterface {
     protected $typeField = '';
 
     /**
-     * @var NamingStrategyInterface
+     * @var NamingStra<tegyInterface
      */
     protected $nameStrategy;
 
@@ -114,6 +114,7 @@ class MapHydrator implements HydratorInterface, EntityPrototypeAwareInterface {
         if (!isset($this->hydrators[$field])) {
             throw new \Exception(sprintf('Field %field not set', $field));
         }
+
 
         $object = $object ? $object : $this->getEntityPrototype()->getPrototype($data);
         return $this->hydrators[$field]->hydrate($data, $object);

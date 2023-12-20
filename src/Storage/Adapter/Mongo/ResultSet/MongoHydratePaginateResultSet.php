@@ -71,7 +71,7 @@ class MongoHydratePaginateResultSet extends MongoHydrateResultSet implements Mon
     /**
      * @inheritDoc
      */
-    public function count() {
+    public function count() : int {
         return $this->count;
     }
 }

@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\Module\Resource\Controller;
 
+use App\Controller\AcceptTrait;
 use App\Controller\RestControllerInterface;
-use App\Middleware\ContentNegotiation\AcceptServiceAwareTrait;
 use App\Module\Resource\Entity\AbstractResourceEntity;
 use App\Module\Resource\Storage\ResourceStorageInterface;
 use App\Storage\StorageInterface;
@@ -20,7 +20,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 class ResourceController implements RestControllerInterface {
 
-    use AcceptServiceAwareTrait;
+    use AcceptTrait;
 
     /**
      * @var StorageInterface
@@ -38,12 +38,6 @@ class ResourceController implements RestControllerInterface {
     protected $tmp;
 
     /**
-     * @var string
-     */
-    protected $hydratorService = 'RestResourceEntityHydrator';
-
-
-    /**
      * ResourceController constructor.
      * @param ResourceStorageInterface $storage
      * @param ContainerInterface $container
@@ -59,19 +53,15 @@ class ResourceController implements RestControllerInterface {
      */
     public function post(Request $request, Response $response) {
 
-        $data = array_merge($request->getParsedBody(), $request->getUploadedFiles());
+        $data = $this->getData($request);
 
         if ($request->getAttribute('app-validation')) {
             /** @var InputFilterInterface $validator */
             $validator = $request->getAttribute('app-validation');
             $validator->setData($data);
             if (!$validator->isValid()) {
-                $acceptService = $this->getAcceptService($request);
-                $response = $acceptService->transformAccept(
-                    $response,
-                    ['errors' => $validator->getMessages()]
-                );
-                return $response->withStatus(422);
+                $response = $response->withStatus(422);
+                return $this->getAcceptData($request, $response, ['errors' => $validator->getMessages()]);
             }
 
             $data = $validator->getValues();
@@ -89,8 +79,7 @@ class ResourceController implements RestControllerInterface {
         );
 
         $this->storage->save($entity);
-        $acceptService = $this->getAcceptService($request);
-        return $acceptService->transformAccept($response, $entity);
+        return $this->getAcceptData($request, $response, $entity);
     }
 
     /**
@@ -105,20 +94,16 @@ class ResourceController implements RestControllerInterface {
             return $response->withStatus(404);
         }
 
-        $requestParams = RequestParser::parse();
-        $data = array_merge($requestParams->files, $requestParams->params);
+        $data = $this->getData($request);
 
         if ($request->getAttribute('app-validation')) {
             /** @var InputFilterInterface $validator */
             $validator = $request->getAttribute('app-validation');
             $validator->setData($data);
             if (!$validator->isValid()) {
-                $acceptService = $this->getAcceptService($request);
-                $response = $acceptService->transformAccept(
-                    $response,
-                    ['errors' => $validator->getMessages()]
-                );
-                return $response->withStatus(422);
+                $response = $response->withStatus(422);
+                return $this->getAcceptData($request, $response, ['errors' => $validator->getMessages()]);
+         
             }
 
             $data = $validator->getValues();
@@ -137,8 +122,7 @@ class ResourceController implements RestControllerInterface {
         $this->storage->getHydrator()->hydrate($data, $putEntity);
         $this->storage->update($putEntity);
 
-        $acceptService = $this->getAcceptService($request);
-        return $acceptService->transformAccept($response, $putEntity);
+        return $this->getAcceptData($request, $response, $entity);
     }
 
     public function patch(Request $request, Response $response) {
@@ -151,30 +135,20 @@ class ResourceController implements RestControllerInterface {
             return $response->withStatus(404);
         }
 
-        $requestParams = RequestParser::parse();
-        $data = array_merge($requestParams->files, $requestParams->params);
+        $data = $this->getData($request);
 
         if ($request->getAttribute('app-validation')) {
             /** @var InputFilterInterface $validator */
             $validator = $request->getAttribute('app-validation');
             $validator->setData($data);
             if (!$validator->isValid()) {
-                $acceptService = $this->getAcceptService($request);
-                $response = $acceptService->transformAccept(
-                    $response,
-                    ['errors' => $validator->getMessages()]
-                );
-                return $response->withStatus(422);
+                $response = $response->withStatus(422);
+                return $this->getAcceptData($request, $response, ['errors' => $validator->getMessages()]);
+         
             }
-
-            $dataFilter = $validator->getValues();
-            foreach ($dataFilter as $key => $value) {
-                if(!isset($data[$key])) {
-                    unset($dataFilter[$key]);
-                }
-
-            }
-            $data = $dataFilter;
+           
+            // Remove data that are filtered but not set in data patch
+            $data = $this->mergeData($data, $validator->getValues());
         }
 
         if (isset($data['file'])) {
@@ -203,8 +177,7 @@ class ResourceController implements RestControllerInterface {
 
         $this->storage->update($entity);
 
-        $acceptService = $this->getAcceptService($request);
-        return $acceptService->transformAccept($response, $entity);
+        return $this->getAcceptData($request, $response, $entity);
     }
 
     /**
@@ -233,20 +206,30 @@ class ResourceController implements RestControllerInterface {
             return $response->withStatus(404);
         }
 
-        $acceptService = $this->getAcceptService($request);
-        return $acceptService->transformAccept($response, $entity);
+        return $this->getAcceptData($request, $response, $entity);
     }
 
     /**
      * @inheritDoc
      */
     public function paginate(Request $request, Response $response) {
-        $query = $request->getQueryParams();
+      
+        $filter = $request->getAttribute('app-query-string');
+        $query =  array_merge($filter ? $filter : [], $request->getQueryParams());
+
         $page = isset($query['page']) ? intval($query['page']) ? intval($query['page']) : 1 : 1;
+        unset($query['page']);
         $itemPerPage = isset($query['item-per-page']) ? intval($query['item-per-page']) ? intval($query['item-per-page']) : 10 : 10;
-        $pagination = $this->storage->getPage($page, $itemPerPage);
-        $acceptService = $this->getAcceptService($request);
-        return $acceptService->transformAccept($response, $pagination);
+        unset($query['item-per-page']);
+        
+        $storageFilter = $request->getAttribute('app-storage-filter');
+        if ($storageFilter) {
+            $query = $storageFilter->computeQueryString($query);
+        }
+
+        $pagination = $this->storage->getPage($page, $itemPerPage, $query);
+   
+        return $this->getAcceptData($request, $response, $pagination);
     }
 
     /**
@@ -256,5 +239,44 @@ class ResourceController implements RestControllerInterface {
      */
     public function options(Request $request, Response $response) {
         return $response->withStatus(200);
+    }
+
+    /**
+     * @param [type] $data
+     * @param [type] $dataFilter
+     * @return void
+     */
+    protected function mergeData($data, $dataFilter) {
+
+        foreach ($dataFilter as $key => $value) {
+
+            if (isset($data[$key]) && is_array($data[$key]) ) {
+                $dataFilter[$key] = $this->mergeData($data[$key], $dataFilter[$key]);
+            } else if(!isset($data[$key])) {
+                unset($dataFilter[$key]);
+            }
+        }
+
+        return $dataFilter;
+    }
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    protected function getData(Request $request) {
+
+        $data = array_merge(
+            $request->getParsedBody() !== null ? $request->getParsedBody() : [], 
+            $request->getUploadedFiles(),
+            $request->getAttribute('app-body-data') ? $request->getAttribute('app-body-data') : []
+        );
+
+        if (count($data) === 0) {
+            $requestParams = RequestParser::parse();
+            $data = array_merge($requestParams->files, $requestParams->params);
+        }
+
+        return $data;
     }
 }

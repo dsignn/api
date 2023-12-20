@@ -1,15 +1,16 @@
 <?php
 declare(strict_types=1);
 
-use Graze\ArrayMerger\RecursiveArrayMerger;
+use App\Module\Monitor\Http\QueryString\MonitorQueryString;
+//use Graze\ArrayMerger\RecursiveArrayMerger;
 
 /**
  * Monitor settings
  */
 return function (&$setting) {
 
-    $merger = new RecursiveArrayMerger();
-    $setting = $merger->merge(
+    //$merger = new RecursiveArrayMerger();
+    $setting = array_merge_recursive(
         $setting,
         [
             "settings" => [
@@ -22,12 +23,21 @@ return function (&$setting) {
                     '/monitor' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestMonitorEntityHydrator',
                             'contentTypeFilter' => ['/application\/json/']
                         ]
                     ],
                     '/monitor/{id:[0-9a-fA-F]{24}}' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestMonitorEntityHydrator',
+                            'contentTypeFilter' => ['/application\/json/']
+                        ]
+                    ],
+                    '/monitor/all' => [
+                        'default' => [
+                            'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestMonitorEntityHydrator',
                             'contentTypeFilter' => ['/application\/json/']
                         ]
                     ],
@@ -35,6 +45,49 @@ return function (&$setting) {
                 'validation' => [
                     '/monitor' => [
                         'POST' => 'MonitorPostValidation'
+                    ]
+                ],
+                'queryString' => [
+                    '/monitor' => [
+                        'default' => [
+                            'service' => MonitorQueryString::class
+                        ]
+                    ],
+                    '/monitor/{id:[0-9a-fA-F]{24}}' => [
+                        'default' => [
+                            'service' => MonitorQueryString::class
+                        ]
+                    ],
+                    '/monitor/all' => [
+                        'default' => [
+                            'service' => MonitorQueryString::class
+                        ]
+                    ]
+                ],
+                'authorization' => [
+                    '/monitor/all' => [
+                        'admin' => [
+                            'allow' => true,
+                        ],
+                        'organizationOwner' => [
+                            'allow' => true,
+                        ],
+                    ],
+                    '/monitor/{id:[0-9a-fA-F]{24}}' => [
+                        'admin' => [
+                            'allow' => true,
+                        ],
+                        'organizationOwner' => [
+                            'allow' => true,
+                        ],
+                    ],
+                    '/monitor' => [
+                        'admin' => [
+                            'allow' => true,
+                        ],
+                        'organizationOwner' => [
+                            'allow' => true,
+                        ],
                     ]
                 ]
             ],

@@ -9,6 +9,7 @@ use GuzzleHttp\Client;
 use Psr\Log\LoggerInterface;
 use SendinBlue\Client\Api\TransactionalEmailsApi;
 use SendinBlue\Client\Configuration;
+use SendinBlue\Client\Model\CreateSmtpEmail;
 use SendinBlue\Client\Model\SendSmtpEmail;
 use SendinBlue\Client\Model\SendSmtpEmailSender;
 use SendinBlue\Client\Model\SendSmtpEmailTo;
@@ -74,7 +75,9 @@ class SendinblueMailer  implements MailerInterface {
         // CONTENT
         $sendSmtpEmail->setHtmlContent($content);
         try {
+            /** @var CreateSmtpEmail $result */
             $result = $apiInstance->sendTransacEmail($sendSmtpEmail);
+            $this->logger->info('Send email: ' . implode($sendSmtpEmailToArray) . ' ' . $result->__toString());
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
         }

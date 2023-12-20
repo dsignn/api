@@ -29,6 +29,10 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface {
         $this->storage = $storage;
     }
 
+    public function getStorage() {
+        return $this->storage;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -47,6 +51,15 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface {
      */
     public function persistNewAccessToken(AccessTokenEntityInterface $accessTokenEntity) {
         $this->storage->save($accessTokenEntity);
+    }
+
+    public function getByIdentifier(string $identifier) {
+        $resultSet = $this->storage->getAll(['user_identifier' => $identifier]);
+        if ($resultSet->count() > 1) {
+            // TODO log error
+        }
+
+        return $resultSet->current();
     }
 
     /**

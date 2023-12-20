@@ -9,6 +9,6 @@ use App\Storage\Storage;
  * Class MonitorStorage
  * @package App\Module\Monitor\Storage
  */
-class MonitorStorage extends  Storage implements MonitorStorageInterface {
+class MonitorStorage extends Storage implements MonitorStorageInterface {
 
 }

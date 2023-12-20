@@ -1,9 +1,12 @@
 <?php
 declare(strict_types=1);
 
+use App\Filter\DefaultFilter;
 use App\Hydrator\Strategy\HydratorArrayStrategy;
+use App\Hydrator\Strategy\HydratorStrategy;
 use App\Hydrator\Strategy\Mongo\NamingStrategy\MongoUnderscoreNamingStrategy;
 use App\Hydrator\Strategy\NamingStrategy\CamelCaseStrategy;
+use App\InputFilter\Input;
 use App\Module\Monitor\Entity\MonitorContainerEntity;
 use App\Module\Monitor\Entity\MonitorEntity;
 use App\Module\Monitor\Storage\MonitorStorage;
@@ -16,6 +19,12 @@ use DI\ContainerBuilder;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use MongoDB\Client;
 use Psr\Container\ContainerInterface;
+use App\InputFilter\InputFilter as AppInputFilter;
+use App\Module\Monitor\Http\QueryString\MonitorQueryString;
+use App\Storage\Entity\Reference;
+use App\Validator\Mongo\ObjectIdValidator;
+use Laminas\InputFilter\InputFilter;
+use Laminas\Validator\NotEmpty;
 
 return function (ContainerBuilder $containerBuilder) {
 
@@ -52,6 +61,10 @@ return function (ContainerBuilder $containerBuilder) {
     ])->addDefinitions([
         'RestMonitorEntityHydrator' => function(ContainerInterface $c) {
 
+            $organizationHydrator = new ClassMethodsHydrator();
+            $organizationHydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
+            $organizationHydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
+
             $monitorHydrator = new ClassMethodsHydrator();
             $monitorHydrator->setNamingStrategy(new CamelCaseStrategy());
             $monitorHydrator->addStrategy('monitors', new HydratorArrayStrategy($monitorHydrator, new SingleEntityPrototype(new MonitorEntity())));
@@ -61,11 +74,16 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
             $hydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
             $hydrator->addStrategy('monitors', new HydratorArrayStrategy($monitorHydrator, new SingleEntityPrototype(new MonitorEntity())));
+            $hydrator->addStrategy('organizationReference', new HydratorStrategy($organizationHydrator, new SingleEntityPrototype(new Reference())));
 
             return $hydrator;
         }
     ])->addDefinitions([
         'StorageMonitorEntityHydrator' => function(ContainerInterface $c) {
+
+            $organizationHydrator = new ClassMethodsHydrator();
+            $organizationHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
+            $organizationHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
 
             $monitorHydrator = new ClassMethodsHydrator();
             $monitorHydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
@@ -75,10 +93,49 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
             $hydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
             $hydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
-
+            $hydrator->addStrategy('organizationReference', new HydratorStrategy($organizationHydrator, new SingleEntityPrototype(new Reference())));
             $hydrator->addStrategy('monitors', new HydratorArrayStrategy($monitorHydrator, new SingleEntityPrototype(new MonitorEntity())));
 
             return $hydrator;
+        }
+    ])->addDefinitions([
+        'MonitorPostValidation' => function(ContainerInterface $c) {
+            $inputFilter = new AppInputFilter();
+
+            $name = new Input('name');
+
+            $monitors = new Input('monitors');
+
+            $description = new Input('description');
+
+            $organizationReference = new InputFilter();
+
+            $id = new Input('id');
+            $id->getValidatorChain()
+                ->attach(new NotEmpty())
+                ->attach(new ObjectIdValidator());
+            
+            $organizationReference->add($id);
+
+            $collection = new Input('collection');
+            $collection->setRequired(false);
+            $collection->getFilterChain()
+                ->attach(new DefaultFilter('collection'));
+
+            $organizationReference->add($collection);
+
+            $inputFilter
+                ->add($name)
+                ->add($monitors)
+                ->add($description)
+                ->add($organizationReference, 'organizationReference')
+                ;
+
+            return $inputFilter;
+        }
+    ])->addDefinitions([
+        MonitorQueryString::class => function(ContainerInterface $c) {
+            return new MonitorQueryString();
         }
     ]);
 };

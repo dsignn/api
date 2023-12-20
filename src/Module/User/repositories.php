@@ -14,7 +14,9 @@ use App\Mail\adapter\SendinblueMailer;
 use App\Mail\Contact;
 use App\Mail\MailerInterface;
 use App\Module\Oauth\Filter\PasswordFilter;
-use App\Module\Organization\Validator\UniqueNameOrganization;
+use App\Module\Organization\Storage\OrganizationStorage;
+use App\Module\Organization\Storage\OrganizationStorageInterface;
+use App\Module\Organization\Validator\OrganizationSaveValidator;
 use App\Module\User\Entity\Embedded\ActivationCode;
 use App\Module\User\Entity\Embedded\RecoverPassword;
 use App\Module\User\Entity\UserEntity;
@@ -59,6 +61,7 @@ return function (ContainerBuilder $containerBuilder) {
                 $c->get(Client::class),
                 $c->get('settings')['httpClient']["url"],
                 $c->get('RestOrganizationEntityHydrator'),
+                $c->get(OrganizationStorageInterface::class),
                 $c->get('settings')['client']
             );
         },
@@ -87,7 +90,12 @@ return function (ContainerBuilder $containerBuilder) {
 
             $storage->getEventManager()->attach(
                 Storage::$BEFORE_SAVE,
-                new UserActivationCodeEvent($c->get('OAuthCrypto'), $c->get(MailerInterface::class), $c->get('UserFrom'), $settings['mail']['activationCode'])
+                new UserActivationCodeEvent(
+                    $c->get('OAuthCrypto'),
+                    $c->get(MailerInterface::class),
+                    $c->get('UserFrom'),
+                    $settings['mail']['activationCode']
+                )
             );
 
             $storage->getEventManager()->attach(RestController::$PREPROCESS_POST, $c->get(AppendOrganizationEvent::class));
@@ -106,6 +114,7 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addFilter('activationCode', new MethodMatchFilter('getActivationCode'),  FilterComposite::CONDITION_AND);
             $hydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
             $hydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
+            
             $recoverPasswordHydrator = new ClassMethodsHydrator();
             $recoverPasswordHydrator->setNamingStrategy(new CamelCaseStrategy());
             $recoverPasswordHydrator->addStrategy('date', new MongoDateStrategy());
@@ -182,7 +191,6 @@ return function (ContainerBuilder $containerBuilder) {
                 'email',
                 'password',
                 'roleId',
-                'nameOrganization',
                 'organizations'
             ]);
 
@@ -197,15 +205,15 @@ return function (ContainerBuilder $containerBuilder) {
                 ->attach(new EmailAddress())
                 ->attach($container->get(EmailExistValidator::class));
 
-            $nameOrganization = new Input('nameOrganization');
-            $nameOrganization->setRequired(false);
+            $nameOrganization = new Input('organization');
+            $nameOrganization->setRequired(true);
             $nameOrganization->getValidatorChain()
-                ->attach($container->get(UniqueNameOrganization::class));
+                ->attach($container->get(OrganizationSaveValidator::class));
 
             // Role field
             $role = new Input('roleId');
             $role->getValidatorChain()->attach(new InArray([
-                'haystack' => ['guest', 'restaurantOwner']
+                'haystack' => ['organizationOwner', 'admin']
             ]));
             // Password field
             $password = $password = new Input('password');
@@ -291,6 +299,7 @@ return function (ContainerBuilder $containerBuilder) {
 
             return new SendinblueMailer($serviceSetting, $container->get(LoggerInterface::class));
         },
+
         EmailExistValidator::class => function(ContainerInterface $container) {
             return new EmailExistValidator($container->get(UserStorageInterface::class));
         },

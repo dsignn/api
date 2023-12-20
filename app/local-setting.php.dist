@@ -31,7 +31,8 @@ return function (&$setting) {
                     'name' => 'dsign'
                 ],
                 'mail' => [
-                    "sendinblueApiKey" => "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",
+                    "sendinblueApiKey" => "TODO",
+                    "sendGrid" => 'TODO',
                     "port" => 587,
                     "host" => 'smtp.gmail.com',
                     "username" => 'antonino.visalli@gmail.com',

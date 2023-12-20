@@ -3,22 +3,34 @@ declare(strict_types=1);
 
 namespace App\Module\Organization\Entity;
 
+use App\Module\Organization\Entity\Embedded\Address\Address;
+use App\Module\Organization\Entity\Embedded\Phone\Phone;
 use App\Storage\Entity\EntityInterface;
 use App\Storage\Entity\EntityTrait;
 use App\Storage\Entity\Reference;
 use App\Storage\Entity\ReferenceInterface;
+use League\OAuth2\Server\Entities\UserEntityInterface;
 
 /**
  * Class OrganizationEntity
  * @package App\Module\Organization\Entity
  */
-class OrganizationEntity implements EntityInterface {
+class OrganizationEntity implements EntityInterface, UserEntityInterface {
 
     use EntityTrait;
 
+    /**
+     * OrganizationEntity constructor.
+     */
     public function __construct() {
-        $this->qrCode = new Reference();
+        
         $this->logo = new Reference();
+    }
+
+    /**
+     */
+    public function getIdentifier() {
+        return 'organization_' . $this->getId();
     }
 
     /**
@@ -27,35 +39,15 @@ class OrganizationEntity implements EntityInterface {
     protected $name = '';
 
     /**
-     * @var string
-     */
-    protected $normalizeName = '';
-
-    /**
-     * @var ReferenceInterface
-     */
-    protected $qrCode;
-
-    /**
      * @var ReferenceInterface
      */
     protected $logo;
 
     /**
+     *
      * @var string
      */
-    protected $whatsappPhone = '';
-
-    /**
-     * @var bool
-     */
-    protected $open = false;
-
-    /**
-     * @var string
-     */
-    protected $siteUrl = '';
-
+    protected $oauthToken;
 
     /**
      * @return string
@@ -72,39 +64,7 @@ class OrganizationEntity implements EntityInterface {
         $this->name = $name;
         return $this;
     }
-
-    /**
-     * @return string
-     */
-    public function getNormalizeName(): string {
-        return $this->normalizeName;
-    }
-
-    /**
-     * @param string $normalizeName
-     * @return OrganizationEntity
-     */
-    public function setNormalizeName(string $normalizeName): OrganizationEntity {
-        $this->normalizeName = $normalizeName;
-        return $this;
-    }
-
-    /**
-     * @return ReferenceInterface
-     */
-    public function getQrCode(): ReferenceInterface {
-        return $this->qrCode;
-    }
-
-    /**
-     * @param ReferenceInterface $qrCode
-     * @return OrganizationEntity
-     */
-    public function setQrCode(ReferenceInterface $qrCode): OrganizationEntity {
-        $this->qrCode = $qrCode;
-        return $this;
-    }
-
+    
     /**
      * @return ReferenceInterface
      */
@@ -122,50 +82,24 @@ class OrganizationEntity implements EntityInterface {
     }
 
     /**
-     * @return string
-     */
-    public function getWhatsappPhone() {
-        return $this->whatsappPhone;
+     * Get the value of oauthToken
+     *
+     * @return  string
+     */ 
+    public function getOauthToken()
+    {
+        return $this->oauthToken;
     }
 
     /**
-     * @param string $whatsappPhone
-     * @return OrganizationEntity
-     */
-    public function setWhatsappPhone(string $whatsappPhone): OrganizationEntity {
-        $this->whatsappPhone = $whatsappPhone;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getOpen(): bool {
-        return $this->open;
-    }
-
-    /**
-     * @param bool $open
-     * @return OrganizationEntity
-     */
-    public function setOpen(bool $open): OrganizationEntity {
-        $this->open = $open;
-        return  $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSiteUrl(): string {
-        return $this->siteUrl;
-    }
-
-    /**
-     * @param string $siteUrl
-     * @return OrganizationEntity
-     */
-    public function setSiteUrl(string $siteUrl): OrganizationEntity {
-        $this->siteUrl = $siteUrl;
+     * Set the value of oauthToken
+     *
+     * @param  string  $oauthToken
+     *
+     * @return  self
+     */ 
+    public function setOauthToken(string $oauthToken = null) {
+        $this->oauthToken = $oauthToken;
         return $this;
     }
 }

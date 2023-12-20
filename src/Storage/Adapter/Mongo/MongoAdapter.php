@@ -105,7 +105,6 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
 
         if (!isset($data['_id'])) {
             // TODO
-            var_dump($data);
             throw new \Exception('Id not set', 500);
         }
 
@@ -203,6 +202,7 @@ class MongoAdapter implements StorageAdapterInterface, MongoResultSetAwareInterf
      * @return mixed
      */
     protected function transformSearch(array $search) {
+
         return $search;
     }
 

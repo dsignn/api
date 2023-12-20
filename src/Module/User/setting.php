@@ -1,15 +1,16 @@
 <?php
 declare(strict_types=1);
 
-use Graze\ArrayMerger\RecursiveArrayMerger;
+use App\Module\User\Http\QueryString\UserQueryString;
+//use Graze\ArrayMerger\RecursiveArrayMerger;
 
 /**
  * User settings
  */
 return function (&$setting) {
 
-    $merger = new RecursiveArrayMerger();
-    $setting = $merger->merge(
+    //$merger = new RecursiveArrayMerger();
+    $setting = array_merge_recursive(
         $setting,
         [
             "settings" => [
@@ -27,6 +28,7 @@ return function (&$setting) {
                 'contentNegotiation' => [
                     '/user' => [
                         'default' => [
+                            'acceptFilterHydrator' => 'RestUserEntityHydrator',
                             'acceptFilter' => ['/application\/json/'],
                             'contentTypeFilter' => ['/application\/json/']
                         ]
@@ -34,12 +36,36 @@ return function (&$setting) {
                     '/user/{id:[0-9a-fA-F]{24}}' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestUserEntityHydrator',
+                            'contentTypeFilter' => ['/application\/json/']
+                        ]
+                    ],
+                    '/user/all' => [
+                        'default' => [
+                            'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestUserEntityHydrator',
                             'contentTypeFilter' => ['/application\/json/']
                         ]
                     ],
                     '/activation-code' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestUserEntityHydrator',
+                            'contentTypeFilter' => ['/application\/json/']
+                        ]
+                    ],
+                    '/recover-password' => [
+                        'default' => [
+                            'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RpcPasswordUserEntityHydrator',
+                            'contentTypeFilter' => ['/application\/json/']
+                        ]
+                    ],
+                    
+                    '/reset-password' => [
+                        'default' => [
+                            'acceptFilter' => ['/application\/json/'],
+                            'acceptFilterHydrator' => 'RestUserEntityHydrator',
                             'contentTypeFilter' => ['/application\/json/']
                         ]
                     ],
@@ -55,7 +81,7 @@ return function (&$setting) {
                 'authentication' => [
                     '/user' => [
                         'POST' => [
-                            'skip' => true
+                            'public' => true
                         ]
                     ]
                 ],
@@ -63,40 +89,47 @@ return function (&$setting) {
                     '/user' => [
                         'admin' => [
                             'allow' => true,
-                        //    'assertion' => 'Test',
+                        ],
+                        'organizationOwner' => [
+                            'allow' => true,
+                        ],
+                        'guest' => [
+                            'allow' => false,
                             'privileges' => [
                                 [
-                                    "method" => "GET",
-                                    'allow' => true,
-                               //     'assertion' => 'Test',
-                                ],
-                                [
                                     "method" => "POST",
-                                    'allow' => false,
-                             //       'assertion' => 'Test',
+                                    'allow' => true,
                                 ]
                             ]
-                        ]
+                        ],
                     ],
                     '/user/{id:[0-9a-fA-F]{24}}' => [
                         'admin' => [
-                            'allow' => false,
-                            'assertion' => 'Test',
+                            'allow' => true,
+                        ],
+                        'organizationOwner' => [
+                            'allow' => true,
                             'privileges' => [
                                 [
-                                    "method" => "GET",
-                                    'allow' => true,
-                                    //     'assertion' => 'Test',
-                                ],
-                                [
-                                    "method" => "POST",
+                                    "method" => "DELETE",
                                     'allow' => false,
-                                    //       'assertion' => 'Test',
                                 ]
                             ]
                         ]
                     ]
-                ]
+                ],
+                'queryString' => [
+                    '/user' => [
+                        'default' => [
+                            'service' => UserQueryString::class
+                        ]
+                    ],
+                    '/user/{id:[0-9a-fA-F]{24}}' => [
+                        'default' => [
+                            'service' => UserQueryString::class
+                        ]
+                    ]
+                ],
             ]
         ]
     );

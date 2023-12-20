@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace App\InputFilter;
 
-use Laminas\InputFilter\InputFilter as LaminaInputFilter;
+use Laminas\InputFilter\BaseInputFilter;
 use Laminas\InputFilter\InputFilterInterface;
+use Laminas\InputFilter\InputInterface;
+use Slim\App;
 
-class InputFilter extends LaminaInputFilter {
+class InputFilter extends BaseInputFilter {
 
     /**
      * @var array
@@ -48,27 +50,49 @@ class InputFilter extends LaminaInputFilter {
      * @return array
      */
     public function getValues(): array {
+        return $this->getValuesWrapper($this->getData(), $this);
+    }
+
+    /**
+     *
+     * @param array $data
+     * @param BaseInputFilter $inputFilter
+     * @return array
+     */
+    public function getValuesWrapper(array $data, InputFilter $inputFilter): array {
+
         $inputs = $this->validationGroup ?: array_keys($this->inputs);
         $values = [];
-        foreach ($inputs as $name) {
+       // $data = $this->getData();
+       foreach ($inputs as $name) {
+            
             $input = $this->inputs[$name];
-
+            
             if ($input instanceof InputFilterInterface) {
-                $data = $input->getValues();
-                if (in_array($name, $this->propertyToRemove) && empty($data)) {
+
+                $value = $input->getValues();
+                if (in_array($name, $this->propertyToRemove) || !isset($data[$name])) {
                     continue;
                 }
-                $values[$name] = $data;
-                continue;
-            }
+    
+                $values[$name] = $input->getValues();
+            } elseif ($input instanceof InputInterface) {
 
-            $value = $input->getValue();
-            if (in_array($name, $this->propertyToRemove) && !$value) {
-                continue;
+                $value = $input->getValue();           
+                if (in_array($name, $this->propertyToRemove) && !$value) {
+                    continue;
+                }
+                $values[$name] = $value;
             }
-
-            $values[$name] = $value;
         }
+
         return $values;
+    }
+
+    /**
+     * @return array
+     */
+    public function getData(): array {
+        return $this->data;
     }
 }

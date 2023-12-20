@@ -1,6 +1,7 @@
-version: '3'
+version: '3.8'
 services:
   nginx:
+    container_name: dsign-ngnix
     image: nginx:1.13.3
     volumes:
       - ./docker/nginx/conf:/etc/nginx
@@ -10,22 +11,16 @@ services:
         aliases:
           - api.dev
     ports:
-      - "127.0.0.150:80:80"
-
-  nginx-menu:
-    image: nginx:1.13.3
-    volumes:
-      - ./docker/nginx/menu-conf:/etc/nginx
-      - .:/var/www/application
-    networks:
-      app_network:
-        aliases:
-          - api.dev
-    ports:
-      - "127.0.0.200:80:80"
+      - "127.0.0.146:80:80"
 
   phpfpm:
-    build: docker/php-fpm
+    container_name: dsing-php
+    build:
+      context: .
+      dockerfile: docker/php-fpm/Dockerfile8.3
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
     networks:
       app_network:
         aliases:
@@ -38,6 +33,7 @@ services:
 
 
   mongo:
+    container_name: dsign-mongo
     image: mongo:4.2
     networks:
       app_network:
@@ -47,7 +43,7 @@ services:
       - ./docker/mongo/data:/data/db
       - .:/var/www/application
     ports:
-      - "127.0.0.150:27017:27017"
+      - "127.0.0.146:27017:27017"
 
 networks:
   app_network:
