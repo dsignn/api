@@ -3,6 +3,8 @@ services:
   nginx:
     container_name: dsign-ngnix
     image: nginx:1.13.3
+    environment:
+      SERVER_NAME: api-dev.ds-ign.it
     volumes:
       - ./docker/nginx/conf:/etc/nginx
       - .:/var/www/application
