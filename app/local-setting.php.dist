@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Graze\ArrayMerger\RecursiveArrayMerger;
+//use Graze\ArrayMerger\RecursiveArrayMerger;
 use Monolog\Logger;
 
 /**
@@ -9,16 +9,24 @@ use Monolog\Logger;
  */
 return function (&$setting) {
 
-    $merger = new RecursiveArrayMerger();
-    $setting = $merger->merge(
+   // $merger = new RecursiveArrayMerger();
+    $setting = array_merge_recursive(
         $setting,
         [
             'settings' => [
+                'contentNegotiation' => [
+                    '/' => [
+                        'default' => [
+                            'acceptFilter' => ['/application\/json/'],
+                            'contentTypeFilter' => ['/application\/json/']
+                        ]
+                    ],
+                ],
                 'tmp' => '../tmp',
                 'determineRouteBeforeAppMiddleware' => true,
                 'debug' => true,
                 'displayErrorDetails' => true, // Should be set to false in production
-                'urlMenu' => 'http://127.0.0.200',
+                'urlMenu' => 'http://menu.dsign.local',
                 'logger' => [
                     'name' => 'slim-app',
                     'path' => __DIR__ . '/../logs/app.log',
@@ -31,8 +39,8 @@ return function (&$setting) {
                     'name' => 'dsign'
                 ],
                 'mail' => [
-                    "sendinblueApiKey" => "TODO",
-                    "sendGrid" => 'TODO',
+                    "sendinblueApiKey" => "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",
+                    "sendGrid" => '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',
                     "port" => 587,
                     "host" => 'smtp.gmail.com',
                     "username" => 'antonino.visalli@gmail.com',
@@ -41,15 +49,15 @@ return function (&$setting) {
                         "name" => "Dsign",
                         "email" => "noreply@ds-ign.it"
                     ],
-                    "resetPassword" => "http://127.0.0.1:8081/reset-password",
-                    "activationCode" => "http://127.0.0.1:8081/activation-code",
+                    "resetPassword" => "http://dsign.local:8081/reset-password",
+                    "activationCode" => "http://dsign.local:8081/activation-code",
                 ],
                 'httpClient' => [
                     'url' => 'nginx'
                 ],
                 'contentNegotiation' => [],
                 'twig' => [
-                    'path-js' => 'http://127.0.0.150/js',
+                    'path-js' => 'http://menu.dsign.local/js',
                     'options' => [
                         // Should be set to true in production
                         'cache' => false,
@@ -72,8 +80,14 @@ return function (&$setting) {
                             'secret' => 'T2l/cgl6H2KrIlMC8tizzYKoMRj11atcYmbnUqxl'
                         ]
                     ],
-                    'bucket' => 'dsign-cdn-test'
+                    'bucket' => 'digital-signage-test-3'
                 ],
+                'order-cors' => 'dsign.local:8081',
+                'authorizationRoles' => [
+                    'admin',
+                    'organizationOwner',
+                    'guest'
+                ]
             ],
         ]
     );
