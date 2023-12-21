@@ -3,15 +3,17 @@ services:
   nginx:
     container_name: dsign-ngnix
     image: nginx:1.13.3
+    environment:
+      SERVER_NAME: api-dev.ds-ign.it
     volumes:
-      - ./docker/nginx/conf:/etc/nginx
+      - ./docker/nginx/local/conf:/etc/nginx
       - .:/var/www/application
     networks:
       app_network:
         aliases:
-          - api.dev
+          - api
     ports:
-      - "127.0.0.146:80:80"
+      - "80:80"
 
   phpfpm:
     container_name: dsing-php
@@ -24,7 +26,7 @@ services:
     networks:
       app_network:
         aliases:
-          - api.dev
+          - api
     volumes:
       - ./docker/php-fpm/etc:/usr/local/php/etc
       - .:/var/www/application
@@ -34,16 +36,16 @@ services:
 
   mongo:
     container_name: dsign-mongo
-    image: mongo:4.2
+    image: mongo:6
     networks:
       app_network:
         aliases:
-          - api.dev
+          - api
     volumes:
       - ./docker/mongo/data:/data/db
       - .:/var/www/application
     ports:
-      - "127.0.0.146:27017:27017"
+      - "27017:27017"
 
 networks:
   app_network:
