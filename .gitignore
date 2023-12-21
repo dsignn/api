@@ -11,6 +11,7 @@ public/js/config.js
 .history
 docker/mongo/data
 .history
+docker-compose.yml
 
 # Mac
 .DS_Store
