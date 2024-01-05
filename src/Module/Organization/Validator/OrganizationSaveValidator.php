@@ -61,6 +61,11 @@ class OrganizationSaveValidator extends AbstractValidator implements ValidatorIn
     protected $entity = null;
 
     /**
+     * @var StorageInterface
+     */
+    protected StorageInterface $storage;
+
+    /**
      * OrganizationSaveValidator constructor.
      * @param StorageInterface $storage
      * @param ContainerInterface $container
