@@ -21,8 +21,8 @@
         "ext-mongodb": "*",
         "alcaeus/mongo-php-adapter": "^1.1.11",
         "aws/aws-sdk-php": "^3.1.0",
-        "endroid/qr-code": "~3.9.0",
         "defuse/php-encryption": "^2.2.1.",
+        "endroid/qr-code": "~3.9.0",
         "guzzlehttp/guzzle": "~7.8.0",
         "laminas/laminas-crypt": "3.11.0",
         "laminas/laminas-eventmanager": "3.12.0",
@@ -37,13 +37,14 @@
         "php-di/slim-bridge": "^3.0",
         "php-ffmpeg/php-ffmpeg": "^1.1.0",
         "phpmailer/phpmailer": "~6.1.5",
+        "rikudou/array-merge-recursive": "^1.0",
+        "sendgrid/sendgrid": "7.9.2",
+        "sendinblue/api-v3-sdk": "8.4.2",
         "slim/psr7": "^1.5.1",
         "slim/slim": "^4.12",
-        "slim/twig-view": "^3.1.0",
+        "slim/twig-view": "^2.5.1",
         "symfony/console": "^5.0.2",
-        "twig/twig": "^3.0",
-        "sendinblue/api-v3-sdk": "8.4.2",
-        "sendgrid/sendgrid": "7.9.2"
+        "twig/twig": "^3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.5.31"
