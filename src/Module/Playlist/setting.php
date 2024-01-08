@@ -2,14 +2,13 @@
 declare(strict_types=1);
 
 use App\Module\Playlist\Http\QueryString\PlaylistQueryString;
-//use Graze\ArrayMerger\RecursiveArrayMerger;
+use function Rikudou\ArrayMergeRecursive\array_merge_recursive;
 
 /**
  * User settings
  */
 return function (&$setting) {
 
-    //$merger = new RecursiveArrayMerger();
     $setting = array_merge_recursive(
         $setting,
         [

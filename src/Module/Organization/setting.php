@@ -1,14 +1,13 @@
 <?php
 declare(strict_types=1);
 
-//use Graze\ArrayMerger\RecursiveArrayMerger;
+use function Rikudou\ArrayMergeRecursive\array_merge_recursive;
 
 /**
  * Organization settings
  */
 return function (&$setting) {
 
-    //$merger = new RecursiveArrayMerger();
     $setting = array_merge_recursive(
         $setting,
         [
