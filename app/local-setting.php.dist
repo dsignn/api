@@ -39,8 +39,8 @@ return function (&$setting) {
                     'name' => 'dsign'
                 ],
                 'mail' => [
-                    "sendinblueApiKey" => "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",
-                    "sendGrid" => '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',
+                    'bravoAdapter' => [
+                    ],
                     "port" => 587,
                     "host" => 'smtp.gmail.com',
                     "username" => 'antonino.visalli@gmail.com',
@@ -84,8 +84,7 @@ return function (&$setting) {
                         'region'  => 'eu-central-1',
                         //      'debug'   => true,
                         'credentials' => [
-                            'key' => 'AKIAJUETFABXHRWGNGGQ',
-                            'secret' => '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'
+                       
                         ]
                     ],
                     'bucket' => 'digital-signage-test-3'
