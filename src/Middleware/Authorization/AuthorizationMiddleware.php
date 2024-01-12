@@ -46,7 +46,6 @@ class AuthorizationMiddleware implements Middleware {
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
 
-        // RoleInterface ResourceInterface privilege
         $role = $request->getAttribute('app-user') ? $request->getAttribute('app-user') : new GenericRole('guest');
         $resource = new GenericResource($request->getAttribute('__route__')->getPattern());
         $method = $request->getMethod();

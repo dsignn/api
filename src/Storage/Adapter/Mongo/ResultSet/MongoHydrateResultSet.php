@@ -22,9 +22,10 @@ class MongoHydrateResultSet extends MongoResultSet implements HydratorAwareInter
     /**
      * @inheritDoc
      */
-    public function current() : mixed {
+    public function current() {
         $current = parent::current();
         if ($this->getHydrator() && $current) {
+       
             $prototype = clone $this->getEntityPrototype()->getPrototype($current);
             $this->getHydrator()->hydrate($current, $prototype);
             $current = $prototype;

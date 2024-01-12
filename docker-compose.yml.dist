@@ -6,7 +6,7 @@ services:
     environment:
       SERVER_NAME: api-dev.ds-ign.it
     volumes:
-      - ./docker/nginx/local/conf:/etc/nginx
+      - ./docker/nginx/conf:/etc/nginx
       - .:/var/www/application
     networks:
       app_network:
@@ -45,7 +45,7 @@ services:
       - ./docker/mongo/data:/data/db
       - .:/var/www/application
     ports:
-      - "27017:27017"
+      - "127.0.0.146:27017:27017"
 
 networks:
   app_network:

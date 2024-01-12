@@ -22,13 +22,20 @@ class HydratorStrategy implements StrategyInterface {
     protected $hydrator;
 
     /**
+     * @var bool
+     */
+    protected $hydrateWithPrototype;
+
+    /**
      * HydratorStrategy constructor.
      * @param HydratorInterface $hydrator
      * @param $objectPrototype
      */
-    public function __construct(HydratorInterface $hydrator, EntityPrototypeInterface $entityPrototype) {
+    public function __construct(HydratorInterface $hydrator, EntityPrototypeInterface $entityPrototype, bool $hydrateWithPrototype = true) {
         $this->hydrator = $hydrator;
         $this->setEntityPrototype($entityPrototype);
+        $this->hydrateWithPrototype = $hydrateWithPrototype;
+
     }
 
     /**
@@ -47,16 +54,17 @@ class HydratorStrategy implements StrategyInterface {
      */
     public function hydrate($value, ?array $data) {
 
-
+     
         
         $hydrateValue = clone $this->getEntityPrototype()->getPrototype($value);
-  
+   
         if ($value) {
             $this->hydrator->hydrate($value, $hydrateValue);
             $value = $hydrateValue;
-        } else if($hydrateValue) {
+        } else if($hydrateValue && $this->hydrateWithPrototype) {
             $value =  $hydrateValue;
         }
+
         return $value;
     }
 }

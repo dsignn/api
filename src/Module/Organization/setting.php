@@ -99,6 +99,15 @@ return function (&$setting) {
                         'organizationOwner' => [
                             'allow' => true,
                         ],
+                        'guest' => [
+                            'allow' => false,
+                            'privileges' => [
+                                [
+                                    "method" => "POST",
+                                    'allow' => true,
+                                ]
+                            ]
+                        ]
                     ]
                 ]
             ]

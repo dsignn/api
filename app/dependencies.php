@@ -1,6 +1,9 @@
 <?php
 declare(strict_types=1);
 
+use App\Exception\ConfigException;
+use App\Mail\adapter\BrevoMailer;
+use App\Mail\MailerInterface;
 use App\Middleware\Authentication\AuthenticationMiddleware;
 use App\Middleware\Authentication\InjectOrganizationByRoleMiddleware;
 use App\Middleware\Authorization\AuthorizationMiddleware;
@@ -13,12 +16,10 @@ use App\Middleware\ContentNegotiation\ContentType\MultipartFormDataContentType;
 use App\Middleware\QueryString\QueryStringMiddleware;
 use App\Middleware\Validation\ValidationMiddleware;
 use App\Module\Oauth\Storage\ClientStorageInterface;
-use App\Module\Organization\Entity\OrganizationEntity;
 use App\Module\Organization\Storage\OrganizationStorageInterface;
 use App\Module\User\Storage\UserStorageInterface;
 use DI\ContainerBuilder;
 use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Query;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Hydrator\Strategy\ClosureStrategy;
 use Laminas\Permissions\Acl\Acl;
@@ -109,6 +110,22 @@ return function (ContainerBuilder $containerBuilder) {
                 $c->get('AccessTokenStorage'),
                 $c->get(ClientStorageInterface::class),
                 $c->get('settings')['authentication']
+            );
+        },
+
+        MailerInterface::class => function(ContainerInterface $container) {
+            $settings = $container->get('settings');
+
+            if (!isset($settings['mail']['bravoAdapter']['apikey'])) {
+                throw new ConfigException(
+                    'Mail config error no apikey found',
+                    600
+               );
+            }
+
+            return new BrevoMailer(
+                $settings['mail']['bravoAdapter']['apikey'],
+                $container->get(LoggerInterface::class)
             );
         },
 

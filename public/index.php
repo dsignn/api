@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use App\Application\Handlers\HttpErrorHandler;
@@ -6,6 +7,8 @@ use App\Application\Handlers\ShutdownHandler;
 use App\Application\ResponseEmitter\ResponseEmitter;
 use DI\ContainerBuilder;
 use Slim\Factory\ServerRequestCreatorFactory;
+use Brevo\Client\Configuration;
+
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -67,6 +70,7 @@ $app->addRoutingMiddleware();
 // Add Error Middleware
 $errorMiddleware = $app->addErrorMiddleware($displayErrorDetails, true, true);
 $errorMiddleware->setDefaultErrorHandler($errorHandler);
+
 
 // Run App & Emit Response
 $response = $app->handle($request);

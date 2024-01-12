@@ -131,7 +131,9 @@ return function (ContainerBuilder $containerBuilder) {
             $hydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
             $hydrator->addStrategy('organizationReference', new HydratorStrategy(
                 $c->get('OrganizationReferenceStorageHydrator'), 
-                new SingleEntityPrototype(new Reference()))
+                new SingleEntityPrototype(new Reference()),
+                false
+                )
             );
 
             return $hydrator;

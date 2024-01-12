@@ -293,13 +293,6 @@ return function (ContainerBuilder $containerBuilder) {
         CryptoInterface::class => function(ContainerInterface $container) {
             return $container->get('OAuthCrypto');
         },
-        MailerInterface::class => function(ContainerInterface $container) {
-            $settings = $container->get('settings');
-            $serviceSetting = $settings['mail'];
-
-            return new SendinblueMailer($serviceSetting, $container->get(LoggerInterface::class));
-        },
-
         EmailExistValidator::class => function(ContainerInterface $container) {
             return new EmailExistValidator($container->get(UserStorageInterface::class));
         },
