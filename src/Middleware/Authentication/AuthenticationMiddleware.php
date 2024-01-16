@@ -89,10 +89,10 @@ class AuthenticationMiddleware implements Middleware {
             $request = $request->withAddedHeader('authorization', 'Bearer ' . $request->getQueryParams()['auth']);        
         }
 
-        if (($this->isPublic($request) && !$request->getHeaderLine('authorization')) || $request->getMethod() === 'OPTIONS' ) {
+        if ($this->isPublic($request) || $request->getMethod() === 'OPTIONS' ) {
             return $handler->handle($request);
         }
-
+        
         try {
             $request = $this->server->validateAuthenticatedRequest($request);
         } catch (OAuthServerException $exception) {
