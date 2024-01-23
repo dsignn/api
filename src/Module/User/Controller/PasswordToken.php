@@ -88,8 +88,12 @@ class PasswordToken implements RpcControllerInterface {
             return $response->withStatus(404);
         }
 
-        $user->getRecoverPassword()->setDate(new \DateTime())
-            ->setToken($this->crypto->crypto($user->getRecoverPassword()->getDate()->format('Y-m-d H:i:s')));
+        $user->getRecoverPassword()->setDate(new \DateTime());
+
+        $token = $this->crypto->crypto($user->getRecoverPassword()->getDate()->format('Y-m-d H:i:s'));
+        $token = str_replace('', '+', $token);
+        
+        $user->getRecoverPassword()->setToken($token);
 
         $this->storage->update($user);
 
