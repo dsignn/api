@@ -4,6 +4,7 @@ declare(strict_types=1);
 use App\Controller\RestController;
 use App\Crypto\CryptoInterface;
 use App\Crypto\CryptoOpenSsl;
+use App\Crypto\QueryStringCrypto;
 use App\Hydrator\Strategy\HydratorArrayStrategy;
 use App\Hydrator\Strategy\HydratorStrategy;
 use App\Hydrator\Strategy\Mongo\MongoDateStrategy;
@@ -91,7 +92,7 @@ return function (ContainerBuilder $containerBuilder) {
             $storage->getEventManager()->attach(
                 Storage::$BEFORE_SAVE,
                 new UserActivationCodeEvent(
-                    $c->get('OAuthCrypto'),
+                    $c->get(QueryStringCrypto::class),
                     $c->get(MailerInterface::class),
                     $c->get('UserFrom'),
                     $settings['mail']['activationCode']
@@ -292,6 +293,9 @@ return function (ContainerBuilder $containerBuilder) {
         },
         CryptoInterface::class => function(ContainerInterface $container) {
             return $container->get('OAuthCrypto');
+        },
+        UserCryptoInterface::class =>  function(ContainerInterface $container) {
+            return $container->get(QueryStringCrypto::class);
         },
         EmailExistValidator::class => function(ContainerInterface $container) {
             return new EmailExistValidator($container->get(UserStorageInterface::class));

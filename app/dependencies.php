@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use App\Crypto\QueryStringCrypto;
 use App\Exception\ConfigException;
 use App\Mail\adapter\BrevoMailer;
 use App\Mail\MailerInterface;
@@ -247,6 +248,10 @@ return function (ContainerBuilder $containerBuilder) {
         QueryStringMiddleware::class => function(ContainerInterface $c) {
      
             return new QueryStringMiddleware($c);
+        },
+
+        QueryStringCrypto::class => function(ContainerInterface $c) {
+            return new QueryStringCrypto();
         }
     ]);
 };

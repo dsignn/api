@@ -58,12 +58,8 @@ class UserActivationCodeEvent
      */
     public function __invoke(EventInterface $event) {
 
-        $event->getTarget()->getActivationCode()->setDate(new \DateTime());
-
-        $token = $this->crypto->crypto($event->getTarget()->getActivationCode()->getDate()->format('Y-m-d H:i:s'));
-        $token = str_replace('', '+', $token);
-
-        $event->getTarget()->getActivationCode()->setToken($token);
+        $event->getTarget()->getActivationCode()->setDate(new \DateTime())
+            ->setToken($this->crypto->crypto(50));
 
         $this->sendActivationMail($event->getTarget());
     }

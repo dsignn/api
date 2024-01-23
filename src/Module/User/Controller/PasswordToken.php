@@ -9,6 +9,7 @@ use App\Crypto\CryptoInterface;
 use App\Mail\Contact;
 use App\Mail\ContactInterface;
 use App\Mail\MailerInterface;
+use App\Module\User\Crypto\UserCryptoInterface;
 use App\Module\User\Entity\UserEntity;
 use App\Module\User\Mail\UserMailerInterface;
 use App\Module\User\Storage\UserStorageInterface;
@@ -53,7 +54,10 @@ class PasswordToken implements RpcControllerInterface {
     /**
      * @inheritDoc
      */
-    public function __construct(UserStorageInterface $storage, CryptoInterface $crypto, MailerInterface $mailer, ContainerInterface $container) {
+    public function __construct(UserStorageInterface $storage, 
+        UserCryptoInterface $crypto,
+        MailerInterface $mailer, 
+        ContainerInterface $container) {
 
         $this->storage = $storage;
         $this->crypto = $crypto;
@@ -88,12 +92,8 @@ class PasswordToken implements RpcControllerInterface {
             return $response->withStatus(404);
         }
 
-        $user->getRecoverPassword()->setDate(new \DateTime());
-
-        $token = $this->crypto->crypto($user->getRecoverPassword()->getDate()->format('Y-m-d H:i:s'));
-        $token = str_replace('', '+', $token);
-        
-        $user->getRecoverPassword()->setToken($token);
+        $user->getRecoverPassword()->setDate(new \DateTime())
+            ->setToken($this->crypto->crypto(50));
 
         $this->storage->update($user);
 
