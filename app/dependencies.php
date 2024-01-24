@@ -58,7 +58,7 @@ return function (ContainerBuilder $containerBuilder) {
             $mongoSettings = $c->get('settings')['mongodb'];
 
             $host  = sprintf('mongodb://%s:%s@%s/',$mongoSettings["username"], $mongoSettings["password"],  $mongoSettings["host"] );
-var_dump($host); die();
+
             return new MongoClient( $host);
         },
 
