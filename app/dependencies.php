@@ -54,10 +54,12 @@ return function (ContainerBuilder $containerBuilder) {
         },
 
         MongoClient::class => function(ContainerInterface $c) {
-            $settings = $c->get('settings');
-            $mongoSettings = $settings['mongodb'];
 
-            return new MongoClient('mongodb://' . $mongoSettings["host"] . '/');
+            $mongoSettings = $c->get('settings')['mongodb'];
+
+            $host  = sprintf('mongodb://%s:%s@%s/',$mongoSettings["username"], $mongoSettings["password"],  $mongoSettings["host"] );
+var_dump($host); die();
+            return new MongoClient( $host);
         },
 
         ContentTypeContainer::class => function(ContainerInterface $c) {
