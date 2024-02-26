@@ -4,6 +4,7 @@ declare(strict_types=1);
 use App\Filter\DefaultFilter;
 use App\Hydrator\Strategy\HydratorArrayStrategy;
 use App\Hydrator\Strategy\DateStrategy;
+use App\Hydrator\Strategy\DefaultStrategy;
 use App\Hydrator\Strategy\HydratorStrategy;
 use App\Hydrator\Strategy\Mongo\MongoDateStrategy;
 use App\Hydrator\Strategy\Mongo\MongoIdStrategy;
@@ -38,6 +39,7 @@ function monitorRestHydrator(ContainerInterface $c) {
     $playlistHydrator = new ClassMethodsHydrator();
     $playlistHydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
     $playlistHydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
+    $playlistHydrator->addStrategy('collection', new DefaultStrategy('playlist'));
 
     $monitorHydrator = new ClassMethodsHydrator();
     $monitorHydrator->setNamingStrategy(new CamelCaseStrategy());
@@ -45,36 +47,40 @@ function monitorRestHydrator(ContainerInterface $c) {
     $monitorHydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
     $monitorHydrator->addStrategy('playlist', new HydratorStrategy($playlistHydrator, new SingleEntityPrototype(new Reference())));
     $monitorHydrator->addStrategy('monitors', new HydratorArrayStrategy($monitorHydrator, new SingleEntityPrototype(new MonitorEntityReference())));
+    $monitorHydrator->addStrategy('collection', new DefaultStrategy('monitor'));
           
-
     $monitorContainerHydrator = new ClassMethodsHydrator();
     $monitorContainerHydrator->setNamingStrategy(new CamelCaseStrategy());
     $monitorContainerHydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
     $monitorContainerHydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
     $monitorContainerHydrator->addStrategy('monitors', new HydratorArrayStrategy($monitorHydrator, new SingleEntityPrototype(new MonitorEntityReference())));
+    $monitorContainerHydrator->addStrategy('collection', new DefaultStrategy('monitor'));
 
     return $monitorContainerHydrator;
 }
 
 function monitorStorageHydrator(ContainerInterface $c) {
 
-    $referenceHydrator = new ClassMethodsHydrator();
-    $referenceHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
-    $referenceHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
+    $playlistHydrator = new ClassMethodsHydrator();
+    $playlistHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
+    $playlistHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
+    $playlistHydrator->addStrategy('collection', new DefaultStrategy('playlist'));
 
     $monitorHydrator = new ClassMethodsHydrator();
     $monitorHydrator->setNamingStrategy(new CamelCaseStrategy());
     $monitorHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
     $monitorHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
-    $monitorHydrator->addStrategy('playlist', new HydratorStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
+    $monitorHydrator->addStrategy('playlist', new HydratorStrategy($playlistHydrator, new SingleEntityPrototype(new Reference())));
     $monitorHydrator->addStrategy('monitors', new HydratorArrayStrategy($monitorHydrator, new SingleEntityPrototype(new MonitorEntityReference())));
-          
+    $monitorHydrator->addStrategy('collection', new DefaultStrategy('monitor'));      
 
     $monitorContainerHydrator = new ClassMethodsHydrator();
     $monitorContainerHydrator->setNamingStrategy(new CamelCaseStrategy());
     $monitorContainerHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
     $monitorContainerHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
     $monitorContainerHydrator->addStrategy('monitors', new HydratorArrayStrategy($monitorHydrator, new SingleEntityPrototype(new MonitorEntityReference())));
+    $monitorContainerHydrator->addStrategy('collection', new DefaultStrategy('monitor'));      
+
 
     return $monitorContainerHydrator;
 }
