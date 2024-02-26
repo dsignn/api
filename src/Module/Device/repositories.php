@@ -58,16 +58,16 @@ function monitorRestHydrator(ContainerInterface $c) {
 
 function monitorStorageHydrator(ContainerInterface $c) {
 
-    $playlistHydrator = new ClassMethodsHydrator();
-    $playlistHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
-    $playlistHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
+    $referenceHydrator = new ClassMethodsHydrator();
+    $referenceHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
+    $referenceHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
 
     $monitorHydrator = new ClassMethodsHydrator();
     $monitorHydrator->setNamingStrategy(new CamelCaseStrategy());
     $monitorHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
     $monitorHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
-    $monitorHydrator->addStrategy('playlist', new HydratorStrategy($playlistHydrator, new SingleEntityPrototype(new Reference())));
-  //  $monitorHydrator->addStrategy('monitors', new HydratorArrayStrategy($monitorHydrator, new SingleEntityPrototype(new MonitorEntityReference())));
+    $monitorHydrator->addStrategy('playlist', new HydratorStrategy($referenceHydrator, new SingleEntityPrototype(new Reference())));
+    $monitorHydrator->addStrategy('monitors', new HydratorArrayStrategy($monitorHydrator, new SingleEntityPrototype(new MonitorEntityReference())));
           
 
     $monitorContainerHydrator = new ClassMethodsHydrator();
@@ -175,12 +175,16 @@ return function (ContainerBuilder $containerBuilder) {
     ])
     ->addDefinitions([
         'RestDeviceEntityHydrator' => function(ContainerInterface $c) {
-        
+
+            $organizationHydrator = new ClassMethodsHydrator();
+            $organizationHydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
+            $organizationHydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
+
             $hydrator = new ObjectPropertyHydrator();
             $hydrator->setNamingStrategy(new CamelCaseStrategy());
             $hydrator->addStrategy('_id', $c->get('MongoIdRestStrategy'));
             $hydrator->addStrategy('id', $c->get('MongoIdRestStrategy'));
-            $hydrator->addStrategy('organizationReference', $c->get('MongoIdRestStrategy'));
+            $hydrator->addStrategy('organizationReference', new HydratorStrategy($organizationHydrator, new SingleEntityPrototype(new Reference())));
             $hydrator->addStrategy('lastUpdateDate', new DateStrategy());
             $hydrator->addStrategy('createdDate', new DateStrategy());
             $hydrator->addStrategy('monitor', new HydratorStrategy(monitorRestHydrator($c), new SingleEntityPrototype(new MonitorContainerEntityReference())));
@@ -190,9 +194,13 @@ return function (ContainerBuilder $containerBuilder) {
     ])->addDefinitions([
         'StorageDeviceEntityHydrator' => function(ContainerInterface $c) {
 
+            $organizationHydrator = new ClassMethodsHydrator();
+            $organizationHydrator->addStrategy('_id', $c->get('MongoIdStorageStrategy'));
+            $organizationHydrator->addStrategy('id', $c->get('MongoIdStorageStrategy'));
+
             $hydrator = new ObjectPropertyHydrator();
             $hydrator->setNamingStrategy(new MongoUnderscoreNamingStrategy());
-            $hydrator->addStrategy('organizationReference', $c->get('MongoIdStorageStrategy'));
+            $hydrator->addStrategy('organizationReference', new HydratorStrategy($organizationHydrator, new SingleEntityPrototype(new Reference())));
             $hydrator->addStrategy('lastUpdateDate', new MongoDateStrategy());
             $hydrator->addStrategy('createdDate', new MongoDateStrategy());
             $hydrator->addStrategy('monitor', new HydratorStrategy(monitorStorageHydrator($c), new SingleEntityPrototype(new MonitorContainerEntityReference())));

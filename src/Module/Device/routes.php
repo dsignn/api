@@ -19,6 +19,10 @@ return function (App $app) {
 
         $group->post('',  [DeviceUpsertRpcRestController::class, 'rpc']);
 
+        $group->put('/{id}', [DeviceController::class, 'put']);
+
+        $group->options('/{id}', [DeviceController::class, 'options']);
+
         $group->get('', [DeviceController::class, 'paginate']);
 
     })->add($app->getContainer()->get(ValidationMiddleware::class))

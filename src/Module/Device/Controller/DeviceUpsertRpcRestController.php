@@ -42,7 +42,7 @@ class DeviceUpsertRpcRestController implements RpcControllerInterface {
         $data = $request->getParsedBody();
 
         if ($request->getAttribute('app-organization')) {
-            $data['organization_reference'] = $request->getAttribute('app-organization')->getId();
+            $data['organizationReference']['_id'] = $request->getAttribute('app-organization')->getId();
         }
 
         if ($request->getAttribute('app-validation')) {

@@ -27,7 +27,7 @@ return function (&$setting) {
                             'contentTypeFilter' => ['/application\/json/']
                         ]
                     ],
-                    '/device/{id:[0-9a-fA-F]{24}}' => [
+                    '/device/{id}' => [
                         'default' => [
                             'acceptFilter' => ['/application\/json/'],
                             'acceptFilterHydrator' => 'RestDeviceEntityHydrator',
@@ -61,7 +61,7 @@ return function (&$setting) {
                             'allow' => true,
                         ],
                     ],
-                    '/device/{id:[0-9a-fA-F]{24}}' => [
+                    '/device/{id}' => [
                         'admin' => [
                             'allow' => true,
                         ],

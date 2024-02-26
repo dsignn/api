@@ -130,9 +130,7 @@ class RestController implements RestControllerInterface {
             $data = $validator->getValues();
         }
 
-        //$putEntity = clone $this->storage->getEntityPrototype()->getPrototype($request->getParsedBody());
         $this->storage->getHydrator()->hydrate($data, $entity);
-        //$putEntity->setId($id);
 
         $this->storage->update($entity);
 
@@ -204,12 +202,12 @@ class RestController implements RestControllerInterface {
         unset($query['page']);
         $itemPerPage = isset($query['item-per-page']) ? intval($query['item-per-page']) ? intval($query['item-per-page']) : 10 : 10;
         unset($query['item-per-page']);
-      
+
         $storageFilter = $request->getAttribute('app-storage-filter');
         if ($storageFilter) {
             $query = $storageFilter->computeQueryString($query);
         }
-        
+
         $pagination = $this->storage->getPage($page, $itemPerPage, $query);
 
         return $this->getAcceptData($request, $response, $pagination);

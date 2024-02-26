@@ -16,7 +16,7 @@ class DeviceController extends RestController implements RestControllerInterface
 
     /**
      * MonitorController constructor.
-     * @param MonitorStorageInterface $storage
+     * @param DeviceStorageInterface $storage
      * @param ContainerInterface $container
      */
     public function __construct(DeviceStorageInterface $storage, ContainerInterface $container) {

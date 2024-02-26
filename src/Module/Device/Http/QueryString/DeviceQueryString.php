@@ -30,7 +30,7 @@ class DeviceQueryString implements QueryStringInterface {
                     break;
                 case $key === 'organization_reference':
                     try {
-                        $query['organization_reference'] = new ObjectId($value);
+                        $query['organization_reference.id'] = new ObjectId($value);
                     } catch (Exception $e) {
                         // TODO 
                     }

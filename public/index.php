@@ -7,8 +7,6 @@ use App\Application\Handlers\ShutdownHandler;
 use App\Application\ResponseEmitter\ResponseEmitter;
 use DI\ContainerBuilder;
 use Slim\Factory\ServerRequestCreatorFactory;
-use Brevo\Client\Configuration;
-
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -18,7 +16,6 @@ $containerBuilder = new ContainerBuilder();
 if (false) { // Should be set to true in production
 	$containerBuilder->enableCompilation(__DIR__ . '/../var/cache');
 }
-
 
 // Set up settings
 $settings = require __DIR__ . '/../app/settings.php';
